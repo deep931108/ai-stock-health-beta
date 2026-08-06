@@ -1,0 +1,78 @@
+{
+  "version": "ClientReport-v1.0",
+  "generated_at": "2026-08-06T21:30:14+08:00",
+  "status": "success",
+  "stock_id": "1303",
+  "stock": {
+    "name": "南亞",
+    "display_name": "南亞（1303）",
+    "market": "台股",
+    "industry": "傳統產業"
+  },
+  "overview": {
+    "health_score": 49.45,
+    "assessment": "偏弱",
+    "research_grade": "保持觀望",
+    "confidence_level": "中等信心",
+    "confidence_score": 71.4,
+    "risk_level": "高風險",
+    "risk_score": 52.77,
+    "summary_zh": "目前條件偏弱或風險偏高，建議降低研究優先級。"
+  },
+  "health_indicators": [
+    {
+      "key": "financial",
+      "label": "財務健康",
+      "score": 77.12,
+      "level": "良好",
+      "description": "營收年增率為 85.3 分，屬於加分因子。"
+    },
+    {
+      "key": "technical",
+      "label": "技術健康",
+      "score": 51.97,
+      "level": "偏弱",
+      "description": "RSI 相對強弱為 91.2 分，屬於加分因子。"
+    },
+    {
+      "key": "institutional",
+      "label": "法人籌碼",
+      "score": 47.76,
+      "level": "偏弱",
+      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
+    },
+    {
+      "key": "market",
+      "label": "市場環境",
+      "score": 50.2,
+      "level": "偏弱",
+      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。"
+    },
+    {
+      "key": "news",
+      "label": "新聞情緒",
+      "score": 37.17,
+      "level": "不佳",
+      "description": "正負面新聞比例為 21.4 分，屬於扣分因子。"
+    }
+  ],
+  "strategy": {
+    "status": "researching",
+    "label_zh": "研究累積中",
+    "message_zh": "目前尚無正式策略，客戶端不會以一般分析訊號代替策略。"
+  },
+  "data_status": {
+    "status": "limited",
+    "label_zh": "資料狀態待確認",
+    "message_zh": ""
+  },
+  "notices_zh": [],
+  "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
+  "safety": {
+    "internal_paths_exposed": false,
+    "holdout_details_exposed": false,
+    "candidate_parameters_exposed": false,
+    "live_order_available": false,
+    "investment_advice": false
+  }
+}

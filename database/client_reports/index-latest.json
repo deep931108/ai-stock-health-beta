@@ -1,0 +1,248 @@
+{
+  "version": "ClientReportBatchService-v1.1",
+  "generated_at": "2026-08-06T21:30:17+08:00",
+  "status": "success",
+  "counts": {
+    "universe": 28,
+    "requested": 28,
+    "eligible": 28,
+    "success": 28,
+    "failed": 0,
+    "skipped": 0
+  },
+  "stocks": [
+    {
+      "stock_id": "2330",
+      "status": "success",
+      "name": "\u53f0\u7a4d\u96fb",
+      "industry": "\u534a\u5c0e\u9ad4\u696d",
+      "generated_at": "2026-08-06T21:30:06+08:00",
+      "report": "2330/latest.json"
+    },
+    {
+      "stock_id": "2454",
+      "status": "success",
+      "name": "\u806f\u767c\u79d1",
+      "industry": "\u534a\u5c0e\u9ad4\u696d",
+      "generated_at": "2026-08-06T21:30:06+08:00",
+      "report": "2454/latest.json"
+    },
+    {
+      "stock_id": "2303",
+      "status": "success",
+      "name": "\u806f\u96fb",
+      "industry": "\u534a\u5c0e\u9ad4\u696d",
+      "generated_at": "2026-08-06T21:30:06+08:00",
+      "report": "2303/latest.json"
+    },
+    {
+      "stock_id": "3711",
+      "status": "success",
+      "name": "\u65e5\u6708\u5149\u6295\u63a7",
+      "industry": "\u534a\u5c0e\u9ad4\u696d",
+      "generated_at": "2026-08-06T21:30:06+08:00",
+      "report": "3711/latest.json"
+    },
+    {
+      "stock_id": "3034",
+      "status": "success",
+      "name": "\u806f\u8a60",
+      "industry": "\u534a\u5c0e\u9ad4\u696d",
+      "generated_at": "2026-08-06T21:30:07+08:00",
+      "report": "3034/latest.json"
+    },
+    {
+      "stock_id": "3231",
+      "status": "success",
+      "name": "\u7def\u5275",
+      "industry": "AI\u96fb\u5b50\u696d",
+      "generated_at": "2026-08-06T21:30:08+08:00",
+      "report": "3231/latest.json"
+    },
+    {
+      "stock_id": "2317",
+      "status": "success",
+      "name": "\u9d3b\u6d77",
+      "industry": "AI\u96fb\u5b50\u696d",
+      "generated_at": "2026-08-06T21:30:08+08:00",
+      "report": "2317/latest.json"
+    },
+    {
+      "stock_id": "6669",
+      "status": "success",
+      "name": "\u7def\u7a4e",
+      "industry": "AI\u96fb\u5b50\u696d",
+      "generated_at": "2026-08-06T21:30:08+08:00",
+      "report": "6669/latest.json"
+    },
+    {
+      "stock_id": "2382",
+      "status": "success",
+      "name": "\u5ee3\u9054",
+      "industry": "AI\u96fb\u5b50\u696d",
+      "generated_at": "2026-08-06T21:30:09+08:00",
+      "report": "2382/latest.json"
+    },
+    {
+      "stock_id": "2376",
+      "status": "success",
+      "name": "\u6280\u5609",
+      "industry": "AI\u96fb\u5b50\u696d",
+      "generated_at": "2026-08-06T21:30:09+08:00",
+      "report": "2376/latest.json"
+    },
+    {
+      "stock_id": "2891",
+      "status": "success",
+      "name": "\u4e2d\u4fe1\u91d1",
+      "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
+      "generated_at": "2026-08-06T21:30:10+08:00",
+      "report": "2891/latest.json"
+    },
+    {
+      "stock_id": "2881",
+      "status": "success",
+      "name": "\u5bcc\u90a6\u91d1",
+      "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
+      "generated_at": "2026-08-06T21:30:10+08:00",
+      "report": "2881/latest.json"
+    },
+    {
+      "stock_id": "2882",
+      "status": "success",
+      "name": "\u570b\u6cf0\u91d1",
+      "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
+      "generated_at": "2026-08-06T21:30:11+08:00",
+      "report": "2882/latest.json"
+    },
+    {
+      "stock_id": "2884",
+      "status": "success",
+      "name": "\u7389\u5c71\u91d1",
+      "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
+      "generated_at": "2026-08-06T21:30:11+08:00",
+      "report": "2884/latest.json"
+    },
+    {
+      "stock_id": "2886",
+      "status": "success",
+      "name": "\u5146\u8c50\u91d1",
+      "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
+      "generated_at": "2026-08-06T21:30:12+08:00",
+      "report": "2886/latest.json"
+    },
+    {
+      "stock_id": "2618",
+      "status": "success",
+      "name": "\u9577\u69ae\u822a",
+      "industry": "\u822a\u904b\u696d",
+      "generated_at": "2026-08-06T21:30:12+08:00",
+      "report": "2618/latest.json"
+    },
+    {
+      "stock_id": "2603",
+      "status": "success",
+      "name": "\u9577\u69ae",
+      "industry": "\u822a\u904b\u696d",
+      "generated_at": "2026-08-06T21:30:13+08:00",
+      "report": "2603/latest.json"
+    },
+    {
+      "stock_id": "2609",
+      "status": "success",
+      "name": "\u967d\u660e",
+      "industry": "\u822a\u904b\u696d",
+      "generated_at": "2026-08-06T21:30:13+08:00",
+      "report": "2609/latest.json"
+    },
+    {
+      "stock_id": "2615",
+      "status": "success",
+      "name": "\u842c\u6d77",
+      "industry": "\u822a\u904b\u696d",
+      "generated_at": "2026-08-06T21:30:13+08:00",
+      "report": "2615/latest.json"
+    },
+    {
+      "stock_id": "1303",
+      "status": "success",
+      "name": "\u5357\u4e9e",
+      "industry": "\u50b3\u7d71\u7522\u696d",
+      "generated_at": "2026-08-06T21:30:14+08:00",
+      "report": "1303/latest.json"
+    },
+    {
+      "stock_id": "1301",
+      "status": "success",
+      "name": "\u53f0\u5851",
+      "industry": "\u50b3\u7d71\u7522\u696d",
+      "generated_at": "2026-08-06T21:30:15+08:00",
+      "report": "1301/latest.json"
+    },
+    {
+      "stock_id": "1216",
+      "status": "success",
+      "name": "\u7d71\u4e00",
+      "industry": "\u50b3\u7d71\u7522\u696d",
+      "generated_at": "2026-08-06T21:30:15+08:00",
+      "report": "1216/latest.json"
+    },
+    {
+      "stock_id": "2002",
+      "status": "success",
+      "name": "\u4e2d\u92fc",
+      "industry": "\u50b3\u7d71\u7522\u696d",
+      "generated_at": "2026-08-06T21:30:15+08:00",
+      "report": "2002/latest.json"
+    },
+    {
+      "stock_id": "1101",
+      "status": "success",
+      "name": "\u53f0\u6ce5",
+      "industry": "\u50b3\u7d71\u7522\u696d",
+      "generated_at": "2026-08-06T21:30:15+08:00",
+      "report": "1101/latest.json"
+    },
+    {
+      "stock_id": "6446",
+      "status": "success",
+      "name": "\u85e5\u83ef\u85e5",
+      "industry": "\u751f\u6280\u91ab\u7642\u696d",
+      "generated_at": "2026-08-06T21:30:17+08:00",
+      "report": "6446/latest.json"
+    },
+    {
+      "stock_id": "1795",
+      "status": "success",
+      "name": "\u7f8e\u6642",
+      "industry": "\u751f\u6280\u91ab\u7642\u696d",
+      "generated_at": "2026-08-06T21:30:17+08:00",
+      "report": "1795/latest.json"
+    },
+    {
+      "stock_id": "4743",
+      "status": "success",
+      "name": "\u5408\u4e00",
+      "industry": "\u751f\u6280\u91ab\u7642\u696d",
+      "generated_at": "2026-08-06T21:30:17+08:00",
+      "report": "4743/latest.json"
+    },
+    {
+      "stock_id": "4105",
+      "status": "success",
+      "name": "\u6771\u6d0b",
+      "industry": "\u751f\u6280\u91ab\u7642\u696d",
+      "generated_at": "2026-08-06T21:30:17+08:00",
+      "report": "4105/latest.json"
+    }
+  ],
+  "skipped_stocks": [],
+  "safety": {
+    "single_stock_failure_aborts_batch": false,
+    "unhealthy_stocks_published": false,
+    "strategy_parameters_exposed": false,
+    "holdout_details_exposed": false,
+    "automatic_order_available": false
+  },
+  "message_zh": "\u5ba2\u6236\u5831\u544a\u5df2\u66f4\u65b0 28/28 \u6a94\u3002"
+}

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b10">
+  <meta name="description" content="AI 股票健康研究輔助 Beta">
+  <link rel="manifest" href="/assets/manifest.webmanifest">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <title>AI 股票健康｜研究輔助 Beta</title>
+</head>
+<body>
+  <div id="accessGate" class="access-gate hidden" role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+    <form id="accessForm" class="access-panel">
+      <span class="brand-mark">A</span>
+      <p class="section-kicker">Private Beta</p>
+      <h1 id="accessTitle">歡迎加入 AI 股票健康測試</h1>
+      <p>本階段僅開放受邀測試者。請輸入你的邀請碼，登入後此裝置會保留測試資格。</p>
+      <label for="inviteCode">Beta 邀請碼</label>
+      <input id="inviteCode" autocomplete="one-time-code" placeholder="ASH-XXXX-XXXX" maxlength="20" required>
+      <label class="consent"><input id="betaConsent" type="checkbox" required><span>我了解本服務僅供研究輔助，不構成投資建議或獲利保證。</span></label>
+      <button id="activateButton" type="submit">進入 Beta</button>
+      <small id="accessMessage" aria-live="polite"></small>
+    </form>
+  </div>
+  <main class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="AI 股票健康首頁">
+        <span class="brand-mark">A</span>
+        <span><b>AI 股票健康</b><small>研究輔助 Beta</small></span>
+      </a>
+      <div class="top-actions">
+        <span id="testerBadge" class="tester-badge hidden"></span>
+        <a class="stock-center-link" href="#stockCenter">股票中心</a>
+        <button id="saveButton" class="save-button" type="button">☆ 加入自選</button>
+      </div>
+    </header>
+
+    <section id="top" class="intro">
+      <p class="eyebrow">六大板塊 · 28 檔研究報告</p>
+      <h1>先看全市場，<br>再研究個股。</h1>
+      <p>整合財務、技術、籌碼、市場與新聞，用一致標準比較股票，再深入閱讀個股研究摘要。</p>
+      <form id="searchForm" class="search">
+        <label for="stockSearch">輸入股票名稱或四位數代號</label>
+        <div>
+          <input id="stockSearch" placeholder="例如 台積電、2330" autocomplete="off">
+          <button id="searchButton" type="submit">查看健康</button>
+        </div>
+        <span id="formHint" class="form-hint" aria-live="polite">正在讀取可用股票…</span>
+      </form>
+    </section>
+
+    <section id="stockCenter" class="stock-center">
+      <div class="section-heading stock-center-heading">
+        <div><span class="section-kicker">股票中心</span><h2>找到值得深入理解的股票</h2></div>
+        <div class="universe-count"><b id="stockCount">—</b><span>份客戶研究報告</span></div>
+      </div>
+      <div class="stock-toolbar">
+        <div id="sectorFilters" class="sector-filters" aria-label="板塊篩選"></div>
+        <button id="watchlistFilter" class="watchlist-filter" type="button">☆ 只看自選</button>
+      </div>
+      <div id="stockGrid" class="stock-grid" aria-live="polite"></div>
+      <div id="stockEmpty" class="stock-empty hidden">找不到符合條件的股票，請更換關鍵字或板塊。</div>
+    </section>
+
+    <div id="loadingCard" class="state-card hidden" role="status">
+      <span class="spinner"></span><b>正在整理研究報告</b><small>通常只需要幾秒鐘</small>
+    </div>
+    <div id="errorCard" class="state-card error hidden" role="alert">
+      <b>目前無法顯示這檔股票</b><span id="errorMessage"></span>
+      <button id="retryButton" type="button">重新嘗試</button>
+    </div>
+
+    <div id="reportContent">
+      <div id="reportAnchor" class="report-anchor" aria-hidden="true"></div>
+      <div class="dashboard-grid">
+        <section class="hero-card">
+          <div class="stock-title">
+            <div><span id="stockMeta">2330 · 半導體業</span><h2 id="stockName">台積電</h2></div>
+            <span id="assessment" class="status-chip">中性</span>
+          </div>
+          <div class="score-area">
+            <div id="scoreRing" class="score-ring"><div><strong id="healthScore">59.7</strong><span>健康分數</span></div></div>
+            <div class="score-copy">
+              <span class="research-label">AI 研究摘要</span>
+              <h3 id="summary">目前適合持續追蹤，尚不足以提高研究優先級。</h3>
+              <p>這是研究狀態，不是買進或賣出訊號。</p>
+            </div>
+          </div>
+          <div class="quick-stats">
+            <article><span>研究等級</span><strong id="grade">資料待補</strong><small>依完整資料與驗證進度判定</small></article>
+            <article><span>AI 信心</span><strong id="confidence">70 · 中等信心</strong><small>反映資料一致性與樣本充分度</small></article>
+            <article><span>風險等級</span><strong id="risk">41 · 中等風險</strong><small>仍需留意市場波動</small></article>
+          </div>
+        </section>
+
+        <aside class="side-card">
+          <span class="section-kicker">今日重點</span>
+          <h3 id="strategyLabel">研究累積中</h3>
+          <p id="strategyCopy">系統持續更新與驗證，不會因單日波動任意改變研究門檻。</p>
+          <div class="timeline">
+            <div class="active"><i></i>資料更新完成</div>
+            <div><i></i>條件持續驗證</div>
+            <div><i></i>累積實盤證據</div>
+          </div>
+          <div class="freshness"><span>資料日期</span><b id="updated">—</b></div>
+          <div class="freshness"><span>資料來源</span><b id="source">Beta 展示資料</b></div>
+        </aside>
+      </div>
+
+      <section class="indicators-section">
+        <div class="section-heading"><div><span class="section-kicker">五大健康指標</span><h2>看懂分數從哪裡來</h2></div><small>點選卡片查看說明</small></div>
+        <div id="indicatorGrid" class="indicator-grid"></div>
+        <div id="indicatorDetail" class="indicator-detail" aria-live="polite"></div>
+      </section>
+
+      <section class="explain-card">
+        <div><span class="section-kicker">如何閱讀</span><h2>分數是研究摘要，不是報酬保證</h2></div>
+        <div class="explain-list">
+          <p><b>75–100</b><span>資料表現相對穩健，仍需持續觀察。</span></p>
+          <p><b>55–74</b><span>訊號中性或尚未一致，不急著下結論。</span></p>
+          <p><b>0–54</b><span>存在待確認項目，優先理解風險來源。</span></p>
+        </div>
+      </section>
+    </div>
+
+    <footer><b>AI 股票健康 · Beta 測試版</b><p id="disclaimer">本服務僅供資料整理與研究輔助，不構成投資建議。</p></footer>
+    <button id="feedbackButton" class="feedback-button" type="button" aria-label="提供 Beta 使用回饋">✎ 提供回饋</button>
+    <nav class="mobile-nav" aria-label="主要導覽">
+      <button class="active" data-tab="home"><span>⌂</span>股票</button>
+      <button data-tab="watchlist"><span>☆</span>自選</button>
+      <button data-tab="about"><span>?</span>說明</button>
+    </nav>
+    <div id="toast" class="toast" aria-live="polite"></div>
+  </main>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>

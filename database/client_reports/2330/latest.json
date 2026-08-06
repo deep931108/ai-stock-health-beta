@@ -1,0 +1,78 @@
+{
+  "version": "ClientReport-v1.0",
+  "generated_at": "2026-08-06T21:30:06+08:00",
+  "status": "success",
+  "stock_id": "2330",
+  "stock": {
+    "name": "台積電",
+    "display_name": "台積電（2330）",
+    "market": "台股",
+    "industry": "半導體業"
+  },
+  "overview": {
+    "health_score": 63.15,
+    "assessment": "中性",
+    "research_grade": "資料待補",
+    "confidence_level": "中等信心",
+    "confidence_score": 72.92,
+    "risk_level": "中等風險",
+    "risk_score": 37.08,
+    "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
+  },
+  "health_indicators": [
+    {
+      "key": "financial",
+      "label": "財務健康",
+      "score": 87.68,
+      "level": "優秀",
+      "description": "每股盈餘為 95.0 分，屬於加分因子。"
+    },
+    {
+      "key": "technical",
+      "label": "技術健康",
+      "score": 61.3,
+      "level": "中性",
+      "description": "多空排列為 92.0 分，屬於加分因子。"
+    },
+    {
+      "key": "institutional",
+      "label": "法人籌碼",
+      "score": 65.69,
+      "level": "中性",
+      "description": "近 10 日法人方向為 75.0 分，屬於加分因子。"
+    },
+    {
+      "key": "market",
+      "label": "市場環境",
+      "score": 50.2,
+      "level": "偏弱",
+      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。"
+    },
+    {
+      "key": "news",
+      "label": "新聞情緒",
+      "score": 59.33,
+      "level": "中性",
+      "description": "正負面新聞比例為 75.3 分，屬於加分因子。"
+    }
+  ],
+  "strategy": {
+    "status": "researching",
+    "label_zh": "研究累積中",
+    "message_zh": "目前尚無正式策略，客戶端不會以一般分析訊號代替策略。"
+  },
+  "data_status": {
+    "status": "blocked",
+    "label_zh": "資料狀態待確認",
+    "message_zh": ""
+  },
+  "notices_zh": [],
+  "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
+  "safety": {
+    "internal_paths_exposed": false,
+    "holdout_details_exposed": false,
+    "candidate_parameters_exposed": false,
+    "live_order_available": false,
+    "investment_advice": false
+  }
+}

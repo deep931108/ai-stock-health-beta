@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+database/web_beta/
+invite-codes-production.json
+.railway/

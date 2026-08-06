@@ -1,0 +1,15 @@
+{
+  "name": "AI 股票健康",
+  "short_name": "股票健康",
+  "description": "AI 股票研究輔助 Beta",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080b10",
+  "theme_color": "#080b10",
+  "lang": "zh-Hant",
+  "icons": [
+    {"src": "/assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
+

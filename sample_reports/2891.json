@@ -1,0 +1,28 @@
+{
+  "version": "ClientReport-v1.0",
+  "generated_at": "2026-08-02T23:20:59+08:00",
+  "status": "success",
+  "stock_id": "2891",
+  "stock": {"name": "中信金", "display_name": "中信金", "market": "TWSE", "industry": "金融保險業"},
+  "overview": {
+    "health_score": 62.4,
+    "assessment": "中性偏穩",
+    "research_grade": "持續追蹤",
+    "confidence_level": "中等信心",
+    "confidence_score": 68.9,
+    "risk_level": "中等風險",
+    "risk_score": 45.3,
+    "summary_zh": "研究樣本持續累積中，目前維持觀察，不因單日訊號改變判斷。"
+  },
+  "health_indicators": {
+    "financial": {"score": 72, "level_zh": "良好", "summary_zh": "財務表現穩定。"},
+    "technical": {"score": 57, "level_zh": "中性", "summary_zh": "趨勢尚待確認。"},
+    "institutional": {"score": 61, "level_zh": "中性", "summary_zh": "籌碼沒有明顯偏向。"},
+    "market": {"score": 64, "level_zh": "中性", "summary_zh": "金融板塊環境平穩。"},
+    "news": {"score": 58, "level_zh": "中性", "summary_zh": "近期消息大致中性。"}
+  },
+  "strategy": {"status": "tracking", "label_zh": "持續追蹤"},
+  "data_status": {"status": "success", "label_zh": "資料完整"},
+  "notices_zh": ["此為 Beta 展示資料。"],
+  "disclaimer_zh": "本服務僅供資料整理與研究輔助，不構成投資建議。"
+}
