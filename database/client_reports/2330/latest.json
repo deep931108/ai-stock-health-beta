@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T12:40:01+08:00",
+  "generated_at": "2026-08-07T23:20:19+08:00",
   "status": "success",
   "stock_id": "2330",
   "stock": {
@@ -10,13 +10,13 @@
     "industry": "半導體業"
   },
   "overview": {
-    "health_score": 63.27,
+    "health_score": 59.44,
     "assessment": "中性",
     "research_grade": "資料待補",
     "confidence_level": "中等信心",
-    "confidence_score": 72.95,
+    "confidence_score": 72.35,
     "risk_level": "中等風險",
-    "risk_score": 37.08,
+    "risk_score": 41.03,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -30,15 +30,15 @@
     {
       "key": "technical",
       "label": "技術健康",
-      "score": 61.3,
+      "score": 62.88,
       "level": "中性",
       "description": "多空排列為 92.0 分，屬於加分因子。"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 65.69,
-      "level": "中性",
+      "score": 49.7,
+      "level": "偏弱",
       "description": "近 10 日法人方向為 75.0 分，屬於加分因子。"
     },
     {
@@ -51,9 +51,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 59.99,
+      "score": 59.63,
       "level": "中性",
-      "description": "正負面新聞比例為 75.3 分，屬於加分因子。"
+      "description": "正負面新聞比例為 77.7 分，屬於加分因子。"
     }
   ],
   "strategy": {

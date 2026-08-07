@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T12:40:01+08:00",
+  "generated_at": "2026-08-07T23:20:18+08:00",
   "status": "success",
   "stock_id": "2376",
   "stock": {
@@ -10,13 +10,13 @@
     "industry": "AI電子業"
   },
   "overview": {
-    "health_score": 57.12,
-    "assessment": "中性",
+    "health_score": 54.01,
+    "assessment": "偏弱",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 72.12,
+    "confidence_score": 70.29,
     "risk_level": "中等風險",
-    "risk_score": 42.46,
+    "risk_score": 46.28,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -30,16 +30,16 @@
     {
       "key": "technical",
       "label": "技術健康",
-      "score": 58.85,
+      "score": 59.26,
       "level": "中性",
       "description": "RSI 相對強弱為 91.5 分，屬於加分因子。"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 44.82,
-      "level": "偏弱",
-      "description": "近 10 日法人方向為 25.0 分，屬於扣分因子。"
+      "score": 30.97,
+      "level": "不佳",
+      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
     },
     {
       "key": "market",
@@ -51,9 +51,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 67.16,
+      "score": 68.0,
       "level": "中性",
-      "description": "正負面新聞比例為 84.6 分，屬於加分因子。"
+      "description": "正負面新聞比例為 85.3 分，屬於加分因子。"
     }
   ],
   "strategy": {

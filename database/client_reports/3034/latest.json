@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T12:40:01+08:00",
+  "generated_at": "2026-08-07T23:20:18+08:00",
   "status": "success",
   "stock_id": "3034",
   "stock": {
@@ -10,13 +10,13 @@
     "industry": "半導體業"
   },
   "overview": {
-    "health_score": 49.63,
+    "health_score": 53.2,
     "assessment": "偏弱",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 73.73,
+    "confidence_score": 73.71,
     "risk_level": "高風險",
-    "risk_score": 50.48,
+    "risk_score": 51.05,
     "summary_zh": "目前條件偏弱或風險偏高，建議降低研究優先級。"
   },
   "health_indicators": [
@@ -30,14 +30,14 @@
     {
       "key": "technical",
       "label": "技術健康",
-      "score": 62.57,
+      "score": 62.87,
       "level": "中性",
-      "description": "RSI 相對強弱為 93.3 分，屬於加分因子。"
+      "description": "RSI 相對強弱為 93.6 分，屬於加分因子。"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 32.34,
+      "score": 31.36,
       "level": "不佳",
       "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
     },
@@ -51,9 +51,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 42.61,
-      "level": "偏弱",
-      "description": "正負面新聞比例為 31.7 分，屬於扣分因子。"
+      "score": 62.69,
+      "level": "中性",
+      "description": "正負面新聞比例為 76.6 分，屬於加分因子。"
     }
   ],
   "strategy": {

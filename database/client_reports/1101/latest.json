@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T12:40:11+08:00",
+  "generated_at": "2026-08-07T23:20:27+08:00",
   "status": "success",
   "stock_id": "1101",
   "stock": {
@@ -10,13 +10,13 @@
     "industry": "傳統產業"
   },
   "overview": {
-    "health_score": 56.24,
+    "health_score": 55.65,
     "assessment": "中性",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 77.07,
+    "confidence_score": 77.41,
     "risk_level": "中等風險",
-    "risk_score": 42.25,
+    "risk_score": 42.64,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -30,14 +30,14 @@
     {
       "key": "technical",
       "label": "技術健康",
-      "score": 59.16,
+      "score": 59.02,
       "level": "中性",
       "description": "RSI 相對強弱為 92.1 分，屬於加分因子。"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 62.62,
+      "score": 60.29,
       "level": "中性",
       "description": "近 10 日法人方向為 75.0 分，屬於加分因子。"
     },
@@ -51,7 +51,7 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 46.12,
+      "score": 46.68,
       "level": "偏弱",
       "description": "正負面新聞比例為 31.7 分，屬於扣分因子。"
     }
