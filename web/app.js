@@ -45,19 +45,33 @@ function render(report) {
   refreshSavedButton();
 }
 
+const factorNames = {financial:"財務健康",technical:"技術健康",institutional:"法人籌碼",market:"市場環境",news:"新聞情緒"};
+
 function factorRows(items, emptyText) {
   if (!items?.length) return `<p class="factor-empty">${escapeHtml(emptyText)}</p>`;
   return items.map((item) => `<div class="factor-row">
-    <div><b>${escapeHtml(item.label)}</b><span>${Number(item.score).toFixed(1)} 分</span></div>
-    <p>${escapeHtml(item.reason)}</p><small>來源：${escapeHtml(item.source)}</small>
+    <div class="factor-title"><b>${escapeHtml(item.label)}</b><strong class="impact ${item.impact >= 0 ? "up" : "down"}">${item.impact >= 0 ? "+" : ""}${Number(item.impact).toFixed(2)} 分</strong></div>
+    <div class="factor-metrics"><span>${escapeHtml(factorNames[item.factor] || item.factor)}子指標 ${Number(item.score).toFixed(1)} 分</span><span>子項權重 ${Number(item.sub_weight_pct).toFixed(1)}%</span><span>面向權重 ${Number(item.factor_weight_pct).toFixed(1)}%</span></div>
+    <p>${escapeHtml(item.reason)}</p><small>資料來源：${escapeHtml(item.source)}</small>
   </div>`).join("");
 }
 
 function renderEvidence(report) {
   $("scoreInterval").textContent = `目前區間 ${report.score_interval || "—"}`;
   $("scoreMethod").textContent = report.score_method || "分數用於一致比較，不代表未來漲跌。";
-  $("positiveFactors").innerHTML = factorRows(report.positive_factors, "目前沒有明顯加分因素。");
-  $("negativeFactors").innerHTML = factorRows(report.negative_factors, "目前沒有明顯扣分因素。");
+  const raw = Number(report.score_v1), shown = Number(report.score_v2 ?? report.score);
+  $("scoreBridge").innerHTML = Number.isFinite(raw)
+    ? `<b>展示分 ${shown.toFixed(1)}</b><span>原始加權分 ${raw.toFixed(1)}</span><span>校準調整 ${shown-raw >= 0 ? "+" : ""}${(shown-raw).toFixed(1)}</span>`
+    : `<b>展示分 ${Number(report.score).toFixed(1)}</b>`;
+  $("impactDefinition").textContent = report.impact_definition || "影響值以中性 50 分為基準，顯示各子指標對原始健康分的實際影響。";
+  $("positiveFactors").innerHTML = factorRows(report.detailed_positive, "目前沒有可量化的加分因素。");
+  $("negativeFactors").innerHTML = factorRows(report.detailed_negative, "目前沒有可量化的扣分因素。");
+  $("weightAdjustments").innerHTML = (report.weight_adjustments || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  $("weightBox").classList.toggle("hidden", !(report.weight_adjustments || []).length);
+  $("factorBreakdown").innerHTML = report.indicators.map((item) => `<details>
+    <summary><b>${escapeHtml(item.label)} ${Number(item.score).toFixed(1)} 分</b><span>面向權重 ${Number(item.weight_pct).toFixed(1)}% · 原始分貢獻 ${Number(item.weighted_contribution).toFixed(2)} · 覆蓋 ${Number(item.coverage_pct).toFixed(1)}%</span></summary>
+    <div>${factorRows(item.contributions, "這個面向尚無子指標明細。")}${item.missing_features?.length ? `<p class="missing-note">尚缺資料：${item.missing_features.map(escapeHtml).join("、")}</p>` : ""}</div>
+  </details>`).join("");
 }
 
 function renderHistory(history) {

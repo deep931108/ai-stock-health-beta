@@ -48,8 +48,13 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="positiveFactors"' in html
     assert 'id="negativeFactors"' in html
     assert 'id="sourceGrid"' in html
+    assert 'id="scoreBridge"' in html
+    assert 'id="impactDefinition"' in html
+    assert 'id="factorBreakdown"' in html
     assert "function renderHistory" in js
     assert "function renderEvidence" in js
+    assert "health_impact" not in js
+    assert "item.impact" in js
 
 
 def test_invalid_stock_id_is_rejected() -> None:

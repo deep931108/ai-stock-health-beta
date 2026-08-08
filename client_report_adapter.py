@@ -83,12 +83,15 @@ class ClientReportRepository:
             notices = [notices]
         summary = overview.get("summary_zh") or payload.get("summary_zh") or "目前資料仍在累積，建議持續觀察。"
         explanation = payload.get("score_explanation") or {}
+        detailed = payload.get("detailed_score_explanation") or {}
         return {
             "id": str(payload.get("stock_id") or stock.get("stock_id") or stock_id),
             "name": stock.get("name") or payload.get("stock_name") or known_name,
             "industry": stock.get("industry") or known_industry,
             "market": stock.get("market") or payload.get("market") or "TWSE",
             "score": self._number(overview.get("health_score"), 0),
+            "score_v1": self._optional_number(overview.get("health_score_v1")),
+            "score_v2": self._optional_number(overview.get("health_score_v2")),
             "assessment": overview.get("assessment") or self._level(self._number(overview.get("health_score"), 0)),
             "grade": overview.get("research_grade") or "研究累積中",
             "confidence": self._number(overview.get("confidence_score"), 0),
@@ -108,6 +111,10 @@ class ClientReportRepository:
             ),
             "positive_factors": self._normalize_factors(explanation.get("positive_factors")),
             "negative_factors": self._normalize_factors(explanation.get("negative_factors")),
+            "detailed_positive": self._normalize_contributions(detailed.get("top_positive")),
+            "detailed_negative": self._normalize_contributions(detailed.get("top_negative")),
+            "impact_definition": str(detailed.get("impact_definition_zh") or ""),
+            "weight_adjustments": [str(item) for item in detailed.get("weight_adjustments_zh", []) if item],
             "score_history": self._normalize_history(payload.get("score_history")),
             "data_sources": self._normalize_sources(payload.get("data_sources")),
             "notices": notices,
@@ -127,6 +134,23 @@ class ClientReportRepository:
                 "source": str(item.get("source_label_zh") or "公開資料"),
             })
         return factors[:5]
+
+    def _normalize_contributions(self, raw: Any) -> list[dict[str, Any]]:
+        result = []
+        for item in raw if isinstance(raw, list) else []:
+            if not isinstance(item, dict):
+                continue
+            result.append({
+                "label": str(item.get("label_zh") or "子指標"),
+                "factor": str(item.get("factor") or ""),
+                "score": self._number(item.get("score"), 0),
+                "impact": self._number(item.get("health_impact"), 0),
+                "sub_weight_pct": self._number(item.get("sub_weight_pct"), 0),
+                "factor_weight_pct": self._number(item.get("factor_weight_pct"), 0),
+                "reason": str(item.get("reason_zh") or "此項用於構成面向分數。"),
+                "source": str(item.get("source_label_zh") or "公開資料"),
+            })
+        return result[:5]
 
     def _normalize_history(self, raw: Any) -> list[dict[str, Any]]:
         by_date: dict[str, dict[str, Any]] = {}
@@ -182,6 +206,11 @@ class ClientReportRepository:
                     or item.get("note")
                     or default_note
                 ),
+                "weight_pct": round(self._number(item.get("weight"), 0) * 100, 2),
+                "weighted_contribution": self._number(item.get("weighted_contribution"), 0),
+                "coverage_pct": self._number(item.get("coverage_pct"), 0),
+                "contributions": self._normalize_contributions(item.get("contributions")),
+                "missing_features": [str(value) for value in item.get("missing_features", []) if value],
             })
         return normalized[:5]
 
@@ -191,6 +220,13 @@ class ClientReportRepository:
             return round(float(value), 2)
         except (TypeError, ValueError):
             return default
+
+    @staticmethod
+    def _optional_number(value: Any) -> float | None:
+        try:
+            return round(float(value), 2)
+        except (TypeError, ValueError):
+            return None
 
     @staticmethod
     def _level(score: float) -> str:
