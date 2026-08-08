@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T23:20:24+08:00",
+  "version": "ClientReport-v1.1-ScoreV2",
+  "generated_at": "2026-08-08T15:15:08+08:00",
   "status": "success",
   "stock_id": "1303",
   "stock": {
@@ -10,13 +10,19 @@
     "industry": "傳統產業"
   },
   "overview": {
-    "health_score": 58.14,
+    "health_score": 60.7,
+    "health_score_v1": null,
+    "health_score_v2": 60.7,
+    "health_score_interval": "--",
+    "health_score_band_zh": "中性",
+    "health_score_calibration_version": "",
     "assessment": "中性",
-    "research_grade": "保持觀望",
+    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "research_grade": "觀察名單",
     "confidence_level": "中等信心",
-    "confidence_score": 75.45,
+    "confidence_score": 72.66,
     "risk_level": "中等風險",
-    "risk_score": 46.73,
+    "risk_score": 49.98,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -37,9 +43,9 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 58.53,
-      "level": "中性",
-      "description": "近 10 日法人方向為 25.0 分，屬於扣分因子。"
+      "score": 50.89,
+      "level": "偏弱",
+      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
     },
     {
       "key": "market",
@@ -51,9 +57,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 50.44,
+      "score": 51.82,
       "level": "偏弱",
-      "description": "近期新聞熱度為 48.3 分，屬於中性因子。"
+      "description": "正負面新聞比例為 55.8 分，屬於中性因子。"
     }
   ],
   "strategy": {
@@ -62,7 +68,7 @@
     "message_zh": "目前尚無正式策略，客戶端不會以一般分析訊號代替策略。"
   },
   "data_status": {
-    "status": "limited",
+    "status": "ready",
     "label_zh": "資料狀態待確認",
     "message_zh": ""
   },

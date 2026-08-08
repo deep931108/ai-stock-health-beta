@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T23:20:27+08:00",
+  "version": "ClientReport-v1.1-ScoreV2",
+  "generated_at": "2026-08-08T15:15:09+08:00",
   "status": "success",
   "stock_id": "2002",
   "stock": {
@@ -10,22 +10,28 @@
     "industry": "傳統產業"
   },
   "overview": {
-    "health_score": 59.79,
+    "health_score": 65.7,
+    "health_score_v1": null,
+    "health_score_v2": 65.7,
+    "health_score_interval": "--",
+    "health_score_band_zh": "中性",
+    "health_score_calibration_version": "",
     "assessment": "中性",
-    "research_grade": "資料待補",
+    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "research_grade": "觀察名單",
     "confidence_level": "中等信心",
-    "confidence_score": 70.31,
+    "confidence_score": 76.8,
     "risk_level": "中等風險",
-    "risk_score": 45.29,
+    "risk_score": 41.31,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
     {
       "key": "financial",
       "label": "財務健康",
-      "score": 50.0,
-      "level": "Insufficient",
-      "description": "財務健康資料不足，本次不納入有效加權。"
+      "score": 41.44,
+      "level": "偏弱",
+      "description": "EPS 年增率為 10.0 分，屬於扣分因子。"
     },
     {
       "key": "technical",
@@ -37,9 +43,9 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 66.16,
-      "level": "中性",
-      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
+      "score": 71.93,
+      "level": "良好",
+      "description": "法人連買連賣為 83.0 分，屬於加分因子。"
     },
     {
       "key": "market",
@@ -51,9 +57,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 59.72,
+      "score": 61.46,
       "level": "中性",
-      "description": "正負面新聞比例為 68.3 分，屬於加分因子。"
+      "description": "正負面新聞比例為 75.3 分，屬於加分因子。"
     }
   ],
   "strategy": {
@@ -62,7 +68,7 @@
     "message_zh": "目前尚無正式策略，客戶端不會以一般分析訊號代替策略。"
   },
   "data_status": {
-    "status": "blocked",
+    "status": "ready",
     "label_zh": "資料狀態待確認",
     "message_zh": ""
   },

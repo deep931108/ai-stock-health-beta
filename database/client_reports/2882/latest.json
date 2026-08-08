@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T23:20:25+08:00",
+  "version": "ClientReport-v1.1-ScoreV2",
+  "generated_at": "2026-08-08T15:15:07+08:00",
   "status": "success",
   "stock_id": "2882",
   "stock": {
@@ -10,21 +10,27 @@
     "industry": "金融保險業"
   },
   "overview": {
-    "health_score": 57.38,
+    "health_score": 65.7,
+    "health_score_v1": null,
+    "health_score_v2": 65.7,
+    "health_score_interval": "--",
+    "health_score_band_zh": "中性",
+    "health_score_calibration_version": "",
     "assessment": "中性",
-    "research_grade": "保持觀望",
+    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "research_grade": "觀察名單",
     "confidence_level": "中等信心",
-    "confidence_score": 78.88,
+    "confidence_score": 77.39,
     "risk_level": "中等風險",
-    "risk_score": 46.91,
+    "risk_score": 41.27,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
     {
       "key": "financial",
       "label": "財務健康",
-      "score": 54.49,
-      "level": "偏弱",
+      "score": 73.82,
+      "level": "良好",
       "description": "EPS 年增率為 98.0 分，屬於加分因子。"
     },
     {
@@ -51,9 +57,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 56.08,
+      "score": 55.8,
       "level": "中性",
-      "description": "近期新聞熱度為 68.0 分，屬於加分因子。"
+      "description": "近期新聞熱度為 66.7 分，屬於加分因子。"
     }
   ],
   "strategy": {
@@ -62,7 +68,7 @@
     "message_zh": "目前尚無正式策略，客戶端不會以一般分析訊號代替策略。"
   },
   "data_status": {
-    "status": "stale",
+    "status": "ready",
     "label_zh": "資料狀態待確認",
     "message_zh": ""
   },

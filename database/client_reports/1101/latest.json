@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T23:20:27+08:00",
+  "version": "ClientReport-v1.1-ScoreV2",
+  "generated_at": "2026-08-08T15:15:08+08:00",
   "status": "success",
   "stock_id": "1101",
   "stock": {
@@ -10,8 +10,14 @@
     "industry": "傳統產業"
   },
   "overview": {
-    "health_score": 55.65,
+    "health_score": 59.3,
+    "health_score_v1": null,
+    "health_score_v2": 59.3,
+    "health_score_interval": "--",
+    "health_score_band_zh": "中性",
+    "health_score_calibration_version": "",
     "assessment": "中性",
+    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
     "confidence_score": 77.41,
@@ -51,7 +57,7 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 46.68,
+      "score": 46.7,
       "level": "偏弱",
       "description": "正負面新聞比例為 31.7 分，屬於扣分因子。"
     }

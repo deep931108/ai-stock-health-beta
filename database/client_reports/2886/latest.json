@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T23:20:24+08:00",
+  "version": "ClientReport-v1.1-ScoreV2",
+  "generated_at": "2026-08-08T15:15:08+08:00",
   "status": "success",
   "stock_id": "2886",
   "stock": {
@@ -10,22 +10,28 @@
     "industry": "金融保險業"
   },
   "overview": {
-    "health_score": 69.44,
-    "assessment": "中性",
-    "research_grade": "觀察名單",
+    "health_score": 80.4,
+    "health_score_v1": null,
+    "health_score_v2": 80.4,
+    "health_score_interval": "--",
+    "health_score_band_zh": "良好",
+    "health_score_calibration_version": "",
+    "assessment": "良好",
+    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "research_grade": "優先觀察",
     "confidence_level": "中等信心",
-    "confidence_score": 74.94,
+    "confidence_score": 74.98,
     "risk_level": "中等風險",
-    "risk_score": 34.87,
-    "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
+    "risk_score": 35.38,
+    "summary_zh": "可列入重點觀察清單，等待條件確認或更合適的研究時點。"
   },
   "health_indicators": [
     {
       "key": "financial",
       "label": "財務健康",
-      "score": 68.15,
+      "score": 64.14,
       "level": "中性",
-      "description": "營收年增率為 76.4 分，屬於加分因子。"
+      "description": "營收年增率為 78.9 分，屬於加分因子。"
     },
     {
       "key": "technical",
@@ -51,9 +57,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 69.98,
+      "score": 67.03,
       "level": "中性",
-      "description": "正負面新聞比例為 80.9 分，屬於加分因子。"
+      "description": "正負面新聞比例為 76.3 分，屬於加分因子。"
     }
   ],
   "strategy": {
@@ -62,7 +68,7 @@
     "message_zh": "目前尚無正式策略，客戶端不會以一般分析訊號代替策略。"
   },
   "data_status": {
-    "status": "stale",
+    "status": "ready",
     "label_zh": "資料狀態待確認",
     "message_zh": ""
   },

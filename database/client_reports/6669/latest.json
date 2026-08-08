@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.0",
-  "generated_at": "2026-08-07T23:20:18+08:00",
+  "version": "ClientReport-v1.1-ScoreV2",
+  "generated_at": "2026-08-08T15:14:54+08:00",
   "status": "success",
   "stock_id": "6669",
   "stock": {
@@ -10,13 +10,19 @@
     "industry": "AI電子業"
   },
   "overview": {
-    "health_score": 65.44,
-    "assessment": "中性",
-    "research_grade": "觀察名單",
+    "health_score": 75.1,
+    "health_score_v1": null,
+    "health_score_v2": 75.1,
+    "health_score_interval": "--",
+    "health_score_band_zh": "良好",
+    "health_score_calibration_version": "",
+    "assessment": "良好",
+    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "research_grade": "優先觀察",
     "confidence_level": "中等信心",
-    "confidence_score": 74.42,
+    "confidence_score": 74.39,
     "risk_level": "中等風險",
-    "risk_score": 45.5,
+    "risk_score": 45.54,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -37,9 +43,9 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 57.01,
+      "score": 56.5,
       "level": "中性",
-      "description": "融資 5 日變化為 19.2 分，屬於扣分因子。"
+      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
     },
     {
       "key": "market",
@@ -51,9 +57,9 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 69.17,
+      "score": 68.61,
       "level": "中性",
-      "description": "正負面新聞比例為 83.7 分，屬於加分因子。"
+      "description": "正負面新聞比例為 84.6 分，屬於加分因子。"
     }
   ],
   "strategy": {
