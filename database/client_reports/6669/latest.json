@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T16:05:05+08:00",
+  "generated_at": "2026-08-08T16:22:58+08:00",
   "status": "success",
   "stock_id": "6669",
   "stock": {
@@ -180,12 +180,5 @@
     "message_zh": ""
   },
   "notices_zh": [],
-  "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
-  "safety": {
-    "internal_paths_exposed": false,
-    "holdout_details_exposed": false,
-    "candidate_parameters_exposed": false,
-    "live_order_available": false,
-    "investment_advice": false
-  }
+  "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。"
 }
