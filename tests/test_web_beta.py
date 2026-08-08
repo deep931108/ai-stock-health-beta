@@ -51,14 +51,20 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=1.4' in html
-    assert 'app.js?v=1.4' in html
+    assert 'evidence.css?v=1.5' in html
+    assert 'app.js?v=1.5' in html
     assert 'score-evidence-item' in js
     assert 'score-evidence-metrics' in js
     assert "function renderHistory" in js
     assert "function renderEvidence" in js
     assert "health_impact" not in js
     assert "item.impact" in js
+    assert 'id="stockCenter"' in html
+    assert 'id="stockCenterGrid"' in html
+    assert 'id="watchlistOnlyButton"' in html
+    assert "function renderStockCenter" in js
+    assert 'localStorage.getItem("aiStockWatchlist")' in js
+    assert "完整清單將在下一階段加入" not in js
 
 
 def test_invalid_stock_id_is_rejected() -> None:

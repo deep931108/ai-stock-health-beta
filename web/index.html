@@ -8,7 +8,7 @@
   <link rel="manifest" href="/assets/manifest.webmanifest">
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/styles.css">
-  <link rel="stylesheet" href="/assets/evidence.css?v=1.4">
+  <link rel="stylesheet" href="/assets/evidence.css?v=1.5">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body>
@@ -33,6 +33,20 @@
         </div>
         <span id="formHint" class="form-hint" aria-live="polite">正在讀取可用股票…</span>
       </form>
+    </section>
+
+    <section id="stockCenter" class="stock-center-section" aria-labelledby="stockCenterTitle">
+      <div class="stock-center-heading">
+        <div><span class="section-kicker">股票中心</span><h2 id="stockCenterTitle">找到值得深入理解的股票</h2></div>
+        <div class="stock-center-count"><b id="stockCenterCount">0</b><span>份客戶研究報告</span></div>
+      </div>
+      <div class="stock-center-tools">
+        <div id="sectorFilters" class="sector-filters" aria-label="板塊篩選"></div>
+        <button id="watchlistOnlyButton" class="watchlist-only" type="button" aria-pressed="false">☆ 只看自選 <span id="watchlistCount">0</span></button>
+      </div>
+      <div id="stockCenterLoading" class="stock-center-empty">正在整理股票中心…</div>
+      <div id="stockCenterGrid" class="stock-center-grid" aria-live="polite"></div>
+      <div id="stockCenterEmpty" class="stock-center-empty hidden">目前沒有符合條件的股票。</div>
     </section>
 
     <div id="loadingCard" class="state-card hidden" role="status">
@@ -134,6 +148,6 @@
     </nav>
     <div id="toast" class="toast" aria-live="polite"></div>
   </main>
-  <script src="/assets/app.js?v=1.4" defer></script>
+  <script src="/assets/app.js?v=1.5" defer></script>
 </body>
 </html>

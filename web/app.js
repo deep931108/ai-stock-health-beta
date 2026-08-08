@@ -2,6 +2,9 @@ const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
 let currentReport = null;
 let available = [];
+let stockCatalog = [];
+let activeSector = "全部";
+let watchlistOnly = false;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -43,6 +46,7 @@ function render(report) {
   renderHistory(report.score_history || []);
   renderSources(report.data_sources || []);
   refreshSavedButton();
+  if (stockCatalog.length) renderStockCenter();
 }
 
 const factorNames = {financial:"財務健康",technical:"技術健康",institutional:"法人籌碼",market:"市場環境",news:"新聞情緒"};
@@ -163,7 +167,15 @@ async function loadStock(stockId) {
 }
 
 function watchlist() {
-  try { return JSON.parse(localStorage.getItem("aiStockWatchlist") || "[]"); } catch { return []; }
+  try {
+    const saved = JSON.parse(localStorage.getItem("aiStockWatchlist") || "[]");
+    return Array.isArray(saved) ? [...new Set(saved.map(String).filter((id) => /^\d{4}$/.test(id)))] : [];
+  } catch { return []; }
+}
+
+function saveWatchlist(items) {
+  localStorage.setItem("aiStockWatchlist", JSON.stringify([...new Set(items.map(String))]));
+  refreshWatchlistUI();
 }
 
 function refreshSavedButton() {
@@ -177,9 +189,65 @@ function toggleSaved() {
   const saved = new Set(watchlist());
   const adding = !saved.has(currentReport.id);
   adding ? saved.add(currentReport.id) : saved.delete(currentReport.id);
-  localStorage.setItem("aiStockWatchlist", JSON.stringify([...saved]));
-  refreshSavedButton();
+  saveWatchlist([...saved]);
   showToast(adding ? `已將 ${currentReport.name} 加入自選` : `已將 ${currentReport.name} 移出自選`);
+}
+
+function sectorName(industry) {
+  const value = String(industry || "");
+  if (/半導體/.test(value)) return "半導體業";
+  if (/生技|醫療|製藥/.test(value)) return "生技醫療業";
+  if (/航運|海運|航空/.test(value)) return "航運業";
+  if (/金融|保險|銀行|金控|證券/.test(value)) return "金融保險業";
+  if (/電子|電腦|光電|通信|網路/.test(value)) return "AI電子業";
+  return "傳統產業";
+}
+
+function renderSectorFilters() {
+  const preferred = ["全部", "AI電子業", "傳統產業", "半導體業", "生技醫療業", "航運業", "金融保險業"];
+  const present = new Set(stockCatalog.map((item) => item.sector));
+  const sectors = preferred.filter((item) => item === "全部" || present.has(item));
+  $("sectorFilters").innerHTML = sectors.map((sector) => `<button type="button" class="sector-filter ${sector === activeSector ? "active" : ""}" data-sector="${escapeHtml(sector)}">${escapeHtml(sector)}</button>`).join("");
+  document.querySelectorAll(".sector-filter").forEach((button) => button.addEventListener("click", () => {
+    activeSector = button.dataset.sector;
+    renderSectorFilters();
+    renderStockCenter();
+  }));
+}
+
+function renderStockCenter() {
+  const saved = new Set(watchlist());
+  const rows = stockCatalog.filter((item) => (activeSector === "全部" || item.sector === activeSector) && (!watchlistOnly || saved.has(item.id)));
+  $("stockCenterCount").textContent = rows.length;
+  $("watchlistCount").textContent = saved.size;
+  $("watchlistOnlyButton").classList.toggle("active", watchlistOnly);
+  $("watchlistOnlyButton").setAttribute("aria-pressed", String(watchlistOnly));
+  $("stockCenterGrid").innerHTML = rows.map((item) => `<article class="stock-center-card ${currentReport?.id === item.id ? "current" : ""}">
+    <div class="stock-card-title"><div><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.id)} · ${escapeHtml(item.industry)}</small></div><strong class="stock-card-score ${levelTone(item.score)}">${Number(item.score).toFixed(1)}</strong></div>
+    <div class="stock-card-meta"><span>研究等級<b>${escapeHtml(item.grade)}</b></span><span>風險<b>${escapeHtml(item.risk_level)}</b></span></div>
+    <div class="stock-card-actions"><span class="stock-card-assessment">${escapeHtml(item.assessment)}</span><button type="button" data-save-stock="${item.id}" aria-label="${saved.has(item.id) ? "移出" : "加入"}${escapeHtml(item.name)}自選">${saved.has(item.id) ? "★ 已自選" : "☆ 加入自選"}</button><button type="button" data-open-stock="${item.id}">查看報告 →</button></div>
+  </article>`).join("");
+  $("stockCenterEmpty").classList.toggle("hidden", rows.length > 0);
+  document.querySelectorAll("[data-open-stock]").forEach((button) => button.addEventListener("click", async () => {
+    const id = button.dataset.openStock;
+    $("stockSearch").value = id;
+    await loadStock(id);
+    document.querySelector(".dashboard-grid")?.scrollIntoView({behavior:"smooth", block:"start"});
+  }));
+  document.querySelectorAll("[data-save-stock]").forEach((button) => button.addEventListener("click", () => {
+    const id = button.dataset.saveStock;
+    const savedItems = new Set(watchlist());
+    const adding = !savedItems.has(id);
+    adding ? savedItems.add(id) : savedItems.delete(id);
+    saveWatchlist([...savedItems]);
+    const stock = stockCatalog.find((item) => item.id === id);
+    showToast(`${stock?.name || id}${adding ? " 已加入自選" : " 已移出自選"}`);
+  }));
+}
+
+function refreshWatchlistUI() {
+  refreshSavedButton();
+  renderStockCenter();
 }
 
 function showToast(message) {
@@ -195,19 +263,32 @@ async function loadAvailable() {
     const payload = await response.json();
     available = payload.stocks || [];
     $("formHint").textContent = available.length ? `目前有 ${available.length} 檔客戶報告可查詢` : "目前尚無可用報告";
+    const reports = await Promise.all(available.map(async (item) => {
+      try {
+        const result = await fetch(`/api/stocks/${encodeURIComponent(item.id)}`, {headers:{Accept:"application/json"}});
+        if (!result.ok) return null;
+        return (await result.json()).report;
+      } catch { return null; }
+    }));
+    stockCatalog = reports.filter(Boolean).map((report) => ({...report, sector:sectorName(report.industry)}));
+    $("stockCenterLoading").classList.add("hidden");
+    renderSectorFilters();
+    renderStockCenter();
   } catch {
     $("formHint").textContent = "可先試用 2330、2891";
+    $("stockCenterLoading").textContent = "股票中心目前無法讀取，請稍後重新整理。";
   }
 }
 
 $("searchForm").addEventListener("submit", (event) => { event.preventDefault(); loadStock($("stockSearch").value.trim()); });
 $("retryButton").addEventListener("click", () => loadStock($("stockSearch").value.trim()));
 $("saveButton").addEventListener("click", toggleSaved);
+$("watchlistOnlyButton").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockCenter(); });
 document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEventListener("click", () => {
   document.querySelectorAll(".mobile-nav button").forEach((item) => item.classList.toggle("active", item === button));
-  if (button.dataset.tab === "watchlist") showToast(`自選股 ${watchlist().length} 檔；完整清單將在下一階段加入`);
+  if (button.dataset.tab === "watchlist") { watchlistOnly = true; renderStockCenter(); $("stockCenter").scrollIntoView({behavior:"smooth"}); }
   if (button.dataset.tab === "about") document.querySelector(".explain-card").scrollIntoView({behavior: "smooth"});
-  if (button.dataset.tab === "home") window.scrollTo({top: 0, behavior: "smooth"});
+  if (button.dataset.tab === "home") { watchlistOnly = false; renderStockCenter(); window.scrollTo({top: 0, behavior: "smooth"}); }
 }));
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
