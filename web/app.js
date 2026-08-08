@@ -49,11 +49,19 @@ const factorNames = {financial:"財務健康",technical:"技術健康",instituti
 
 function factorRows(items, emptyText) {
   if (!items?.length) return `<p class="factor-empty">${escapeHtml(emptyText)}</p>`;
-  return items.map((item) => `<div class="factor-row">
-    <div class="factor-title"><b>${escapeHtml(item.label)}</b><strong class="impact ${item.impact >= 0 ? "up" : "down"}">${item.impact >= 0 ? "+" : ""}${Number(item.impact).toFixed(2)} 分</strong></div>
-    <div class="factor-metrics"><span>${escapeHtml(factorNames[item.factor] || item.factor)}子指標 ${Number(item.score).toFixed(1)} 分</span><span>子項權重 ${Number(item.sub_weight_pct).toFixed(1)}%</span><span>面向權重 ${Number(item.factor_weight_pct).toFixed(1)}%</span></div>
-    <p>${escapeHtml(item.reason)}</p><small>資料來源：${escapeHtml(item.source)}</small>
-  </div>`).join("");
+  return items.map((item) => `<article class="score-evidence-item">
+    <header class="score-evidence-head">
+      <b class="score-evidence-name">${escapeHtml(item.label)}</b>
+      <em class="score-evidence-impact ${item.impact >= 0 ? "is-positive" : "is-negative"}">${item.impact >= 0 ? "+" : ""}${Number(item.impact).toFixed(2)} 分</em>
+    </header>
+    <ul class="score-evidence-metrics">
+      <li>${escapeHtml(factorNames[item.factor] || item.factor)}子指標 ${Number(item.score).toFixed(1)} 分</li>
+      <li>子項權重 ${Number(item.sub_weight_pct).toFixed(1)}%</li>
+      <li>面向權重 ${Number(item.factor_weight_pct).toFixed(1)}%</li>
+    </ul>
+    <p class="score-evidence-reason">${escapeHtml(item.reason)}</p>
+    <p class="score-evidence-source">資料來源：${escapeHtml(item.source)}</p>
+  </article>`).join("");
 }
 
 function renderEvidence(report) {
