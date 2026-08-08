@@ -51,8 +51,8 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=1.5' in html
-    assert 'app.js?v=1.5' in html
+    assert 'evidence.css?v=1.6' in html
+    assert 'app.js?v=1.6' in html
     assert 'score-evidence-item' in js
     assert 'score-evidence-metrics' in js
     assert "function renderHistory" in js
@@ -65,6 +65,13 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderStockCenter" in js
     assert 'localStorage.getItem("aiStockWatchlist")' in js
     assert "完整清單將在下一階段加入" not in js
+    assert 'id="homeView"' in html
+    assert 'id="detailNavigation"' in html
+    assert 'id="backToCenterButton"' in html
+    assert 'id="brandHomeLink"' in html
+    assert "function showDetailView" in js
+    assert "function showHomeView" in js
+    assert 'loadStock("2330");' not in js
 
 
 def test_invalid_stock_id_is_rejected() -> None:

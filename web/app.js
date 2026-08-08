@@ -5,6 +5,7 @@ let available = [];
 let stockCatalog = [];
 let activeSector = "全部";
 let watchlistOnly = false;
+let homeScrollPosition = 0;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -19,6 +20,24 @@ function setState(state, message = "") {
   if (state === "error") $("errorMessage").textContent = message;
 }
 
+function showDetailView() {
+  if (!$("homeView").classList.contains("hidden")) homeScrollPosition = window.scrollY;
+  $("homeView").classList.add("hidden");
+  $("detailNavigation").classList.remove("hidden");
+  window.scrollTo({top: 0});
+}
+
+function showHomeView({restoreScroll = true} = {}) {
+  $("homeView").classList.remove("hidden");
+  $("detailNavigation").classList.add("hidden");
+  $("loadingCard").classList.add("hidden");
+  $("errorCard").classList.add("hidden");
+  $("reportContent").classList.add("hidden");
+  $("saveButton").classList.add("hidden");
+  renderStockCenter();
+  if (restoreScroll) window.requestAnimationFrame(() => window.scrollTo({top: homeScrollPosition, behavior:"smooth"}));
+}
+
 function levelTone(score) {
   if (score >= 75) return "good";
   if (score >= 55) return "neutral";
@@ -27,6 +46,8 @@ function levelTone(score) {
 
 function render(report) {
   currentReport = report;
+  $("saveButton").classList.remove("hidden");
+  $("detailNavigationTitle").textContent = `${report.name}（${report.id}）研究報告`;
   $("stockMeta").textContent = `${report.id} · ${report.industry}`;
   $("stockName").textContent = report.name;
   $("assessment").textContent = report.assessment;
@@ -151,6 +172,7 @@ async function loadStock(stockId) {
     $("formHint").textContent = "請輸入四位數台股代號";
     return;
   }
+  showDetailView();
   setState("loading");
   $("formHint").textContent = "正在取得最新研究報告…";
   try {
@@ -283,14 +305,15 @@ async function loadAvailable() {
 $("searchForm").addEventListener("submit", (event) => { event.preventDefault(); loadStock($("stockSearch").value.trim()); });
 $("retryButton").addEventListener("click", () => loadStock($("stockSearch").value.trim()));
 $("saveButton").addEventListener("click", toggleSaved);
+$("backToCenterButton").addEventListener("click", () => showHomeView());
+$("brandHomeLink").addEventListener("click", (event) => { event.preventDefault(); showHomeView({restoreScroll:false}); window.scrollTo({top:0, behavior:"smooth"}); });
 $("watchlistOnlyButton").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockCenter(); });
 document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEventListener("click", () => {
   document.querySelectorAll(".mobile-nav button").forEach((item) => item.classList.toggle("active", item === button));
-  if (button.dataset.tab === "watchlist") { watchlistOnly = true; renderStockCenter(); $("stockCenter").scrollIntoView({behavior:"smooth"}); }
+  if (button.dataset.tab === "watchlist") { watchlistOnly = true; showHomeView({restoreScroll:false}); $("stockCenter").scrollIntoView({behavior:"smooth"}); }
   if (button.dataset.tab === "about") document.querySelector(".explain-card").scrollIntoView({behavior: "smooth"});
-  if (button.dataset.tab === "home") { watchlistOnly = false; renderStockCenter(); window.scrollTo({top: 0, behavior: "smooth"}); }
+  if (button.dataset.tab === "home") { watchlistOnly = false; showHomeView({restoreScroll:false}); window.scrollTo({top: 0, behavior: "smooth"}); }
 }));
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
 loadAvailable();
-loadStock("2330");
