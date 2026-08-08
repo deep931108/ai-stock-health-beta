@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T15:15:08+08:00",
+  "generated_at": "2026-08-08T15:54:07+08:00",
   "status": "success",
   "stock_id": "2615",
   "stock": {
@@ -31,35 +31,192 @@
       "label": "財務健康",
       "score": 82.7,
       "level": "良好",
-      "description": "營收年增率為 85.9 分，屬於加分因子。"
+      "description": "營收年增率為 85.9 分，屬於加分因子。",
+      "weight": 0.06,
+      "weighted_contribution": 5.03,
+      "reasons": [],
+      "source_label_zh": "公開財報與營收資料"
     },
     {
       "key": "technical",
       "label": "技術健康",
       "score": 63.5,
       "level": "中性",
-      "description": "RSI 相對強弱為 92.7 分，屬於加分因子。"
+      "description": "RSI 相對強弱為 92.7 分，屬於加分因子。",
+      "weight": 0.36,
+      "weighted_contribution": 23.15,
+      "reasons": [],
+      "source_label_zh": "交易所股價與成交資料"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
       "score": 43.45,
       "level": "偏弱",
-      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
+      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+      "weight": 0.28,
+      "weighted_contribution": 12.04,
+      "reasons": [],
+      "source_label_zh": "三大法人與籌碼公開資料"
     },
     {
       "key": "market",
       "label": "市場環境",
       "score": 50.2,
       "level": "偏弱",
-      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。"
+      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+      "weight": 0.11,
+      "weighted_contribution": 5.6,
+      "reasons": [],
+      "source_label_zh": "大盤、產業與市場行情資料"
     },
     {
       "key": "news",
       "label": "新聞情緒",
       "score": 69.45,
       "level": "中性",
-      "description": "正負面新聞比例為 92.0 分，屬於加分因子。"
+      "description": "正負面新聞比例為 92.0 分，屬於加分因子。",
+      "weight": 0.19,
+      "weighted_contribution": 12.91,
+      "reasons": [],
+      "source_label_zh": "公開新聞索引"
+    }
+  ],
+  "evidence_version": "ClientEvidence-v1.0",
+  "score_explanation": {
+    "positive_factors": [
+      {
+        "key": "financial",
+        "label": "財務健康",
+        "score": 82.7,
+        "direction": "positive",
+        "reason_zh": "營收年增率為 85.9 分，屬於加分因子。",
+        "source_label_zh": "公開財報與營收資料"
+      },
+      {
+        "key": "news",
+        "label": "新聞情緒",
+        "score": 69.45,
+        "direction": "positive",
+        "reason_zh": "正負面新聞比例為 92.0 分，屬於加分因子。",
+        "source_label_zh": "公開新聞索引"
+      },
+      {
+        "key": "technical",
+        "label": "技術健康",
+        "score": 63.5,
+        "direction": "positive",
+        "reason_zh": "RSI 相對強弱為 92.7 分，屬於加分因子。",
+        "source_label_zh": "交易所股價與成交資料"
+      }
+    ],
+    "negative_factors": [
+      {
+        "key": "institutional",
+        "label": "法人籌碼",
+        "score": 43.45,
+        "direction": "negative",
+        "reason_zh": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+        "source_label_zh": "三大法人與籌碼公開資料"
+      },
+      {
+        "key": "market",
+        "label": "市場環境",
+        "score": 50.2,
+        "direction": "negative",
+        "reason_zh": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+        "source_label_zh": "大盤、產業與市場行情資料"
+      }
+    ],
+    "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；校準不改變股票排序。"
+  },
+  "score_history": [
+    {
+      "date": "2026-07-30",
+      "score": 58.46,
+      "risk": 42.53,
+      "confidence": 65.12
+    },
+    {
+      "date": "2026-08-01",
+      "score": 63.26,
+      "risk": 39.06,
+      "confidence": 65.94
+    },
+    {
+      "date": "2026-08-02",
+      "score": 64.43,
+      "risk": 36.77,
+      "confidence": 75.15
+    },
+    {
+      "date": "2026-08-03",
+      "score": 63.36,
+      "risk": 37.45,
+      "confidence": 74.99
+    },
+    {
+      "date": "2026-08-04",
+      "score": 63.78,
+      "risk": 36.65,
+      "confidence": 75.17
+    },
+    {
+      "date": "2026-08-06",
+      "score": 59.14,
+      "risk": 39.57,
+      "confidence": 74.36
+    },
+    {
+      "date": "2026-08-06",
+      "score": 59.14,
+      "risk": 39.57,
+      "confidence": 74.36
+    },
+    {
+      "date": "2026-08-07",
+      "score": 57.97,
+      "risk": 41.86,
+      "confidence": 73.84
+    },
+    {
+      "date": "2026-08-07",
+      "score": 57.97,
+      "risk": 41.86,
+      "confidence": 73.84
+    },
+    {
+      "date": "2026-08-08",
+      "score": 64.4,
+      "risk": 42.21,
+      "confidence": 73.69
+    }
+  ],
+  "data_sources": [
+    {
+      "key": "financial",
+      "label": "財務健康",
+      "source_label_zh": "公開財報與營收資料"
+    },
+    {
+      "key": "technical",
+      "label": "技術健康",
+      "source_label_zh": "交易所股價與成交資料"
+    },
+    {
+      "key": "institutional",
+      "label": "法人籌碼",
+      "source_label_zh": "三大法人與籌碼公開資料"
+    },
+    {
+      "key": "market",
+      "label": "市場環境",
+      "source_label_zh": "大盤、產業與市場行情資料"
+    },
+    {
+      "key": "news",
+      "label": "新聞情緒",
+      "source_label_zh": "公開新聞索引"
     }
   ],
   "strategy": {

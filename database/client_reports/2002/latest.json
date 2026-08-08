@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T15:15:09+08:00",
+  "generated_at": "2026-08-08T15:54:10+08:00",
   "status": "success",
   "stock_id": "2002",
   "stock": {
@@ -31,35 +31,150 @@
       "label": "財務健康",
       "score": 41.44,
       "level": "偏弱",
-      "description": "EPS 年增率為 10.0 分，屬於扣分因子。"
+      "description": "EPS 年增率為 10.0 分，屬於扣分因子。",
+      "weight": 0.11,
+      "weighted_contribution": 4.75,
+      "reasons": [],
+      "source_label_zh": "公開財報與營收資料"
     },
     {
       "key": "technical",
       "label": "技術健康",
       "score": 57.91,
       "level": "中性",
-      "description": "RSI 相對強弱為 87.6 分，屬於加分因子。"
+      "description": "RSI 相對強弱為 87.6 分，屬於加分因子。",
+      "weight": 0.34,
+      "weighted_contribution": 19.9,
+      "reasons": [],
+      "source_label_zh": "交易所股價與成交資料"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
       "score": 71.93,
       "level": "良好",
-      "description": "法人連買連賣為 83.0 分，屬於加分因子。"
+      "description": "法人連買連賣為 83.0 分，屬於加分因子。",
+      "weight": 0.26,
+      "weighted_contribution": 18.79,
+      "reasons": [],
+      "source_label_zh": "三大法人與籌碼公開資料"
     },
     {
       "key": "market",
       "label": "市場環境",
       "score": 50.2,
       "level": "偏弱",
-      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。"
+      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+      "weight": 0.11,
+      "weighted_contribution": 5.28,
+      "reasons": [],
+      "source_label_zh": "大盤、產業與市場行情資料"
     },
     {
       "key": "news",
       "label": "新聞情緒",
       "score": 61.46,
       "level": "中性",
-      "description": "正負面新聞比例為 75.3 分，屬於加分因子。"
+      "description": "正負面新聞比例為 75.3 分，屬於加分因子。",
+      "weight": 0.18,
+      "weighted_contribution": 10.77,
+      "reasons": [],
+      "source_label_zh": "公開新聞索引"
+    }
+  ],
+  "evidence_version": "ClientEvidence-v1.0",
+  "score_explanation": {
+    "positive_factors": [
+      {
+        "key": "institutional",
+        "label": "法人籌碼",
+        "score": 71.93,
+        "direction": "positive",
+        "reason_zh": "法人連買連賣為 83.0 分，屬於加分因子。",
+        "source_label_zh": "三大法人與籌碼公開資料"
+      },
+      {
+        "key": "news",
+        "label": "新聞情緒",
+        "score": 61.46,
+        "direction": "positive",
+        "reason_zh": "正負面新聞比例為 75.3 分，屬於加分因子。",
+        "source_label_zh": "公開新聞索引"
+      },
+      {
+        "key": "technical",
+        "label": "技術健康",
+        "score": 57.91,
+        "direction": "positive",
+        "reason_zh": "RSI 相對強弱為 87.6 分，屬於加分因子。",
+        "source_label_zh": "交易所股價與成交資料"
+      }
+    ],
+    "negative_factors": [
+      {
+        "key": "financial",
+        "label": "財務健康",
+        "score": 41.44,
+        "direction": "negative",
+        "reason_zh": "EPS 年增率為 10.0 分，屬於扣分因子。",
+        "source_label_zh": "公開財報與營收資料"
+      },
+      {
+        "key": "market",
+        "label": "市場環境",
+        "score": 50.2,
+        "direction": "negative",
+        "reason_zh": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+        "source_label_zh": "大盤、產業與市場行情資料"
+      }
+    ],
+    "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；校準不改變股票排序。"
+  },
+  "score_history": [
+    {
+      "date": "2026-08-06",
+      "score": 60.39,
+      "risk": 44.64,
+      "confidence": 70.18
+    },
+    {
+      "date": "2026-08-07",
+      "score": 59.79,
+      "risk": 45.29,
+      "confidence": 70.31
+    },
+    {
+      "date": "2026-08-08",
+      "score": 65.7,
+      "risk": 41.31,
+      "confidence": 76.8
+    }
+  ],
+  "data_sources": [
+    {
+      "key": "financial",
+      "label": "財務健康",
+      "source_label_zh": "公開財報與營收資料"
+    },
+    {
+      "key": "technical",
+      "label": "技術健康",
+      "source_label_zh": "交易所股價與成交資料"
+    },
+    {
+      "key": "institutional",
+      "label": "法人籌碼",
+      "source_label_zh": "三大法人與籌碼公開資料"
+    },
+    {
+      "key": "market",
+      "label": "市場環境",
+      "source_label_zh": "大盤、產業與市場行情資料"
+    },
+    {
+      "key": "news",
+      "label": "新聞情緒",
+      "source_label_zh": "公開新聞索引"
     }
   ],
   "strategy": {

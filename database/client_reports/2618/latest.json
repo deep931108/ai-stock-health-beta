@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T15:15:08+08:00",
+  "generated_at": "2026-08-08T15:54:06+08:00",
   "status": "success",
   "stock_id": "2618",
   "stock": {
@@ -31,35 +31,150 @@
       "label": "財務健康",
       "score": 73.91,
       "level": "良好",
-      "description": "EPS 年增率為 89.3 分，屬於加分因子。"
+      "description": "EPS 年增率為 89.3 分，屬於加分因子。",
+      "weight": 0.11,
+      "weighted_contribution": 8.47,
+      "reasons": [],
+      "source_label_zh": "公開財報與營收資料"
     },
     {
       "key": "technical",
       "label": "技術健康",
       "score": 71.97,
       "level": "良好",
-      "description": "多空排列為 92.0 分，屬於加分因子。"
+      "description": "多空排列為 92.0 分，屬於加分因子。",
+      "weight": 0.34,
+      "weighted_contribution": 24.74,
+      "reasons": [],
+      "source_label_zh": "交易所股價與成交資料"
     },
     {
       "key": "institutional",
       "label": "法人籌碼",
       "score": 36.95,
       "level": "不佳",
-      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。"
+      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+      "weight": 0.26,
+      "weighted_contribution": 9.65,
+      "reasons": [],
+      "source_label_zh": "三大法人與籌碼公開資料"
     },
     {
       "key": "market",
       "label": "市場環境",
       "score": 50.2,
       "level": "偏弱",
-      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。"
+      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+      "weight": 0.11,
+      "weighted_contribution": 5.28,
+      "reasons": [],
+      "source_label_zh": "大盤、產業與市場行情資料"
     },
     {
       "key": "news",
       "label": "新聞情緒",
       "score": 66.5,
       "level": "中性",
-      "description": "正負面新聞比例為 92.0 分，屬於加分因子。"
+      "description": "正負面新聞比例為 92.0 分，屬於加分因子。",
+      "weight": 0.18,
+      "weighted_contribution": 11.66,
+      "reasons": [],
+      "source_label_zh": "公開新聞索引"
+    }
+  ],
+  "evidence_version": "ClientEvidence-v1.0",
+  "score_explanation": {
+    "positive_factors": [
+      {
+        "key": "financial",
+        "label": "財務健康",
+        "score": 73.91,
+        "direction": "positive",
+        "reason_zh": "EPS 年增率為 89.3 分，屬於加分因子。",
+        "source_label_zh": "公開財報與營收資料"
+      },
+      {
+        "key": "technical",
+        "label": "技術健康",
+        "score": 71.97,
+        "direction": "positive",
+        "reason_zh": "多空排列為 92.0 分，屬於加分因子。",
+        "source_label_zh": "交易所股價與成交資料"
+      },
+      {
+        "key": "news",
+        "label": "新聞情緒",
+        "score": 66.5,
+        "direction": "positive",
+        "reason_zh": "正負面新聞比例為 92.0 分，屬於加分因子。",
+        "source_label_zh": "公開新聞索引"
+      }
+    ],
+    "negative_factors": [
+      {
+        "key": "institutional",
+        "label": "法人籌碼",
+        "score": 36.95,
+        "direction": "negative",
+        "reason_zh": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+        "source_label_zh": "三大法人與籌碼公開資料"
+      },
+      {
+        "key": "market",
+        "label": "市場環境",
+        "score": 50.2,
+        "direction": "negative",
+        "reason_zh": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+        "source_label_zh": "大盤、產業與市場行情資料"
+      }
+    ],
+    "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；校準不改變股票排序。"
+  },
+  "score_history": [
+    {
+      "date": "2026-08-06",
+      "score": 56.8,
+      "risk": 50.96,
+      "confidence": 66.29
+    },
+    {
+      "date": "2026-08-07",
+      "score": 56.06,
+      "risk": 51.8,
+      "confidence": 66.66
+    },
+    {
+      "date": "2026-08-08",
+      "score": 66.2,
+      "risk": 44.29,
+      "confidence": 74.99
+    }
+  ],
+  "data_sources": [
+    {
+      "key": "financial",
+      "label": "財務健康",
+      "source_label_zh": "公開財報與營收資料"
+    },
+    {
+      "key": "technical",
+      "label": "技術健康",
+      "source_label_zh": "交易所股價與成交資料"
+    },
+    {
+      "key": "institutional",
+      "label": "法人籌碼",
+      "source_label_zh": "三大法人與籌碼公開資料"
+    },
+    {
+      "key": "market",
+      "label": "市場環境",
+      "source_label_zh": "大盤、產業與市場行情資料"
+    },
+    {
+      "key": "news",
+      "label": "新聞情緒",
+      "source_label_zh": "公開新聞索引"
     }
   ],
   "strategy": {
