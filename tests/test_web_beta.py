@@ -51,8 +51,8 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=1.6' in html
-    assert 'app.js?v=1.6' in html
+    assert 'evidence.css?v=1.7' in html
+    assert 'app.js?v=1.7' in html
     assert 'score-evidence-item' in js
     assert 'score-evidence-metrics' in js
     assert "function renderHistory" in js
@@ -72,6 +72,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function showDetailView" in js
     assert "function showHomeView" in js
     assert 'loadStock("2330");' not in js
+    assert 'data-stock-card=' in js
+    assert 'role="link"' in js
+    assert 'event.target.closest("[data-save-stock]")' in js
 
 
 def test_invalid_stock_id_is_rejected() -> None:

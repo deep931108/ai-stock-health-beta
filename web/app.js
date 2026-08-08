@@ -244,18 +244,30 @@ function renderStockCenter() {
   $("watchlistCount").textContent = saved.size;
   $("watchlistOnlyButton").classList.toggle("active", watchlistOnly);
   $("watchlistOnlyButton").setAttribute("aria-pressed", String(watchlistOnly));
-  $("stockCenterGrid").innerHTML = rows.map((item) => `<article class="stock-center-card ${currentReport?.id === item.id ? "current" : ""}">
+  $("stockCenterGrid").innerHTML = rows.map((item) => `<article class="stock-center-card ${currentReport?.id === item.id ? "current" : ""}" data-stock-card="${item.id}" role="link" tabindex="0" aria-label="查看 ${escapeHtml(item.name)}（${item.id}）研究報告">
     <div class="stock-card-title"><div><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.id)} · ${escapeHtml(item.industry)}</small></div><strong class="stock-card-score ${levelTone(item.score)}">${Number(item.score).toFixed(1)}</strong></div>
     <div class="stock-card-meta"><span>研究等級<b>${escapeHtml(item.grade)}</b></span><span>風險<b>${escapeHtml(item.risk_level)}</b></span></div>
     <div class="stock-card-actions"><span class="stock-card-assessment">${escapeHtml(item.assessment)}</span><button type="button" data-save-stock="${item.id}" aria-label="${saved.has(item.id) ? "移出" : "加入"}${escapeHtml(item.name)}自選">${saved.has(item.id) ? "★ 已自選" : "☆ 加入自選"}</button><button type="button" data-open-stock="${item.id}">查看報告 →</button></div>
   </article>`).join("");
   $("stockCenterEmpty").classList.toggle("hidden", rows.length > 0);
-  document.querySelectorAll("[data-open-stock]").forEach((button) => button.addEventListener("click", async () => {
-    const id = button.dataset.openStock;
+  const openCard = async (card) => {
+    const id = card.dataset.stockCard;
     $("stockSearch").value = id;
     await loadStock(id);
     document.querySelector(".dashboard-grid")?.scrollIntoView({behavior:"smooth", block:"start"});
-  }));
+  };
+  document.querySelectorAll("[data-stock-card]").forEach((card) => {
+    card.addEventListener("click", (event) => {
+      if (event.target.closest("[data-save-stock]")) return;
+      openCard(card);
+    });
+    card.addEventListener("keydown", (event) => {
+      if ((event.key === "Enter" || event.key === " ") && !event.target.closest("[data-save-stock]")) {
+        event.preventDefault();
+        openCard(card);
+      }
+    });
+  });
   document.querySelectorAll("[data-save-stock]").forEach((button) => button.addEventListener("click", () => {
     const id = button.dataset.saveStock;
     const savedItems = new Set(watchlist());
