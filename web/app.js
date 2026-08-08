@@ -6,6 +6,7 @@ let stockCatalog = [];
 let activeSector = "全部";
 let watchlistOnly = false;
 let homeScrollPosition = 0;
+let betaSession = null;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -18,6 +19,82 @@ function setState(state, message = "") {
   $("searchButton").disabled = state === "loading";
   $("searchButton").textContent = state === "loading" ? "讀取中…" : "查看健康";
   if (state === "error") $("errorMessage").textContent = message;
+}
+
+function setInviteMessage(message = "", tone = "") {
+  $("inviteMessage").textContent = message;
+  $("inviteMessage").className = `invite-message ${tone}`.trim();
+}
+
+function showInviteGate(message = "") {
+  document.body.classList.remove("auth-pending");
+  document.body.classList.add("auth-locked");
+  $("inviteGate").classList.add("visible");
+  $("inviteCode").value = "";
+  setInviteMessage(message, message ? "error" : "");
+  window.setTimeout(() => $("inviteCode").focus(), 50);
+}
+
+function enterBeta(session) {
+  betaSession = session;
+  document.body.classList.remove("auth-pending", "auth-locked");
+  $("inviteGate").classList.remove("visible");
+  const code = session?.tester_code || "";
+  $("testerBadge").textContent = code;
+  $("testerBadge").classList.toggle("hidden", !code || code === "LOCAL-OWNER");
+  $("logoutButton").classList.toggle("hidden", !session?.invite_required);
+}
+
+async function activateInvite(inviteCode) {
+  $("inviteSubmit").disabled = true;
+  $("inviteSubmit").textContent = "驗證中…";
+  setInviteMessage("正在確認邀請碼…");
+  try {
+    const response = await fetch("/api/beta/activate", {
+      method: "POST",
+      headers: {"Content-Type": "application/json", Accept: "application/json"},
+      body: JSON.stringify({invite_code: inviteCode}),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.detail || "邀請碼驗證失敗");
+    enterBeta({invite_required: true, authorized: true, tester_code: payload.tester_code});
+    await loadAvailable();
+    showToast(`歡迎 ${payload.tester_code}`);
+  } catch (error) {
+    showInviteGate(error.message || "邀請碼無效，請重新確認");
+  } finally {
+    $("inviteSubmit").disabled = false;
+    $("inviteSubmit").textContent = "驗證並進入";
+  }
+}
+
+async function logoutBeta() {
+  $("logoutButton").disabled = true;
+  try {
+    await fetch("/api/beta/logout", {method: "POST", headers: {Accept: "application/json"}});
+  } finally {
+    betaSession = null;
+    $("testerBadge").classList.add("hidden");
+    $("logoutButton").classList.add("hidden");
+    $("logoutButton").disabled = false;
+    showInviteGate("已安全登出，請輸入邀請碼重新進入。 ");
+  }
+}
+
+async function initializeBetaAccess() {
+  try {
+    const response = await fetch("/api/beta/session", {headers: {Accept: "application/json"}});
+    const session = await response.json();
+    if (!response.ok) throw new Error("目前無法確認登入狀態");
+    if (session.invite_required && !session.authorized) {
+      showInviteGate();
+      return;
+    }
+    enterBeta(session);
+    await loadAvailable();
+  } catch (error) {
+    showInviteGate(error.message || "目前無法確認登入狀態，請稍後再試");
+  }
 }
 
 function showDetailView() {
@@ -178,6 +255,10 @@ async function loadStock(stockId) {
   try {
     const response = await fetch(`/api/stocks/${encodeURIComponent(stockId)}`, {headers: {Accept: "application/json"}});
     const payload = await response.json();
+    if (response.status === 401) {
+      showInviteGate("登入已逾期，請重新輸入邀請碼。 ");
+      return;
+    }
     if (!response.ok) throw new Error(payload.detail || "暫時無法取得研究報告");
     render(payload.report);
     setState("ready");
@@ -295,6 +376,11 @@ async function loadAvailable() {
   try {
     const response = await fetch("/api/stocks");
     const payload = await response.json();
+    if (response.status === 401) {
+      showInviteGate("登入已逾期，請重新輸入邀請碼。 ");
+      return;
+    }
+    if (!response.ok) throw new Error(payload.detail || "股票中心目前無法讀取");
     available = payload.stocks || [];
     $("formHint").textContent = available.length ? `目前有 ${available.length} 檔客戶報告可查詢` : "目前尚無可用報告";
     const reports = await Promise.all(available.map(async (item) => {
@@ -320,6 +406,16 @@ $("saveButton").addEventListener("click", toggleSaved);
 $("backToCenterButton").addEventListener("click", () => showHomeView());
 $("brandHomeLink").addEventListener("click", (event) => { event.preventDefault(); showHomeView({restoreScroll:false}); window.scrollTo({top:0, behavior:"smooth"}); });
 $("watchlistOnlyButton").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockCenter(); });
+$("inviteForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const code = $("inviteCode").value.trim().toUpperCase();
+  if (code.length < 5) {
+    setInviteMessage("請輸入完整邀請碼。", "error");
+    return;
+  }
+  activateInvite(code);
+});
+$("logoutButton").addEventListener("click", logoutBeta);
 document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEventListener("click", () => {
   document.querySelectorAll(".mobile-nav button").forEach((item) => item.classList.toggle("active", item === button));
   if (button.dataset.tab === "watchlist") { watchlistOnly = true; showHomeView({restoreScroll:false}); $("stockCenter").scrollIntoView({behavior:"smooth"}); }
@@ -328,4 +424,4 @@ document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEv
 }));
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
-loadAvailable();
+initializeBetaAccess();

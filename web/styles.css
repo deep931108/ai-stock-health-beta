@@ -20,3 +20,50 @@
 .history-empty{margin-top:20px;padding:32px;border:1px dashed #35465e;border-radius:16px;text-align:center;color:var(--muted);font-size:13px}.history-chart-wrap{margin-top:16px;padding:14px 12px 8px;background:#0c131e;border:1px solid #253449;border-radius:18px}.history-chart-wrap svg{display:block;width:100%;height:auto}.chart-grid{stroke:#28384c;stroke-width:1}.chart-label{fill:#8493a8;font-size:10px}.score-line{fill:none;stroke:var(--mint);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}.history-chart-wrap circle{fill:#0c131e;stroke:var(--mint);stroke-width:4}.history-legend{display:flex;align-items:center;justify-content:center;gap:18px;color:var(--muted);font-size:11px}.history-legend b{padding:6px 10px;border-radius:999px}.history-legend .up{color:var(--mint);background:#37e2ad14}.history-legend .down{color:var(--danger);background:#ff6b7d14}
 .sources-section{display:grid;grid-template-columns:.72fr 1.28fr;gap:24px}.sources-section h2{font-size:26px;margin:8px 0 12px}.sources-section p{color:var(--muted);font-size:13px;line-height:1.7}.source-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}.source-list>div{padding:13px;background:#0c131e;border:1px solid #253449;border-radius:13px}.source-list span,.source-list b,.source-list small{display:block}.source-list span{color:var(--blue);font-size:10px}.source-list b{font-size:12px;margin:5px 0}.source-list small{color:var(--muted);font-size:9px}
 @media(max-width:820px){.evidence-section,.history-section,.sources-section{padding:20px;border-radius:22px}.evidence-layout,.sources-section{grid-template-columns:1fr}.evidence-columns{grid-template-columns:1fr}.indicator-detail{grid-template-columns:1fr}.source-list{grid-template-columns:1fr}.history-legend{gap:9px;flex-wrap:wrap}}
+body.auth-pending > .site-shell,
+body.auth-locked > .site-shell { visibility: hidden; }
+
+.invite-gate {
+  position: fixed; inset: 0; z-index: 9999; display: none; place-items: center;
+  min-height: 100dvh; padding: 24px; overflow-y: auto;
+  background: radial-gradient(circle at 50% 15%, #10243c 0, #080d15 44%, #05080d 100%);
+}
+.invite-gate.visible { display: grid; }
+.invite-card {
+  width: min(100%, 480px); padding: 38px; border: 1px solid #29425e; border-radius: 26px;
+  color: #f5f9ff; background: rgba(15, 25, 39, .96); box-shadow: 0 28px 80px rgba(0,0,0,.45);
+}
+.invite-mark {
+  display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 24px;
+  border-radius: 14px; color: white; font-size: 22px; font-weight: 800;
+  background: linear-gradient(145deg, #35a7ff, #235cff);
+}
+.invite-card h1 { margin: 8px 0 14px; font-size: clamp(28px, 6vw, 40px); line-height: 1.2; }
+.invite-intro { color: #b8cce3; line-height: 1.8; }
+.invite-form { display: grid; gap: 10px; margin: 28px 0 18px; }
+.invite-form label { color: #9fc8ef; font-size: 14px; }
+.invite-form input {
+  width: 100%; padding: 16px 17px; border: 1px solid #3b5877; border-radius: 13px;
+  color: #fff; background: #0a1320; font: 700 17px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: .06em; text-transform: uppercase; outline: none;
+}
+.invite-form input:focus { border-color: #36dcb0; box-shadow: 0 0 0 3px rgba(54,220,176,.15); }
+.invite-form button {
+  margin-top: 4px; padding: 15px; border: 0; border-radius: 13px; color: #05110d;
+  background: #37e0b0; font-weight: 800; cursor: pointer;
+}
+.invite-form button:disabled { opacity: .6; cursor: wait; }
+.invite-message { min-height: 22px; margin: 2px 0 0; color: #9fc8ef; font-size: 14px; }
+.invite-message.error { color: #ff8f99; }
+.invite-card > small { color: #7895b2; line-height: 1.6; }
+.account-actions { display: flex; align-items: center; gap: 10px; }
+.tester-badge { padding: 7px 11px; border: 1px solid #197c6d; border-radius: 999px; color: #42e6b7; font-size: 12px; }
+.logout-button { border: 0; color: #9fb7d0; background: transparent; cursor: pointer; }
+.logout-button:hover { color: #fff; }
+
+@media (max-width: 680px) {
+  .invite-gate { align-items: end; padding: 12px; }
+  .invite-card { padding: 27px 22px; border-radius: 22px; }
+  .account-actions { gap: 6px; }
+  .logout-button { font-size: 12px; }
+}

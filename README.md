@@ -111,3 +111,8 @@ database/client_reports/<stock_id>/latest.json
 3. 建立邀請碼與 20 人 Beta 記錄。
 4. 部署免費測試網址。
 5. 最後才購買自有網域與包裝 Android／iOS App。
+# 邀請碼登入
+
+正式 Beta 設定 `AI_STOCK_BETA_REQUIRE_INVITE=1` 後，未登入的訪客會先看到邀請碼輸入畫面。驗證成功後才會載入股票中心；右上角會顯示測試者代號，並可使用「登出／更換邀請碼」清除目前登入狀態。
+
+若部署後仍直接進入網站，通常是瀏覽器仍保存有效的 Beta Cookie，可按右上角登出，或使用無痕視窗確認邀請碼閘門。

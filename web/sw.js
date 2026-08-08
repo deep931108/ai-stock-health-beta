@@ -1,4 +1,4 @@
-const CACHE = "ai-stock-health-beta-v4";
+const CACHE = "ai-stock-health-beta-v5-invite-gate";
 const SHELL = ["/", "/assets/styles.css", "/assets/app.js", "/assets/icon.svg", "/assets/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL))));

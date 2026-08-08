@@ -1,11 +1,13 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+import app as app_module
 from app import app
+from beta_access import BetaAccessStore
 from client_report_adapter import ClientReportRepository
 
 
@@ -52,7 +54,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
     assert 'evidence.css?v=1.7' in html
-    assert 'app.js?v=1.7' in html
+    assert 'app.js?v=1.8' in html
     assert 'score-evidence-item' in js
     assert 'score-evidence-metrics' in js
     assert "function renderHistory" in js
@@ -75,6 +77,34 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'data-stock-card=' in js
     assert 'role="link"' in js
     assert 'event.target.closest("[data-save-stock]")' in js
+    assert 'id="inviteGate"' in html
+    assert 'id="inviteForm"' in html
+    assert 'id="inviteCode"' in html
+    assert 'id="logoutButton"' in html
+    assert "function initializeBetaAccess" in js
+    assert 'fetch("/api/beta/activate"' in js
+    assert 'fetch("/api/beta/logout"' in js
+
+
+def test_invite_gate_activation_and_logout(tmp_path: Path, monkeypatch) -> None:
+    store = BetaAccessStore(tmp_path / "beta.sqlite3")
+    invitation = store.create_invites(1)[0]
+    monkeypatch.setattr(app_module, "REQUIRE_INVITE", True)
+    monkeypatch.setattr(app_module, "SECURE_COOKIE", False)
+    monkeypatch.setattr(app_module, "beta_access", store)
+    gated = TestClient(app_module.app)
+
+    assert gated.get("/api/beta/session").json()["authorized"] is False
+    assert gated.get("/api/stocks").status_code == 401
+
+    activated = gated.post("/api/beta/activate", json={"invite_code": invitation["invite_code"]})
+    assert activated.status_code == 200
+    assert activated.json()["tester_code"] == "BETA-001"
+    assert gated.get("/api/beta/session").json()["authorized"] is True
+    assert gated.get("/api/stocks").status_code == 200
+
+    assert gated.post("/api/beta/logout").status_code == 200
+    assert gated.get("/api/beta/session").json()["authorized"] is False
 
 
 def test_invalid_stock_id_is_rejected() -> None:
@@ -105,3 +135,4 @@ def test_repository_prefers_and_normalizes_engine_report(tmp_path: Path) -> None
     assert report["industry"] != ""
     assert report["indicators"][0]["note"] == "EPS contribution"
     assert report["source"] == "engine"
+
