@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T15:53:58+08:00",
+  "generated_at": "2026-08-08T16:00:36+08:00",
   "status": "success",
   "stock_id": "3711",
   "stock": {
@@ -13,11 +13,11 @@
     "health_score": 65.7,
     "health_score_v1": null,
     "health_score_v2": 65.7,
-    "health_score_interval": "--",
+    "health_score_interval": "60-69",
     "health_score_band_zh": "中性",
     "health_score_calibration_version": "",
     "assessment": "中性",
-    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "score_explanation_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。",
     "research_grade": "觀察名單",
     "confidence_level": "中等信心",
     "confidence_score": 71.65,
@@ -116,7 +116,7 @@
         "label": "技術健康",
         "score": 45.23,
         "direction": "negative",
-        "reason_zh": "RSI 相對強弱為 86.1 分，屬於加分因子。",
+        "reason_zh": "技術健康整體為 45.2 分，低於中性基準；目前可見加分項為「RSI 相對強弱為 86.1 分」，其餘子項仍抵銷部分分數。",
         "source_label_zh": "交易所股價與成交資料"
       },
       {
@@ -128,56 +128,14 @@
         "source_label_zh": "大盤、產業與市場行情資料"
       }
     ],
-    "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；校準不改變股票排序。"
+    "method_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。"
   },
   "score_history": [
-    {
-      "date": "2026-07-30",
-      "score": 45.27,
-      "risk": 50.4,
-      "confidence": 64.7
-    },
-    {
-      "date": "2026-08-01",
-      "score": 49.7,
-      "risk": 49.74,
-      "confidence": 65.03
-    },
-    {
-      "date": "2026-08-02",
-      "score": 53.15,
-      "risk": 48.34,
-      "confidence": 73.97
-    },
-    {
-      "date": "2026-08-03",
-      "score": 58.2,
-      "risk": 47.93,
-      "confidence": 75.02
-    },
-    {
-      "date": "2026-08-04",
-      "score": 58.06,
-      "risk": 47.99,
-      "confidence": 74.86
-    },
-    {
-      "date": "2026-08-06",
-      "score": 59.07,
-      "risk": 47.31,
-      "confidence": 74.95
-    },
     {
       "date": "2026-08-06",
       "score": 59.11,
       "risk": 47.31,
       "confidence": 74.93
-    },
-    {
-      "date": "2026-08-07",
-      "score": 60.06,
-      "risk": 43.88,
-      "confidence": 74.29
     },
     {
       "date": "2026-08-07",

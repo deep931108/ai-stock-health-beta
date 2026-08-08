@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T15:54:01+08:00",
+  "generated_at": "2026-08-08T16:00:35+08:00",
   "status": "success",
   "stock_id": "2317",
   "stock": {
@@ -13,11 +13,11 @@
     "health_score": 63.9,
     "health_score_v1": null,
     "health_score_v2": 63.9,
-    "health_score_interval": "--",
+    "health_score_interval": "60-69",
     "health_score_band_zh": "中性",
     "health_score_calibration_version": "",
     "assessment": "中性",
-    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "score_explanation_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。",
     "research_grade": "觀察名單",
     "confidence_level": "中等信心",
     "confidence_score": 75.04,
@@ -73,11 +73,11 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 60.86,
+      "score": 60.92,
       "level": "中性",
       "description": "正負面新聞比例為 79.9 分，屬於加分因子。",
       "weight": 0.19,
-      "weighted_contribution": 11.31,
+      "weighted_contribution": 11.32,
       "reasons": [],
       "source_label_zh": "公開新聞索引"
     }
@@ -104,7 +104,7 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 60.86,
+        "score": 60.92,
         "direction": "positive",
         "reason_zh": "正負面新聞比例為 79.9 分，屬於加分因子。",
         "source_label_zh": "公開新聞索引"
@@ -124,60 +124,18 @@
         "label": "法人籌碼",
         "score": 50.55,
         "direction": "negative",
-        "reason_zh": "近 10 日法人方向為 75.0 分，屬於加分因子。",
+        "reason_zh": "法人籌碼整體為 50.5 分，低於中性基準；目前可見加分項為「近 10 日法人方向為 75.0 分」，其餘子項仍抵銷部分分數。",
         "source_label_zh": "三大法人與籌碼公開資料"
       }
     ],
-    "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；校準不改變股票排序。"
+    "method_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。"
   },
   "score_history": [
-    {
-      "date": "2026-07-30",
-      "score": 55.93,
-      "risk": 42.43,
-      "confidence": 65.0
-    },
-    {
-      "date": "2026-08-01",
-      "score": 62.15,
-      "risk": 40.13,
-      "confidence": 66.23
-    },
-    {
-      "date": "2026-08-02",
-      "score": 62.03,
-      "risk": 39.02,
-      "confidence": 75.45
-    },
-    {
-      "date": "2026-08-03",
-      "score": 62.25,
-      "risk": 39.07,
-      "confidence": 75.46
-    },
-    {
-      "date": "2026-08-04",
-      "score": 59.42,
-      "risk": 40.94,
-      "confidence": 75.44
-    },
-    {
-      "date": "2026-08-06",
-      "score": 62.96,
-      "risk": 40.49,
-      "confidence": 75.47
-    },
     {
       "date": "2026-08-06",
       "score": 62.99,
       "risk": 40.49,
       "confidence": 75.47
-    },
-    {
-      "date": "2026-08-07",
-      "score": 56.58,
-      "risk": 45.03,
-      "confidence": 74.22
     },
     {
       "date": "2026-08-07",

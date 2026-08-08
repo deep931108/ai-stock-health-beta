@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T15:54:06+08:00",
+  "generated_at": "2026-08-08T16:00:47+08:00",
   "status": "success",
   "stock_id": "2884",
   "stock": {
@@ -13,11 +13,11 @@
     "health_score": 77.9,
     "health_score_v1": null,
     "health_score_v2": 77.9,
-    "health_score_interval": "--",
+    "health_score_interval": "70-79",
     "health_score_band_zh": "良好",
     "health_score_calibration_version": "",
     "assessment": "良好",
-    "score_explanation_zh": "V2 分數以單調校準拉開股票差距；原始加權分數保留供稽核，不改變股票排序，也不代表未來漲跌。",
+    "score_explanation_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。",
     "research_grade": "優先觀察",
     "confidence_level": "中等信心",
     "confidence_score": 76.03,
@@ -120,56 +120,14 @@
         "source_label_zh": "大盤、產業與市場行情資料"
       }
     ],
-    "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；校準不改變股票排序。"
+    "method_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。"
   },
   "score_history": [
     {
-      "date": "2026-07-30",
-      "score": 60.63,
-      "risk": 41.2,
-      "confidence": 64.79
-    },
-    {
-      "date": "2026-08-01",
-      "score": 67.32,
-      "risk": 39.6,
-      "confidence": 66.68
-    },
-    {
-      "date": "2026-08-02",
-      "score": 68.26,
-      "risk": 37.95,
-      "confidence": 75.69
-    },
-    {
-      "date": "2026-08-03",
-      "score": 63.92,
-      "risk": 39.69,
-      "confidence": 74.93
-    },
-    {
-      "date": "2026-08-04",
-      "score": 67.8,
-      "risk": 36.34,
-      "confidence": 73.31
-    },
-    {
       "date": "2026-08-06",
       "score": 66.92,
       "risk": 34.97,
       "confidence": 75.9
-    },
-    {
-      "date": "2026-08-06",
-      "score": 66.92,
-      "risk": 34.97,
-      "confidence": 75.9
-    },
-    {
-      "date": "2026-08-07",
-      "score": 66.88,
-      "risk": 35.33,
-      "confidence": 76.03
     },
     {
       "date": "2026-08-07",
