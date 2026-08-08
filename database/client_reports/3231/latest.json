@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T17:11:07+08:00",
+  "generated_at": "2026-08-08T17:19:31+08:00",
   "status": "success",
   "stock_id": "3231",
   "stock": {
@@ -979,7 +979,11 @@
         "missing_features": []
       }
     ],
-    "weight_adjustments_zh": []
+    "weight_adjustments_zh": [
+      "財務面特徵覆蓋率僅 16.7%，已降低權重。",
+      "市場面特徵覆蓋率僅 60.0%，已降低權重。",
+      "新聞面資料品質不足，已依可靠度調降權重。"
+    ]
   },
   "score_history": [
     {
