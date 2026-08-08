@@ -51,6 +51,8 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
+    assert 'evidence.css?v=1.3' in html
+    assert 'app.js?v=1.3' in html
     assert "function renderHistory" in js
     assert "function renderEvidence" in js
     assert "health_impact" not in js
