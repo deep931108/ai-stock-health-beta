@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T17:19:42+08:00",
+  "generated_at": "2026-08-08T23:20:30+08:00",
   "status": "success",
   "stock_id": "1216",
   "stock": {
@@ -10,9 +10,9 @@
     "industry": "傳統產業"
   },
   "overview": {
-    "health_score": 57.7,
-    "health_score_v1": 54.65,
-    "health_score_v2": 57.7,
+    "health_score": 55.0,
+    "health_score_v1": 53.03,
+    "health_score_v2": 55.0,
     "health_score_interval": "50-59",
     "health_score_band_zh": "中性",
     "health_score_calibration_version": "HealthScoreCalibration-v2.0",
@@ -20,9 +20,9 @@
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 77.5,
+    "confidence_score": 76.72,
     "risk_level": "中等風險",
-    "risk_score": 44.45,
+    "risk_score": 47.18,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -222,16 +222,16 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 47.56,
+      "score": 41.69,
       "level": "偏弱",
       "description": "近 10 日法人方向為 75.0 分，屬於加分因子。",
       "weight": 0.28,
-      "weighted_contribution": 13.18,
+      "weighted_contribution": 11.55,
       "coverage_pct": 100.0,
       "reasons": [
         "近 10 日法人方向為 75.0 分，屬於加分因子。",
         "法人連買連賣為 25.0 分，屬於扣分因子。",
-        "融資 5 日變化為 75.0 分，屬於加分因子。",
+        "融資 5 日變化為 25.9 分，屬於扣分因子。",
         "近 5 日法人方向為 28.0 分，屬於扣分因子。"
       ],
       "source_label_zh": "三大法人與籌碼公開資料",
@@ -283,11 +283,11 @@
         {
           "factor": "institutional",
           "label_zh": "融資 5 日變化",
-          "score": 75.0,
+          "score": 25.89,
           "sub_weight_pct": 12.0,
           "factor_weight_pct": 27.71,
-          "health_impact": 0.83,
-          "direction": "positive",
+          "health_impact": -0.8,
+          "direction": "negative",
           "reason_zh": "融資快速增加通常會提高籌碼壓力。",
           "source_label_zh": "三大法人與籌碼公開資料"
         },
@@ -305,7 +305,7 @@
         {
           "factor": "institutional",
           "label_zh": "券資比",
-          "score": 58.0,
+          "score": 58.27,
           "sub_weight_pct": 8.0,
           "factor_weight_pct": 27.71,
           "health_impact": 0.18,
@@ -448,9 +448,9 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 47.56,
+        "score": 41.69,
         "direction": "negative",
-        "reason_zh": "法人籌碼整體為 47.6 分，低於中性基準；目前可見加分項為「近 10 日法人方向為 75.0 分」，其餘子項仍抵銷部分分數。",
+        "reason_zh": "法人籌碼整體為 41.7 分，低於中性基準；目前可見加分項為「近 10 日法人方向為 75.0 分」，其餘子項仍抵銷部分分數。",
         "source_label_zh": "三大法人與籌碼公開資料"
       },
       {
@@ -509,17 +509,6 @@
         "source_label_zh": "三大法人與籌碼公開資料"
       },
       {
-        "factor": "institutional",
-        "label_zh": "融資 5 日變化",
-        "score": 75.0,
-        "sub_weight_pct": 12.0,
-        "factor_weight_pct": 27.71,
-        "health_impact": 0.83,
-        "direction": "positive",
-        "reason_zh": "融資快速增加通常會提高籌碼壓力。",
-        "source_label_zh": "三大法人與籌碼公開資料"
-      },
-      {
         "factor": "technical",
         "label_zh": "20 日波動率",
         "score": 80.11,
@@ -528,6 +517,17 @@
         "health_impact": 0.77,
         "direction": "positive",
         "reason_zh": "波動率過高會降低技術面穩定度。",
+        "source_label_zh": "交易所股價與成交資料"
+      },
+      {
+        "factor": "technical",
+        "label_zh": "ATR 波動風險",
+        "score": 69.92,
+        "sub_weight_pct": 9.0,
+        "factor_weight_pct": 36.46,
+        "health_impact": 0.65,
+        "direction": "positive",
+        "reason_zh": "ATR 佔股價比例越高，短期波動風險越大。",
         "source_label_zh": "交易所股價與成交資料"
       }
     ],
@@ -556,6 +556,17 @@
       },
       {
         "factor": "institutional",
+        "label_zh": "融資 5 日變化",
+        "score": 25.89,
+        "sub_weight_pct": 12.0,
+        "factor_weight_pct": 27.71,
+        "health_impact": -0.8,
+        "direction": "negative",
+        "reason_zh": "融資快速增加通常會提高籌碼壓力。",
+        "source_label_zh": "三大法人與籌碼公開資料"
+      },
+      {
+        "factor": "institutional",
         "label_zh": "法人流向加速度",
         "score": 30.0,
         "sub_weight_pct": 12.0,
@@ -575,17 +586,6 @@
         "direction": "negative",
         "reason_zh": "MACD 柱狀體反映趨勢動能方向。",
         "source_label_zh": "交易所股價與成交資料"
-      },
-      {
-        "factor": "market",
-        "label_zh": "大盤 20 日報酬",
-        "score": 40.4,
-        "sub_weight_pct": 20.0,
-        "factor_weight_pct": 11.16,
-        "health_impact": -0.21,
-        "direction": "negative",
-        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
-        "source_label_zh": "大盤、產業與市場行情資料"
       }
     ],
     "factor_breakdown": [
@@ -785,16 +785,16 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 47.56,
+        "score": 41.69,
         "level": "偏弱",
         "description": "近 10 日法人方向為 75.0 分，屬於加分因子。",
         "weight": 0.28,
-        "weighted_contribution": 13.18,
+        "weighted_contribution": 11.55,
         "coverage_pct": 100.0,
         "reasons": [
           "近 10 日法人方向為 75.0 分，屬於加分因子。",
           "法人連買連賣為 25.0 分，屬於扣分因子。",
-          "融資 5 日變化為 75.0 分，屬於加分因子。",
+          "融資 5 日變化為 25.9 分，屬於扣分因子。",
           "近 5 日法人方向為 28.0 分，屬於扣分因子。"
         ],
         "source_label_zh": "三大法人與籌碼公開資料",
@@ -846,11 +846,11 @@
           {
             "factor": "institutional",
             "label_zh": "融資 5 日變化",
-            "score": 75.0,
+            "score": 25.89,
             "sub_weight_pct": 12.0,
             "factor_weight_pct": 27.71,
-            "health_impact": 0.83,
-            "direction": "positive",
+            "health_impact": -0.8,
+            "direction": "negative",
             "reason_zh": "融資快速增加通常會提高籌碼壓力。",
             "source_label_zh": "三大法人與籌碼公開資料"
           },
@@ -868,7 +868,7 @@
           {
             "factor": "institutional",
             "label_zh": "券資比",
-            "score": 58.0,
+            "score": 58.27,
             "sub_weight_pct": 8.0,
             "factor_weight_pct": 27.71,
             "health_impact": 0.18,
@@ -1008,9 +1008,9 @@
     },
     {
       "date": "2026-08-08",
-      "score": 57.7,
-      "risk": 44.45,
-      "confidence": 77.5
+      "score": 55.0,
+      "risk": 47.18,
+      "confidence": 76.72
     }
   ],
   "data_sources": [

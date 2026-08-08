@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T17:19:32+08:00",
+  "generated_at": "2026-08-08T23:20:20+08:00",
   "status": "success",
   "stock_id": "3034",
   "stock": {
@@ -10,9 +10,9 @@
     "industry": "半導體業"
   },
   "overview": {
-    "health_score": 54.8,
-    "health_score_v1": 52.88,
-    "health_score_v2": 54.8,
+    "health_score": 58.1,
+    "health_score_v1": 54.91,
+    "health_score_v2": 58.1,
     "health_score_interval": "50-59",
     "health_score_band_zh": "中性",
     "health_score_calibration_version": "HealthScoreCalibration-v2.0",
@@ -20,10 +20,10 @@
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 73.78,
-    "risk_level": "高風險",
-    "risk_score": 51.13,
-    "summary_zh": "目前條件偏弱或風險偏高，建議降低研究優先級。"
+    "confidence_score": 74.83,
+    "risk_level": "中等風險",
+    "risk_score": 48.14,
+    "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
     {
@@ -222,16 +222,16 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 31.36,
+      "score": 38.68,
       "level": "不佳",
-      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+      "description": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
       "weight": 0.28,
-      "weighted_contribution": 8.69,
+      "weighted_contribution": 10.72,
       "coverage_pct": 100.0,
       "reasons": [
-        "融資 5 日變化為 15.0 分，屬於扣分因子。",
         "近 10 日法人方向為 25.0 分，屬於扣分因子。",
         "法人連買連賣為 25.0 分，屬於扣分因子。",
+        "融資 5 日變化為 75.0 分，屬於加分因子。",
         "近 5 日法人方向為 28.0 分，屬於扣分因子。"
       ],
       "source_label_zh": "三大法人與籌碼公開資料",
@@ -283,21 +283,21 @@
         {
           "factor": "institutional",
           "label_zh": "融資 5 日變化",
-          "score": 15.0,
+          "score": 75.0,
           "sub_weight_pct": 12.0,
           "factor_weight_pct": 27.71,
-          "health_impact": -1.16,
-          "direction": "negative",
+          "health_impact": 0.83,
+          "direction": "positive",
           "reason_zh": "融資快速增加通常會提高籌碼壓力。",
           "source_label_zh": "三大法人與籌碼公開資料"
         },
         {
           "factor": "institutional",
           "label_zh": "融券 5 日變化",
-          "score": 70.0,
+          "score": 67.6,
           "sub_weight_pct": 8.0,
           "factor_weight_pct": 27.71,
-          "health_impact": 0.44,
+          "health_impact": 0.39,
           "direction": "positive",
           "reason_zh": "融券快速增加可能代表市場分歧或空方壓力。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -305,10 +305,10 @@
         {
           "factor": "institutional",
           "label_zh": "券資比",
-          "score": 58.0,
+          "score": 61.88,
           "sub_weight_pct": 8.0,
           "factor_weight_pct": 27.71,
-          "health_impact": 0.18,
+          "health_impact": 0.26,
           "direction": "positive",
           "reason_zh": "券資比過高時需注意回補與軋空並存的高波動風險。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -456,9 +456,9 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 31.36,
+        "score": 38.68,
         "direction": "negative",
-        "reason_zh": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+        "reason_zh": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
         "source_label_zh": "三大法人與籌碼公開資料"
       },
       {
@@ -520,15 +520,15 @@
         "source_label_zh": "公開新聞索引"
       },
       {
-        "factor": "news",
-        "label_zh": "新聞情緒分數",
-        "score": 55.43,
-        "sub_weight_pct": 50.0,
-        "factor_weight_pct": 18.59,
-        "health_impact": 0.5,
+        "factor": "institutional",
+        "label_zh": "融資 5 日變化",
+        "score": 75.0,
+        "sub_weight_pct": 12.0,
+        "factor_weight_pct": 27.71,
+        "health_impact": 0.83,
         "direction": "positive",
-        "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-        "source_label_zh": "公開新聞索引"
+        "reason_zh": "融資快速增加通常會提高籌碼壓力。",
+        "source_label_zh": "三大法人與籌碼公開資料"
       }
     ],
     "top_negative": [
@@ -566,17 +566,6 @@
         "source_label_zh": "三大法人與籌碼公開資料"
       },
       {
-        "factor": "institutional",
-        "label_zh": "融資 5 日變化",
-        "score": 15.0,
-        "sub_weight_pct": 12.0,
-        "factor_weight_pct": 27.71,
-        "health_impact": -1.16,
-        "direction": "negative",
-        "reason_zh": "融資快速增加通常會提高籌碼壓力。",
-        "source_label_zh": "三大法人與籌碼公開資料"
-      },
-      {
         "factor": "technical",
         "label_zh": "歷史最大回撤",
         "score": 13.47,
@@ -586,6 +575,17 @@
         "direction": "negative",
         "reason_zh": "歷史最大回撤越深，代表價格風險越高。",
         "source_label_zh": "交易所股價與成交資料"
+      },
+      {
+        "factor": "institutional",
+        "label_zh": "法人流向加速度",
+        "score": 30.0,
+        "sub_weight_pct": 12.0,
+        "factor_weight_pct": 27.71,
+        "health_impact": -0.67,
+        "direction": "negative",
+        "reason_zh": "近期買賣超是否加速，可反映籌碼動能變化。",
+        "source_label_zh": "三大法人與籌碼公開資料"
       }
     ],
     "factor_breakdown": [
@@ -785,16 +785,16 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 31.36,
+        "score": 38.68,
         "level": "不佳",
-        "description": "融資 5 日變化為 15.0 分，屬於扣分因子。",
+        "description": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
         "weight": 0.28,
-        "weighted_contribution": 8.69,
+        "weighted_contribution": 10.72,
         "coverage_pct": 100.0,
         "reasons": [
-          "融資 5 日變化為 15.0 分，屬於扣分因子。",
           "近 10 日法人方向為 25.0 分，屬於扣分因子。",
           "法人連買連賣為 25.0 分，屬於扣分因子。",
+          "融資 5 日變化為 75.0 分，屬於加分因子。",
           "近 5 日法人方向為 28.0 分，屬於扣分因子。"
         ],
         "source_label_zh": "三大法人與籌碼公開資料",
@@ -846,21 +846,21 @@
           {
             "factor": "institutional",
             "label_zh": "融資 5 日變化",
-            "score": 15.0,
+            "score": 75.0,
             "sub_weight_pct": 12.0,
             "factor_weight_pct": 27.71,
-            "health_impact": -1.16,
-            "direction": "negative",
+            "health_impact": 0.83,
+            "direction": "positive",
             "reason_zh": "融資快速增加通常會提高籌碼壓力。",
             "source_label_zh": "三大法人與籌碼公開資料"
           },
           {
             "factor": "institutional",
             "label_zh": "融券 5 日變化",
-            "score": 70.0,
+            "score": 67.6,
             "sub_weight_pct": 8.0,
             "factor_weight_pct": 27.71,
-            "health_impact": 0.44,
+            "health_impact": 0.39,
             "direction": "positive",
             "reason_zh": "融券快速增加可能代表市場分歧或空方壓力。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -868,10 +868,10 @@
           {
             "factor": "institutional",
             "label_zh": "券資比",
-            "score": 58.0,
+            "score": 61.88,
             "sub_weight_pct": 8.0,
             "factor_weight_pct": 27.71,
-            "health_impact": 0.18,
+            "health_impact": 0.26,
             "direction": "positive",
             "reason_zh": "券資比過高時需注意回補與軋空並存的高波動風險。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -1008,9 +1008,9 @@
     },
     {
       "date": "2026-08-08",
-      "score": 54.8,
-      "risk": 51.13,
-      "confidence": 73.78
+      "score": 58.1,
+      "risk": 48.14,
+      "confidence": 74.83
     }
   ],
   "data_sources": [

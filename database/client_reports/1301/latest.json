@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T17:19:42+08:00",
+  "generated_at": "2026-08-08T23:20:30+08:00",
   "status": "success",
   "stock_id": "1301",
   "stock": {
@@ -11,7 +11,7 @@
   },
   "overview": {
     "health_score": 50.0,
-    "health_score_v1": 50.01,
+    "health_score_v1": 50.02,
     "health_score_v2": 50.0,
     "health_score_interval": "50-59",
     "health_score_band_zh": "中性",
@@ -20,9 +20,9 @@
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 76.81,
+    "confidence_score": 76.8,
     "risk_level": "高風險",
-    "risk_score": 53.1,
+    "risk_score": 53.11,
     "summary_zh": "目前條件偏弱或風險偏高，建議降低研究優先級。"
   },
   "health_indicators": [
@@ -222,11 +222,11 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 43.1,
+      "score": 43.12,
       "level": "偏弱",
       "description": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
       "weight": 0.28,
-      "weighted_contribution": 11.94,
+      "weighted_contribution": 11.95,
       "coverage_pct": 100.0,
       "reasons": [
         "近 10 日法人方向為 25.0 分，屬於扣分因子。",
@@ -305,10 +305,10 @@
         {
           "factor": "institutional",
           "label_zh": "券資比",
-          "score": 58.54,
+          "score": 58.8,
           "sub_weight_pct": 8.0,
           "factor_weight_pct": 27.71,
-          "health_impact": 0.19,
+          "health_impact": 0.2,
           "direction": "positive",
           "reason_zh": "券資比過高時需注意回補與軋空並存的高波動風險。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -374,16 +374,16 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 61.96,
+      "score": 62.02,
       "level": "中性",
       "description": "正負面新聞比例為 82.5 分，屬於加分因子。",
       "weight": 0.19,
-      "weighted_contribution": 11.52,
+      "weighted_contribution": 11.53,
       "coverage_pct": 100.0,
       "reasons": [
         "正負面新聞比例為 82.5 分，屬於加分因子。",
         "新聞情緒分數為 53.6 分，屬於中性因子。",
-        "近期新聞熱度為 52.2 分，屬於中性因子。"
+        "近期新聞熱度為 52.5 分，屬於中性因子。"
       ],
       "source_label_zh": "公開新聞索引",
       "contributions": [
@@ -412,10 +412,10 @@
         {
           "factor": "news",
           "label_zh": "近期新聞熱度",
-          "score": 52.2,
+          "score": 52.5,
           "sub_weight_pct": 20.0,
           "factor_weight_pct": 18.59,
-          "health_impact": 0.08,
+          "health_impact": 0.09,
           "direction": "positive",
           "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
           "source_label_zh": "公開新聞索引"
@@ -430,7 +430,7 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 61.96,
+        "score": 62.02,
         "direction": "positive",
         "reason_zh": "正負面新聞比例為 82.5 分，屬於加分因子。",
         "source_label_zh": "公開新聞索引"
@@ -440,7 +440,7 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 43.1,
+        "score": 43.12,
         "direction": "negative",
         "reason_zh": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
         "source_label_zh": "三大法人與籌碼公開資料"
@@ -777,11 +777,11 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 43.1,
+        "score": 43.12,
         "level": "偏弱",
         "description": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
         "weight": 0.28,
-        "weighted_contribution": 11.94,
+        "weighted_contribution": 11.95,
         "coverage_pct": 100.0,
         "reasons": [
           "近 10 日法人方向為 25.0 分，屬於扣分因子。",
@@ -860,10 +860,10 @@
           {
             "factor": "institutional",
             "label_zh": "券資比",
-            "score": 58.54,
+            "score": 58.8,
             "sub_weight_pct": 8.0,
             "factor_weight_pct": 27.71,
-            "health_impact": 0.19,
+            "health_impact": 0.2,
             "direction": "positive",
             "reason_zh": "券資比過高時需注意回補與軋空並存的高波動風險。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -929,16 +929,16 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 61.96,
+        "score": 62.02,
         "level": "中性",
         "description": "正負面新聞比例為 82.5 分，屬於加分因子。",
         "weight": 0.19,
-        "weighted_contribution": 11.52,
+        "weighted_contribution": 11.53,
         "coverage_pct": 100.0,
         "reasons": [
           "正負面新聞比例為 82.5 分，屬於加分因子。",
           "新聞情緒分數為 53.6 分，屬於中性因子。",
-          "近期新聞熱度為 52.2 分，屬於中性因子。"
+          "近期新聞熱度為 52.5 分，屬於中性因子。"
         ],
         "source_label_zh": "公開新聞索引",
         "contributions": [
@@ -967,10 +967,10 @@
           {
             "factor": "news",
             "label_zh": "近期新聞熱度",
-            "score": 52.2,
+            "score": 52.5,
             "sub_weight_pct": 20.0,
             "factor_weight_pct": 18.59,
-            "health_impact": 0.08,
+            "health_impact": 0.09,
             "direction": "positive",
             "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "source_label_zh": "公開新聞索引"
@@ -1001,8 +1001,8 @@
     {
       "date": "2026-08-08",
       "score": 50.0,
-      "risk": 53.1,
-      "confidence": 76.81
+      "risk": 53.11,
+      "confidence": 76.8
     }
   ],
   "data_sources": [

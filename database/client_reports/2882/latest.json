@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T17:19:37+08:00",
+  "generated_at": "2026-08-08T23:20:27+08:00",
   "status": "success",
   "stock_id": "2882",
   "stock": {
@@ -10,19 +10,19 @@
     "industry": "金融保險業"
   },
   "overview": {
-    "health_score": 65.7,
-    "health_score_v1": 59.54,
-    "health_score_v2": 65.7,
-    "health_score_interval": "60-69",
-    "health_score_band_zh": "中性偏強",
+    "health_score": 70.3,
+    "health_score_v1": 62.28,
+    "health_score_v2": 70.3,
+    "health_score_interval": "70-79",
+    "health_score_band_zh": "偏強",
     "health_score_calibration_version": "HealthScoreCalibration-v2.0",
-    "assessment": "中性偏強",
+    "assessment": "偏強",
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "觀察名單",
     "confidence_level": "中等信心",
-    "confidence_score": 77.39,
+    "confidence_score": 75.23,
     "risk_level": "中等風險",
-    "risk_score": 41.27,
+    "risk_score": 38.26,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -32,8 +32,8 @@
       "score": 73.82,
       "level": "良好",
       "description": "EPS 年增率為 98.0 分，屬於加分因子。",
-      "weight": 0.11,
-      "weighted_contribution": 8.46,
+      "weight": 0.12,
+      "weighted_contribution": 8.78,
       "coverage_pct": 33.33,
       "reasons": [
         "EPS 年增率為 98.0 分，屬於加分因子。",
@@ -49,8 +49,8 @@
           "label_zh": "每股盈餘",
           "score": 59.8,
           "sub_weight_pct": 10.0,
-          "factor_weight_pct": 11.46,
-          "health_impact": 0.11,
+          "factor_weight_pct": 11.9,
+          "health_impact": 0.12,
           "direction": "positive",
           "reason_zh": "EPS 越穩定為正，獲利基礎越健康。",
           "source_label_zh": "公開財報與營收資料"
@@ -60,8 +60,8 @@
           "label_zh": "營收年增率",
           "score": 84.0,
           "sub_weight_pct": 12.0,
-          "factor_weight_pct": 11.46,
-          "health_impact": 0.47,
+          "factor_weight_pct": 11.9,
+          "health_impact": 0.49,
           "direction": "positive",
           "reason_zh": "營收年增率衡量企業成長動能。",
           "source_label_zh": "公開財報與營收資料"
@@ -71,7 +71,7 @@
           "label_zh": "營收月增率",
           "score": 29.09,
           "sub_weight_pct": 5.0,
-          "factor_weight_pct": 11.46,
+          "factor_weight_pct": 11.9,
           "health_impact": -0.12,
           "direction": "negative",
           "reason_zh": "月增率用於補充短期營運變化。",
@@ -82,8 +82,8 @@
           "label_zh": "EPS 年增率",
           "score": 98.0,
           "sub_weight_pct": 10.0,
-          "factor_weight_pct": 11.46,
-          "health_impact": 0.55,
+          "factor_weight_pct": 11.9,
+          "health_impact": 0.57,
           "direction": "positive",
           "reason_zh": "EPS 成長反映獲利是否持續改善。",
           "source_label_zh": "公開財報與營收資料"
@@ -106,8 +106,8 @@
       "score": 66.25,
       "level": "中性",
       "description": "多空排列為 92.0 分，屬於加分因子。",
-      "weight": 0.34,
-      "weighted_contribution": 22.77,
+      "weight": 0.36,
+      "weighted_contribution": 23.66,
       "coverage_pct": 100.0,
       "reasons": [
         "多空排列為 92.0 分，屬於加分因子。",
@@ -122,8 +122,8 @@
           "label_zh": "均線趨勢結構",
           "score": 64.26,
           "sub_weight_pct": 20.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 0.98,
+          "factor_weight_pct": 35.71,
+          "health_impact": 1.02,
           "direction": "positive",
           "reason_zh": "比較股價與中短期均線位置，判斷趨勢方向與強度。",
           "source_label_zh": "交易所股價與成交資料"
@@ -133,8 +133,8 @@
           "label_zh": "多空排列",
           "score": 92.0,
           "sub_weight_pct": 10.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 1.44,
+          "factor_weight_pct": 35.71,
+          "health_impact": 1.5,
           "direction": "positive",
           "reason_zh": "完整多頭排列代表趨勢一致性較高。",
           "source_label_zh": "交易所股價與成交資料"
@@ -144,8 +144,8 @@
           "label_zh": "RSI 相對強弱",
           "score": 91.16,
           "sub_weight_pct": 10.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 1.41,
+          "factor_weight_pct": 35.71,
+          "health_impact": 1.47,
           "direction": "positive",
           "reason_zh": "RSI 過熱或過弱都會降低技術健康度。",
           "source_label_zh": "交易所股價與成交資料"
@@ -155,8 +155,8 @@
           "label_zh": "MACD 動能",
           "score": 57.01,
           "sub_weight_pct": 10.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 0.24,
+          "factor_weight_pct": 35.71,
+          "health_impact": 0.25,
           "direction": "positive",
           "reason_zh": "MACD 柱狀體反映趨勢動能方向。",
           "source_label_zh": "交易所股價與成交資料"
@@ -166,8 +166,8 @@
           "label_zh": "20 日報酬",
           "score": 58.44,
           "sub_weight_pct": 10.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 0.29,
+          "factor_weight_pct": 35.71,
+          "health_impact": 0.3,
           "direction": "positive",
           "reason_zh": "中短期報酬過弱代表趨勢壓力，過度急漲則可能增加追高風險。",
           "source_label_zh": "交易所股價與成交資料"
@@ -177,8 +177,8 @@
           "label_zh": "60 日報酬",
           "score": 82.87,
           "sub_weight_pct": 8.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 0.9,
+          "factor_weight_pct": 35.71,
+          "health_impact": 0.94,
           "direction": "positive",
           "reason_zh": "60 日報酬用於確認中期趨勢。",
           "source_label_zh": "交易所股價與成交資料"
@@ -188,7 +188,7 @@
           "label_zh": "ATR 波動風險",
           "score": 56.01,
           "sub_weight_pct": 9.0,
-          "factor_weight_pct": 34.37,
+          "factor_weight_pct": 35.71,
           "health_impact": 0.19,
           "direction": "positive",
           "reason_zh": "ATR 佔股價比例越高，短期波動風險越大。",
@@ -199,8 +199,8 @@
           "label_zh": "20 日波動率",
           "score": 71.76,
           "sub_weight_pct": 7.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 0.52,
+          "factor_weight_pct": 35.71,
+          "health_impact": 0.54,
           "direction": "positive",
           "reason_zh": "波動率過高會降低技術面穩定度。",
           "source_label_zh": "交易所股價與成交資料"
@@ -210,7 +210,7 @@
           "label_zh": "成交量比",
           "score": 44.83,
           "sub_weight_pct": 6.0,
-          "factor_weight_pct": 34.37,
+          "factor_weight_pct": 35.71,
           "health_impact": -0.11,
           "direction": "negative",
           "reason_zh": "適度放量有助於確認趨勢，極端爆量則需注意短線震盪。",
@@ -221,8 +221,8 @@
           "label_zh": "突破與跌破",
           "score": 52.0,
           "sub_weight_pct": 5.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": 0.03,
+          "factor_weight_pct": 35.71,
+          "health_impact": 0.04,
           "direction": "positive",
           "reason_zh": "突破近期壓力有利於趨勢延續，跌破支撐則屬負面訊號。",
           "source_label_zh": "交易所股價與成交資料"
@@ -232,8 +232,8 @@
           "label_zh": "歷史最大回撤",
           "score": 31.11,
           "sub_weight_pct": 5.0,
-          "factor_weight_pct": 34.37,
-          "health_impact": -0.32,
+          "factor_weight_pct": 35.71,
+          "health_impact": -0.34,
           "direction": "negative",
           "reason_zh": "歷史最大回撤越深，代表價格風險越高。",
           "source_label_zh": "交易所股價與成交資料"
@@ -244,17 +244,17 @@
     {
       "key": "institutional",
       "label": "法人籌碼",
-      "score": 50.73,
-      "level": "偏弱",
-      "description": "融資 5 日變化為 15.0 分，屬於扣分因子。",
-      "weight": 0.26,
-      "weighted_contribution": 13.25,
-      "coverage_pct": 100.0,
+      "score": 61.0,
+      "level": "中性",
+      "description": "近 10 日法人方向為 75.0 分，屬於加分因子。",
+      "weight": 0.23,
+      "weighted_contribution": 14.19,
+      "coverage_pct": 85.71,
       "reasons": [
-        "融資 5 日變化為 15.0 分，屬於扣分因子。",
-        "融券 5 日變化為 22.0 分，屬於扣分因子。",
         "近 10 日法人方向為 75.0 分，屬於加分因子。",
-        "近 5 日法人方向為 72.0 分，屬於加分因子。"
+        "融資 5 日變化為 75.0 分，屬於加分因子。",
+        "近 5 日法人方向為 72.0 分，屬於加分因子。",
+        "法人流向加速度為 30.0 分，屬於扣分因子。"
       ],
       "source_label_zh": "三大法人與籌碼公開資料",
       "contributions": [
@@ -263,8 +263,8 @@
           "label_zh": "近 5 日法人方向",
           "score": 72.0,
           "sub_weight_pct": 24.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": 1.38,
+          "factor_weight_pct": 23.26,
+          "health_impact": 1.23,
           "direction": "positive",
           "reason_zh": "近 5 日法人買賣方向反映短期籌碼態度。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -274,8 +274,8 @@
           "label_zh": "近 10 日法人方向",
           "score": 75.0,
           "sub_weight_pct": 18.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": 1.18,
+          "factor_weight_pct": 23.26,
+          "health_impact": 1.05,
           "direction": "positive",
           "reason_zh": "近 10 日累積方向用於確認籌碼趨勢。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -285,8 +285,8 @@
           "label_zh": "法人連買連賣",
           "score": 45.0,
           "sub_weight_pct": 18.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": -0.24,
+          "factor_weight_pct": 23.26,
+          "health_impact": -0.21,
           "direction": "negative",
           "reason_zh": "連續買超有助於籌碼穩定，連續賣超則增加壓力。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -296,8 +296,8 @@
           "label_zh": "法人流向加速度",
           "score": 30.0,
           "sub_weight_pct": 12.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": -0.63,
+          "factor_weight_pct": 23.26,
+          "health_impact": -0.56,
           "direction": "negative",
           "reason_zh": "近期買賣超是否加速，可反映籌碼動能變化。",
           "source_label_zh": "三大法人與籌碼公開資料"
@@ -305,38 +305,29 @@
         {
           "factor": "institutional",
           "label_zh": "融資 5 日變化",
-          "score": 15.0,
+          "score": 75.0,
           "sub_weight_pct": 12.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": -1.1,
-          "direction": "negative",
+          "factor_weight_pct": 23.26,
+          "health_impact": 0.7,
+          "direction": "positive",
           "reason_zh": "融資快速增加通常會提高籌碼壓力。",
           "source_label_zh": "三大法人與籌碼公開資料"
         },
         {
           "factor": "institutional",
-          "label_zh": "融券 5 日變化",
-          "score": 22.0,
-          "sub_weight_pct": 8.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": -0.59,
-          "direction": "negative",
-          "reason_zh": "融券快速增加可能代表市場分歧或空方壓力。",
-          "source_label_zh": "三大法人與籌碼公開資料"
-        },
-        {
-          "factor": "institutional",
           "label_zh": "券資比",
-          "score": 58.59,
+          "score": 58.0,
           "sub_weight_pct": 8.0,
-          "factor_weight_pct": 26.12,
-          "health_impact": 0.18,
+          "factor_weight_pct": 23.26,
+          "health_impact": 0.15,
           "direction": "positive",
           "reason_zh": "券資比過高時需注意回補與軋空並存的高波動風險。",
           "source_label_zh": "三大法人與籌碼公開資料"
         }
       ],
-      "missing_features": []
+      "missing_features": [
+        "融券 5 日變化"
+      ]
     },
     {
       "key": "market",
@@ -345,7 +336,7 @@
       "level": "偏弱",
       "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
       "weight": 0.11,
-      "weighted_contribution": 5.28,
+      "weighted_contribution": 5.49,
       "coverage_pct": 60.0,
       "reasons": [
         "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
@@ -359,7 +350,7 @@
           "label_zh": "大盤多空環境",
           "score": 52.0,
           "sub_weight_pct": 32.0,
-          "factor_weight_pct": 10.52,
+          "factor_weight_pct": 10.93,
           "health_impact": 0.07,
           "direction": "positive",
           "reason_zh": "大盤趨勢會影響個股的系統性順風或逆風。",
@@ -370,8 +361,8 @@
           "label_zh": "大盤 20 日報酬",
           "score": 40.4,
           "sub_weight_pct": 20.0,
-          "factor_weight_pct": 10.52,
-          "health_impact": -0.2,
+          "factor_weight_pct": 10.93,
+          "health_impact": -0.21,
           "direction": "negative",
           "reason_zh": "大盤中短期報酬反映市場風險偏好。",
           "source_label_zh": "大盤、產業與市場行情資料"
@@ -381,7 +372,7 @@
           "label_zh": "大盤波動率",
           "score": 57.87,
           "sub_weight_pct": 18.0,
-          "factor_weight_pct": 10.52,
+          "factor_weight_pct": 10.93,
           "health_impact": 0.15,
           "direction": "positive",
           "reason_zh": "大盤波動率越高，系統性風險越大。",
@@ -400,7 +391,7 @@
       "level": "中性",
       "description": "近期新聞熱度為 66.7 分，屬於加分因子。",
       "weight": 0.18,
-      "weighted_contribution": 9.78,
+      "weighted_contribution": 10.16,
       "coverage_pct": 100.0,
       "reasons": [
         "近期新聞熱度為 66.7 分，屬於加分因子。",
@@ -414,8 +405,8 @@
           "label_zh": "新聞情緒分數",
           "score": 51.27,
           "sub_weight_pct": 50.0,
-          "factor_weight_pct": 17.53,
-          "health_impact": 0.11,
+          "factor_weight_pct": 18.21,
+          "health_impact": 0.12,
           "direction": "positive",
           "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
           "source_label_zh": "公開新聞索引"
@@ -425,8 +416,8 @@
           "label_zh": "正負面新聞比例",
           "score": 56.11,
           "sub_weight_pct": 30.0,
-          "factor_weight_pct": 17.53,
-          "health_impact": 0.32,
+          "factor_weight_pct": 18.21,
+          "health_impact": 0.33,
           "direction": "positive",
           "reason_zh": "正負面新聞數量差異可補充單一平均值。",
           "source_label_zh": "公開新聞索引"
@@ -436,8 +427,8 @@
           "label_zh": "近期新聞熱度",
           "score": 66.67,
           "sub_weight_pct": 20.0,
-          "factor_weight_pct": 17.53,
-          "health_impact": 0.58,
+          "factor_weight_pct": 18.21,
+          "health_impact": 0.61,
           "direction": "positive",
           "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
           "source_label_zh": "公開新聞索引"
@@ -466,12 +457,12 @@
         "source_label_zh": "交易所股價與成交資料"
       },
       {
-        "key": "news",
-        "label": "新聞情緒",
-        "score": 55.8,
+        "key": "institutional",
+        "label": "法人籌碼",
+        "score": 61.0,
         "direction": "positive",
-        "reason_zh": "近期新聞熱度為 66.7 分，屬於加分因子。",
-        "source_label_zh": "公開新聞索引"
+        "reason_zh": "近 10 日法人方向為 75.0 分，屬於加分因子。",
+        "source_label_zh": "三大法人與籌碼公開資料"
       }
     ],
     "negative_factors": [
@@ -482,14 +473,6 @@
         "direction": "negative",
         "reason_zh": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
         "source_label_zh": "大盤、產業與市場行情資料"
-      },
-      {
-        "key": "institutional",
-        "label": "法人籌碼",
-        "score": 50.73,
-        "direction": "negative",
-        "reason_zh": "融資 5 日變化為 15.0 分，屬於扣分因子。",
-        "source_label_zh": "三大法人與籌碼公開資料"
       }
     ],
     "method_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。"
@@ -502,8 +485,8 @@
         "label_zh": "多空排列",
         "score": 92.0,
         "sub_weight_pct": 10.0,
-        "factor_weight_pct": 34.37,
-        "health_impact": 1.44,
+        "factor_weight_pct": 35.71,
+        "health_impact": 1.5,
         "direction": "positive",
         "reason_zh": "完整多頭排列代表趨勢一致性較高。",
         "source_label_zh": "交易所股價與成交資料"
@@ -513,8 +496,8 @@
         "label_zh": "RSI 相對強弱",
         "score": 91.16,
         "sub_weight_pct": 10.0,
-        "factor_weight_pct": 34.37,
-        "health_impact": 1.41,
+        "factor_weight_pct": 35.71,
+        "health_impact": 1.47,
         "direction": "positive",
         "reason_zh": "RSI 過熱或過弱都會降低技術健康度。",
         "source_label_zh": "交易所股價與成交資料"
@@ -524,8 +507,8 @@
         "label_zh": "近 5 日法人方向",
         "score": 72.0,
         "sub_weight_pct": 24.0,
-        "factor_weight_pct": 26.12,
-        "health_impact": 1.38,
+        "factor_weight_pct": 23.26,
+        "health_impact": 1.23,
         "direction": "positive",
         "reason_zh": "近 5 日法人買賣方向反映短期籌碼態度。",
         "source_label_zh": "三大法人與籌碼公開資料"
@@ -535,8 +518,8 @@
         "label_zh": "近 10 日法人方向",
         "score": 75.0,
         "sub_weight_pct": 18.0,
-        "factor_weight_pct": 26.12,
-        "health_impact": 1.18,
+        "factor_weight_pct": 23.26,
+        "health_impact": 1.05,
         "direction": "positive",
         "reason_zh": "近 10 日累積方向用於確認籌碼趨勢。",
         "source_label_zh": "三大法人與籌碼公開資料"
@@ -546,8 +529,8 @@
         "label_zh": "均線趨勢結構",
         "score": 64.26,
         "sub_weight_pct": 20.0,
-        "factor_weight_pct": 34.37,
-        "health_impact": 0.98,
+        "factor_weight_pct": 35.71,
+        "health_impact": 1.02,
         "direction": "positive",
         "reason_zh": "比較股價與中短期均線位置，判斷趨勢方向與強度。",
         "source_label_zh": "交易所股價與成交資料"
@@ -556,35 +539,13 @@
     "top_negative": [
       {
         "factor": "institutional",
-        "label_zh": "融資 5 日變化",
-        "score": 15.0,
-        "sub_weight_pct": 12.0,
-        "factor_weight_pct": 26.12,
-        "health_impact": -1.1,
-        "direction": "negative",
-        "reason_zh": "融資快速增加通常會提高籌碼壓力。",
-        "source_label_zh": "三大法人與籌碼公開資料"
-      },
-      {
-        "factor": "institutional",
         "label_zh": "法人流向加速度",
         "score": 30.0,
         "sub_weight_pct": 12.0,
-        "factor_weight_pct": 26.12,
-        "health_impact": -0.63,
+        "factor_weight_pct": 23.26,
+        "health_impact": -0.56,
         "direction": "negative",
         "reason_zh": "近期買賣超是否加速，可反映籌碼動能變化。",
-        "source_label_zh": "三大法人與籌碼公開資料"
-      },
-      {
-        "factor": "institutional",
-        "label_zh": "融券 5 日變化",
-        "score": 22.0,
-        "sub_weight_pct": 8.0,
-        "factor_weight_pct": 26.12,
-        "health_impact": -0.59,
-        "direction": "negative",
-        "reason_zh": "融券快速增加可能代表市場分歧或空方壓力。",
         "source_label_zh": "三大法人與籌碼公開資料"
       },
       {
@@ -592,8 +553,8 @@
         "label_zh": "歷史最大回撤",
         "score": 31.11,
         "sub_weight_pct": 5.0,
-        "factor_weight_pct": 34.37,
-        "health_impact": -0.32,
+        "factor_weight_pct": 35.71,
+        "health_impact": -0.34,
         "direction": "negative",
         "reason_zh": "歷史最大回撤越深，代表價格風險越高。",
         "source_label_zh": "交易所股價與成交資料"
@@ -603,11 +564,33 @@
         "label_zh": "法人連買連賣",
         "score": 45.0,
         "sub_weight_pct": 18.0,
-        "factor_weight_pct": 26.12,
-        "health_impact": -0.24,
+        "factor_weight_pct": 23.26,
+        "health_impact": -0.21,
         "direction": "negative",
         "reason_zh": "連續買超有助於籌碼穩定，連續賣超則增加壓力。",
         "source_label_zh": "三大法人與籌碼公開資料"
+      },
+      {
+        "factor": "market",
+        "label_zh": "大盤 20 日報酬",
+        "score": 40.4,
+        "sub_weight_pct": 20.0,
+        "factor_weight_pct": 10.93,
+        "health_impact": -0.21,
+        "direction": "negative",
+        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
+        "source_label_zh": "大盤、產業與市場行情資料"
+      },
+      {
+        "factor": "financial",
+        "label_zh": "營收月增率",
+        "score": 29.09,
+        "sub_weight_pct": 5.0,
+        "factor_weight_pct": 11.9,
+        "health_impact": -0.12,
+        "direction": "negative",
+        "reason_zh": "月增率用於補充短期營運變化。",
+        "source_label_zh": "公開財報與營收資料"
       }
     ],
     "factor_breakdown": [
@@ -617,8 +600,8 @@
         "score": 73.82,
         "level": "良好",
         "description": "EPS 年增率為 98.0 分，屬於加分因子。",
-        "weight": 0.11,
-        "weighted_contribution": 8.46,
+        "weight": 0.12,
+        "weighted_contribution": 8.78,
         "coverage_pct": 33.33,
         "reasons": [
           "EPS 年增率為 98.0 分，屬於加分因子。",
@@ -634,8 +617,8 @@
             "label_zh": "每股盈餘",
             "score": 59.8,
             "sub_weight_pct": 10.0,
-            "factor_weight_pct": 11.46,
-            "health_impact": 0.11,
+            "factor_weight_pct": 11.9,
+            "health_impact": 0.12,
             "direction": "positive",
             "reason_zh": "EPS 越穩定為正，獲利基礎越健康。",
             "source_label_zh": "公開財報與營收資料"
@@ -645,8 +628,8 @@
             "label_zh": "營收年增率",
             "score": 84.0,
             "sub_weight_pct": 12.0,
-            "factor_weight_pct": 11.46,
-            "health_impact": 0.47,
+            "factor_weight_pct": 11.9,
+            "health_impact": 0.49,
             "direction": "positive",
             "reason_zh": "營收年增率衡量企業成長動能。",
             "source_label_zh": "公開財報與營收資料"
@@ -656,7 +639,7 @@
             "label_zh": "營收月增率",
             "score": 29.09,
             "sub_weight_pct": 5.0,
-            "factor_weight_pct": 11.46,
+            "factor_weight_pct": 11.9,
             "health_impact": -0.12,
             "direction": "negative",
             "reason_zh": "月增率用於補充短期營運變化。",
@@ -667,8 +650,8 @@
             "label_zh": "EPS 年增率",
             "score": 98.0,
             "sub_weight_pct": 10.0,
-            "factor_weight_pct": 11.46,
-            "health_impact": 0.55,
+            "factor_weight_pct": 11.9,
+            "health_impact": 0.57,
             "direction": "positive",
             "reason_zh": "EPS 成長反映獲利是否持續改善。",
             "source_label_zh": "公開財報與營收資料"
@@ -691,8 +674,8 @@
         "score": 66.25,
         "level": "中性",
         "description": "多空排列為 92.0 分，屬於加分因子。",
-        "weight": 0.34,
-        "weighted_contribution": 22.77,
+        "weight": 0.36,
+        "weighted_contribution": 23.66,
         "coverage_pct": 100.0,
         "reasons": [
           "多空排列為 92.0 分，屬於加分因子。",
@@ -707,8 +690,8 @@
             "label_zh": "均線趨勢結構",
             "score": 64.26,
             "sub_weight_pct": 20.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 0.98,
+            "factor_weight_pct": 35.71,
+            "health_impact": 1.02,
             "direction": "positive",
             "reason_zh": "比較股價與中短期均線位置，判斷趨勢方向與強度。",
             "source_label_zh": "交易所股價與成交資料"
@@ -718,8 +701,8 @@
             "label_zh": "多空排列",
             "score": 92.0,
             "sub_weight_pct": 10.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 1.44,
+            "factor_weight_pct": 35.71,
+            "health_impact": 1.5,
             "direction": "positive",
             "reason_zh": "完整多頭排列代表趨勢一致性較高。",
             "source_label_zh": "交易所股價與成交資料"
@@ -729,8 +712,8 @@
             "label_zh": "RSI 相對強弱",
             "score": 91.16,
             "sub_weight_pct": 10.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 1.41,
+            "factor_weight_pct": 35.71,
+            "health_impact": 1.47,
             "direction": "positive",
             "reason_zh": "RSI 過熱或過弱都會降低技術健康度。",
             "source_label_zh": "交易所股價與成交資料"
@@ -740,8 +723,8 @@
             "label_zh": "MACD 動能",
             "score": 57.01,
             "sub_weight_pct": 10.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 0.24,
+            "factor_weight_pct": 35.71,
+            "health_impact": 0.25,
             "direction": "positive",
             "reason_zh": "MACD 柱狀體反映趨勢動能方向。",
             "source_label_zh": "交易所股價與成交資料"
@@ -751,8 +734,8 @@
             "label_zh": "20 日報酬",
             "score": 58.44,
             "sub_weight_pct": 10.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 0.29,
+            "factor_weight_pct": 35.71,
+            "health_impact": 0.3,
             "direction": "positive",
             "reason_zh": "中短期報酬過弱代表趨勢壓力，過度急漲則可能增加追高風險。",
             "source_label_zh": "交易所股價與成交資料"
@@ -762,8 +745,8 @@
             "label_zh": "60 日報酬",
             "score": 82.87,
             "sub_weight_pct": 8.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 0.9,
+            "factor_weight_pct": 35.71,
+            "health_impact": 0.94,
             "direction": "positive",
             "reason_zh": "60 日報酬用於確認中期趨勢。",
             "source_label_zh": "交易所股價與成交資料"
@@ -773,7 +756,7 @@
             "label_zh": "ATR 波動風險",
             "score": 56.01,
             "sub_weight_pct": 9.0,
-            "factor_weight_pct": 34.37,
+            "factor_weight_pct": 35.71,
             "health_impact": 0.19,
             "direction": "positive",
             "reason_zh": "ATR 佔股價比例越高，短期波動風險越大。",
@@ -784,8 +767,8 @@
             "label_zh": "20 日波動率",
             "score": 71.76,
             "sub_weight_pct": 7.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 0.52,
+            "factor_weight_pct": 35.71,
+            "health_impact": 0.54,
             "direction": "positive",
             "reason_zh": "波動率過高會降低技術面穩定度。",
             "source_label_zh": "交易所股價與成交資料"
@@ -795,7 +778,7 @@
             "label_zh": "成交量比",
             "score": 44.83,
             "sub_weight_pct": 6.0,
-            "factor_weight_pct": 34.37,
+            "factor_weight_pct": 35.71,
             "health_impact": -0.11,
             "direction": "negative",
             "reason_zh": "適度放量有助於確認趨勢，極端爆量則需注意短線震盪。",
@@ -806,8 +789,8 @@
             "label_zh": "突破與跌破",
             "score": 52.0,
             "sub_weight_pct": 5.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": 0.03,
+            "factor_weight_pct": 35.71,
+            "health_impact": 0.04,
             "direction": "positive",
             "reason_zh": "突破近期壓力有利於趨勢延續，跌破支撐則屬負面訊號。",
             "source_label_zh": "交易所股價與成交資料"
@@ -817,8 +800,8 @@
             "label_zh": "歷史最大回撤",
             "score": 31.11,
             "sub_weight_pct": 5.0,
-            "factor_weight_pct": 34.37,
-            "health_impact": -0.32,
+            "factor_weight_pct": 35.71,
+            "health_impact": -0.34,
             "direction": "negative",
             "reason_zh": "歷史最大回撤越深，代表價格風險越高。",
             "source_label_zh": "交易所股價與成交資料"
@@ -829,17 +812,17 @@
       {
         "key": "institutional",
         "label": "法人籌碼",
-        "score": 50.73,
-        "level": "偏弱",
-        "description": "融資 5 日變化為 15.0 分，屬於扣分因子。",
-        "weight": 0.26,
-        "weighted_contribution": 13.25,
-        "coverage_pct": 100.0,
+        "score": 61.0,
+        "level": "中性",
+        "description": "近 10 日法人方向為 75.0 分，屬於加分因子。",
+        "weight": 0.23,
+        "weighted_contribution": 14.19,
+        "coverage_pct": 85.71,
         "reasons": [
-          "融資 5 日變化為 15.0 分，屬於扣分因子。",
-          "融券 5 日變化為 22.0 分，屬於扣分因子。",
           "近 10 日法人方向為 75.0 分，屬於加分因子。",
-          "近 5 日法人方向為 72.0 分，屬於加分因子。"
+          "融資 5 日變化為 75.0 分，屬於加分因子。",
+          "近 5 日法人方向為 72.0 分，屬於加分因子。",
+          "法人流向加速度為 30.0 分，屬於扣分因子。"
         ],
         "source_label_zh": "三大法人與籌碼公開資料",
         "contributions": [
@@ -848,8 +831,8 @@
             "label_zh": "近 5 日法人方向",
             "score": 72.0,
             "sub_weight_pct": 24.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": 1.38,
+            "factor_weight_pct": 23.26,
+            "health_impact": 1.23,
             "direction": "positive",
             "reason_zh": "近 5 日法人買賣方向反映短期籌碼態度。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -859,8 +842,8 @@
             "label_zh": "近 10 日法人方向",
             "score": 75.0,
             "sub_weight_pct": 18.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": 1.18,
+            "factor_weight_pct": 23.26,
+            "health_impact": 1.05,
             "direction": "positive",
             "reason_zh": "近 10 日累積方向用於確認籌碼趨勢。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -870,8 +853,8 @@
             "label_zh": "法人連買連賣",
             "score": 45.0,
             "sub_weight_pct": 18.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": -0.24,
+            "factor_weight_pct": 23.26,
+            "health_impact": -0.21,
             "direction": "negative",
             "reason_zh": "連續買超有助於籌碼穩定，連續賣超則增加壓力。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -881,8 +864,8 @@
             "label_zh": "法人流向加速度",
             "score": 30.0,
             "sub_weight_pct": 12.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": -0.63,
+            "factor_weight_pct": 23.26,
+            "health_impact": -0.56,
             "direction": "negative",
             "reason_zh": "近期買賣超是否加速，可反映籌碼動能變化。",
             "source_label_zh": "三大法人與籌碼公開資料"
@@ -890,38 +873,29 @@
           {
             "factor": "institutional",
             "label_zh": "融資 5 日變化",
-            "score": 15.0,
+            "score": 75.0,
             "sub_weight_pct": 12.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": -1.1,
-            "direction": "negative",
+            "factor_weight_pct": 23.26,
+            "health_impact": 0.7,
+            "direction": "positive",
             "reason_zh": "融資快速增加通常會提高籌碼壓力。",
             "source_label_zh": "三大法人與籌碼公開資料"
           },
           {
             "factor": "institutional",
-            "label_zh": "融券 5 日變化",
-            "score": 22.0,
-            "sub_weight_pct": 8.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": -0.59,
-            "direction": "negative",
-            "reason_zh": "融券快速增加可能代表市場分歧或空方壓力。",
-            "source_label_zh": "三大法人與籌碼公開資料"
-          },
-          {
-            "factor": "institutional",
             "label_zh": "券資比",
-            "score": 58.59,
+            "score": 58.0,
             "sub_weight_pct": 8.0,
-            "factor_weight_pct": 26.12,
-            "health_impact": 0.18,
+            "factor_weight_pct": 23.26,
+            "health_impact": 0.15,
             "direction": "positive",
             "reason_zh": "券資比過高時需注意回補與軋空並存的高波動風險。",
             "source_label_zh": "三大法人與籌碼公開資料"
           }
         ],
-        "missing_features": []
+        "missing_features": [
+          "融券 5 日變化"
+        ]
       },
       {
         "key": "market",
@@ -930,7 +904,7 @@
         "level": "偏弱",
         "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
         "weight": 0.11,
-        "weighted_contribution": 5.28,
+        "weighted_contribution": 5.49,
         "coverage_pct": 60.0,
         "reasons": [
           "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
@@ -944,7 +918,7 @@
             "label_zh": "大盤多空環境",
             "score": 52.0,
             "sub_weight_pct": 32.0,
-            "factor_weight_pct": 10.52,
+            "factor_weight_pct": 10.93,
             "health_impact": 0.07,
             "direction": "positive",
             "reason_zh": "大盤趨勢會影響個股的系統性順風或逆風。",
@@ -955,8 +929,8 @@
             "label_zh": "大盤 20 日報酬",
             "score": 40.4,
             "sub_weight_pct": 20.0,
-            "factor_weight_pct": 10.52,
-            "health_impact": -0.2,
+            "factor_weight_pct": 10.93,
+            "health_impact": -0.21,
             "direction": "negative",
             "reason_zh": "大盤中短期報酬反映市場風險偏好。",
             "source_label_zh": "大盤、產業與市場行情資料"
@@ -966,7 +940,7 @@
             "label_zh": "大盤波動率",
             "score": 57.87,
             "sub_weight_pct": 18.0,
-            "factor_weight_pct": 10.52,
+            "factor_weight_pct": 10.93,
             "health_impact": 0.15,
             "direction": "positive",
             "reason_zh": "大盤波動率越高，系統性風險越大。",
@@ -985,7 +959,7 @@
         "level": "中性",
         "description": "近期新聞熱度為 66.7 分，屬於加分因子。",
         "weight": 0.18,
-        "weighted_contribution": 9.78,
+        "weighted_contribution": 10.16,
         "coverage_pct": 100.0,
         "reasons": [
           "近期新聞熱度為 66.7 分，屬於加分因子。",
@@ -999,8 +973,8 @@
             "label_zh": "新聞情緒分數",
             "score": 51.27,
             "sub_weight_pct": 50.0,
-            "factor_weight_pct": 17.53,
-            "health_impact": 0.11,
+            "factor_weight_pct": 18.21,
+            "health_impact": 0.12,
             "direction": "positive",
             "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
             "source_label_zh": "公開新聞索引"
@@ -1010,8 +984,8 @@
             "label_zh": "正負面新聞比例",
             "score": 56.11,
             "sub_weight_pct": 30.0,
-            "factor_weight_pct": 17.53,
-            "health_impact": 0.32,
+            "factor_weight_pct": 18.21,
+            "health_impact": 0.33,
             "direction": "positive",
             "reason_zh": "正負面新聞數量差異可補充單一平均值。",
             "source_label_zh": "公開新聞索引"
@@ -1021,8 +995,8 @@
             "label_zh": "近期新聞熱度",
             "score": 66.67,
             "sub_weight_pct": 20.0,
-            "factor_weight_pct": 17.53,
-            "health_impact": 0.58,
+            "factor_weight_pct": 18.21,
+            "health_impact": 0.61,
             "direction": "positive",
             "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "source_label_zh": "公開新聞索引"
@@ -1052,9 +1026,9 @@
     },
     {
       "date": "2026-08-08",
-      "score": 65.7,
-      "risk": 41.27,
-      "confidence": 77.39
+      "score": 70.3,
+      "risk": 38.26,
+      "confidence": 75.23
     }
   ],
   "data_sources": [

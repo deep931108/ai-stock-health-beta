@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.1-ScoreV2",
-  "generated_at": "2026-08-08T17:19:38+08:00",
+  "generated_at": "2026-08-08T23:20:26+08:00",
   "status": "success",
   "stock_id": "2603",
   "stock": {
@@ -11,7 +11,7 @@
   },
   "overview": {
     "health_score": 66.1,
-    "health_score_v1": 59.76,
+    "health_score_v1": 59.77,
     "health_score_v2": 66.1,
     "health_score_interval": "60-69",
     "health_score_band_zh": "中性偏強",
@@ -20,7 +20,7 @@
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "觀察名單",
     "confidence_level": "中等信心",
-    "confidence_score": 72.62,
+    "confidence_score": 72.63,
     "risk_level": "中等風險",
     "risk_score": 40.68,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
@@ -365,15 +365,15 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 55.26,
+      "score": 55.32,
       "level": "中性",
       "description": "正負面新聞比例為 68.3 分，屬於加分因子。",
       "weight": 0.19,
-      "weighted_contribution": 10.7,
+      "weighted_contribution": 10.71,
       "coverage_pct": 100.0,
       "reasons": [
         "正負面新聞比例為 68.3 分，屬於加分因子。",
-        "近期新聞熱度為 45.6 分，屬於中性因子。",
+        "近期新聞熱度為 45.9 分，屬於中性因子。",
         "新聞情緒分數為 51.3 分，屬於中性因子。"
       ],
       "source_label_zh": "公開新聞索引",
@@ -403,10 +403,10 @@
         {
           "factor": "news",
           "label_zh": "近期新聞熱度",
-          "score": 45.6,
+          "score": 45.9,
           "sub_weight_pct": 20.0,
           "factor_weight_pct": 19.36,
-          "health_impact": -0.17,
+          "health_impact": -0.16,
           "direction": "negative",
           "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
           "source_label_zh": "公開新聞索引"
@@ -551,10 +551,10 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "score": 45.6,
+        "score": 45.9,
         "sub_weight_pct": 20.0,
         "factor_weight_pct": 19.36,
-        "health_impact": -0.17,
+        "health_impact": -0.16,
         "direction": "negative",
         "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "source_label_zh": "公開新聞索引"
@@ -911,15 +911,15 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 55.26,
+        "score": 55.32,
         "level": "中性",
         "description": "正負面新聞比例為 68.3 分，屬於加分因子。",
         "weight": 0.19,
-        "weighted_contribution": 10.7,
+        "weighted_contribution": 10.71,
         "coverage_pct": 100.0,
         "reasons": [
           "正負面新聞比例為 68.3 分，屬於加分因子。",
-          "近期新聞熱度為 45.6 分，屬於中性因子。",
+          "近期新聞熱度為 45.9 分，屬於中性因子。",
           "新聞情緒分數為 51.3 分，屬於中性因子。"
         ],
         "source_label_zh": "公開新聞索引",
@@ -949,10 +949,10 @@
           {
             "factor": "news",
             "label_zh": "近期新聞熱度",
-            "score": 45.6,
+            "score": 45.9,
             "sub_weight_pct": 20.0,
             "factor_weight_pct": 19.36,
-            "health_impact": -0.17,
+            "health_impact": -0.16,
             "direction": "negative",
             "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "source_label_zh": "公開新聞索引"
@@ -984,7 +984,7 @@
       "date": "2026-08-08",
       "score": 66.1,
       "risk": 40.68,
-      "confidence": 72.62
+      "confidence": 72.63
     }
   ],
   "data_sources": [
