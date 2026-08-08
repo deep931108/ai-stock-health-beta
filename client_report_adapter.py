@@ -56,7 +56,7 @@ class ClientReportRepository:
                 continue
         return None
 
-    def available_stocks(self) -> list[dict[str, Any]]:
+    def available_stocks(self) -> list[dict[str, str]]:
         ids: set[str] = set()
         if self.report_root.is_dir():
             ids.update(path.parent.name for path in self.report_root.glob("*/latest.json"))
@@ -66,18 +66,7 @@ class ClientReportRepository:
         for stock_id in sorted(ids):
             report = self.load(stock_id)
             if report:
-                result.append({
-                    "id": stock_id,
-                    "name": report["name"],
-                    "industry": report["industry"],
-                    "score": report["score"],
-                    "assessment": report["assessment"],
-                    "grade": report["grade"],
-                    "risk": report["risk"],
-                    "risk_level": report["risk_level"],
-                    "updated": report["updated"],
-                    "source": report["source"],
-                })
+                result.append({"id": stock_id, "name": report["name"]})
         return result
 
     def _normalize(self, payload: dict[str, Any], stock_id: str) -> dict[str, Any]:
@@ -93,6 +82,7 @@ class ClientReportRepository:
         if isinstance(notices, str):
             notices = [notices]
         summary = overview.get("summary_zh") or payload.get("summary_zh") or "目前資料仍在累積，建議持續觀察。"
+        explanation = payload.get("score_explanation") or {}
         return {
             "id": str(payload.get("stock_id") or stock.get("stock_id") or stock_id),
             "name": stock.get("name") or payload.get("stock_name") or known_name,
@@ -110,9 +100,60 @@ class ClientReportRepository:
             "strategy": payload.get("strategy") or {},
             "data_status": payload.get("data_status") or {},
             "indicators": indicators,
+            "score_interval": overview.get("health_score_interval") or "—",
+            "score_method": (
+                explanation.get("method_zh")
+                or overview.get("score_explanation_zh")
+                or "分數依五大面向與資料完整度形成，用於一致比較。"
+            ),
+            "positive_factors": self._normalize_factors(explanation.get("positive_factors")),
+            "negative_factors": self._normalize_factors(explanation.get("negative_factors")),
+            "score_history": self._normalize_history(payload.get("score_history")),
+            "data_sources": self._normalize_sources(payload.get("data_sources")),
             "notices": notices,
             "disclaimer": payload.get("disclaimer_zh") or "本服務僅供資料整理與研究輔助，不構成投資建議。",
         }
+
+    def _normalize_factors(self, raw: Any) -> list[dict[str, Any]]:
+        factors = []
+        for item in raw if isinstance(raw, list) else []:
+            if not isinstance(item, dict):
+                continue
+            factors.append({
+                "key": str(item.get("key") or ""),
+                "label": str(item.get("label") or item.get("label_zh") or "影響因素"),
+                "score": self._number(item.get("score"), 0),
+                "reason": str(item.get("reason_zh") or "持續觀察資料變化。"),
+                "source": str(item.get("source_label_zh") or "公開資料"),
+            })
+        return factors[:5]
+
+    def _normalize_history(self, raw: Any) -> list[dict[str, Any]]:
+        by_date: dict[str, dict[str, Any]] = {}
+        for item in raw if isinstance(raw, list) else []:
+            if not isinstance(item, dict) or not item.get("date"):
+                continue
+            date = str(item["date"])[:10]
+            by_date[date] = {
+                "date": date,
+                "score": self._number(item.get("score"), 0),
+                "risk": self._number(item.get("risk"), 0),
+                "confidence": self._number(item.get("confidence"), 0),
+            }
+        return [by_date[date] for date in sorted(by_date)][-30:]
+
+    @staticmethod
+    def _normalize_sources(raw: Any) -> list[dict[str, str]]:
+        sources = []
+        for item in raw if isinstance(raw, list) else []:
+            if not isinstance(item, dict):
+                continue
+            sources.append({
+                "key": str(item.get("key") or ""),
+                "label": str(item.get("label") or "資料來源"),
+                "source": str(item.get("source_label_zh") or "公開資料"),
+            })
+        return sources[:5]
 
     def _normalize_indicators(self, raw: Any) -> list[dict[str, Any]]:
         items: list[tuple[str, Any]]

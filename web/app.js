@@ -1,15 +1,7 @@
 const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
-const feedbackForm = {
-  url: "https://docs.google.com/forms/d/e/1FAIpQLSf1aHr1FgfzJATg1C16QTURV9vay1KdBIHTehXiCy_LBcp0XA/viewform",
-  testerEntry: "entry.1967805630",
-  stockEntry: "entry.1628915144",
-};
 let currentReport = null;
 let available = [];
-let activeSector = "全部";
-let watchlistOnly = false;
-let betaTesterCode = "";
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -25,14 +17,9 @@ function setState(state, message = "") {
 }
 
 function levelTone(score) {
-  if (Number(score) >= 75) return "good";
-  if (Number(score) >= 55) return "neutral";
+  if (score >= 75) return "good";
+  if (score >= 55) return "neutral";
   return "watch";
-}
-
-function scoreText(score) {
-  const value = Number(score);
-  return Number.isFinite(value) ? value.toFixed(1) : "—";
 }
 
 function render(report) {
@@ -40,8 +27,8 @@ function render(report) {
   $("stockMeta").textContent = `${report.id} · ${report.industry}`;
   $("stockName").textContent = report.name;
   $("assessment").textContent = report.assessment;
-  $("healthScore").textContent = scoreText(report.score);
-  $("scoreRing").style.setProperty("--score-angle", `${Math.min(100, Math.max(0, Number(report.score) || 0)) * 3.6}deg`);
+  $("healthScore").textContent = Number(report.score).toFixed(1);
+  $("scoreRing").style.setProperty("--score-angle", `${Math.min(100, Math.max(0, report.score)) * 3.6}deg`);
   $("summary").textContent = report.summary;
   $("grade").textContent = report.grade;
   $("confidence").textContent = `${Math.round(report.confidence)} · ${report.confidence_level}`;
@@ -51,12 +38,64 @@ function render(report) {
   $("strategyLabel").textContent = report.strategy?.label_zh || "研究累積中";
   $("strategyCopy").textContent = report.strategy?.message_zh || "系統持續更新與驗證，不會因單日波動任意改變研究門檻。";
   $("disclaimer").textContent = report.disclaimer;
-  // The same input also filters the stock center.  Clear it after opening a
-  // report so the selected stock does not silently constrain every sector.
-  $("stockSearch").value = "";
-  renderStockGrid();
   renderIndicators(report.indicators);
+  renderEvidence(report);
+  renderHistory(report.score_history || []);
+  renderSources(report.data_sources || []);
   refreshSavedButton();
+}
+
+function factorRows(items, emptyText) {
+  if (!items?.length) return `<p class="factor-empty">${escapeHtml(emptyText)}</p>`;
+  return items.map((item) => `<div class="factor-row">
+    <div><b>${escapeHtml(item.label)}</b><span>${Number(item.score).toFixed(1)} 分</span></div>
+    <p>${escapeHtml(item.reason)}</p><small>來源：${escapeHtml(item.source)}</small>
+  </div>`).join("");
+}
+
+function renderEvidence(report) {
+  $("scoreInterval").textContent = `目前區間 ${report.score_interval || "—"}`;
+  $("scoreMethod").textContent = report.score_method || "分數用於一致比較，不代表未來漲跌。";
+  $("positiveFactors").innerHTML = factorRows(report.positive_factors, "目前沒有明顯加分因素。");
+  $("negativeFactors").innerHTML = factorRows(report.negative_factors, "目前沒有明顯扣分因素。");
+}
+
+function renderHistory(history) {
+  const points = (history || []).filter((item) => item?.date && Number.isFinite(Number(item.score)));
+  const chart = $("historyChart");
+  const empty = $("historyEmpty");
+  const summary = $("historySummary");
+  if (points.length < 2) {
+    chart.innerHTML = "";
+    chart.classList.add("hidden");
+    empty.classList.remove("hidden");
+    summary.textContent = points.length ? `目前已累積 1 筆：${Number(points[0].score).toFixed(1)} 分。` : "歷史資料正在累積。";
+    return;
+  }
+  chart.classList.remove("hidden");
+  empty.classList.add("hidden");
+  const width = 760, height = 250, left = 42, right = 18, top = 22, bottom = 38;
+  const scores = points.map((item) => Number(item.score));
+  const rawMin = Math.min(...scores), rawMax = Math.max(...scores);
+  const min = Math.max(0, Math.floor((rawMin - 5) / 10) * 10);
+  const max = Math.min(100, Math.max(min + 10, Math.ceil((rawMax + 5) / 10) * 10));
+  const x = (index) => left + index * ((width - left - right) / (points.length - 1));
+  const y = (score) => top + (max - score) * ((height - top - bottom) / (max - min));
+  const line = points.map((item, index) => `${x(index)},${y(Number(item.score))}`).join(" ");
+  const grid = [0, .5, 1].map((ratio) => {
+    const value = Math.round(max - (max - min) * ratio);
+    const gy = top + ratio * (height - top - bottom);
+    return `<line x1="${left}" y1="${gy}" x2="${width-right}" y2="${gy}"/><text x="4" y="${gy+4}">${value}</text>`;
+  }).join("");
+  const dots = points.map((item, index) => `<g><circle cx="${x(index)}" cy="${y(Number(item.score))}" r="5"/><text class="point-score" x="${x(index)}" y="${y(Number(item.score))-12}" text-anchor="middle">${Number(item.score).toFixed(1)}</text><text class="point-date" x="${x(index)}" y="${height-10}" text-anchor="middle">${escapeHtml(item.date.slice(5))}</text></g>`).join("");
+  chart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true"><g class="chart-grid">${grid}</g><polyline points="${line}"/>${dots}</svg>`;
+  const delta = scores.at(-1) - scores.at(-2);
+  const direction = delta > 0 ? "上升" : delta < 0 ? "下降" : "持平";
+  summary.innerHTML = `<b>最新 ${scores.at(-1).toFixed(1)} 分</b><span>較前次${direction} ${Math.abs(delta).toFixed(1)} 分；目前共 ${points.length} 個有效日期。</span>`;
+}
+
+function renderSources(sources) {
+  $("sourceGrid").innerHTML = (sources || []).map((item) => `<article><b>${escapeHtml(item.label)}</b><span>${escapeHtml(item.source)}</span></article>`).join("") || "<p class=\"factor-empty\">資料來源正在整理。</p>";
 }
 
 function renderIndicators(indicators) {
@@ -64,9 +103,9 @@ function renderIndicators(indicators) {
     <button class="indicator-card ${index === 0 ? "selected" : ""}" data-index="${index}" type="button">
       <span class="indicator-icon">${icons[index] || "•"}</span>
       <span class="indicator-name">${escapeHtml(item.label)}</span>
-      <strong>${scoreText(item.score)}</strong>
+      <strong>${Number(item.score).toFixed(1)}</strong>
       <span class="level ${levelTone(item.score)}">${escapeHtml(item.level)}</span>
-      <span class="bar"><i style="width:${Math.min(100, Math.max(0, Number(item.score) || 0))}%"></i></span>
+      <span class="bar"><i style="width:${Math.min(100, Math.max(0, item.score))}%"></i></span>
     </button>`).join("");
   selectIndicator(0);
   document.querySelectorAll(".indicator-card").forEach((button) => {
@@ -81,18 +120,9 @@ function selectIndicator(index) {
   $("indicatorDetail").innerHTML = `<b>${escapeHtml(item.label)}</b><span>${escapeHtml(item.note)}</span>`;
 }
 
-function resolveSearch(value) {
-  const query = String(value || "").trim().toLowerCase();
-  if (!query) return null;
-  if (/^\d{4}$/.test(query)) return query;
-  const exact = available.find((stock) => stock.name.toLowerCase() === query);
-  const partial = available.find((stock) => stock.name.toLowerCase().includes(query));
-  return (exact || partial)?.id || null;
-}
-
-async function loadStock(stockId, {scroll = true, updateUrl = true} = {}) {
+async function loadStock(stockId) {
   if (!/^\d{4}$/.test(stockId)) {
-    $("formHint").textContent = "請輸入股票中文名稱或四位數代號";
+    $("formHint").textContent = "請輸入四位數台股代號";
     return;
   }
   setState("loading");
@@ -104,15 +134,9 @@ async function loadStock(stockId, {scroll = true, updateUrl = true} = {}) {
     render(payload.report);
     setState("ready");
     $("formHint").textContent = `已顯示 ${payload.report.name}（${payload.report.id}）`;
-    if (updateUrl) {
-      const url = new URL(window.location.href);
-      url.searchParams.set("stock", payload.report.id);
-      history.pushState({stock: payload.report.id}, "", url);
-    }
-    if (scroll) $("reportAnchor").scrollIntoView({behavior: "smooth", block: "start"});
   } catch (error) {
     setState("error", error.message || "暫時無法取得研究報告");
-    $("formHint").textContent = "請確認名稱、代號或稍後再試";
+    $("formHint").textContent = "請確認代號或稍後再試";
   }
 }
 
@@ -133,7 +157,6 @@ function toggleSaved() {
   adding ? saved.add(currentReport.id) : saved.delete(currentReport.id);
   localStorage.setItem("aiStockWatchlist", JSON.stringify([...saved]));
   refreshSavedButton();
-  renderStockGrid();
   showToast(adding ? `已將 ${currentReport.name} 加入自選` : `已將 ${currentReport.name} 移出自選`);
 }
 
@@ -144,187 +167,27 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => $("toast").classList.remove("show"), 2200);
 }
 
-function openFeedback() {
-  let testerCode = betaTesterCode || localStorage.getItem("aiStockBetaTesterCode") || "";
-  if (!testerCode) {
-    testerCode = window.prompt("請輸入你的 Beta 測試者代號", "")?.trim() || "";
-    if (!testerCode) {
-      showToast("需要測試者代號才能送出回饋");
-      return;
-    }
-    if (testerCode.length > 40) {
-      showToast("測試者代號過長，請重新輸入");
-      return;
-    }
-    localStorage.setItem("aiStockBetaTesterCode", testerCode);
-  }
-  const url = new URL(feedbackForm.url);
-  url.searchParams.set("usp", "pp_url");
-  url.searchParams.set(feedbackForm.testerEntry, testerCode);
-  url.searchParams.set(feedbackForm.stockEntry, currentReport?.id || "");
-  window.open(url.toString(), "_blank", "noopener,noreferrer");
-}
-
-function showAccessGate(message = "") {
-  $("accessGate").classList.remove("hidden");
-  document.body.classList.add("gate-open");
-  $("accessMessage").textContent = message;
-  window.setTimeout(() => $("inviteCode").focus(), 50);
-}
-
-function hideAccessGate(testerCode = "") {
-  $("accessGate").classList.add("hidden");
-  document.body.classList.remove("gate-open");
-  betaTesterCode = testerCode === "LOCAL-OWNER" ? "" : testerCode;
-  if (betaTesterCode) {
-    localStorage.setItem("aiStockBetaTesterCode", betaTesterCode);
-    $("testerBadge").textContent = betaTesterCode;
-    $("testerBadge").classList.remove("hidden");
-  }
-}
-
-async function checkBetaAccess() {
-  try {
-    const response = await fetch("/api/beta/session", {headers: {Accept: "application/json"}});
-    const payload = await response.json();
-    if (!response.ok || !payload.authorized) {
-      showAccessGate();
-      return false;
-    }
-    hideAccessGate(payload.tester_code || "");
-    return true;
-  } catch {
-    showAccessGate("目前無法確認測試資格，請稍後重新整理。");
-    return false;
-  }
-}
-
-async function activateBeta(event) {
-  event.preventDefault();
-  if (!$("betaConsent").checked) {
-    $("accessMessage").textContent = "請先確認研究用途聲明。";
-    return;
-  }
-  const inviteCode = $("inviteCode").value.trim().toUpperCase();
-  $("activateButton").disabled = true;
-  $("activateButton").textContent = "驗證中…";
-  $("accessMessage").textContent = "";
-  try {
-    const response = await fetch("/api/beta/activate", {
-      method: "POST",
-      headers: {"Content-Type": "application/json", Accept: "application/json"},
-      body: JSON.stringify({invite_code: inviteCode}),
-    });
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload.detail || "邀請碼驗證失敗");
-    hideAccessGate(payload.tester_code || "");
-    await startApplication();
-  } catch (error) {
-    $("accessMessage").textContent = error.message || "邀請碼驗證失敗";
-  } finally {
-    $("activateButton").disabled = false;
-    $("activateButton").textContent = "進入 Beta";
-  }
-}
-
-function renderSectorFilters(sectors) {
-  $("sectorFilters").innerHTML = ["全部", ...sectors].map((sector) => `
-    <button type="button" class="sector-filter ${sector === activeSector ? "active" : ""}" data-sector="${escapeHtml(sector)}">${escapeHtml(sector)}</button>
-  `).join("");
-}
-
-function renderStockGrid() {
-  const query = $("stockSearch").value.trim().toLowerCase();
-  const saved = new Set(watchlist());
-  const filtered = available.filter((stock) => {
-    const matchesText = !query || stock.id.includes(query) || stock.name.toLowerCase().includes(query);
-    const matchesSector = activeSector === "全部" || stock.industry === activeSector;
-    const matchesWatchlist = !watchlistOnly || saved.has(stock.id);
-    return matchesText && matchesSector && matchesWatchlist;
-  });
-  $("stockCount").textContent = filtered.length;
-  $("stockEmpty").classList.toggle("hidden", filtered.length !== 0);
-  $("watchlistFilter").classList.toggle("active", watchlistOnly);
-  $("watchlistFilter").textContent = watchlistOnly ? `★ 自選 ${saved.size}` : `☆ 只看自選 ${saved.size ? `(${saved.size})` : ""}`;
-  $("stockGrid").innerHTML = filtered.map((stock) => `
-    <button class="stock-card" data-stock="${stock.id}" type="button" aria-label="查看 ${escapeHtml(stock.name)} 研究報告">
-      <span class="stock-card-head"><span><b>${escapeHtml(stock.name)}</b><small>${stock.id} · ${escapeHtml(stock.industry)}</small></span><i class="mini-score ${levelTone(stock.score)}">${scoreText(stock.score)}</i></span>
-      <span class="stock-card-body"><span><small>研究等級</small><b>${escapeHtml(stock.grade)}</b></span><span><small>風險</small><b>${escapeHtml(stock.risk_level)}</b></span></span>
-      <span class="stock-card-foot"><span>${escapeHtml(stock.assessment)}</span><span>${saved.has(stock.id) ? "★" : "查看報告 →"}</span></span>
-    </button>
-  `).join("");
-}
-
 async function loadAvailable() {
   try {
-    const response = await fetch("/api/stocks", {headers: {Accept: "application/json"}});
+    const response = await fetch("/api/stocks");
     const payload = await response.json();
-    if (!response.ok) throw new Error("stock center unavailable");
     available = payload.stocks || [];
-    renderSectorFilters(payload.sectors || [...new Set(available.map((stock) => stock.industry))].sort());
-    renderStockGrid();
     $("formHint").textContent = available.length ? `目前有 ${available.length} 檔客戶報告可查詢` : "目前尚無可用報告";
   } catch {
-    $("formHint").textContent = "股票中心暫時無法載入，可先輸入代號查詢";
-    $("stockEmpty").classList.remove("hidden");
+    $("formHint").textContent = "可先試用 2330、2891";
   }
 }
 
-$("searchForm").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const stockId = resolveSearch($("stockSearch").value);
-  if (stockId) loadStock(stockId);
-  else $("formHint").textContent = "找不到這個名稱或代號，請從股票中心選擇";
-});
-$("stockSearch").addEventListener("input", renderStockGrid);
-$("sectorFilters").addEventListener("click", (event) => {
-  const button = event.target.closest("[data-sector]");
-  if (!button) return;
-  activeSector = button.dataset.sector;
-  renderSectorFilters([...new Set(available.map((stock) => stock.industry))].sort());
-  renderStockGrid();
-});
-$("stockGrid").addEventListener("click", (event) => {
-  const card = event.target.closest("[data-stock]");
-  if (card) loadStock(card.dataset.stock);
-});
-$("watchlistFilter").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockGrid(); });
-$("retryButton").addEventListener("click", () => {
-  const stockId = resolveSearch($("stockSearch").value);
-  if (stockId) loadStock(stockId);
-});
+$("searchForm").addEventListener("submit", (event) => { event.preventDefault(); loadStock($("stockSearch").value.trim()); });
+$("retryButton").addEventListener("click", () => loadStock($("stockSearch").value.trim()));
 $("saveButton").addEventListener("click", toggleSaved);
-$("feedbackButton").addEventListener("click", openFeedback);
-$("accessForm").addEventListener("submit", activateBeta);
 document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEventListener("click", () => {
   document.querySelectorAll(".mobile-nav button").forEach((item) => item.classList.toggle("active", item === button));
-  if (button.dataset.tab === "watchlist") {
-    watchlistOnly = true;
-    renderStockGrid();
-    $("stockCenter").scrollIntoView({behavior: "smooth"});
-  }
+  if (button.dataset.tab === "watchlist") showToast(`自選股 ${watchlist().length} 檔；完整清單將在下一階段加入`);
   if (button.dataset.tab === "about") document.querySelector(".explain-card").scrollIntoView({behavior: "smooth"});
-  if (button.dataset.tab === "home") {
-    watchlistOnly = false;
-    renderStockGrid();
-    $("stockCenter").scrollIntoView({behavior: "smooth"});
-  }
+  if (button.dataset.tab === "home") window.scrollTo({top: 0, behavior: "smooth"});
 }));
-window.addEventListener("popstate", () => {
-  const stockId = new URLSearchParams(location.search).get("stock");
-  if (stockId) loadStock(stockId, {scroll: false, updateUrl: false});
-});
-
-async function startApplication() {
-  await loadAvailable();
-  const requested = new URLSearchParams(location.search).get("stock");
-  const initial = /^\d{4}$/.test(requested || "")
-    ? requested
-    : (available.some((stock) => stock.id === "2330") ? "2330" : (available[0]?.id || "2330"));
-  await loadStock(initial, {scroll: false, updateUrl: false});
-}
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
-(async () => {
-  if (await checkBetaAccess()) await startApplication();
-})();
+loadAvailable();
+loadStock("2330");
