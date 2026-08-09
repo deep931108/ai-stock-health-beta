@@ -1,6 +1,6 @@
 {
-  "version": "ClientReport-v1.4-ScoreDeltaPriceDate",
-  "generated_at": "2026-08-09T17:15:29+08:00",
+  "version": "ClientReport-v1.5-DailyEvidence",
+  "generated_at": "2026-08-09T18:18:59+08:00",
   "status": "success",
   "stock_id": "1301",
   "data_date": "2026-08-07",
@@ -21,7 +21,7 @@
     "score_explanation_zh": "分數依五大面向、資料完整度與權重形成，用於一致比較；目前報告未提供可對照的原始校準欄位，也不代表未來漲跌。",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 76.78,
+    "confidence_score": 76.75,
     "risk_level": "高風險",
     "risk_score": 53.11,
     "summary_zh": "目前條件偏弱或風險偏高，建議降低研究優先級。"
@@ -86,11 +86,11 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 62.14,
+      "score": 62.32,
       "level": "中性",
       "description": "正負面新聞比例為 82.5 分，屬於加分因子。",
       "weight": 0.19,
-      "weighted_contribution": 11.55,
+      "weighted_contribution": 11.59,
       "coverage_pct": null,
       "reasons": [],
       "source_label_zh": "公開新聞索引",
@@ -104,7 +104,7 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 62.14,
+        "score": 62.32,
         "direction": "positive",
         "reason_zh": "正負面新聞比例為 82.5 分，屬於加分因子。",
         "source_label_zh": "公開新聞索引"
@@ -202,11 +202,11 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 62.14,
+        "score": 62.32,
         "level": "中性",
         "description": "正負面新聞比例為 82.5 分，屬於加分因子。",
         "weight": 0.19,
-        "weighted_contribution": 11.55,
+        "weighted_contribution": 11.59,
         "coverage_pct": null,
         "reasons": [],
         "source_label_zh": "公開新聞索引",
@@ -227,7 +227,7 @@
       "date": "2026-08-07",
       "score": 50.1,
       "risk": 53.11,
-      "confidence": 76.78
+      "confidence": 76.75
     }
   ],
   "score_delta": {
@@ -290,5 +290,116 @@
     "message_zh": ""
   },
   "notices_zh": [],
-  "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。"
+  "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
+  "today_changes": {
+    "version": "DailyEvidence-v1.1",
+    "data_date": "2026-08-07",
+    "comparison_available": false,
+    "comparison_date": null,
+    "events": [
+      {
+        "event_id": "DRIVER-05",
+        "event_type": "score_driver",
+        "status": "current",
+        "category": "news",
+        "title_zh": "新聞情緒",
+        "direction": "positive",
+        "current_value": 62.32,
+        "current_unit": "子指標分",
+        "baseline_value": 50.0,
+        "baseline_label_zh": "中性基準",
+        "comparison_window": "當期資料相對中性基準",
+        "score_impact": 2.34,
+        "impact_kind": "raw_health_impact",
+        "reason_zh": "正負面新聞比例為 82.5 分，屬於加分因子。",
+        "source": "公開新聞索引",
+        "source_time": "2026-08-07",
+        "confidence": "medium"
+      },
+      {
+        "event_id": "DRIVER-03",
+        "event_type": "score_driver",
+        "status": "current",
+        "category": "institutional",
+        "title_zh": "法人籌碼",
+        "direction": "negative",
+        "current_value": 43.12,
+        "current_unit": "子指標分",
+        "baseline_value": 50.0,
+        "baseline_label_zh": "中性基準",
+        "comparison_window": "當期資料相對中性基準",
+        "score_impact": -1.93,
+        "impact_kind": "raw_health_impact",
+        "reason_zh": "近 10 日法人方向為 25.0 分，屬於扣分因子。",
+        "source": "三大法人與籌碼公開資料",
+        "source_time": "2026-08-07",
+        "confidence": "medium"
+      },
+      {
+        "event_id": "DRIVER-01",
+        "event_type": "score_driver",
+        "status": "current",
+        "category": "financial",
+        "title_zh": "財務健康",
+        "direction": "negative",
+        "current_value": 44.44,
+        "current_unit": "子指標分",
+        "baseline_value": 50.0,
+        "baseline_label_zh": "中性基準",
+        "comparison_window": "當期資料相對中性基準",
+        "score_impact": -0.33,
+        "impact_kind": "raw_health_impact",
+        "reason_zh": "營收月增率為 28.7 分，屬於扣分因子。",
+        "source": "公開財報與營收資料",
+        "source_time": "2026-08-07",
+        "confidence": "medium"
+      },
+      {
+        "event_id": "DRIVER-04",
+        "event_type": "score_driver",
+        "status": "current",
+        "category": "market",
+        "title_zh": "市場環境",
+        "direction": "positive",
+        "current_value": 50.2,
+        "current_unit": "子指標分",
+        "baseline_value": 50.0,
+        "baseline_label_zh": "中性基準",
+        "comparison_window": "當期資料相對中性基準",
+        "score_impact": 0.02,
+        "impact_kind": "raw_health_impact",
+        "reason_zh": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+        "source": "大盤、產業與市場行情資料",
+        "source_time": "2026-08-07",
+        "confidence": "medium"
+      },
+      {
+        "event_id": "DRIVER-02",
+        "event_type": "score_driver",
+        "status": "current",
+        "category": "technical",
+        "title_zh": "技術健康",
+        "direction": "positive",
+        "current_value": 50.03,
+        "current_unit": "子指標分",
+        "baseline_value": 50.0,
+        "baseline_label_zh": "中性基準",
+        "comparison_window": "當期資料相對中性基準",
+        "score_impact": 0.01,
+        "impact_kind": "raw_health_impact",
+        "reason_zh": "歷史最大回撤為 10.0 分，屬於扣分因子。",
+        "source": "交易所股價與成交資料",
+        "source_time": "2026-08-07",
+        "confidence": "medium"
+      }
+    ],
+    "counts": {
+      "total": 5,
+      "positive": 3,
+      "negative": 2,
+      "neutral": 0
+    },
+    "summary_zh": "依今日分數結構整理出 5 項重點：3 項正向、2 項負向。",
+    "method_zh": "有前一交易日快照時顯示實際日變化；尚無可比快照時，顯示今日分數中影響最大的可量化證據，並清楚標示為相對中性基準，而非昨日變化。"
+  }
 }
