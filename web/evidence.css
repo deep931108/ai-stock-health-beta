@@ -29,3 +29,12 @@
 @media(max-width:640px){.stock-center-section{padding:20px;border-radius:22px}.stock-center-heading h2{font-size:22px}.stock-center-tools{align-items:stretch;flex-direction:column}.watchlist-only{align-self:flex-start}.stock-center-grid{grid-template-columns:1fr}.stock-center-count b{font-size:26px}}
 .detail-navigation{max-width:1180px;margin:12px auto 16px;display:flex;align-items:center;justify-content:space-between;gap:16px}.detail-navigation button{appearance:none;border:1px solid #2b3e57;background:#111a27;color:#eaf2ff;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}.detail-navigation button:hover{border-color:var(--mint);color:var(--mint)}.detail-navigation span{color:var(--muted);font-size:13px}.detail-navigation.hidden{display:none!important}
 @media(max-width:640px){.detail-navigation{align-items:flex-start;flex-direction:column;margin:10px 14px 14px;gap:8px}.detail-navigation button{padding:9px 14px}.detail-navigation span{padding-left:4px}}
+.today-changes-section{margin-top:16px;padding:28px;border:1px solid var(--line,#293b50);border-radius:24px;background:var(--panel,#101925)}
+.today-changes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+.today-change{padding:18px;border:1px solid #2a3b50;border-radius:16px;background:#0c1521}
+.today-change-heading{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start}
+.today-change-dot{width:9px;height:9px;border-radius:50%;margin-top:8px;background:#85a0bc}
+.today-change.positive .today-change-dot{background:#31e6b0}.today-change.negative .today-change-dot{background:#ffd51d}
+.today-change-heading small,.today-change footer{color:#8fb5d9;font-size:12px}.today-change-heading h3{margin:3px 0 0;font-size:17px}.today-change-heading strong{color:#31e6b0;font-size:18px}.today-change.negative .today-change-heading strong{color:#ffd51d}
+.today-change-data{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0 12px}.today-change-data div{padding:10px;border-radius:10px;background:#111e2d}.today-change-data dt{color:#8fb5d9;font-size:11px}.today-change-data dd{margin:4px 0 0;font-weight:700}.today-change p{min-height:38px;color:#bad0e6;line-height:1.6}.today-change footer{margin-top:10px;border-top:1px solid #24364a;padding-top:10px}
+@media(max-width:760px){.today-changes-section{padding:18px}.today-changes-grid{grid-template-columns:1fr}.today-change-data{grid-template-columns:1fr}.today-change p{min-height:0}}

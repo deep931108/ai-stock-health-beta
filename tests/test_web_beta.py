@@ -54,7 +54,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
     assert 'evidence.css?v=1.7' in html
-    assert 'app.js?v=1.8' in html
+    assert 'app.js?v=2.1' in html
+    assert 'id="todayChangesGrid"' in html
+    assert "function renderTodayChanges" in js
     assert 'score-evidence-item' in js
     assert 'score-evidence-metrics' in js
     assert "function renderHistory" in js

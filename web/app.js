@@ -140,11 +140,43 @@ function render(report) {
   $("strategyCopy").textContent = report.strategy?.message_zh || "系統持續更新與驗證，不會因單日波動任意改變研究門檻。";
   $("disclaimer").textContent = report.disclaimer;
   renderIndicators(report.indicators);
+  renderTodayChanges(report.today_changes || {});
   renderEvidence(report);
   renderHistory(report.score_history || []);
   renderSources(report.data_sources || []);
   refreshSavedButton();
   if (stockCatalog.length) renderStockCenter();
+}
+
+function formatEventValue(value, unit = "") {
+  const number = Number(value);
+  return Number.isFinite(number) ? `${number.toFixed(1)} ${unit}`.trim() : "—";
+}
+
+function renderTodayChanges(block) {
+  const events = Array.isArray(block.events) ? block.events : [];
+  $("todayChangesSummary").textContent = block.summary || "今日尚無足夠的可量化事件。";
+  $("todayChangesBasis").textContent = block.comparison_available
+    ? `與 ${block.comparison_date || "前一交易日"} 相比`
+    : block.mode === "no_change" ? "今日沒有可確認的新變化" : "目前狀態（不是今日新增變化）";
+  $("todayChangesEmpty").classList.toggle("hidden", events.length > 0);
+  $("todayChangesGrid").innerHTML = events.map((item) => `<article class="today-change ${escapeHtml(item.direction)}">
+    <div class="today-change-heading">
+      <span class="today-change-dot" aria-hidden="true"></span>
+      <div><small>${escapeHtml(factorNames[item.category] || item.category || "研究證據")}</small><h3>${escapeHtml(item.title)}</h3></div>
+      <strong>${item.impact >= 0 ? "+" : ""}${Number(item.impact).toFixed(2)} 分</strong>
+    </div>
+    <dl class="today-change-data">
+      <div><dt>目前數據</dt><dd>${escapeHtml(item.current_value_text || formatEventValue(item.current_value, item.current_unit))}</dd></div>
+      <div><dt>${escapeHtml(item.baseline_label || "比較基準")}</dt><dd>${escapeHtml(item.baseline_value_text || formatEventValue(item.baseline_value, item.current_unit))}</dd></div>
+      <div><dt>比較方式</dt><dd>${escapeHtml(item.comparison_window || "—")}</dd></div>
+    </dl>
+    <p><b>發生什麼：</b>${escapeHtml(item.what_happened || item.reason)}</p>
+    ${item.metric_explanation ? `<p><b>這代表什麼：</b>${escapeHtml(item.metric_explanation)}</p>` : ""}
+    ${item.score_reason ? `<p><b>為什麼影響分數：</b>${escapeHtml(item.score_reason)}</p>` : ""}
+    ${item.beginner_explanation ? `<p><b>新手怎麼看：</b>${escapeHtml(item.beginner_explanation)}</p>` : ""}
+    <footer>來源：${item.source_url ? `<a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.source)} ↗</a>` : escapeHtml(item.source)}${item.source_time ? `｜${escapeHtml(item.source_time)}` : ""}｜信心 ${escapeHtml(item.confidence)}</footer>
+  </article>`).join("");
 }
 
 const factorNames = {financial:"財務健康",technical:"技術健康",institutional:"法人籌碼",market:"市場環境",news:"新聞情緒"};

@@ -117,8 +117,53 @@ class ClientReportRepository:
             "weight_adjustments": [str(item) for item in detailed.get("weight_adjustments_zh", []) if item],
             "score_history": self._normalize_history(payload.get("score_history")),
             "data_sources": self._normalize_sources(payload.get("data_sources")),
+            "today_changes": self._normalize_today_changes(payload.get("today_changes")),
             "notices": notices,
             "disclaimer": payload.get("disclaimer_zh") or "本服務僅供資料整理與研究輔助，不構成投資建議。",
+        }
+
+    def _normalize_today_changes(self, raw: Any) -> dict[str, Any]:
+        block = raw if isinstance(raw, dict) else {}
+        events = []
+        for item in block.get("events", []) if isinstance(block.get("events"), list) else []:
+            if not isinstance(item, dict):
+                continue
+            events.append({
+                "id": str(item.get("event_id") or ""),
+                "type": str(item.get("event_type") or "score_driver"),
+                "status": str(item.get("status") or "current"),
+                "category": str(item.get("category") or ""),
+                "title": str(item.get("title_zh") or "重要變化"),
+                "direction": str(item.get("direction") or "neutral"),
+                "current_value": self._optional_number(item.get("current_value")),
+                "current_value_text": str(item.get("current_value_zh") or ""),
+                "current_unit": str(item.get("current_unit") or ""),
+                "baseline_value": self._optional_number(item.get("baseline_value")),
+                "baseline_value_text": str(item.get("baseline_value_zh") or ""),
+                "baseline_label": str(item.get("baseline_label_zh") or "比較基準"),
+                "comparison_window": str(item.get("comparison_window") or ""),
+                "impact": self._number(item.get("score_impact"), 0),
+                "reason": str(item.get("reason_zh") or ""),
+                "source": str(item.get("source") or "公開資料"),
+                "source_time": str(item.get("source_time") or ""),
+                "confidence": str(item.get("confidence") or "medium"),
+                "what_happened": str(item.get("what_happened_zh") or item.get("reason_zh") or ""),
+                "metric_explanation": str(item.get("metric_explanation_zh") or ""),
+                "score_reason": str(item.get("score_reason_zh") or ""),
+                "beginner_explanation": str(item.get("beginner_explanation_zh") or ""),
+                "change_value": self._optional_number(item.get("change_value")),
+                "change_value_text": str(item.get("change_value_zh") or ""),
+                "source_url": str(item.get("source_url") or ""),
+                "is_true_daily_change": bool(item.get("is_true_daily_change")),
+            })
+        return {
+            "version": str(block.get("version") or ""),
+            "summary": str(block.get("summary_zh") or "今日尚無足夠的可量化事件。"),
+            "comparison_available": bool(block.get("comparison_available")),
+            "comparison_date": block.get("comparison_date"),
+            "data_date": block.get("data_date"),
+            "mode": str(block.get("mode") or ("daily_change" if block.get("comparison_available") else "current_state")),
+            "events": events,
         }
 
     def _normalize_factors(self, raw: Any) -> list[dict[str, Any]]:
@@ -150,7 +195,7 @@ class ClientReportRepository:
                 "reason": str(item.get("reason_zh") or "此項用於構成面向分數。"),
                 "source": str(item.get("source_label_zh") or "公開資料"),
             })
-        return result[:5]
+        return result
 
     def _normalize_history(self, raw: Any) -> list[dict[str, Any]]:
         by_date: dict[str, dict[str, Any]] = {}
