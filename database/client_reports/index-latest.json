@@ -1,6 +1,6 @@
 {
   "version": "ClientReportBatchService-v1.1",
-  "generated_at": "2026-08-10T19:02:53+08:00",
+  "generated_at": "2026-08-10T23:01:02+08:00",
   "status": "success",
   "counts": {
     "universe": 28,
@@ -16,7 +16,7 @@
       "status": "success",
       "name": "\u53f0\u7a4d\u96fb",
       "industry": "\u534a\u5c0e\u9ad4\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "2330/latest.json"
     },
     {
@@ -24,7 +24,7 @@
       "status": "success",
       "name": "\u806f\u767c\u79d1",
       "industry": "\u534a\u5c0e\u9ad4\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "2454/latest.json"
     },
     {
@@ -32,7 +32,7 @@
       "status": "success",
       "name": "\u806f\u96fb",
       "industry": "\u534a\u5c0e\u9ad4\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:50+08:00",
       "report": "2303/latest.json"
     },
     {
@@ -40,7 +40,7 @@
       "status": "success",
       "name": "\u65e5\u6708\u5149\u6295\u63a7",
       "industry": "\u534a\u5c0e\u9ad4\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:52+08:00",
       "report": "3711/latest.json"
     },
     {
@@ -48,7 +48,7 @@
       "status": "success",
       "name": "\u806f\u8a60",
       "industry": "\u534a\u5c0e\u9ad4\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "3034/latest.json"
     },
     {
@@ -56,7 +56,7 @@
       "status": "success",
       "name": "\u7def\u5275",
       "industry": "AI\u96fb\u5b50\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "3231/latest.json"
     },
     {
@@ -64,7 +64,7 @@
       "status": "success",
       "name": "\u9d3b\u6d77",
       "industry": "AI\u96fb\u5b50\u696d",
-      "generated_at": "2026-08-10T19:02:42+08:00",
+      "generated_at": "2026-08-10T23:00:50+08:00",
       "report": "2317/latest.json"
     },
     {
@@ -72,7 +72,7 @@
       "status": "success",
       "name": "\u7def\u7a4e",
       "industry": "AI\u96fb\u5b50\u696d",
-      "generated_at": "2026-08-10T19:02:41+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "6669/latest.json"
     },
     {
@@ -80,7 +80,7 @@
       "status": "success",
       "name": "\u5ee3\u9054",
       "industry": "AI\u96fb\u5b50\u696d",
-      "generated_at": "2026-08-10T19:02:41+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "2382/latest.json"
     },
     {
@@ -88,7 +88,7 @@
       "status": "success",
       "name": "\u6280\u5609",
       "industry": "AI\u96fb\u5b50\u696d",
-      "generated_at": "2026-08-10T19:02:41+08:00",
+      "generated_at": "2026-08-10T23:00:51+08:00",
       "report": "2376/latest.json"
     },
     {
@@ -96,7 +96,7 @@
       "status": "success",
       "name": "\u4e2d\u4fe1\u91d1",
       "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:55+08:00",
       "report": "2891/latest.json"
     },
     {
@@ -104,7 +104,7 @@
       "status": "success",
       "name": "\u5bcc\u90a6\u91d1",
       "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2881/latest.json"
     },
     {
@@ -112,7 +112,7 @@
       "status": "success",
       "name": "\u570b\u6cf0\u91d1",
       "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2882/latest.json"
     },
     {
@@ -120,7 +120,7 @@
       "status": "success",
       "name": "\u5146\u8c50\u91d1",
       "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2886/latest.json"
     },
     {
@@ -128,7 +128,7 @@
       "status": "success",
       "name": "\u7389\u5c71\u91d1",
       "industry": "\u91d1\u878d\u4fdd\u96aa\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2884/latest.json"
     },
     {
@@ -136,7 +136,7 @@
       "status": "success",
       "name": "\u9577\u69ae\u822a",
       "industry": "\u822a\u904b\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2618/latest.json"
     },
     {
@@ -144,7 +144,7 @@
       "status": "success",
       "name": "\u9577\u69ae",
       "industry": "\u822a\u904b\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2603/latest.json"
     },
     {
@@ -152,7 +152,7 @@
       "status": "success",
       "name": "\u842c\u6d77",
       "industry": "\u822a\u904b\u696d",
-      "generated_at": "2026-08-10T19:02:49+08:00",
+      "generated_at": "2026-08-10T23:00:57+08:00",
       "report": "2615/latest.json"
     },
     {
@@ -160,7 +160,7 @@
       "status": "success",
       "name": "\u967d\u660e",
       "industry": "\u822a\u904b\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:58+08:00",
       "report": "2609/latest.json"
     },
     {
@@ -168,7 +168,7 @@
       "status": "success",
       "name": "\u5357\u4e9e",
       "industry": "\u50b3\u7d71\u7522\u696d",
-      "generated_at": "2026-08-10T19:02:48+08:00",
+      "generated_at": "2026-08-10T23:00:58+08:00",
       "report": "1303/latest.json"
     },
     {
@@ -176,7 +176,7 @@
       "status": "success",
       "name": "\u53f0\u5851",
       "industry": "\u50b3\u7d71\u7522\u696d",
-      "generated_at": "2026-08-10T19:02:52+08:00",
+      "generated_at": "2026-08-10T23:01:00+08:00",
       "report": "1301/latest.json"
     },
     {
@@ -184,7 +184,7 @@
       "status": "success",
       "name": "\u7d71\u4e00",
       "industry": "\u50b3\u7d71\u7522\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "1216/latest.json"
     },
     {
@@ -192,7 +192,7 @@
       "status": "success",
       "name": "\u4e2d\u92fc",
       "industry": "\u50b3\u7d71\u7522\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "2002/latest.json"
     },
     {
@@ -200,7 +200,7 @@
       "status": "success",
       "name": "\u53f0\u6ce5",
       "industry": "\u50b3\u7d71\u7522\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "1101/latest.json"
     },
     {
@@ -208,7 +208,7 @@
       "status": "success",
       "name": "\u85e5\u83ef\u85e5",
       "industry": "\u751f\u6280\u91ab\u7642\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "6446/latest.json"
     },
     {
@@ -216,7 +216,7 @@
       "status": "success",
       "name": "\u7f8e\u6642",
       "industry": "\u751f\u6280\u91ab\u7642\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "1795/latest.json"
     },
     {
@@ -224,7 +224,7 @@
       "status": "success",
       "name": "\u5408\u4e00",
       "industry": "\u751f\u6280\u91ab\u7642\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "4743/latest.json"
     },
     {
@@ -232,7 +232,7 @@
       "status": "success",
       "name": "\u6771\u6d0b",
       "industry": "\u751f\u6280\u91ab\u7642\u696d",
-      "generated_at": "2026-08-10T19:02:53+08:00",
+      "generated_at": "2026-08-10T23:01:02+08:00",
       "report": "4105/latest.json"
     }
   ],
