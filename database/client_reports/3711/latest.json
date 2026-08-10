@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-10T23:31:13+08:00",
+  "generated_at": "2026-08-11T00:05:39+08:00",
   "status": "success",
   "stock_id": "3711",
   "data_date": "2026-08-10",
@@ -5008,6 +5008,15 @@
         ]
       }
     ],
+    "event_group_overview": {
+      "title_zh": "總分變化總覽",
+      "event_count": 27,
+      "positive_impact": 15.52,
+      "negative_impact": -2.34,
+      "net_impact": 13.18,
+      "direction": "positive",
+      "summary_zh": "全部 27 項變化合計：加分 +15.52、扣分 -2.34，健康分淨影響 +13.18 分。點開下方五個面向，可查看每一項加扣分原因。"
+    },
     "indicator_events": [],
     "factor_events": [
       {
