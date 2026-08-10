@@ -53,10 +53,16 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=1.7' in html
-    assert 'app.js?v=2.1' in html
+    assert 'evidence.css?v=2.3.1' in html
+    assert 'app.js?v=2.3.1' in html
     assert 'id="todayChangesGrid"' in html
     assert "function renderTodayChanges" in js
+    assert "function groupTodayEvents" in js
+    assert 'today-change-group' in js
+    assert "function completeTodayGroups" in js
+    assert "function buildGroupOverview" in js
+    assert 'class="today-change-explain"' in js
+    assert '查看原始資料 ↗' in js
     assert 'score-evidence-item' in js
     assert 'score-evidence-metrics' in js
     assert "function renderHistory" in js
@@ -137,4 +143,33 @@ def test_repository_prefers_and_normalizes_engine_report(tmp_path: Path) -> None
     assert report["industry"] != ""
     assert report["indicators"][0]["note"] == "EPS contribution"
     assert report["source"] == "engine"
+
+
+def test_today_change_cards_keep_questions_and_use_dated_official_links(tmp_path: Path) -> None:
+    target = tmp_path / "database" / "client_reports" / "2330"
+    target.mkdir(parents=True)
+    source = Path(__file__).parents[1] / "sample_reports" / "2330.json"
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    payload["today_changes"] = {
+        "summary_zh": "共有兩項變化。",
+        "events": [
+            {
+                "event_id": "T1", "category": "technical", "title_zh": "技術變化",
+                "source_time": "2026-08-10", "source_url": "https://www.twse.com.tw/zh/trading/historical/stock-day.html",
+                "six_questions": {"what_happened_zh": "股價站回均線。", "meaning_zh": "短期走勢改善。", "score_reason_zh": "因此增加 0.2 分。"},
+            },
+            {
+                "event_id": "I1", "category": "institutional", "title_zh": "法人變化",
+                "source_time": "2026-08-10", "source_url": "https://www.twse.com.tw/zh/trading/foreign/t86.html",
+            },
+        ],
+    }
+    (target / "latest.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    report = ClientReportRepository(tmp_path, source.parent).load("2330")
+    assert report is not None
+    events = report["today_changes"]["events"]
+    assert events[0]["what_happened"] == "股價站回均線。"
+    assert events[0]["source_url"].endswith("/company/stock.html?code=2330")
+    assert events[1]["source_url"].endswith("/company/investors.html?code=2330")
+    assert len(events) == 2
 

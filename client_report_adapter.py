@@ -117,17 +117,28 @@ class ClientReportRepository:
             "weight_adjustments": [str(item) for item in detailed.get("weight_adjustments_zh", []) if item],
             "score_history": self._normalize_history(payload.get("score_history")),
             "data_sources": self._normalize_sources(payload.get("data_sources")),
-            "today_changes": self._normalize_today_changes(payload.get("today_changes")),
+            "today_changes": self._normalize_today_changes(payload.get("today_changes"), stock_id),
             "notices": notices,
             "disclaimer": payload.get("disclaimer_zh") or "本服務僅供資料整理與研究輔助，不構成投資建議。",
         }
 
-    def _normalize_today_changes(self, raw: Any) -> dict[str, Any]:
+    def _normalize_today_changes(self, raw: Any, stock_id: str) -> dict[str, Any]:
         block = raw if isinstance(raw, dict) else {}
         events = []
-        for item in block.get("events", []) if isinstance(block.get("events"), list) else []:
+        raw_events = block.get("events") if isinstance(block.get("events"), list) else []
+        if not raw_events and isinstance(block.get("factor_events"), list):
+            raw_events = block.get("factor_events")
+        for item in raw_events:
             if not isinstance(item, dict):
                 continue
+            questions = item.get("six_questions") if isinstance(item.get("six_questions"), dict) else {}
+            source_time = str(item.get("source_time") or "")[:10]
+            source_url = str(item.get("source_url") or "").strip()
+            official_url = self._official_source_url(str(item.get("category") or ""), stock_id, source_time)
+            # Old engine reports used generic TWSE landing pages.  Replace them
+            # with a dated query so the link cannot inherit a wrong industry.
+            if official_url:
+                source_url = official_url
             events.append({
                 "id": str(item.get("event_id") or ""),
                 "type": str(item.get("event_type") or "score_driver"),
@@ -136,25 +147,42 @@ class ClientReportRepository:
                 "title": str(item.get("title_zh") or "重要變化"),
                 "direction": str(item.get("direction") or "neutral"),
                 "current_value": self._optional_number(item.get("current_value")),
-                "current_value_text": str(item.get("current_value_zh") or ""),
                 "current_unit": str(item.get("current_unit") or ""),
                 "baseline_value": self._optional_number(item.get("baseline_value")),
-                "baseline_value_text": str(item.get("baseline_value_zh") or ""),
                 "baseline_label": str(item.get("baseline_label_zh") or "比較基準"),
                 "comparison_window": str(item.get("comparison_window") or ""),
                 "impact": self._number(item.get("score_impact"), 0),
                 "reason": str(item.get("reason_zh") or ""),
                 "source": str(item.get("source") or "公開資料"),
-                "source_time": str(item.get("source_time") or ""),
+                "source_time": source_time,
+                "source_url": source_url,
+                "source_link_available": bool(source_url),
                 "confidence": str(item.get("confidence") or "medium"),
-                "what_happened": str(item.get("what_happened_zh") or item.get("reason_zh") or ""),
-                "metric_explanation": str(item.get("metric_explanation_zh") or ""),
-                "score_reason": str(item.get("score_reason_zh") or ""),
-                "beginner_explanation": str(item.get("beginner_explanation_zh") or ""),
-                "change_value": self._optional_number(item.get("change_value")),
-                "change_value_text": str(item.get("change_value_zh") or ""),
-                "source_url": str(item.get("source_url") or ""),
-                "is_true_daily_change": bool(item.get("is_true_daily_change")),
+                "what_happened": str(questions.get("what_happened_zh") or item.get("what_happened_zh") or item.get("reason_zh") or ""),
+                "current_value_zh": str(questions.get("current_value_zh") or ""),
+                "baseline_value_zh": str(questions.get("baseline_value_zh") or ""),
+                "meaning": str(questions.get("meaning_zh") or item.get("metric_explanation_zh") or "此項資料用來觀察公司的最新變化。"),
+                "score_reason": str(questions.get("score_reason_zh") or item.get("score_reason_zh") or item.get("reason_zh") or ""),
+            })
+        groups = []
+        for group in block.get("event_groups", []) if isinstance(block.get("event_groups"), list) else []:
+            if not isinstance(group, dict):
+                continue
+            wanted = {str(item.get("event_id") or "") for item in group.get("events", []) if isinstance(item, dict)}
+            group_events = [item for item in events if item["id"] in wanted] if wanted else []
+            groups.append({
+                "category": str(group.get("category") or "other"),
+                "label": str(group.get("category_zh") or "其他研究資料"),
+                "direction": str(group.get("direction") or "neutral"),
+                "event_count": int(group.get("event_count") or len(group_events)),
+                "positive_count": int(group.get("positive_count") or 0),
+                "negative_count": int(group.get("negative_count") or 0),
+                "positive_impact": self._number(group.get("positive_impact"), 0),
+                "negative_impact": self._number(group.get("negative_impact"), 0),
+                "net_impact": self._number(group.get("net_impact"), 0),
+                "headline": str(group.get("headline_zh") or "同類因子彙整"),
+                "summary": str(group.get("summary_zh") or ""),
+                "events": group_events,
             })
         return {
             "version": str(block.get("version") or ""),
@@ -162,9 +190,34 @@ class ClientReportRepository:
             "comparison_available": bool(block.get("comparison_available")),
             "comparison_date": block.get("comparison_date"),
             "data_date": block.get("data_date"),
-            "mode": str(block.get("mode") or ("daily_change" if block.get("comparison_available") else "current_state")),
             "events": events,
+            "event_groups": groups,
+            "event_group_overview": {
+                "title": str((block.get("event_group_overview") or {}).get("title_zh") or "總分變化總覽"),
+                "event_count": int((block.get("event_group_overview") or {}).get("event_count") or len(events)),
+                "positive_impact": self._number((block.get("event_group_overview") or {}).get("positive_impact"), 0),
+                "negative_impact": self._number((block.get("event_group_overview") or {}).get("negative_impact"), 0),
+                "net_impact": self._number((block.get("event_group_overview") or {}).get("net_impact"), 0),
+                "direction": str((block.get("event_group_overview") or {}).get("direction") or "neutral"),
+                "summary": str((block.get("event_group_overview") or {}).get("summary_zh") or ""),
+            },
         }
+
+    @staticmethod
+    def _official_source_url(category: str, stock_id: str, source_date: str) -> str:
+        company_root = "https://wwwc.twse.com.tw/IIH2/zh/company"
+        if category == "technical":
+            return f"{company_root}/stock.html?code={stock_id}"
+        if category == "institutional":
+            return f"{company_root}/investors.html?code={stock_id}"
+        if category == "financial":
+            return f"{company_root}/financial.html?code={stock_id}"
+        if category == "market":
+            date = source_date.replace("-", "")
+            if not date:
+                return ""
+            return "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX" f"?date={date}&type=ALL&response=html"
+        return ""
 
     def _normalize_factors(self, raw: Any) -> list[dict[str, Any]]:
         factors = []
@@ -195,7 +248,7 @@ class ClientReportRepository:
                 "reason": str(item.get("reason_zh") or "此項用於構成面向分數。"),
                 "source": str(item.get("source_label_zh") or "公開資料"),
             })
-        return result
+        return result[:5]
 
     def _normalize_history(self, raw: Any) -> list[dict[str, Any]]:
         by_date: dict[str, dict[str, Any]] = {}

@@ -153,30 +153,115 @@ function formatEventValue(value, unit = "") {
   return Number.isFinite(number) ? `${number.toFixed(1)} ${unit}`.trim() : "—";
 }
 
+function eventDisplayValue(preformatted, value, unit = "") {
+  return preformatted || formatEventValue(value, unit);
+}
+
 function renderTodayChanges(block) {
   const events = Array.isArray(block.events) ? block.events : [];
+  const groups = completeTodayGroups(
+    Array.isArray(block.event_groups) && block.event_groups.length
+      ? block.event_groups : groupTodayEvents(events)
+  );
+  const overview = block.event_group_overview || buildGroupOverview(groups);
   $("todayChangesSummary").textContent = block.summary || "今日尚無足夠的可量化事件。";
   $("todayChangesBasis").textContent = block.comparison_available
     ? `與 ${block.comparison_date || "前一交易日"} 相比`
-    : block.mode === "no_change" ? "今日沒有可確認的新變化" : "目前狀態（不是今日新增變化）";
+    : "相對中性基準的當期影響";
   $("todayChangesEmpty").classList.toggle("hidden", events.length > 0);
-  $("todayChangesGrid").innerHTML = events.map((item) => `<article class="today-change ${escapeHtml(item.direction)}">
+  $("todayChangesGrid").innerHTML = `<details class="today-change-group today-overview ${escapeHtml(overview.direction || "neutral")}">
+    <summary>
+      <div><small>全部面向</small><h3>${escapeHtml(overview.title || "總分變化總覽")}</h3></div>
+      ${renderGroupTotals(overview)}
+    </summary>
+    <p class="today-group-summary">${escapeHtml(overview.summary || "點開下方五個面向，可查看全部加扣分原因。")}</p>
+    <div class="today-overview-list">${groups.map((group) => `<div><b>${escapeHtml(group.label)}</b><span>${Number(group.net_impact || 0) >= 0 ? "+" : ""}${Number(group.net_impact || 0).toFixed(2)} 分</span></div>`).join("")}</div>
+  </details>` + groups.map((group) => `<details class="today-change-group ${escapeHtml(group.direction || "neutral")}">
+    <summary>
+      <div><small>${escapeHtml(group.label || factorNames[group.category] || "其他研究資料")}</small><h3>${escapeHtml(group.headline || "同類因子彙整")}</h3></div>
+      ${renderGroupTotals(group)}
+    </summary>
+    <p class="today-group-summary">${escapeHtml(group.summary || "以下完整列出這個面向的所有變化。")}</p>
+    <div class="today-group-events">${(group.events || []).map(renderTodayEvent).join("")}</div>
+  </details>`).join("");
+}
+
+function renderGroupTotals(group) {
+  return `<dl class="today-group-totals">
+    <div><dt>加分合計</dt><dd class="is-positive">+${Number(group.positive_impact || 0).toFixed(2)}</dd></div>
+    <div><dt>扣分合計</dt><dd class="is-negative">${Number(group.negative_impact || 0).toFixed(2)}</dd></div>
+    <div><dt>淨影響</dt><dd>${Number(group.net_impact || 0) >= 0 ? "+" : ""}${Number(group.net_impact || 0).toFixed(2)}</dd></div>
+  </dl>`;
+}
+
+function completeTodayGroups(groups) {
+  const labels = {financial:"財務表現", technical:"技術走勢", institutional:"法人籌碼", market:"市場環境", news:"新聞消息"};
+  const byCategory = new Map(groups.map((group) => [group.category, group]));
+  return Object.entries(labels).map(([category, label]) => byCategory.get(category) || {
+    category, label, direction:"neutral", event_count:0,
+    positive_impact:0, negative_impact:0, net_impact:0,
+    headline:`${label}目前沒有變化`, summary:"這個面向目前沒有可量化的加扣分變化。", events:[],
+  });
+}
+
+function buildGroupOverview(groups) {
+  const positive = groups.reduce((sum, item) => sum + Number(item.positive_impact || 0), 0);
+  const negative = groups.reduce((sum, item) => sum + Number(item.negative_impact || 0), 0);
+  const net = positive + negative;
+  const count = groups.reduce((sum, item) => sum + Number(item.event_count || 0), 0);
+  return {
+    title:"總分變化總覽", event_count:count, positive_impact:positive,
+    negative_impact:negative, net_impact:net,
+    direction:net > 0 ? "positive" : net < 0 ? "negative" : "neutral",
+    summary:`全部 ${count} 項變化合計：加分 +${positive.toFixed(2)}、扣分 ${negative.toFixed(2)}，健康分淨影響 ${net >= 0 ? "+" : ""}${net.toFixed(2)} 分。`,
+  };
+}
+
+function renderTodayEvent(item) {
+  return `<article class="today-change ${escapeHtml(item.direction)}">
     <div class="today-change-heading">
       <span class="today-change-dot" aria-hidden="true"></span>
       <div><small>${escapeHtml(factorNames[item.category] || item.category || "研究證據")}</small><h3>${escapeHtml(item.title)}</h3></div>
       <strong>${item.impact >= 0 ? "+" : ""}${Number(item.impact).toFixed(2)} 分</strong>
     </div>
     <dl class="today-change-data">
-      <div><dt>目前數據</dt><dd>${escapeHtml(item.current_value_text || formatEventValue(item.current_value, item.current_unit))}</dd></div>
-      <div><dt>${escapeHtml(item.baseline_label || "比較基準")}</dt><dd>${escapeHtml(item.baseline_value_text || formatEventValue(item.baseline_value, item.current_unit))}</dd></div>
+      <div><dt>現在是多少？</dt><dd>${escapeHtml(eventDisplayValue(item.current_value_zh, item.current_value, item.current_unit))}</dd></div>
+      <div><dt>之前／基準是多少？</dt><dd>${escapeHtml(eventDisplayValue(item.baseline_value_zh, item.baseline_value, item.current_unit))}</dd></div>
       <div><dt>比較方式</dt><dd>${escapeHtml(item.comparison_window || "—")}</dd></div>
     </dl>
-    <p><b>發生什麼：</b>${escapeHtml(item.what_happened || item.reason)}</p>
-    ${item.metric_explanation ? `<p><b>這代表什麼：</b>${escapeHtml(item.metric_explanation)}</p>` : ""}
-    ${item.score_reason ? `<p><b>為什麼影響分數：</b>${escapeHtml(item.score_reason)}</p>` : ""}
-    ${item.beginner_explanation ? `<p><b>新手怎麼看：</b>${escapeHtml(item.beginner_explanation)}</p>` : ""}
-    <footer>來源：${item.source_url ? `<a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.source)} ↗</a>` : escapeHtml(item.source)}${item.source_time ? `｜${escapeHtml(item.source_time)}` : ""}｜信心 ${escapeHtml(item.confidence)}</footer>
-  </article>`).join("");
+    <div class="today-change-explain">
+      <section><b>發生什麼？</b><p>${escapeHtml(item.what_happened || item.reason)}</p></section>
+      <section><b>這代表什麼？</b><p>${escapeHtml(item.meaning)}</p></section>
+      <section><b>為什麼影響分數？</b><p>${escapeHtml(item.score_reason || item.reason)}</p></section>
+    </div>
+    <footer><span>來源：${escapeHtml(item.source)}${item.source_time ? `｜${escapeHtml(item.source_time)}` : ""}｜信心 ${escapeHtml(item.confidence)}</span>${item.source_link_available ? `<a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">查看原始資料 ↗</a>` : `<span class="source-unavailable">此來源暫無可驗證連結</span>`}</footer>
+  </article>`;
+}
+
+function groupTodayEvents(events) {
+  const order = ["financial", "technical", "institutional", "market", "news"];
+  const buckets = new Map();
+  events.forEach((item) => {
+    const category = item.category || "other";
+    if (!buckets.has(category)) buckets.set(category, []);
+    buckets.get(category).push(item);
+  });
+  return [...buckets.entries()].sort(([a], [b]) => {
+    const ai = order.indexOf(a), bi = order.indexOf(b);
+    return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi);
+  }).map(([category, rows]) => {
+    const positive = rows.reduce((sum, item) => sum + Math.max(0, Number(item.impact) || 0), 0);
+    const negative = rows.reduce((sum, item) => sum + Math.min(0, Number(item.impact) || 0), 0);
+    const net = positive + negative;
+    const label = factorNames[category] || "其他研究資料";
+    return {
+      category, label, events: rows,
+      positive_impact: positive, negative_impact: negative, net_impact: net,
+      direction: net > 0 ? "positive" : net < 0 ? "negative" : "neutral",
+      headline: `${label}整體${net > 0 ? "加分" : net < 0 ? "扣分" : "影響持平"} ${Math.abs(net).toFixed(2)} 分`,
+      summary: `本組共有 ${rows.length} 項變化；加分 +${positive.toFixed(2)}、扣分 ${negative.toFixed(2)}，淨影響 ${net >= 0 ? "+" : ""}${net.toFixed(2)} 分。`,
+    };
+  });
 }
 
 const factorNames = {financial:"財務健康",technical:"技術健康",institutional:"法人籌碼",market:"市場環境",news:"新聞情緒"};
