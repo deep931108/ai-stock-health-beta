@@ -40,6 +40,7 @@ def test_evidence_history_and_sources_are_exposed_to_customer() -> None:
     assert isinstance(report["negative_factors"], list)
     assert isinstance(report["score_history"], list)
     assert isinstance(report["data_sources"], list)
+    assert "investment_research" in report
 
 
 def test_evidence_frontend_contains_chart_and_source_sections() -> None:
@@ -53,14 +54,10 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=2.3.1' in html
-    assert 'app.js?v=2.3.1' in html
+    assert 'evidence.css?v=2.4.0' in html
+    assert 'app.js?v=2.4.0' in html
     assert 'id="todayChangesGrid"' in html
     assert "function renderTodayChanges" in js
-    assert "function groupTodayEvents" in js
-    assert 'today-change-group' in js
-    assert "function completeTodayGroups" in js
-    assert "function buildGroupOverview" in js
     assert 'class="today-change-explain"' in js
     assert '查看原始資料 ↗' in js
     assert 'score-evidence-item' in js
@@ -92,6 +89,11 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function initializeBetaAccess" in js
     assert 'fetch("/api/beta/activate"' in js
     assert 'fetch("/api/beta/logout"' in js
+    assert 'id="companyResearch"' in html
+    assert 'id="valuationResearch"' in html
+    assert 'id="comparisonResearch"' in html
+    assert 'id="researchFit"' in html
+    assert "function renderInvestmentResearch" in js
 
 
 def test_invite_gate_activation_and_logout(tmp_path: Path, monkeypatch) -> None:

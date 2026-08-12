@@ -140,12 +140,51 @@ function render(report) {
   $("strategyCopy").textContent = report.strategy?.message_zh || "系統持續更新與驗證，不會因單日波動任意改變研究門檻。";
   $("disclaimer").textContent = report.disclaimer;
   renderIndicators(report.indicators);
+  renderInvestmentResearch(report.investment_research || {});
   renderTodayChanges(report.today_changes || {});
   renderEvidence(report);
   renderHistory(report.score_history || []);
   renderSources(report.data_sources || []);
   refreshSavedButton();
   if (stockCatalog.length) renderStockCenter();
+}
+
+function researchStatus(value) {
+  return ({available:"資料可用", partial:"部分資料", limited:"資料有限", building:"建置中", unavailable:"暫無資料", relevant:"可納入研究", not_assessed:"尚未評估"})[value] || value || "待確認";
+}
+
+function researchMetric(item) {
+  const value = item?.value == null ? "—" : `${Number(item.value).toLocaleString("zh-TW", {maximumFractionDigits:2})}${item.unit || ""}`;
+  return `<div class="research-metric"><span>${escapeHtml(item.label_zh)}</span><b>${escapeHtml(value)}</b><small>${escapeHtml(item.basis_zh || "")}</small><p>${escapeHtml(item.meaning_zh || "")}</p></div>`;
+}
+
+function renderInvestmentResearch(block) {
+  const company = block.company_profile || {};
+  const valuation = block.valuation || {};
+  const comparisons = block.comparisons || {};
+  const market = comparisons.market || {};
+  const sector = comparisons.sector || {};
+  const peers = comparisons.peers || {};
+  const fit = block.research_fit || {};
+  $("researchContextNotice").textContent = block.score_policy?.message_zh || "本區補充研究背景，目前不直接改變健康分數。";
+  $("companyResearchTitle").textContent = `${company.name_zh || currentReport?.name || "這家公司"}在做什麼？`;
+  $("companyResearch").innerHTML = `<p class="research-lead">${escapeHtml(company.business_summary_zh || "公司業務資料仍待補齊。")}</p>
+    <dl class="research-facts"><div><dt>怎麼賺錢</dt><dd>${escapeHtml(company.revenue_model_zh || "待補")}</dd></div><div><dt>產業怎麼看</dt><dd>${escapeHtml(company.industry_context_zh || "待補")}</dd></div></dl>
+    ${company.key_drivers_zh?.length ? `<b>重要成長動力</b><ul>${company.key_drivers_zh.map((v) => `<li>${escapeHtml(v)}</li>`).join("")}</ul>` : ""}
+    ${company.key_risks_zh?.length ? `<b>主要風險</b><ul>${company.key_risks_zh.map((v) => `<li>${escapeHtml(v)}</li>`).join("")}</ul>` : ""}
+    ${company.source_url ? `<a class="research-link" href="${escapeHtml(company.source_url)}" target="_blank" rel="noopener noreferrer">查看公司公開資訊 ↗</a>` : ""}`;
+  $("valuationResearchTitle").textContent = valuation.headline_zh || "估值資料尚未齊全";
+  $("valuationResearch").innerHTML = `<span class="research-status">${escapeHtml(researchStatus(valuation.status))}</span>
+    <div class="research-metrics">${(valuation.metrics || []).map(researchMetric).join("") || `<p>目前沒有足夠資料計算估值。</p>`}</div>
+    <p class="research-interpretation">${escapeHtml(valuation.interpretation_zh || "")}</p>
+    ${valuation.missing_items_zh?.length ? `<small class="research-missing">尚缺：${valuation.missing_items_zh.map(escapeHtml).join("、")}</small>` : ""}`;
+  const relative = market.relative_return_pct_point == null ? "—" : `${Number(market.relative_return_pct_point) >= 0 ? "+" : ""}${Number(market.relative_return_pct_point).toFixed(2)} 個百分點`;
+  $("comparisonResearch").innerHTML = `<div class="comparison-row"><span>相對大盤</span><b>${escapeHtml(relative)}</b><small>${escapeHtml(market.interpretation_zh || "資料待補")}</small></div>
+    <div class="comparison-row"><span>產業比較 · ${escapeHtml(researchStatus(sector.status))}</span><small>${escapeHtml(sector.interpretation_zh || "")}</small></div>
+    <div class="comparison-row"><span>同業比較 · ${escapeHtml(researchStatus(peers.status))}</span><small>${escapeHtml(peers.interpretation_zh || "")}</small></div>
+    <p class="research-shadow">影子模式：這些比較目前不直接改變健康分數。</p>`;
+  $("researchFit").innerHTML = (fit.lenses || []).map((lens) => `<details class="research-lens"><summary><b>${escapeHtml(lens.label_zh)}</b><span>${escapeHtml(researchStatus(lens.status))}</span></summary><p>${escapeHtml(lens.reason_zh || "")}</p>${lens.missing_evidence_zh?.length ? `<small>尚缺：${lens.missing_evidence_zh.map(escapeHtml).join("、")}</small>` : ""}</details>`).join("") || `<p>研究用途資料正在整理。</p>`;
+  $("researchFollowUp").innerHTML = (fit.follow_up_items_zh || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("") || `<li>持續累積資料，再進行下一階段判讀。</li>`;
 }
 
 function formatEventValue(value, unit = "") {

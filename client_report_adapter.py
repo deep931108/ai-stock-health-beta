@@ -118,9 +118,24 @@ class ClientReportRepository:
             "score_history": self._normalize_history(payload.get("score_history")),
             "data_sources": self._normalize_sources(payload.get("data_sources")),
             "today_changes": self._normalize_today_changes(payload.get("today_changes"), stock_id),
+            "investment_research": self._normalize_investment_research(payload.get("investment_research")),
             "notices": notices,
             "disclaimer": payload.get("disclaimer_zh") or "本服務僅供資料整理與研究輔助，不構成投資建議。",
         }
+
+    @staticmethod
+    def _normalize_investment_research(raw: Any) -> dict[str, Any]:
+        """Pass through the engine-owned, customer-safe research contract."""
+        if not isinstance(raw, dict):
+            return {
+                "status": "limited",
+                "company_profile": {"status": "limited"},
+                "valuation": {"status": "unavailable", "metrics": []},
+                "comparisons": {"mode": "shadow"},
+                "research_fit": {"lenses": [], "follow_up_items_zh": []},
+            }
+        # JSON round-trip makes a detached copy and only permits web-safe data.
+        return json.loads(json.dumps(raw, ensure_ascii=False, default=str))
 
     def _normalize_today_changes(self, raw: Any, stock_id: str) -> dict[str, Any]:
         block = raw if isinstance(raw, dict) else {}

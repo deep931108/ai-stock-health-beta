@@ -8,7 +8,7 @@
   <link rel="manifest" href="/assets/manifest.webmanifest">
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/styles.css">
-  <link rel="stylesheet" href="/assets/evidence.css?v=2.3.1">
+  <link rel="stylesheet" href="/assets/evidence.css?v=2.4.0">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending">
@@ -136,6 +136,21 @@
         <div id="indicatorDetail" class="indicator-detail" aria-live="polite"></div>
       </section>
 
+      <section class="research-context-section" aria-labelledby="researchContextTitle">
+        <div class="section-heading">
+          <div><span class="section-kicker">投資研究脈絡</span><h2 id="researchContextTitle">先了解公司，再看分數</h2></div>
+          <small>研究輔助，不是買賣建議</small>
+        </div>
+        <p id="researchContextNotice" class="method-copy"></p>
+        <div class="research-context-grid">
+          <article class="research-context-card company"><span>公司與產業</span><h3 id="companyResearchTitle">公司在做什麼？</h3><div id="companyResearch"></div></article>
+          <article class="research-context-card valuation"><span>初步估值</span><h3 id="valuationResearchTitle">目前估值資料</h3><div id="valuationResearch"></div></article>
+          <article class="research-context-card comparison"><span>相對比較</span><h3>和大盤、產業、同業相比</h3><div id="comparisonResearch"></div></article>
+          <article class="research-context-card fit"><span>研究用途</span><h3>這檔股票適合怎麼研究？</h3><div id="researchFit"></div></article>
+        </div>
+        <div class="research-follow-up"><h3>接下來要追蹤什麼？</h3><ol id="researchFollowUp"></ol></div>
+      </section>
+
       <section class="evidence-section">
         <div class="section-heading">
           <div><span class="section-kicker">分數證據</span><h2>為什麼是這個分數</h2></div>
@@ -185,6 +200,6 @@
     </nav>
     <div id="toast" class="toast" aria-live="polite"></div>
   </main>
-  <script src="/assets/app.js?v=2.3.1" defer></script>
+  <script src="/assets/app.js?v=2.4.0" defer></script>
 </body>
 </html>
