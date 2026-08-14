@@ -179,9 +179,12 @@ function renderInvestmentResearch(block) {
     <p class="research-interpretation">${escapeHtml(valuation.interpretation_zh || "")}</p>
     ${valuation.missing_items_zh?.length ? `<small class="research-missing">尚缺：${valuation.missing_items_zh.map(escapeHtml).join("、")}</small>` : ""}`;
   const relative = market.relative_return_pct_point == null ? "—" : `${Number(market.relative_return_pct_point) >= 0 ? "+" : ""}${Number(market.relative_return_pct_point).toFixed(2)} 個百分點`;
+  const sectorRelative = sector.relative_to_sector_pct_point == null ? "—" : `${Number(sector.relative_to_sector_pct_point) >= 0 ? "+" : ""}${Number(sector.relative_to_sector_pct_point).toFixed(2)} 個百分點`;
+  const peerRelative = peers.relative_to_peer_median_pct_point == null ? "—" : `${Number(peers.relative_to_peer_median_pct_point) >= 0 ? "+" : ""}${Number(peers.relative_to_peer_median_pct_point).toFixed(2)} 個百分點`;
+  const peerItems = (peers.items || []).map((item) => `<li><span>${escapeHtml(item.name_zh)}（${escapeHtml(item.stock_id)}）</span><b>${Number(item.return_20d_pct) >= 0 ? "+" : ""}${Number(item.return_20d_pct).toFixed(2)}%</b></li>`).join("");
   $("comparisonResearch").innerHTML = `<div class="comparison-row"><span>相對大盤</span><b>${escapeHtml(relative)}</b><small>${escapeHtml(market.interpretation_zh || "資料待補")}</small></div>
-    <div class="comparison-row"><span>產業比較 · ${escapeHtml(researchStatus(sector.status))}</span><small>${escapeHtml(sector.interpretation_zh || "")}</small></div>
-    <div class="comparison-row"><span>同業比較 · ${escapeHtml(researchStatus(peers.status))}</span><small>${escapeHtml(peers.interpretation_zh || "")}</small></div>
+    <div class="comparison-row"><span>產業比較 · ${escapeHtml(researchStatus(sector.status))}</span><b>${escapeHtml(sectorRelative)}</b><small>${escapeHtml(sector.interpretation_zh || "")}</small>${sector.sample_size ? `<em>同期間樣本 ${Number(sector.sample_size)} 檔</em>` : ""}</div>
+    <div class="comparison-row"><span>同業比較 · ${escapeHtml(researchStatus(peers.status))}</span><b>${escapeHtml(peerRelative)}</b><small>${escapeHtml(peers.interpretation_zh || "")}</small>${peerItems ? `<ul class="peer-comparison-list">${peerItems}</ul>` : ""}</div>
     <p class="research-shadow">影子模式：這些比較目前不直接改變健康分數。</p>`;
   $("researchFit").innerHTML = (fit.lenses || []).map((lens) => `<details class="research-lens"><summary><b>${escapeHtml(lens.label_zh)}</b><span>${escapeHtml(researchStatus(lens.status))}</span></summary><p>${escapeHtml(lens.reason_zh || "")}</p>${lens.missing_evidence_zh?.length ? `<small>尚缺：${lens.missing_evidence_zh.map(escapeHtml).join("、")}</small>` : ""}</details>`).join("") || `<p>研究用途資料正在整理。</p>`;
   $("researchFollowUp").innerHTML = (fit.follow_up_items_zh || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("") || `<li>持續累積資料，再進行下一階段判讀。</li>`;

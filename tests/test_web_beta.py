@@ -54,8 +54,8 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=2.4.0' in html
-    assert 'app.js?v=2.4.0' in html
+    assert 'evidence.css?v=2.5.0' in html
+    assert 'app.js?v=2.5.0' in html
     assert 'id="todayChangesGrid"' in html
     assert "function renderTodayChanges" in js
     assert 'class="today-change-explain"' in js
@@ -94,6 +94,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="comparisonResearch"' in html
     assert 'id="researchFit"' in html
     assert "function renderInvestmentResearch" in js
+    assert "relative_to_sector_pct_point" in js
+    assert "relative_to_peer_median_pct_point" in js
+    assert "peer-comparison-list" in js
 
 
 def test_invite_gate_activation_and_logout(tmp_path: Path, monkeypatch) -> None:
