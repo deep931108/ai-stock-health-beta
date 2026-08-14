@@ -155,7 +155,41 @@ function researchStatus(value) {
 
 function researchMetric(item) {
   const value = item?.value == null ? "—" : `${Number(item.value).toLocaleString("zh-TW", {maximumFractionDigits:2})}${item.unit || ""}`;
-  return `<div class="research-metric"><span>${escapeHtml(item.label_zh)}</span><b>${escapeHtml(value)}</b><small>${escapeHtml(item.basis_zh || "")}</small><p>${escapeHtml(item.meaning_zh || "")}</p></div>`;
+  const singlePeriodEps = String(item?.label_zh || "").includes("最新 EPS 參考倍數");
+  const label = singlePeriodEps ? "單期 EPS 參考比值" : item.label_zh;
+  const warning = singlePeriodEps ? "這不是標準本益比，不能單獨用來判斷便宜或昂貴。" : "";
+  return `<div class="research-metric${singlePeriodEps ? " research-metric-caution" : ""}"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b><small>${escapeHtml(item.basis_zh || "")}</small><p>${escapeHtml(warning || item.meaning_zh || "")}</p></div>`;
+}
+
+function signedPercent(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? `${number >= 0 ? "+" : ""}${number.toFixed(2)}%` : "—";
+}
+
+function percentagePoints(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? `${number >= 0 ? "+" : ""}${number.toFixed(2)} 個百分點` : "—";
+}
+
+function relativeLabel(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "資料待補";
+  if (number > 1) return "同期表現較強";
+  if (number < -1) return "同期表現較弱";
+  return "同期表現相近";
+}
+
+function sectorPosition(rank, sampleSize) {
+  const position = Number(rank);
+  const total = Number(sampleSize);
+  if (!Number.isFinite(position) || !Number.isFinite(total) || total < 1) return "樣本建立中";
+  if (position <= Math.ceil(total / 3)) return "位於產業前段";
+  if (position > Math.ceil(total * 2 / 3)) return "位於產業後段";
+  return "位於產業中段";
+}
+
+function comparisonValues(items) {
+  return `<dl class="comparison-values">${items.map((item) => `<div><dt>${escapeHtml(item.label)}</dt><dd>${escapeHtml(item.value)}</dd></div>`).join("")}</dl>`;
 }
 
 function renderInvestmentResearch(block) {
@@ -178,13 +212,26 @@ function renderInvestmentResearch(block) {
     <div class="research-metrics">${(valuation.metrics || []).map(researchMetric).join("") || `<p>目前沒有足夠資料計算估值。</p>`}</div>
     <p class="research-interpretation">${escapeHtml(valuation.interpretation_zh || "")}</p>
     ${valuation.missing_items_zh?.length ? `<small class="research-missing">尚缺：${valuation.missing_items_zh.map(escapeHtml).join("、")}</small>` : ""}`;
-  const relative = market.relative_return_pct_point == null ? "—" : `${Number(market.relative_return_pct_point) >= 0 ? "+" : ""}${Number(market.relative_return_pct_point).toFixed(2)} 個百分點`;
-  const sectorRelative = sector.relative_to_sector_pct_point == null ? "—" : `${Number(sector.relative_to_sector_pct_point) >= 0 ? "+" : ""}${Number(sector.relative_to_sector_pct_point).toFixed(2)} 個百分點`;
-  const peerRelative = peers.relative_to_peer_median_pct_point == null ? "—" : `${Number(peers.relative_to_peer_median_pct_point) >= 0 ? "+" : ""}${Number(peers.relative_to_peer_median_pct_point).toFixed(2)} 個百分點`;
+  const stockName = currentReport?.name || company.name_zh || "這檔股票";
+  const marketTitle = `大盤比較｜${relativeLabel(market.relative_return_pct_point)}`;
+  const sectorTitle = sector.status === "available" ? `產業比較｜${sectorPosition(sector.rank, sector.sample_size)}` : `產業比較｜${researchStatus(sector.status)}`;
+  const peerTitle = peers.status === "limited" ? "單一同業參考" : `同業比較｜${researchStatus(peers.status)}`;
   const peerItems = (peers.items || []).map((item) => `<li><span>${escapeHtml(item.name_zh)}（${escapeHtml(item.stock_id)}）</span><b>${Number(item.return_20d_pct) >= 0 ? "+" : ""}${Number(item.return_20d_pct).toFixed(2)}%</b></li>`).join("");
-  $("comparisonResearch").innerHTML = `<div class="comparison-row"><span>相對大盤</span><b>${escapeHtml(relative)}</b><small>${escapeHtml(market.interpretation_zh || "資料待補")}</small></div>
-    <div class="comparison-row"><span>產業比較 · ${escapeHtml(researchStatus(sector.status))}</span><b>${escapeHtml(sectorRelative)}</b><small>${escapeHtml(sector.interpretation_zh || "")}</small>${sector.sample_size ? `<em>同期間樣本 ${Number(sector.sample_size)} 檔</em>` : ""}</div>
-    <div class="comparison-row"><span>同業比較 · ${escapeHtml(researchStatus(peers.status))}</span><b>${escapeHtml(peerRelative)}</b><small>${escapeHtml(peers.interpretation_zh || "")}</small>${peerItems ? `<ul class="peer-comparison-list">${peerItems}</ul>` : ""}</div>
+  $("comparisonResearch").innerHTML = `<div class="comparison-row"><h4>${escapeHtml(marketTitle)}</h4>${comparisonValues([
+      {label: stockName, value: signedPercent(market.stock_return_pct)},
+      {label: "大盤", value: signedPercent(market.benchmark_return_pct)},
+      {label: "同期差距", value: percentagePoints(market.relative_return_pct_point)},
+    ])}<small>${escapeHtml(market.interpretation_zh || "資料待補")}</small></div>
+    <div class="comparison-row"><h4>${escapeHtml(sectorTitle)}</h4>${comparisonValues([
+      {label: stockName, value: signedPercent(sector.stock_return_pct)},
+      {label: `${sector.industry_zh || "產業"}中位數`, value: signedPercent(sector.sector_median_return_pct)},
+      {label: "產業排名", value: sector.rank && sector.sample_size ? `第 ${Number(sector.rank)}／${Number(sector.sample_size)} 名` : "—"},
+    ])}<small>${escapeHtml(sector.interpretation_zh || "")}</small>${sector.sample_size ? `<em>同期間樣本 ${Number(sector.sample_size)} 檔</em>` : ""}</div>
+    <div class="comparison-row"><h4>${escapeHtml(peerTitle)}</h4>${comparisonValues([
+      {label: stockName, value: signedPercent(peers.stock_return_pct)},
+      {label: peers.status === "limited" ? "單一同業" : "同業中位數", value: signedPercent(peers.peer_median_return_pct)},
+      {label: "同期差距", value: percentagePoints(peers.relative_to_peer_median_pct_point)},
+    ])}<small>${escapeHtml(peers.interpretation_zh || "")}</small>${peerItems ? `<ul class="peer-comparison-list">${peerItems}</ul>` : ""}</div>
     <p class="research-shadow">影子模式：這些比較目前不直接改變健康分數。</p>`;
   $("researchFit").innerHTML = (fit.lenses || []).map((lens) => `<details class="research-lens"><summary><b>${escapeHtml(lens.label_zh)}</b><span>${escapeHtml(researchStatus(lens.status))}</span></summary><p>${escapeHtml(lens.reason_zh || "")}</p>${lens.missing_evidence_zh?.length ? `<small>尚缺：${lens.missing_evidence_zh.map(escapeHtml).join("、")}</small>` : ""}</details>`).join("") || `<p>研究用途資料正在整理。</p>`;
   $("researchFollowUp").innerHTML = (fit.follow_up_items_zh || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("") || `<li>持續累積資料，再進行下一階段判讀。</li>`;

@@ -54,8 +54,8 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=2.5.0' in html
-    assert 'app.js?v=2.5.0' in html
+    assert 'evidence.css?v=2.5.1' in html
+    assert 'app.js?v=2.5.1' in html
     assert 'id="todayChangesGrid"' in html
     assert "function renderTodayChanges" in js
     assert 'class="today-change-explain"' in js
@@ -94,9 +94,14 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="comparisonResearch"' in html
     assert 'id="researchFit"' in html
     assert "function renderInvestmentResearch" in js
-    assert "relative_to_sector_pct_point" in js
+    assert "sector_median_return_pct" in js
     assert "relative_to_peer_median_pct_point" in js
     assert "peer-comparison-list" in js
+    assert "function signedPercent" in js
+    assert "function sectorPosition" in js
+    assert '單一同業參考' in js
+    assert 'class="comparison-values"' in js
+    assert '單期 EPS 參考比值' in js
 
 
 def test_invite_gate_activation_and_logout(tmp_path: Path, monkeypatch) -> None:
@@ -177,4 +182,6 @@ def test_today_change_cards_keep_questions_and_use_dated_official_links(tmp_path
     assert events[0]["source_url"].endswith("/company/stock.html?code=2330")
     assert events[1]["source_url"].endswith("/company/investors.html?code=2330")
     assert len(events) == 2
+
+
 
