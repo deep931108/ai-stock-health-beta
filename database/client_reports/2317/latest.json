@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-14T23:20:13+08:00",
+  "generated_at": "2026-08-15T01:38:46+08:00",
   "status": "success",
   "stock_id": "2317",
   "data_date": "2026-08-14",
@@ -11,9 +11,9 @@
     "industry": "AI電子業"
   },
   "overview": {
-    "health_score": 61.3,
-    "health_score_v1": 56.84,
-    "health_score_v2": 61.3,
+    "health_score": 61.8,
+    "health_score_v1": 57.13,
+    "health_score_v2": 61.8,
     "health_score_interval": "60-69",
     "health_score_band_zh": "中性偏強",
     "health_score_calibration_version": "HealthScoreCalibration-v2.0",
@@ -21,9 +21,9 @@
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "觀察名單",
     "confidence_level": "中等信心",
-    "confidence_score": 75.52,
+    "confidence_score": 75.65,
     "risk_level": "中等風險",
-    "risk_score": 45.47,
+    "risk_score": 45.17,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
   },
   "health_indicators": [
@@ -540,16 +540,16 @@
     {
       "key": "market",
       "label": "市場環境",
-      "score": 50.2,
+      "score": 52.93,
       "level": "偏弱",
-      "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+      "description": "大盤波動率為 59.1 分，屬於中性因子。",
       "weight": 0.11,
-      "weighted_contribution": 5.28,
+      "weighted_contribution": 5.57,
       "coverage_pct": 60.0,
       "reasons": [
-        "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
-        "大盤波動率為 57.9 分，屬於中性因子。",
-        "大盤多空環境為 52.0 分，屬於中性因子。"
+        "大盤波動率為 59.1 分，屬於中性因子。",
+        "大盤多空環境為 52.0 分，屬於中性因子。",
+        "大盤 20 日報酬為 48.8 分，屬於中性因子。"
       ],
       "source_label_zh": "大盤、產業與市場行情資料",
       "contributions": [
@@ -577,15 +577,15 @@
           "factor": "market",
           "feature": "market_return_20d_pct",
           "label_zh": "大盤 20 日報酬",
-          "value": -4.2165,
+          "value": -1.149,
           "unit": "%",
           "baseline_value": 0,
           "baseline_label_zh": "20 日前大盤",
           "comparison_window": "20 個交易日",
-          "score": 40.4,
+          "score": 48.84,
           "sub_weight_pct": 20.0,
           "factor_weight_pct": 10.52,
-          "health_impact": -0.2,
+          "health_impact": -0.02,
           "direction": "negative",
           "reason_zh": "大盤中短期報酬反映市場風險偏好。",
           "source_label_zh": "大盤、產業與市場行情資料",
@@ -597,15 +597,15 @@
           "factor": "market",
           "feature": "market_volatility_20d_pct",
           "label_zh": "大盤波動率",
-          "value": 2.3378,
+          "value": 2.2674,
           "unit": "%",
           "baseline_value": 2.5,
           "baseline_label_zh": "一般大盤波動參考",
           "comparison_window": "20 個交易日",
-          "score": 57.87,
+          "score": 59.12,
           "sub_weight_pct": 18.0,
           "factor_weight_pct": 10.52,
-          "health_impact": 0.15,
+          "health_impact": 0.17,
           "direction": "positive",
           "reason_zh": "大盤波動率越高，系統性風險越大。",
           "source_label_zh": "大盤、產業與市場行情資料",
@@ -679,7 +679,7 @@
           "factor": "news",
           "feature": "news_count_7d",
           "label_zh": "近期新聞熱度",
-          "value": 190,
+          "value": 189,
           "unit": "則",
           "baseline_value": 0,
           "baseline_label_zh": "無相關新聞",
@@ -739,9 +739,9 @@
       {
         "key": "market",
         "label": "市場環境",
-        "score": 50.2,
+        "score": 52.93,
         "direction": "negative",
-        "reason_zh": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+        "reason_zh": "大盤波動率為 59.1 分，屬於中性因子。",
         "source_label_zh": "大盤、產業與市場行情資料"
       }
     ],
@@ -1011,6 +1011,26 @@
         "confidence": "medium"
       },
       {
+        "factor": "market",
+        "feature": "market_volatility_20d_pct",
+        "label_zh": "大盤波動率",
+        "value": 2.2674,
+        "unit": "%",
+        "baseline_value": 2.5,
+        "baseline_label_zh": "一般大盤波動參考",
+        "comparison_window": "20 個交易日",
+        "score": 59.12,
+        "sub_weight_pct": 18.0,
+        "factor_weight_pct": 10.52,
+        "health_impact": 0.17,
+        "direction": "positive",
+        "reason_zh": "大盤波動率越高，系統性風險越大。",
+        "source_label_zh": "大盤、產業與市場行情資料",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium"
+      },
+      {
         "factor": "technical",
         "feature": "volatility_20d_pct",
         "label_zh": "20 日波動率",
@@ -1026,26 +1046,6 @@
         "direction": "positive",
         "reason_zh": "波動率過高會降低技術面穩定度。",
         "source_label_zh": "交易所股價與成交資料",
-        "source_url": null,
-        "source_date": null,
-        "confidence": "medium"
-      },
-      {
-        "factor": "market",
-        "feature": "market_volatility_20d_pct",
-        "label_zh": "大盤波動率",
-        "value": 2.3378,
-        "unit": "%",
-        "baseline_value": 2.5,
-        "baseline_label_zh": "一般大盤波動參考",
-        "comparison_window": "20 個交易日",
-        "score": 57.87,
-        "sub_weight_pct": 18.0,
-        "factor_weight_pct": 10.52,
-        "health_impact": 0.15,
-        "direction": "positive",
-        "reason_zh": "大盤波動率越高，系統性風險越大。",
-        "source_label_zh": "大盤、產業與市場行情資料",
         "source_url": null,
         "source_date": null,
         "confidence": "medium"
@@ -1253,30 +1253,10 @@
         "confidence": "medium"
       },
       {
-        "factor": "market",
-        "feature": "market_return_20d_pct",
-        "label_zh": "大盤 20 日報酬",
-        "value": -4.2165,
-        "unit": "%",
-        "baseline_value": 0,
-        "baseline_label_zh": "20 日前大盤",
-        "comparison_window": "20 個交易日",
-        "score": 40.4,
-        "sub_weight_pct": 20.0,
-        "factor_weight_pct": 10.52,
-        "health_impact": -0.2,
-        "direction": "negative",
-        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
-        "source_label_zh": "大盤、產業與市場行情資料",
-        "source_url": null,
-        "source_date": null,
-        "confidence": "medium"
-      },
-      {
         "factor": "news",
         "feature": "news_count_7d",
         "label_zh": "近期新聞熱度",
-        "value": 190,
+        "value": 189,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -1308,6 +1288,26 @@
         "direction": "negative",
         "reason_zh": "月增率用於補充短期營運變化。",
         "source_label_zh": "公開財報與營收資料",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium"
+      },
+      {
+        "factor": "market",
+        "feature": "market_return_20d_pct",
+        "label_zh": "大盤 20 日報酬",
+        "value": -1.149,
+        "unit": "%",
+        "baseline_value": 0,
+        "baseline_label_zh": "20 日前大盤",
+        "comparison_window": "20 個交易日",
+        "score": 48.84,
+        "sub_weight_pct": 20.0,
+        "factor_weight_pct": 10.52,
+        "health_impact": -0.02,
+        "direction": "negative",
+        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
+        "source_label_zh": "大盤、產業與市場行情資料",
         "source_url": null,
         "source_date": null,
         "confidence": "medium"
@@ -1635,26 +1635,6 @@
         "confidence": "medium"
       },
       {
-        "factor": "market",
-        "feature": "market_return_20d_pct",
-        "label_zh": "大盤 20 日報酬",
-        "value": -4.2165,
-        "unit": "%",
-        "baseline_value": 0,
-        "baseline_label_zh": "20 日前大盤",
-        "comparison_window": "20 個交易日",
-        "score": 40.4,
-        "sub_weight_pct": 20.0,
-        "factor_weight_pct": 10.52,
-        "health_impact": -0.2,
-        "direction": "negative",
-        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
-        "source_label_zh": "大盤、產業與市場行情資料",
-        "source_url": null,
-        "source_date": null,
-        "confidence": "medium"
-      },
-      {
         "factor": "financial",
         "feature": "eps_latest",
         "label_zh": "每股盈餘",
@@ -1678,7 +1658,7 @@
         "factor": "news",
         "feature": "news_count_7d",
         "label_zh": "近期新聞熱度",
-        "value": 190,
+        "value": 189,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -1715,6 +1695,26 @@
         "confidence": "medium"
       },
       {
+        "factor": "market",
+        "feature": "market_volatility_20d_pct",
+        "label_zh": "大盤波動率",
+        "value": 2.2674,
+        "unit": "%",
+        "baseline_value": 2.5,
+        "baseline_label_zh": "一般大盤波動參考",
+        "comparison_window": "20 個交易日",
+        "score": 59.12,
+        "sub_weight_pct": 18.0,
+        "factor_weight_pct": 10.52,
+        "health_impact": 0.17,
+        "direction": "positive",
+        "reason_zh": "大盤波動率越高，系統性風險越大。",
+        "source_label_zh": "大盤、產業與市場行情資料",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium"
+      },
+      {
         "factor": "technical",
         "feature": "volatility_20d_pct",
         "label_zh": "20 日波動率",
@@ -1730,26 +1730,6 @@
         "direction": "positive",
         "reason_zh": "波動率過高會降低技術面穩定度。",
         "source_label_zh": "交易所股價與成交資料",
-        "source_url": null,
-        "source_date": null,
-        "confidence": "medium"
-      },
-      {
-        "factor": "market",
-        "feature": "market_volatility_20d_pct",
-        "label_zh": "大盤波動率",
-        "value": 2.3378,
-        "unit": "%",
-        "baseline_value": 2.5,
-        "baseline_label_zh": "一般大盤波動參考",
-        "comparison_window": "20 個交易日",
-        "score": 57.87,
-        "sub_weight_pct": 18.0,
-        "factor_weight_pct": 10.52,
-        "health_impact": 0.15,
-        "direction": "positive",
-        "reason_zh": "大盤波動率越高，系統性風險越大。",
-        "source_label_zh": "大盤、產業與市場行情資料",
         "source_url": null,
         "source_date": null,
         "confidence": "medium"
@@ -1870,6 +1850,26 @@
         "direction": "positive",
         "reason_zh": "突破近期壓力有利於趨勢延續，跌破支撐則屬負面訊號。",
         "source_label_zh": "交易所股價與成交資料",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium"
+      },
+      {
+        "factor": "market",
+        "feature": "market_return_20d_pct",
+        "label_zh": "大盤 20 日報酬",
+        "value": -1.149,
+        "unit": "%",
+        "baseline_value": 0,
+        "baseline_label_zh": "20 日前大盤",
+        "comparison_window": "20 個交易日",
+        "score": 48.84,
+        "sub_weight_pct": 20.0,
+        "factor_weight_pct": 10.52,
+        "health_impact": -0.02,
+        "direction": "negative",
+        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
+        "source_label_zh": "大盤、產業與市場行情資料",
         "source_url": null,
         "source_date": null,
         "confidence": "medium"
@@ -2389,16 +2389,16 @@
       {
         "key": "market",
         "label": "市場環境",
-        "score": 50.2,
+        "score": 52.93,
         "level": "偏弱",
-        "description": "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
+        "description": "大盤波動率為 59.1 分，屬於中性因子。",
         "weight": 0.11,
-        "weighted_contribution": 5.28,
+        "weighted_contribution": 5.57,
         "coverage_pct": 60.0,
         "reasons": [
-          "大盤 20 日報酬為 40.4 分，屬於扣分因子。",
-          "大盤波動率為 57.9 分，屬於中性因子。",
-          "大盤多空環境為 52.0 分，屬於中性因子。"
+          "大盤波動率為 59.1 分，屬於中性因子。",
+          "大盤多空環境為 52.0 分，屬於中性因子。",
+          "大盤 20 日報酬為 48.8 分，屬於中性因子。"
         ],
         "source_label_zh": "大盤、產業與市場行情資料",
         "contributions": [
@@ -2426,15 +2426,15 @@
             "factor": "market",
             "feature": "market_return_20d_pct",
             "label_zh": "大盤 20 日報酬",
-            "value": -4.2165,
+            "value": -1.149,
             "unit": "%",
             "baseline_value": 0,
             "baseline_label_zh": "20 日前大盤",
             "comparison_window": "20 個交易日",
-            "score": 40.4,
+            "score": 48.84,
             "sub_weight_pct": 20.0,
             "factor_weight_pct": 10.52,
-            "health_impact": -0.2,
+            "health_impact": -0.02,
             "direction": "negative",
             "reason_zh": "大盤中短期報酬反映市場風險偏好。",
             "source_label_zh": "大盤、產業與市場行情資料",
@@ -2446,15 +2446,15 @@
             "factor": "market",
             "feature": "market_volatility_20d_pct",
             "label_zh": "大盤波動率",
-            "value": 2.3378,
+            "value": 2.2674,
             "unit": "%",
             "baseline_value": 2.5,
             "baseline_label_zh": "一般大盤波動參考",
             "comparison_window": "20 個交易日",
-            "score": 57.87,
+            "score": 59.12,
             "sub_weight_pct": 18.0,
             "factor_weight_pct": 10.52,
-            "health_impact": 0.15,
+            "health_impact": 0.17,
             "direction": "positive",
             "reason_zh": "大盤波動率越高，系統性風險越大。",
             "source_label_zh": "大盤、產業與市場行情資料",
@@ -2528,7 +2528,7 @@
             "factor": "news",
             "feature": "news_count_7d",
             "label_zh": "近期新聞熱度",
-            "value": 190,
+            "value": 189,
             "unit": "則",
             "baseline_value": 0,
             "baseline_label_zh": "無相關新聞",
@@ -2601,9 +2601,9 @@
     },
     {
       "date": "2026-08-14",
-      "score": 61.3,
-      "risk": 45.47,
-      "confidence": 75.52
+      "score": 61.8,
+      "risk": 45.17,
+      "confidence": 75.65
     }
   ],
   "score_delta": {
@@ -2618,8 +2618,8 @@
     "overall": {
       "available": true,
       "previous_score": 63.9,
-      "current_score": 61.3,
-      "change": -2.6,
+      "current_score": 61.8,
+      "change": -2.1,
       "direction": "down"
     },
     "factor_changes": [
@@ -2650,6 +2650,20 @@
         "weighted_change": -0.64,
         "direction": "negative",
         "reason_zh": "技術健康由 63.48 分變為 61.63 分（-1.85）；在當日權重下，原始加權貢獻減少 0.64。"
+      },
+      {
+        "key": "market",
+        "label": "市場環境",
+        "previous_score": 50.2,
+        "current_score": 52.93,
+        "score_change": 2.73,
+        "previous_weight_pct": 11.0,
+        "current_weight_pct": 11.0,
+        "previous_weighted_contribution": 5.28,
+        "current_weighted_contribution": 5.57,
+        "weighted_change": 0.29,
+        "direction": "positive",
+        "reason_zh": "市場環境由 50.20 分變為 52.93 分（+2.73）；在當日權重下，原始加權貢獻增加 0.29。"
       },
       {
         "key": "news",
@@ -2847,6 +2861,36 @@
         "current_health_impact": -0.47,
         "impact_change": -0.23,
         "direction": "negative"
+      },
+      {
+        "key": "market:market_return_20d_pct",
+        "factor": "market",
+        "feature": "market_return_20d_pct",
+        "label_zh": "大盤 20 日報酬",
+        "value": -1.149,
+        "unit": "%",
+        "score": 48.84,
+        "health_impact": -0.02,
+        "sub_weight_pct": 20.0,
+        "factor_weight_pct": 10.52,
+        "baseline_value": 0,
+        "baseline_label_zh": "20 日前大盤",
+        "comparison_window": "20 個交易日",
+        "reason_zh": "大盤中短期報酬反映市場風險偏好。",
+        "source_label_zh": "大盤、產業與市場行情資料",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium",
+        "previous_value": -4.2165,
+        "current_value": -1.149,
+        "value_change": 3.0675,
+        "previous_score": 40.4,
+        "current_score": 48.84,
+        "score_change": 8.44,
+        "previous_health_impact": -0.2,
+        "current_health_impact": -0.02,
+        "impact_change": 0.18,
+        "direction": "positive"
       },
       {
         "key": "technical:return_20d_pct",
@@ -3059,6 +3103,36 @@
         "direction": "negative"
       },
       {
+        "key": "market:market_volatility_20d_pct",
+        "factor": "market",
+        "feature": "market_volatility_20d_pct",
+        "label_zh": "大盤波動率",
+        "value": 2.2674,
+        "unit": "%",
+        "score": 59.12,
+        "health_impact": 0.17,
+        "sub_weight_pct": 18.0,
+        "factor_weight_pct": 10.52,
+        "baseline_value": 2.5,
+        "baseline_label_zh": "一般大盤波動參考",
+        "comparison_window": "20 個交易日",
+        "reason_zh": "大盤波動率越高，系統性風險越大。",
+        "source_label_zh": "大盤、產業與市場行情資料",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium",
+        "previous_value": 2.3378,
+        "current_value": 2.2674,
+        "value_change": -0.0704,
+        "previous_score": 57.87,
+        "current_score": 59.12,
+        "score_change": 1.25,
+        "previous_health_impact": 0.15,
+        "current_health_impact": 0.17,
+        "impact_change": 0.02,
+        "direction": "positive"
+      },
+      {
         "key": "technical:atr_14_pct",
         "factor": "technical",
         "feature": "atr_14_pct",
@@ -3183,7 +3257,7 @@
         "factor": "news",
         "feature": "news_count_7d",
         "label_zh": "近期新聞熱度",
-        "value": 190,
+        "value": 189,
         "unit": "則",
         "score": 45.0,
         "health_impact": -0.18,
@@ -3198,8 +3272,8 @@
         "source_date": null,
         "confidence": "medium",
         "previous_value": 176,
-        "current_value": 190,
-        "value_change": 14.0,
+        "current_value": 189,
+        "value_change": 13.0,
         "previous_score": 45.0,
         "current_score": 45.0,
         "score_change": 0.0,
@@ -3209,8 +3283,23 @@
         "direction": "neutral"
       }
     ],
-    "indicator_change_count": 18,
-    "top_positive_changes": [],
+    "indicator_change_count": 20,
+    "top_positive_changes": [
+      {
+        "key": "market",
+        "label": "市場環境",
+        "previous_score": 50.2,
+        "current_score": 52.93,
+        "score_change": 2.73,
+        "previous_weight_pct": 11.0,
+        "current_weight_pct": 11.0,
+        "previous_weighted_contribution": 5.28,
+        "current_weighted_contribution": 5.57,
+        "weighted_change": 0.29,
+        "direction": "positive",
+        "reason_zh": "市場環境由 50.20 分變為 52.93 分（+2.73）；在當日權重下，原始加權貢獻增加 0.29。"
+      }
+    ],
     "top_negative_changes": [
       {
         "key": "institutional",
@@ -3255,7 +3344,7 @@
         "reason_zh": "新聞情緒由 67.61 分變為 67.25 分（-0.36）；在當日權重下，原始加權貢獻減少 0.06。"
       }
     ],
-    "summary_zh": "健康分數較前一交易日下降 2.60 分，並已完成五大面向比較。",
+    "summary_zh": "健康分數較前一交易日下降 2.10 分，並已完成五大面向比較。",
     "method_zh": "總分差直接比較兩個交易日的展示分；面向變化比較各面向分數與加權貢獻。底層指標使用穩定鍵逐項比較，完整保留所有真實變化；沒有昨日底層快照時不推測變化。展示分另經單調校準，因此面向加權變化不應直接相加冒充總分差。"
   },
   "data_sources": [
@@ -3285,6 +3374,136 @@
       "source_label_zh": "公開新聞索引"
     }
   ],
+  "market_home_summary": {
+    "version": "MarketHomeSummary-v1.0",
+    "market": "TWSE",
+    "index_id": "TAIEX",
+    "index_name_zh": "臺灣加權指數",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "context_only"
+    },
+    "source": {
+      "name_zh": "臺灣證券交易所公開資料",
+      "dataset": "official_market_index",
+      "url": "https://www.twse.com.tw/zh/indices/taiex/mi-5min-hist.html"
+    },
+    "status": "available",
+    "data_date": "2026-08-13",
+    "stale_calendar_days": 1,
+    "headline_zh": "市場短線上漲，趨勢偏多",
+    "summary_zh": "加權指數單日上漲 1.11%，市場風險為偏高；這是市場背景，不代表個股一定同方向。",
+    "close": 46021.48,
+    "daily_change_points": 503.41,
+    "daily_change_pct": 1.106,
+    "return_20d_pct": -1.149,
+    "volatility_20d_pct": 2.2674,
+    "ma20": 44684.655,
+    "ma60": null,
+    "market_regime": "bullish",
+    "market_regime_zh": "偏多",
+    "risk_level": "high",
+    "risk_level_zh": "偏高",
+    "confidence": "high",
+    "history": [
+      {
+        "date": "2026-07-01",
+        "close": 47018.99
+      },
+      {
+        "date": "2026-07-02",
+        "close": 46744.16
+      },
+      {
+        "date": "2026-07-03",
+        "close": 46780.62
+      },
+      {
+        "date": "2026-07-06",
+        "close": 46556.39
+      },
+      {
+        "date": "2026-07-07",
+        "close": 45479.11
+      },
+      {
+        "date": "2026-07-08",
+        "close": 45734.41
+      },
+      {
+        "date": "2026-07-09",
+        "close": 45354.61
+      },
+      {
+        "date": "2026-07-13",
+        "close": 45380.52
+      },
+      {
+        "date": "2026-07-14",
+        "close": 44737.95
+      },
+      {
+        "date": "2026-07-15",
+        "close": 45631.59
+      },
+      {
+        "date": "2026-07-16",
+        "close": 45624.98
+      },
+      {
+        "date": "2026-07-17",
+        "close": 42671.27
+      },
+      {
+        "date": "2026-07-20",
+        "close": 42449.7
+      },
+      {
+        "date": "2026-07-21",
+        "close": 44232.87
+      },
+      {
+        "date": "2026-07-22",
+        "close": 44825.78
+      },
+      {
+        "date": "2026-08-03",
+        "close": 43386.41
+      },
+      {
+        "date": "2026-08-04",
+        "close": 43360.66
+      },
+      {
+        "date": "2026-08-05",
+        "close": 44611.6
+      },
+      {
+        "date": "2026-08-06",
+        "close": 44396.7
+      },
+      {
+        "date": "2026-08-07",
+        "close": 44225.91
+      },
+      {
+        "date": "2026-08-10",
+        "close": 44928.76
+      },
+      {
+        "date": "2026-08-11",
+        "close": 45120.72
+      },
+      {
+        "date": "2026-08-12",
+        "close": 45518.07
+      },
+      {
+        "date": "2026-08-13",
+        "close": 46021.48
+      }
+    ]
+  },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
     "status": "available",
@@ -3343,9 +3562,9 @@
         "benchmark_name_zh": "台灣加權市場基準",
         "comparison_window_zh": "近 20 個交易日",
         "stock_return_pct": 10.8974,
-        "benchmark_return_pct": -4.2165,
-        "relative_return_pct_point": 15.11,
-        "interpretation_zh": "近 20 個交易日比大盤多 15.11 個百分點，代表同期表現相對強；不代表未來一定續強。"
+        "benchmark_return_pct": -1.149,
+        "relative_return_pct_point": 12.05,
+        "interpretation_zh": "近 20 個交易日比大盤多 12.05 個百分點，代表同期表現相對強；不代表未來一定續強。"
       },
       "sector": {
         "status": "available",
@@ -3370,7 +3589,7 @@
             "stock_id": "2317",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 259.5,
             "return_20d_pct": 10.8974,
             "volatility_20d_pct": 3.273,
@@ -3391,7 +3610,7 @@
             "stock_id": "2382",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 327.5,
             "return_20d_pct": 0.6144,
             "volatility_20d_pct": 3.2681,
@@ -3412,7 +3631,7 @@
             "stock_id": "3231",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 193.5,
             "return_20d_pct": 39.2086,
             "volatility_20d_pct": 4.3437,
@@ -3433,7 +3652,7 @@
             "stock_id": "2376",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 397.5,
             "return_20d_pct": 22.3077,
             "volatility_20d_pct": 3.0946,
@@ -3454,7 +3673,7 @@
             "stock_id": "6669",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 6435.0,
             "return_20d_pct": 39.2857,
             "volatility_20d_pct": 4.9643,
@@ -3877,6 +4096,53 @@
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
+        "category": "market",
+        "feature": "market_return_20d_pct",
+        "title_zh": "大盤 20 日報酬改善",
+        "direction": "positive",
+        "current_value": -1.149,
+        "current_value_zh": "-1.15 %",
+        "current_unit": "%",
+        "baseline_value": -4.2165,
+        "baseline_value_zh": "-4.22 %",
+        "baseline_label_zh": "前一交易日實際值",
+        "change_value": 3.0675,
+        "change_value_zh": "+3.07 %",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": 0.18,
+        "impact_kind": "daily_health_impact_change",
+        "reason_zh": "大盤 20 日報酬由 -4.22 % 變為 -1.15 %（變化 +3.07 %）。這代表大盤中短期報酬反映市場風險偏好。；因此相較昨日加分 0.18 分。",
+        "what_happened_zh": "大盤 20 日報酬從 -4.22 % 變成 -1.15 %，實際變化 +3.07 %。",
+        "metric_explanation_zh": "大盤中短期報酬反映市場風險偏好。",
+        "score_reason_zh": "這項指標相較昨日讓健康分增加 0.18 分。影響值來自同一套健康評分規則，不是人工判斷。",
+        "beginner_explanation_zh": "簡單說，大盤 20 日報酬是用來觀察大盤中短期報酬反映市場風險偏好。。本次讓健康分比昨天增加 0.18 分。這是研究評分變化，不代表買進或賣出訊號。",
+        "source": "大盤、產業與市場行情資料",
+        "source_time": "2026-08-14",
+        "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "impact_category_zh": "健康分加分",
+        "source_link_status": "available",
+        "source_link_message_zh": "查看這檔股票的官方原始資料",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "大盤 20 日報酬從 -4.22 % 變成 -1.15 %，實際變化 +3.07 %。",
+          "current_value_zh": "-1.15 %",
+          "comparison_zh": "-4.22 %",
+          "baseline_value_zh": "-4.22 %",
+          "meaning_zh": "大盤中短期報酬反映市場風險偏好。",
+          "score_reason_zh": "這項指標相較昨日讓健康分增加 0.18 分。影響值來自同一套健康評分規則，不是人工判斷。",
+          "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+          "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+        }
+      },
+      {
+        "event_id": "INDICATOR-DELTA-08",
+        "event_type": "indicator_change",
+        "event_level": "indicator",
+        "status": "new",
         "category": "technical",
         "feature": "return_20d_pct",
         "title_zh": "20 日報酬改善",
@@ -3920,7 +4186,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-08",
+        "event_id": "INDICATOR-DELTA-09",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -3967,7 +4233,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-09",
+        "event_id": "INDICATOR-DELTA-10",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4014,7 +4280,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-10",
+        "event_id": "INDICATOR-DELTA-11",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4061,7 +4327,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-11",
+        "event_id": "INDICATOR-DELTA-12",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4108,7 +4374,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-12",
+        "event_id": "INDICATOR-DELTA-13",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4155,7 +4421,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-13",
+        "event_id": "INDICATOR-DELTA-14",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4202,7 +4468,54 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-14",
+        "event_id": "INDICATOR-DELTA-15",
+        "event_type": "indicator_change",
+        "event_level": "indicator",
+        "status": "new",
+        "category": "market",
+        "feature": "market_volatility_20d_pct",
+        "title_zh": "大盤波動率改善",
+        "direction": "positive",
+        "current_value": 2.2674,
+        "current_value_zh": "2.27 %",
+        "current_unit": "%",
+        "baseline_value": 2.3378,
+        "baseline_value_zh": "2.34 %",
+        "baseline_label_zh": "前一交易日實際值",
+        "change_value": -0.0704,
+        "change_value_zh": "-0.07 %",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": 0.02,
+        "impact_kind": "daily_health_impact_change",
+        "reason_zh": "大盤波動率由 2.34 % 變為 2.27 %（變化 -0.07 %）。這代表大盤波動率越高，系統性風險越大。；因此相較昨日加分 0.02 分。",
+        "what_happened_zh": "大盤波動率從 2.34 % 變成 2.27 %，實際變化 -0.07 %。",
+        "metric_explanation_zh": "大盤波動率越高，系統性風險越大。",
+        "score_reason_zh": "這項指標相較昨日讓健康分增加 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
+        "beginner_explanation_zh": "簡單說，大盤波動率是用來觀察大盤波動率越高，系統性風險越大。。本次讓健康分比昨天增加 0.02 分。這是研究評分變化，不代表買進或賣出訊號。",
+        "source": "大盤、產業與市場行情資料",
+        "source_time": "2026-08-14",
+        "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "impact_category_zh": "健康分加分",
+        "source_link_status": "available",
+        "source_link_message_zh": "查看這檔股票的官方原始資料",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "大盤波動率從 2.34 % 變成 2.27 %，實際變化 -0.07 %。",
+          "current_value_zh": "2.27 %",
+          "comparison_zh": "2.34 %",
+          "baseline_value_zh": "2.34 %",
+          "meaning_zh": "大盤波動率越高，系統性風險越大。",
+          "score_reason_zh": "這項指標相較昨日讓健康分增加 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
+          "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+          "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+        }
+      },
+      {
+        "event_id": "INDICATOR-DELTA-16",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4249,7 +4562,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-15",
+        "event_id": "INDICATOR-DELTA-17",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4296,7 +4609,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-16",
+        "event_id": "INDICATOR-DELTA-18",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4343,7 +4656,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-17",
+        "event_id": "INDICATOR-DELTA-19",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4390,7 +4703,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-18",
+        "event_id": "INDICATOR-DELTA-20",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4398,19 +4711,19 @@
         "feature": "news_count_7d",
         "title_zh": "近期新聞熱度數值改變",
         "direction": "neutral",
-        "current_value": 190,
-        "current_value_zh": "190.00 則",
+        "current_value": 189,
+        "current_value_zh": "189.00 則",
         "current_unit": "則",
         "baseline_value": 176,
         "baseline_value_zh": "176.00 則",
         "baseline_label_zh": "前一交易日實際值",
-        "change_value": 14.0,
-        "change_value_zh": "+14.00 則",
+        "change_value": 13.0,
+        "change_value_zh": "+13.00 則",
         "comparison_window": "前一個有資料的交易日",
         "score_impact": 0.0,
         "impact_kind": "daily_health_impact_change",
-        "reason_zh": "近期新聞熱度由 176.00 則 變為 190.00 則（變化 +14.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
-        "what_happened_zh": "近期新聞熱度從 176.00 則 變成 190.00 則，實際變化 +14.00 則。",
+        "reason_zh": "近期新聞熱度由 176.00 則 變為 189.00 則（變化 +13.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
+        "what_happened_zh": "近期新聞熱度從 176.00 則 變成 189.00 則，實際變化 +13.00 則。",
         "metric_explanation_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
         "beginner_explanation_zh": "簡單說，近期新聞熱度是用來觀察適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。。數值雖有變化，但四捨五入後沒有改變健康分。這是研究評分變化，不代表買進或賣出訊號。",
@@ -4426,8 +4739,8 @@
         "is_true_daily_change": true,
         "state": "daily_change",
         "six_questions": {
-          "what_happened_zh": "近期新聞熱度從 176.00 則 變成 190.00 則，實際變化 +14.00 則。",
-          "current_value_zh": "190.00 則",
+          "what_happened_zh": "近期新聞熱度從 176.00 則 變成 189.00 則，實際變化 +13.00 則。",
+          "current_value_zh": "189.00 則",
           "comparison_zh": "176.00 則",
           "baseline_value_zh": "176.00 則",
           "meaning_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
@@ -4560,7 +4873,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-07",
+            "event_id": "INDICATOR-DELTA-08",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -4607,7 +4920,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-08",
+            "event_id": "INDICATOR-DELTA-09",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -4654,7 +4967,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-10",
+            "event_id": "INDICATOR-DELTA-11",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -4701,7 +5014,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-11",
+            "event_id": "INDICATOR-DELTA-12",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -4748,7 +5061,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-12",
+            "event_id": "INDICATOR-DELTA-13",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -4795,7 +5108,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-14",
+            "event_id": "INDICATOR-DELTA-16",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5045,7 +5358,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-15",
+            "event_id": "INDICATOR-DELTA-17",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5092,7 +5405,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-16",
+            "event_id": "INDICATOR-DELTA-18",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5139,7 +5452,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-17",
+            "event_id": "INDICATOR-DELTA-19",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5190,16 +5503,111 @@
       {
         "category": "market",
         "category_zh": "市場環境",
-        "direction": "neutral",
-        "event_count": 0,
-        "positive_count": 0,
+        "direction": "positive",
+        "event_count": 2,
+        "positive_count": 2,
         "negative_count": 0,
-        "positive_impact": 0,
-        "negative_impact": 0,
-        "net_impact": 0,
-        "headline_zh": "市場環境整體影響持平 0.00 分",
-        "summary_zh": "相關數據有變化，但四捨五入後沒有改變健康分；所以市場環境本次正負影響互相抵銷。",
-        "events": []
+        "positive_impact": 0.2,
+        "negative_impact": 0.0,
+        "net_impact": 0.2,
+        "headline_zh": "市場環境整體加分 0.20 分",
+        "summary_zh": "加分主要來自大盤 20 日報酬改善、大盤波動率改善，合計 +0.20 分；所以市場環境本次淨增加 0.20 分。",
+        "events": [
+          {
+            "event_id": "INDICATOR-DELTA-07",
+            "event_type": "indicator_change",
+            "event_level": "indicator",
+            "status": "new",
+            "category": "market",
+            "feature": "market_return_20d_pct",
+            "title_zh": "大盤 20 日報酬改善",
+            "direction": "positive",
+            "current_value": -1.149,
+            "current_value_zh": "-1.15 %",
+            "current_unit": "%",
+            "baseline_value": -4.2165,
+            "baseline_value_zh": "-4.22 %",
+            "baseline_label_zh": "前一交易日實際值",
+            "change_value": 3.0675,
+            "change_value_zh": "+3.07 %",
+            "comparison_window": "前一個有資料的交易日",
+            "score_impact": 0.18,
+            "impact_kind": "daily_health_impact_change",
+            "reason_zh": "大盤 20 日報酬由 -4.22 % 變為 -1.15 %（變化 +3.07 %）。這代表大盤中短期報酬反映市場風險偏好。；因此相較昨日加分 0.18 分。",
+            "what_happened_zh": "大盤 20 日報酬從 -4.22 % 變成 -1.15 %，實際變化 +3.07 %。",
+            "metric_explanation_zh": "大盤中短期報酬反映市場風險偏好。",
+            "score_reason_zh": "這項指標相較昨日讓健康分增加 0.18 分。影響值來自同一套健康評分規則，不是人工判斷。",
+            "beginner_explanation_zh": "簡單說，大盤 20 日報酬是用來觀察大盤中短期報酬反映市場風險偏好。。本次讓健康分比昨天增加 0.18 分。這是研究評分變化，不代表買進或賣出訊號。",
+            "source": "大盤、產業與市場行情資料",
+            "source_time": "2026-08-14",
+            "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+            "confidence": "high",
+            "schema_version": "CustomerEvidence-v2.0",
+            "explain_engine_version": "CustomerExplainEngine-v2.2",
+            "impact_category_zh": "健康分加分",
+            "source_link_status": "available",
+            "source_link_message_zh": "查看這檔股票的官方原始資料",
+            "is_true_daily_change": true,
+            "state": "daily_change",
+            "six_questions": {
+              "what_happened_zh": "大盤 20 日報酬從 -4.22 % 變成 -1.15 %，實際變化 +3.07 %。",
+              "current_value_zh": "-1.15 %",
+              "comparison_zh": "-4.22 %",
+              "baseline_value_zh": "-4.22 %",
+              "meaning_zh": "大盤中短期報酬反映市場風險偏好。",
+              "score_reason_zh": "這項指標相較昨日讓健康分增加 0.18 分。影響值來自同一套健康評分規則，不是人工判斷。",
+              "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+              "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+            }
+          },
+          {
+            "event_id": "INDICATOR-DELTA-15",
+            "event_type": "indicator_change",
+            "event_level": "indicator",
+            "status": "new",
+            "category": "market",
+            "feature": "market_volatility_20d_pct",
+            "title_zh": "大盤波動率改善",
+            "direction": "positive",
+            "current_value": 2.2674,
+            "current_value_zh": "2.27 %",
+            "current_unit": "%",
+            "baseline_value": 2.3378,
+            "baseline_value_zh": "2.34 %",
+            "baseline_label_zh": "前一交易日實際值",
+            "change_value": -0.0704,
+            "change_value_zh": "-0.07 %",
+            "comparison_window": "前一個有資料的交易日",
+            "score_impact": 0.02,
+            "impact_kind": "daily_health_impact_change",
+            "reason_zh": "大盤波動率由 2.34 % 變為 2.27 %（變化 -0.07 %）。這代表大盤波動率越高，系統性風險越大。；因此相較昨日加分 0.02 分。",
+            "what_happened_zh": "大盤波動率從 2.34 % 變成 2.27 %，實際變化 -0.07 %。",
+            "metric_explanation_zh": "大盤波動率越高，系統性風險越大。",
+            "score_reason_zh": "這項指標相較昨日讓健康分增加 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
+            "beginner_explanation_zh": "簡單說，大盤波動率是用來觀察大盤波動率越高，系統性風險越大。。本次讓健康分比昨天增加 0.02 分。這是研究評分變化，不代表買進或賣出訊號。",
+            "source": "大盤、產業與市場行情資料",
+            "source_time": "2026-08-14",
+            "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+            "confidence": "high",
+            "schema_version": "CustomerEvidence-v2.0",
+            "explain_engine_version": "CustomerExplainEngine-v2.2",
+            "impact_category_zh": "健康分加分",
+            "source_link_status": "available",
+            "source_link_message_zh": "查看這檔股票的官方原始資料",
+            "is_true_daily_change": true,
+            "state": "daily_change",
+            "six_questions": {
+              "what_happened_zh": "大盤波動率從 2.34 % 變成 2.27 %，實際變化 -0.07 %。",
+              "current_value_zh": "2.27 %",
+              "comparison_zh": "2.34 %",
+              "baseline_value_zh": "2.34 %",
+              "meaning_zh": "大盤波動率越高，系統性風險越大。",
+              "score_reason_zh": "這項指標相較昨日讓健康分增加 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
+              "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+              "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+            }
+          }
+        ]
       },
       {
         "category": "news",
@@ -5215,7 +5623,7 @@
         "summary_zh": "扣分主要來自正負面新聞比例轉弱、新聞情緒分數轉弱，合計 -0.07 分；所以新聞消息本次淨減少 0.07 分。",
         "events": [
           {
-            "event_id": "INDICATOR-DELTA-09",
+            "event_id": "INDICATOR-DELTA-10",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5262,7 +5670,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-13",
+            "event_id": "INDICATOR-DELTA-14",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5309,7 +5717,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-18",
+            "event_id": "INDICATOR-DELTA-20",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -5317,19 +5725,19 @@
             "feature": "news_count_7d",
             "title_zh": "近期新聞熱度數值改變",
             "direction": "neutral",
-            "current_value": 190,
-            "current_value_zh": "190.00 則",
+            "current_value": 189,
+            "current_value_zh": "189.00 則",
             "current_unit": "則",
             "baseline_value": 176,
             "baseline_value_zh": "176.00 則",
             "baseline_label_zh": "前一交易日實際值",
-            "change_value": 14.0,
-            "change_value_zh": "+14.00 則",
+            "change_value": 13.0,
+            "change_value_zh": "+13.00 則",
             "comparison_window": "前一個有資料的交易日",
             "score_impact": 0.0,
             "impact_kind": "daily_health_impact_change",
-            "reason_zh": "近期新聞熱度由 176.00 則 變為 190.00 則（變化 +14.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
-            "what_happened_zh": "近期新聞熱度從 176.00 則 變成 190.00 則，實際變化 +14.00 則。",
+            "reason_zh": "近期新聞熱度由 176.00 則 變為 189.00 則（變化 +13.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
+            "what_happened_zh": "近期新聞熱度從 176.00 則 變成 189.00 則，實際變化 +13.00 則。",
             "metric_explanation_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
             "beginner_explanation_zh": "簡單說，近期新聞熱度是用來觀察適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。。數值雖有變化，但四捨五入後沒有改變健康分。這是研究評分變化，不代表買進或賣出訊號。",
@@ -5345,8 +5753,8 @@
             "is_true_daily_change": true,
             "state": "daily_change",
             "six_questions": {
-              "what_happened_zh": "近期新聞熱度從 176.00 則 變成 190.00 則，實際變化 +14.00 則。",
-              "current_value_zh": "190.00 則",
+              "what_happened_zh": "近期新聞熱度從 176.00 則 變成 189.00 則，實際變化 +13.00 則。",
+              "current_value_zh": "189.00 則",
               "comparison_zh": "176.00 則",
               "baseline_value_zh": "176.00 則",
               "meaning_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
@@ -5360,12 +5768,12 @@
     ],
     "event_group_overview": {
       "title_zh": "總分變化總覽",
-      "event_count": 18,
-      "positive_impact": 1.98,
+      "event_count": 20,
+      "positive_impact": 2.18,
       "negative_impact": -3.53,
-      "net_impact": -1.55,
+      "net_impact": -1.35,
       "direction": "negative",
-      "summary_zh": "全部 18 項變化合計：加分 +1.98、扣分 -3.53，健康分淨影響 -1.55 分。點開下方五個面向，可查看每一項加扣分原因。"
+      "summary_zh": "全部 20 項變化合計：加分 +2.18、扣分 -3.53，健康分淨影響 -1.35 分。點開下方五個面向，可查看每一項加扣分原因。"
     },
     "indicator_events": [
       {
@@ -5655,6 +6063,53 @@
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
+        "category": "market",
+        "feature": "market_return_20d_pct",
+        "title_zh": "大盤 20 日報酬改善",
+        "direction": "positive",
+        "current_value": -1.149,
+        "current_value_zh": "-1.15 %",
+        "current_unit": "%",
+        "baseline_value": -4.2165,
+        "baseline_value_zh": "-4.22 %",
+        "baseline_label_zh": "前一交易日實際值",
+        "change_value": 3.0675,
+        "change_value_zh": "+3.07 %",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": 0.18,
+        "impact_kind": "daily_health_impact_change",
+        "reason_zh": "大盤 20 日報酬由 -4.22 % 變為 -1.15 %（變化 +3.07 %）。這代表大盤中短期報酬反映市場風險偏好。；因此相較昨日加分 0.18 分。",
+        "what_happened_zh": "大盤 20 日報酬從 -4.22 % 變成 -1.15 %，實際變化 +3.07 %。",
+        "metric_explanation_zh": "大盤中短期報酬反映市場風險偏好。",
+        "score_reason_zh": "這項指標相較昨日讓健康分增加 0.18 分。影響值來自同一套健康評分規則，不是人工判斷。",
+        "beginner_explanation_zh": "簡單說，大盤 20 日報酬是用來觀察大盤中短期報酬反映市場風險偏好。。本次讓健康分比昨天增加 0.18 分。這是研究評分變化，不代表買進或賣出訊號。",
+        "source": "大盤、產業與市場行情資料",
+        "source_time": "2026-08-14",
+        "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "impact_category_zh": "健康分加分",
+        "source_link_status": "available",
+        "source_link_message_zh": "查看這檔股票的官方原始資料",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "大盤 20 日報酬從 -4.22 % 變成 -1.15 %，實際變化 +3.07 %。",
+          "current_value_zh": "-1.15 %",
+          "comparison_zh": "-4.22 %",
+          "baseline_value_zh": "-4.22 %",
+          "meaning_zh": "大盤中短期報酬反映市場風險偏好。",
+          "score_reason_zh": "這項指標相較昨日讓健康分增加 0.18 分。影響值來自同一套健康評分規則，不是人工判斷。",
+          "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+          "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+        }
+      },
+      {
+        "event_id": "INDICATOR-DELTA-08",
+        "event_type": "indicator_change",
+        "event_level": "indicator",
+        "status": "new",
         "category": "technical",
         "feature": "return_20d_pct",
         "title_zh": "20 日報酬改善",
@@ -5698,7 +6153,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-08",
+        "event_id": "INDICATOR-DELTA-09",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -5745,7 +6200,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-09",
+        "event_id": "INDICATOR-DELTA-10",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -5792,7 +6247,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-10",
+        "event_id": "INDICATOR-DELTA-11",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -5839,7 +6294,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-11",
+        "event_id": "INDICATOR-DELTA-12",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -5886,7 +6341,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-12",
+        "event_id": "INDICATOR-DELTA-13",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -5933,7 +6388,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-13",
+        "event_id": "INDICATOR-DELTA-14",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -5980,7 +6435,54 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-14",
+        "event_id": "INDICATOR-DELTA-15",
+        "event_type": "indicator_change",
+        "event_level": "indicator",
+        "status": "new",
+        "category": "market",
+        "feature": "market_volatility_20d_pct",
+        "title_zh": "大盤波動率改善",
+        "direction": "positive",
+        "current_value": 2.2674,
+        "current_value_zh": "2.27 %",
+        "current_unit": "%",
+        "baseline_value": 2.3378,
+        "baseline_value_zh": "2.34 %",
+        "baseline_label_zh": "前一交易日實際值",
+        "change_value": -0.0704,
+        "change_value_zh": "-0.07 %",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": 0.02,
+        "impact_kind": "daily_health_impact_change",
+        "reason_zh": "大盤波動率由 2.34 % 變為 2.27 %（變化 -0.07 %）。這代表大盤波動率越高，系統性風險越大。；因此相較昨日加分 0.02 分。",
+        "what_happened_zh": "大盤波動率從 2.34 % 變成 2.27 %，實際變化 -0.07 %。",
+        "metric_explanation_zh": "大盤波動率越高，系統性風險越大。",
+        "score_reason_zh": "這項指標相較昨日讓健康分增加 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
+        "beginner_explanation_zh": "簡單說，大盤波動率是用來觀察大盤波動率越高，系統性風險越大。。本次讓健康分比昨天增加 0.02 分。這是研究評分變化，不代表買進或賣出訊號。",
+        "source": "大盤、產業與市場行情資料",
+        "source_time": "2026-08-14",
+        "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "impact_category_zh": "健康分加分",
+        "source_link_status": "available",
+        "source_link_message_zh": "查看這檔股票的官方原始資料",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "大盤波動率從 2.34 % 變成 2.27 %，實際變化 -0.07 %。",
+          "current_value_zh": "2.27 %",
+          "comparison_zh": "2.34 %",
+          "baseline_value_zh": "2.34 %",
+          "meaning_zh": "大盤波動率越高，系統性風險越大。",
+          "score_reason_zh": "這項指標相較昨日讓健康分增加 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
+          "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+          "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+        }
+      },
+      {
+        "event_id": "INDICATOR-DELTA-16",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -6027,7 +6529,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-15",
+        "event_id": "INDICATOR-DELTA-17",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -6074,7 +6576,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-16",
+        "event_id": "INDICATOR-DELTA-18",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -6121,7 +6623,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-17",
+        "event_id": "INDICATOR-DELTA-19",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -6168,7 +6670,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-18",
+        "event_id": "INDICATOR-DELTA-20",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -6176,19 +6678,19 @@
         "feature": "news_count_7d",
         "title_zh": "近期新聞熱度數值改變",
         "direction": "neutral",
-        "current_value": 190,
-        "current_value_zh": "190.00 則",
+        "current_value": 189,
+        "current_value_zh": "189.00 則",
         "current_unit": "則",
         "baseline_value": 176,
         "baseline_value_zh": "176.00 則",
         "baseline_label_zh": "前一交易日實際值",
-        "change_value": 14.0,
-        "change_value_zh": "+14.00 則",
+        "change_value": 13.0,
+        "change_value_zh": "+13.00 則",
         "comparison_window": "前一個有資料的交易日",
         "score_impact": 0.0,
         "impact_kind": "daily_health_impact_change",
-        "reason_zh": "近期新聞熱度由 176.00 則 變為 190.00 則（變化 +14.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
-        "what_happened_zh": "近期新聞熱度從 176.00 則 變成 190.00 則，實際變化 +14.00 則。",
+        "reason_zh": "近期新聞熱度由 176.00 則 變為 189.00 則（變化 +13.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
+        "what_happened_zh": "近期新聞熱度從 176.00 則 變成 189.00 則，實際變化 +13.00 則。",
         "metric_explanation_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
         "beginner_explanation_zh": "簡單說，近期新聞熱度是用來觀察適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。。數值雖有變化，但四捨五入後沒有改變健康分。這是研究評分變化，不代表買進或賣出訊號。",
@@ -6204,8 +6706,8 @@
         "is_true_daily_change": true,
         "state": "daily_change",
         "six_questions": {
-          "what_happened_zh": "近期新聞熱度從 176.00 則 變成 190.00 則，實際變化 +14.00 則。",
-          "current_value_zh": "190.00 則",
+          "what_happened_zh": "近期新聞熱度從 176.00 則 變成 189.00 則，實際變化 +13.00 則。",
+          "current_value_zh": "189.00 則",
           "comparison_zh": "176.00 則",
           "baseline_value_zh": "176.00 則",
           "meaning_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
@@ -6302,6 +6804,47 @@
         "event_id": "DELTA-03",
         "event_type": "score_change",
         "status": "new",
+        "category": "market",
+        "title_zh": "市場環境較前一交易日改善",
+        "direction": "positive",
+        "current_value": 52.93,
+        "current_unit": "分",
+        "baseline_value": 50.2,
+        "baseline_label_zh": "前一交易日面向分數",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": 0.29,
+        "impact_kind": "raw_weighted_change",
+        "reason_zh": "市場環境由 50.20 分變為 52.93 分（+2.73）；在當日權重下，原始加權貢獻增加 0.29。",
+        "source": "大盤、產業與市場行情資料",
+        "source_time": "2026-08-14",
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "what_happened_zh": "今天相較前一個有效交易日，市場環境較前一交易日改善為 52.93分，比較基準為 50.2分；對健康度有正面影響。",
+        "metric_explanation_zh": "市場指標反映大盤與產業環境，會影響個股面對的順風或逆風。",
+        "score_reason_zh": "系統認為「市場環境較前一交易日改善」相對支持公司目前的健康狀態，因此健康分增加 0.29 分。",
+        "change_value": 2.73,
+        "impact_category_zh": "健康分加分",
+        "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html",
+        "source_link_status": "available",
+        "source_link_message_zh": "查看這檔股票的官方原始資料",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "今天相較前一個有效交易日，市場環境較前一交易日改善為 52.93分，比較基準為 50.2分；對健康度有正面影響。",
+          "current_value_zh": "52.93分",
+          "comparison_zh": "50.2分",
+          "baseline_value_zh": "50.2分",
+          "meaning_zh": "市場指標反映大盤與產業環境，會影響個股面對的順風或逆風。",
+          "score_reason_zh": "系統認為「市場環境較前一交易日改善」相對支持公司目前的健康狀態，因此健康分增加 0.29 分。",
+          "source_zh": "大盤、產業與市場行情資料｜2026-08-14",
+          "source_url": "https://www.twse.com.tw/zh/trading/historical/mi-index.html"
+        }
+      },
+      {
+        "event_id": "DELTA-04",
+        "event_type": "score_change",
+        "status": "new",
         "category": "news",
         "title_zh": "新聞情緒較前一交易日轉弱",
         "direction": "negative",
@@ -6341,12 +6884,12 @@
       }
     ],
     "counts": {
-      "total": 18,
-      "positive": 6,
+      "total": 20,
+      "positive": 8,
       "negative": 9,
       "neutral": 3
     },
-    "summary_zh": "較前一交易日共有 18 項可說明資料：6 項正向、9 項負向；以下完整保留，沒有只挑前幾項。",
+    "summary_zh": "較前一交易日共有 20 項可說明資料：8 項正向、9 項負向；以下完整保留，沒有只挑前幾項。",
     "method_zh": "有前一交易日底層快照時逐項顯示所有真實指標變化；尚無底層快照時，先以五大面向變化或今日可量化證據建立基準，並清楚標示為相對中性基準，而非昨日變化。"
   }
 }
