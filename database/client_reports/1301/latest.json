@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-15T01:53:44+08:00",
+  "generated_at": "2026-08-15T02:42:02+08:00",
   "status": "success",
   "stock_id": "1301",
   "data_date": "2026-08-14",
@@ -3263,6 +3263,40 @@
         "close": 46021.48
       }
     ]
+  },
+  "upcoming_events": {
+    "version": "UpcomingEvents-v1.0",
+    "status": "empty",
+    "stock_id": "1301",
+    "window_start": "2026-08-15",
+    "window_end": "2026-08-21",
+    "window_days": 7,
+    "events": [],
+    "event_count": 0,
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "context_only"
+    },
+    "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
+    "data_as_of": "2026-08-14",
+    "generated_at": "2026-08-15T02:38:11+08:00",
+    "sources": [
+      {
+        "source_id": "ex_right_dividend",
+        "status": "success",
+        "rows": 139,
+        "normalized_events": 131,
+        "url": "https://openapi.twse.com.tw/v1/exchangeReport/TWT48U_ALL"
+      },
+      {
+        "source_id": "shareholder_meeting",
+        "status": "success",
+        "rows": 1118,
+        "normalized_events": 1118,
+        "url": "https://openapi.twse.com.tw/v1/opendata/t187ap41_L"
+      }
+    ],
+    "message_zh": "未來 7 天沒有已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
