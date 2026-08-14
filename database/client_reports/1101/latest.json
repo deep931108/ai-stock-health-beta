@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-13T23:20:48+08:00",
+  "generated_at": "2026-08-14T15:03:29+08:00",
   "status": "success",
   "stock_id": "1101",
   "data_date": "2026-08-13",
@@ -3181,14 +3181,118 @@
         "interpretation_zh": "近 20 個交易日比大盤多 4.63 個百分點，代表同期表現相對強；不代表未來一定續強。"
       },
       "sector": {
-        "status": "building",
+        "status": "available",
         "industry_zh": "傳統產業",
-        "interpretation_zh": "產業指數與同期基準尚未齊全，暫不製造排名。"
+        "comparison_window_zh": "近 20 個交易日",
+        "data_date": "2026-08-13",
+        "stock_return_pct": 0.4175,
+        "sector_median_return_pct": -7.88,
+        "sector_mean_return_pct": -7.46,
+        "relative_to_sector_pct_point": 8.3,
+        "rank": 1,
+        "sample_size": 4,
+        "member_stock_ids": [
+          "1301",
+          "1303",
+          "1216",
+          "1101"
+        ],
+        "members": [
+          {
+            "stock_id": "1301",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 57.5,
+            "return_20d_pct": -12.3476,
+            "volatility_20d_pct": 3.1044,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1301\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "1303",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 189.0,
+            "return_20d_pct": -14.4796,
+            "volatility_20d_pct": 6.0746,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1303\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "1216",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 76.3,
+            "return_20d_pct": -3.4177,
+            "volatility_20d_pct": 1.6346,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1216\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "1101",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 24.05,
+            "return_20d_pct": 0.4175,
+            "volatility_20d_pct": 1.4242,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=1101\\year=2026\\current.parquet"
+            ]
+          }
+        ],
+        "interpretation_zh": "近 20 個交易日相對傳統產業中位數領先 8.30 個百分點；在 4 檔同期間樣本中排名第 1。這是歷史相對表現，不代表未來報酬。",
+        "source_name_zh": "各股票交易所價格資料"
       },
       "peers": {
         "status": "building",
-        "interpretation_zh": "同業名單、財務期間與估值口徑需要一致後才會開放比較，目前不顯示假排名。"
-      }
+        "group_name_zh": "同業群組待建立",
+        "sample_size": 0,
+        "interpretation_zh": "缺少同期間且商業模式可比較的同業資料，暫不顯示同業排名。"
+      },
+      "comparison_version": "SectorPeerComparison-v1.1"
     },
     "research_fit": {
       "lenses": [

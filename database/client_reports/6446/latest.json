@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-13T23:20:51+08:00",
+  "generated_at": "2026-08-14T15:03:29+08:00",
   "status": "success",
   "stock_id": "6446",
   "data_date": "2026-08-13",
@@ -3335,14 +3335,120 @@
         "interpretation_zh": "近 20 個交易日比大盤多 18.90 個百分點，代表同期表現相對強；不代表未來一定續強。"
       },
       "sector": {
-        "status": "building",
+        "status": "available",
         "industry_zh": "生技醫療業",
-        "interpretation_zh": "產業指數與同期基準尚未齊全，暫不製造排名。"
+        "comparison_window_zh": "近 20 個交易日",
+        "data_date": "2026-08-13",
+        "stock_return_pct": 14.6825,
+        "sector_median_return_pct": -2.03,
+        "sector_mean_return_pct": 2.66,
+        "relative_to_sector_pct_point": 16.71,
+        "rank": 1,
+        "sample_size": 3,
+        "member_stock_ids": [
+          "4105",
+          "6446",
+          "4743"
+        ],
+        "members": [
+          {
+            "stock_id": "4105",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 77.1,
+            "return_20d_pct": -2.033,
+            "volatility_20d_pct": 1.0831,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4105\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "6446",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 1445.0,
+            "return_20d_pct": 14.6825,
+            "volatility_20d_pct": 5.3078,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=6446\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "4743",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 47.95,
+            "return_20d_pct": -4.672,
+            "volatility_20d_pct": 3.3166,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=4743\\year=2026\\current.parquet"
+            ]
+          }
+        ],
+        "interpretation_zh": "近 20 個交易日相對生技醫療業中位數領先 16.71 個百分點；在 3 檔同期間樣本中排名第 1。這是歷史相對表現，不代表未來報酬。",
+        "source_name_zh": "各股票交易所價格資料"
       },
       "peers": {
-        "status": "building",
-        "interpretation_zh": "同業名單、財務期間與估值口徑需要一致後才會開放比較，目前不顯示假排名。"
-      }
+        "status": "available",
+        "group_name_zh": "生技製藥研究群組",
+        "comparison_note_zh": "新藥、學名藥與代理業務模式差異大，僅供市場表現參考，不做估值排名。",
+        "comparison_window_zh": "近 20 個交易日",
+        "data_date": "2026-08-13",
+        "stock_return_pct": 14.6825,
+        "peer_median_return_pct": -3.35,
+        "relative_to_peer_median_pct_point": 18.03,
+        "sample_size": 2,
+        "minimum_available_sample_size": 2,
+        "items": [
+          {
+            "stock_id": "4105",
+            "name_zh": "東洋",
+            "return_20d_pct": -2.033,
+            "relative_to_stock_pct_point": -16.72,
+            "data_date": "2026-08-13"
+          },
+          {
+            "stock_id": "4743",
+            "name_zh": "合一",
+            "return_20d_pct": -4.672,
+            "relative_to_stock_pct_point": -19.35,
+            "data_date": "2026-08-13"
+          }
+        ],
+        "interpretation_zh": "近 20 個交易日相對「生技製藥研究群組」中位數領先 18.03 個百分點。同業比較只反映同期價格表現，不等於公司品質或估值結論。",
+        "source_name_zh": "各股票交易所價格資料"
+      },
+      "comparison_version": "SectorPeerComparison-v1.1"
     },
     "research_fit": {
       "lenses": [

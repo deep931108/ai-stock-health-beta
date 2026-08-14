@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-13T23:20:38+08:00",
+  "generated_at": "2026-08-14T15:03:23+08:00",
   "status": "success",
   "stock_id": "2886",
   "data_date": "2026-08-13",
@@ -3236,14 +3236,178 @@
         "interpretation_zh": "近 20 個交易日比大盤多 2.61 個百分點，代表同期表現相對強；不代表未來一定續強。"
       },
       "sector": {
-        "status": "building",
+        "status": "available",
         "industry_zh": "金融保險業",
-        "interpretation_zh": "產業指數與同期基準尚未齊全，暫不製造排名。"
+        "comparison_window_zh": "近 20 個交易日",
+        "data_date": "2026-08-13",
+        "stock_return_pct": -1.6094,
+        "sector_median_return_pct": 2.8,
+        "sector_mean_return_pct": 3.18,
+        "relative_to_sector_pct_point": -4.41,
+        "rank": 5,
+        "sample_size": 5,
+        "member_stock_ids": [
+          "2881",
+          "2882",
+          "2891",
+          "2886",
+          "2884"
+        ],
+        "members": [
+          {
+            "stock_id": "2881",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 128.5,
+            "return_20d_pct": 2.8,
+            "volatility_20d_pct": 1.8787,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2881\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "2882",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 99.5,
+            "return_20d_pct": 2.261,
+            "volatility_20d_pct": 2.2396,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2882\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "2891",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 66.5,
+            "return_20d_pct": 5.5556,
+            "volatility_20d_pct": 1.3801,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2891\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "2886",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 45.85,
+            "return_20d_pct": -1.6094,
+            "volatility_20d_pct": 2.2379,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2886\\year=2026\\current.parquet"
+            ]
+          },
+          {
+            "stock_id": "2884",
+            "status": "available",
+            "data_date": "2026-08-13",
+            "stale_calendar_days": 1,
+            "close_latest": 37.3,
+            "return_20d_pct": 6.8768,
+            "volatility_20d_pct": 1.6258,
+            "data_source": "normalized/stock_price",
+            "source_paths": [
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2018\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2019\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2020\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2021\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2022\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2023\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2024\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2025\\current.parquet",
+              "data\\normalized\\stock_price\\market=TWSE\\symbol=2884\\year=2026\\current.parquet"
+            ]
+          }
+        ],
+        "interpretation_zh": "近 20 個交易日相對金融保險業中位數落後 4.41 個百分點；在 5 檔同期間樣本中排名第 5。這是歷史相對表現，不代表未來報酬。",
+        "source_name_zh": "各股票交易所價格資料"
       },
       "peers": {
-        "status": "building",
-        "interpretation_zh": "同業名單、財務期間與估值口徑需要一致後才會開放比較，目前不顯示假排名。"
-      }
+        "status": "available",
+        "group_name_zh": "金融控股同業",
+        "comparison_note_zh": "壽險與銀行比重不同，價格比較需搭配資本與獲利結構。",
+        "comparison_window_zh": "近 20 個交易日",
+        "data_date": "2026-08-13",
+        "stock_return_pct": -1.6094,
+        "peer_median_return_pct": 4.18,
+        "relative_to_peer_median_pct_point": -5.79,
+        "sample_size": 4,
+        "minimum_available_sample_size": 2,
+        "items": [
+          {
+            "stock_id": "2884",
+            "name_zh": "玉山金",
+            "return_20d_pct": 6.8768,
+            "relative_to_stock_pct_point": 8.49,
+            "data_date": "2026-08-13"
+          },
+          {
+            "stock_id": "2891",
+            "name_zh": "中信金",
+            "return_20d_pct": 5.5556,
+            "relative_to_stock_pct_point": 7.17,
+            "data_date": "2026-08-13"
+          },
+          {
+            "stock_id": "2881",
+            "name_zh": "富邦金",
+            "return_20d_pct": 2.8,
+            "relative_to_stock_pct_point": 4.41,
+            "data_date": "2026-08-13"
+          },
+          {
+            "stock_id": "2882",
+            "name_zh": "國泰金",
+            "return_20d_pct": 2.261,
+            "relative_to_stock_pct_point": 3.87,
+            "data_date": "2026-08-13"
+          }
+        ],
+        "interpretation_zh": "近 20 個交易日相對「金融控股同業」中位數落後 5.79 個百分點。同業比較只反映同期價格表現，不等於公司品質或估值結論。",
+        "source_name_zh": "各股票交易所價格資料"
+      },
+      "comparison_version": "SectorPeerComparison-v1.1"
     },
     "research_fit": {
       "lenses": [
