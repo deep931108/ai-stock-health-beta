@@ -119,6 +119,7 @@ class ClientReportRepository:
             "data_sources": self._normalize_sources(payload.get("data_sources")),
             "today_changes": self._normalize_today_changes(payload.get("today_changes"), stock_id),
             "market_home_summary": self._normalize_market_home_summary(payload.get("market_home_summary")),
+            "upcoming_events": self._normalize_upcoming_events(payload.get("upcoming_events"), stock_id),
             "investment_research": self._normalize_investment_research(payload.get("investment_research")),
             "notices": notices,
             "disclaimer": payload.get("disclaimer_zh") or "本服務僅供資料整理與研究輔助，不構成投資建議。",
@@ -135,6 +136,26 @@ class ClientReportRepository:
                 "history": [],
             }
         return json.loads(json.dumps(raw, ensure_ascii=False, default=str))
+
+    @staticmethod
+    def _normalize_upcoming_events(raw: Any, stock_id: str) -> dict[str, Any]:
+        """Pass through only verified, engine-owned future event rows."""
+        if not isinstance(raw, dict):
+            return {
+                "version": "UpcomingEvents-v1.0", "status": "unavailable",
+                "stock_id": str(stock_id), "events": [], "event_count": 0,
+                "message_zh": "官方預定事件資料尚未建立，不顯示推測日期。",
+                "score_policy": {"affects_health_score": False, "mode": "context_only"},
+            }
+        detached = json.loads(json.dumps(raw, ensure_ascii=False, default=str))
+        detached["events"] = [
+            item for item in detached.get("events", [])
+            if isinstance(item, dict)
+            and item.get("verified") is True
+            and item.get("affects_health_score") is False
+        ]
+        detached["event_count"] = len(detached["events"])
+        return detached
 
     @staticmethod
     def _normalize_investment_research(raw: Any) -> dict[str, Any]:

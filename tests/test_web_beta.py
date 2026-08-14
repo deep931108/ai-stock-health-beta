@@ -41,6 +41,8 @@ def test_evidence_history_and_sources_are_exposed_to_customer() -> None:
     assert isinstance(report["score_history"], list)
     assert isinstance(report["data_sources"], list)
     assert "investment_research" in report
+    assert report["upcoming_events"]["version"] == "UpcomingEvents-v1.0"
+    assert report["upcoming_events"]["score_policy"]["affects_health_score"] is False
 
 
 def test_evidence_frontend_contains_chart_and_source_sections() -> None:
@@ -54,8 +56,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=2.5.1' in html
-    assert 'app.js?v=2.5.1' in html
+    assert 'evidence.css?v=2.9.0' in html
+    assert 'home.css?v=2.9.0' in html
+    assert 'app.js?v=2.9.0' in html
     assert 'id="todayChangesGrid"' in html
     assert "function renderTodayChanges" in js
     assert 'class="today-change-explain"' in js
@@ -102,6 +105,37 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert '單一同業參考' in js
     assert 'class="comparison-values"' in js
     assert '單期 EPS 參考比值' in js
+    assert 'id="dailyConclusionTitle"' in html
+    assert 'id="todayDigest"' in html
+    assert 'id="watchlistPreview"' in html
+    assert 'id="futureEvents"' in html
+    assert 'id="futureEventsStatus"' in html
+    assert "function renderUpcomingEvents" in js
+    assert "function allUpcomingEvents" in js
+    assert "UpcomingEvents-v1.0" in js
+    assert "查看官方資料 ↗" in js
+    assert "affects_health_score !== false" in js
+    assert 'data-tab="events"' in html
+    assert 'data-tab="explore"' in html
+    assert "function renderHomeDashboard" in js
+    assert "function homeDirection" in js
+    assert 'id="homePage"' in html
+    assert 'id="watchlistPage"' in html
+    assert 'id="eventsPage"' in html
+    assert 'id="profilePage"' in html
+    assert 'id="exploreSearch"' in html
+    assert 'id="exploreSort"' in html
+    assert "function switchPage" in js
+    assert "function renderWatchlistPage" in js
+    assert "function renderEventsPage" in js
+    assert "function renderProfilePage" in js
+    assert "function allResearchEvents" in js
+    assert 'evidence.css?v=2.9.0' in html
+    assert 'home.css?v=2.9.0' in html
+    assert 'app.js?v=2.9.0' in html
+    assert "function reportNetImpact" in js
+    assert "function categoryLabel" in js
+    assert "function scoreSparkline" in js
 
 
 def test_invite_gate_activation_and_logout(tmp_path: Path, monkeypatch) -> None:
@@ -182,6 +216,27 @@ def test_today_change_cards_keep_questions_and_use_dated_official_links(tmp_path
     assert events[0]["source_url"].endswith("/company/stock.html?code=2330")
     assert events[1]["source_url"].endswith("/company/investors.html?code=2330")
     assert len(events) == 2
+
+
+def test_upcoming_event_adapter_only_keeps_verified_non_scoring_events(tmp_path: Path) -> None:
+    target = tmp_path / "database" / "client_reports" / "2330"
+    target.mkdir(parents=True)
+    source = Path(__file__).parents[1] / "sample_reports" / "2330.json"
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    payload["upcoming_events"] = {
+        "version": "UpcomingEvents-v1.0", "status": "available",
+        "score_policy": {"affects_health_score": False, "mode": "context_only"},
+        "events": [
+            {"event_id": "safe", "verified": True, "affects_health_score": False},
+            {"event_id": "guess", "verified": False, "affects_health_score": False},
+            {"event_id": "scored", "verified": True, "affects_health_score": True},
+        ],
+    }
+    (target / "latest.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    report = ClientReportRepository(tmp_path, source.parent).load("2330")
+    assert report is not None
+    assert [item["event_id"] for item in report["upcoming_events"]["events"]] == ["safe"]
+    assert report["upcoming_events"]["event_count"] == 1
 
 
 

@@ -1,4 +1,4 @@
-const $ = (id) => document.getElementById(id);
+﻿const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
 let currentReport = null;
 let available = [];
@@ -653,7 +653,16 @@ function scoreSparkline(report) {
 }
 
 function marketHomeSummary() {
-  return stockCatalog.map((report) => report.market_home_summary).find((item) => item && item.version === "MarketHomeSummary-v1.0") || null;
+  const summaries = stockCatalog
+    .map((report) => report.market_home_summary)
+    .filter((item) => item && item.version === "MarketHomeSummary-v1.0");
+
+  return (
+    summaries.find((item) => item.status === "available") ||
+    summaries.find((item) => item.status === "stale") ||
+    summaries[0] ||
+    null
+  );
 }
 
 function renderMarketHomeSummary() {
@@ -680,11 +689,62 @@ function renderMarketHomeSummary() {
   $("marketPreview").innerHTML = `<polyline class="${tone}" points="${points}"></polyline>`;
 }
 
+function allUpcomingEvents() {
+  const unique = new Map();
+  stockCatalog.forEach((report) => {
+    const block = report?.upcoming_events;
+    if (!block || block.version !== "UpcomingEvents-v1.0") return;
+    (Array.isArray(block.events) ? block.events : []).forEach((event) => {
+      if (!event?.verified || event.affects_health_score !== false) return;
+      const key = event.event_id || `${event.stock_id}:${event.event_type}:${event.event_date}`;
+      unique.set(key, {...event, stock_id:event.stock_id || report.id, stock_name:event.stock_name || report.name});
+    });
+  });
+  return Array.from(unique.values()).sort((a, b) => String(a.event_date).localeCompare(String(b.event_date)) || String(a.stock_id).localeCompare(String(b.stock_id)));
+}
+
+function formatEventDate(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ""));
+  if (!match) return "日期待確認";
+  const weekday = ["日", "一", "二", "三", "四", "五", "六"];
+  const parsed = new Date(`${value}T12:00:00`);
+  return `${Number(match[2])}/${Number(match[3])}（${weekday[parsed.getDay()]}）`;
+}
+
+function upcomingEventLabel(type) {
+  return ({ex_dividend:"除息", ex_right:"除權", ex_right_dividend:"除權息", shareholder_meeting:"股東會"})[type] || "公司日程";
+}
+
+function renderUpcomingEvents() {
+  const contracts = stockCatalog.map((report) => report?.upcoming_events).filter((block) => block?.version === "UpcomingEvents-v1.0");
+  const events = allUpcomingEvents();
+  const status = $("futureEventsStatus");
+  if (events.length) {
+    status.textContent = `${events.length} 項已確認`;
+    $("futureEvents").innerHTML = events.slice(0, 4).map((event) => `<article class="warm-card future-event-card">
+      <button type="button" data-home-stock="${escapeHtml(event.stock_id)}">
+        <time datetime="${escapeHtml(event.event_date)}">${escapeHtml(formatEventDate(event.event_date))}</time>
+        <span class="future-event-type">${escapeHtml(upcomingEventLabel(event.event_type))}</span>
+        <h3>${escapeHtml(event.title_zh || `${event.stock_name} 重要日程`)}</h3>
+        <p>${escapeHtml(event.beginner_explanation_zh || "日期本身不是買賣訊號，請查看官方內容後再判斷。")}</p>
+        <small>${escapeHtml(event.stock_name || "")} ${escapeHtml(event.stock_id || "")}</small>
+      </button>
+      ${event.source_url ? `<a href="${escapeHtml(event.source_url)}" target="_blank" rel="noopener noreferrer">查看官方資料 ↗</a>` : ""}
+    </article>`).join("");
+    document.querySelectorAll("#futureEvents [data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
+    return;
+  }
+  const ready = contracts.some((block) => block.status === "empty" || block.status === "available");
+  status.textContent = ready ? "已完成檢查" : "資料建立中";
+  $("futureEvents").innerHTML = `<article class="warm-card event-placeholder"><time>${ready ? "未來 7 天" : "尚未建立"}</time><span>${ready ? "沒有已確認的官方事件" : "官方預定事件資料尚未接入"}</span><p>${ready ? "目前不需要因為預定日程採取動作；系統每日更新後會重新檢查。" : "不顯示推測日期，完成官方來源更新後會自動出現。"}</p></article>`;
+}
+
 function renderHomeDashboard() {
   $("homeDate").textContent = formatHomeDate();
   const updates = stockCatalog.map((report) => report.updated).filter((value) => value && value !== "—").sort();
   $("homeLastUpdated").textContent = updates.length ? `資料 ${updates.at(-1)}` : "等待更新";
   renderMarketHomeSummary();
+  renderUpcomingEvents();
 
   const digestRows = stockCatalog.filter((report) => reportEvents(report).length)
     .sort((a, b) => Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)) || reportEvents(b).length - reportEvents(a).length).slice(0, 3);
@@ -856,3 +916,4 @@ $("homeDate").textContent = formatHomeDate();
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
 initializeBetaAccess();
+
