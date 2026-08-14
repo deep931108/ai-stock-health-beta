@@ -7,6 +7,12 @@ let activeSector = "全部";
 let watchlistOnly = false;
 let homeScrollPosition = 0;
 let betaSession = null;
+let activePage = "home";
+let detailOriginPage = "home";
+let watchlistFilter = "all";
+let eventFilter = "all";
+let exploreQuery = "";
+let exploreSort = "default";
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -99,12 +105,15 @@ async function initializeBetaAccess() {
 
 function showDetailView() {
   if (!$("homeView").classList.contains("hidden")) homeScrollPosition = window.scrollY;
+  detailOriginPage = activePage;
+  document.body.classList.remove("home-mode");
   $("homeView").classList.add("hidden");
   $("detailNavigation").classList.remove("hidden");
   window.scrollTo({top: 0});
 }
 
 function showHomeView({restoreScroll = true} = {}) {
+  document.body.classList.add("home-mode");
   $("homeView").classList.remove("hidden");
   $("detailNavigation").classList.add("hidden");
   $("loadingCard").classList.add("hidden");
@@ -112,7 +121,21 @@ function showHomeView({restoreScroll = true} = {}) {
   $("reportContent").classList.add("hidden");
   $("saveButton").classList.add("hidden");
   renderStockCenter();
+  switchPage(activePage, {scroll:false});
   if (restoreScroll) window.requestAnimationFrame(() => window.scrollTo({top: homeScrollPosition, behavior:"smooth"}));
+}
+
+function switchPage(page, {scroll = true} = {}) {
+  const target = document.querySelector(`[data-page="${page}"]`);
+  if (!target) return;
+  activePage = page;
+  document.querySelectorAll(".app-page").forEach((section) => section.classList.toggle("active", section === target));
+  document.querySelectorAll(".mobile-nav button").forEach((button) => button.classList.toggle("active", button.dataset.tab === page));
+  if (page === "watchlist") renderWatchlistPage();
+  if (page === "events") renderEventsPage();
+  if (page === "explore") renderStockCenter();
+  if (page === "about") renderProfilePage();
+  if (scroll) window.scrollTo({top:0, behavior:"smooth"});
 }
 
 function levelTone(score) {
@@ -526,7 +549,14 @@ function renderSectorFilters() {
 
 function renderStockCenter() {
   const saved = new Set(watchlist());
-  const rows = stockCatalog.filter((item) => (activeSector === "全部" || item.sector === activeSector) && (!watchlistOnly || saved.has(item.id)));
+  const query = exploreQuery.trim().toLowerCase();
+  const riskOrder = (item) => Number(item.risk || 0);
+  const rows = stockCatalog.filter((item) => (activeSector === "全部" || item.sector === activeSector)
+    && (!watchlistOnly || saved.has(item.id))
+    && (!query || item.id.includes(query) || String(item.name).toLowerCase().includes(query) || String(item.industry).toLowerCase().includes(query)))
+    .sort((a, b) => exploreSort === "score-desc" ? Number(b.score) - Number(a.score)
+      : exploreSort === "score-asc" ? Number(a.score) - Number(b.score)
+      : exploreSort === "risk" ? riskOrder(b) - riskOrder(a) : 0);
   $("stockCenterCount").textContent = rows.length;
   $("watchlistCount").textContent = saved.size;
   $("watchlistOnlyButton").classList.toggle("active", watchlistOnly);
@@ -569,6 +599,186 @@ function renderStockCenter() {
 function refreshWatchlistUI() {
   refreshSavedButton();
   renderStockCenter();
+  renderHomeDashboard();
+  renderWatchlistPage();
+  renderProfilePage();
+}
+
+function formatHomeDate(value = new Date()) {
+  return new Intl.DateTimeFormat("zh-TW", {month:"long", day:"numeric", weekday:"long"}).format(value);
+}
+
+function reportEvents(report) {
+  const events = report?.today_changes?.events;
+  return Array.isArray(events) ? events : [];
+}
+
+function scoreChange(report) {
+  const history = Array.isArray(report?.score_history) ? report.score_history : [];
+  if (history.length < 2) return null;
+  const current = Number(history.at(-1)?.score);
+  const previous = Number(history.at(-2)?.score);
+  return Number.isFinite(current) && Number.isFinite(previous) ? current - previous : null;
+}
+
+function homeDirection(report) {
+  const net = reportEvents(report).reduce((total, item) => total + Number(item.score_impact || item.impact || 0), 0);
+  if (net > 0.05) return {label:"正向", tone:"positive", arrow:"↑"};
+  if (net < -0.05) return {label:"注意", tone:"negative", arrow:"↓"};
+  return {label:"持續追蹤", tone:"neutral", arrow:"→"};
+}
+
+function reportNetImpact(report) {
+  return reportEvents(report).reduce((total, item) => total + Number(item.score_impact || item.impact || 0), 0);
+}
+
+function categoryLabel(value) {
+  const labels = {financial:"財務表現", technical:"技術走勢", institutional:"法人籌碼", market:"市場環境", news:"新聞消息"};
+  return labels[String(value || "").toLowerCase()] || value || "研究資料";
+}
+
+function latestPrice(report) {
+  const metrics = report?.investment_research?.valuation?.metrics || [];
+  const item = metrics.find((metric) => /最新收盤|股價/.test(metric.label_zh || ""));
+  return Number.isFinite(Number(item?.value)) ? Number(item.value) : null;
+}
+
+function scoreSparkline(report) {
+  const points = (Array.isArray(report?.score_history) ? report.score_history : []).map((item) => Number(item.score)).filter(Number.isFinite).slice(-8);
+  if (points.length < 2) return `<span class="mini-trend-empty">趨勢建立中</span>`;
+  const min = Math.min(...points), max = Math.max(...points), range = Math.max(max - min, 1);
+  const coordinates = points.map((value, index) => `${(index / (points.length - 1) * 100).toFixed(1)},${(28 - ((value - min) / range * 24)).toFixed(1)}`).join(" ");
+  const tone = points.at(-1) >= points[0] ? "positive" : "negative";
+  return `<svg class="mini-trend ${tone}" viewBox="0 0 100 32" role="img" aria-label="近期健康分數趨勢"><polyline points="${coordinates}"></polyline></svg>`;
+}
+
+function marketHomeSummary() {
+  return stockCatalog.map((report) => report.market_home_summary).find((item) => item && item.version === "MarketHomeSummary-v1.0") || null;
+}
+
+function renderMarketHomeSummary() {
+  const market = marketHomeSummary();
+  const available = market?.status === "available";
+  const stale = market?.status === "stale";
+  $("dailyConclusionTitle").textContent = market?.headline_zh || "市場資料正在建立";
+  $("dailyConclusionCopy").textContent = market?.summary_zh || "大盤指數與市場風險尚未接入首頁合約；目前不顯示推測數字。";
+  $("marketDataStatus").textContent = available ? "官方資料" : stale ? "資料需更新" : "資料建立中";
+  $("marketDataStatus").classList.toggle("stale", stale);
+  $("marketIndexValue").textContent = Number.isFinite(Number(market?.close)) ? Number(market.close).toLocaleString("zh-TW", {maximumFractionDigits:2}) : "—";
+  const change = Number(market?.daily_change_pct);
+  $("marketIndexChange").textContent = Number.isFinite(change) ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}%` : "等待可比較交易日";
+  $("marketIndexChange").className = Number.isFinite(change) ? (change >= 0 ? "positive" : "negative") : "";
+  $("marketRiskValue").textContent = market?.risk_level_zh || "尚未評估";
+  $("marketRiskNote").textContent = market?.market_regime_zh ? `市場趨勢 ${market.market_regime_zh}` : "不使用個股資料代替";
+  $("marketConfidenceValue").textContent = available ? ({high:"高", medium:"中", low:"低"}[market.confidence] || "可用") : stale ? "過期" : "建立中";
+  $("marketDataDate").textContent = market?.data_date ? `資料 ${market.data_date}` : "完成後自動更新";
+  const values = (Array.isArray(market?.history) ? market.history : []).map((item) => Number(item.close)).filter(Number.isFinite).slice(-20);
+  if (values.length < 2) { $("marketPreview").innerHTML = ""; return; }
+  const min = Math.min(...values), max = Math.max(...values), range = Math.max(max - min, 1);
+  const points = values.map((value, index) => `${(index / (values.length - 1) * 266 + 2).toFixed(1)},${(70 - ((value - min) / range * 62)).toFixed(1)}`).join(" ");
+  const tone = values.at(-1) >= values[0] ? "positive" : "negative";
+  $("marketPreview").innerHTML = `<polyline class="${tone}" points="${points}"></polyline>`;
+}
+
+function renderHomeDashboard() {
+  $("homeDate").textContent = formatHomeDate();
+  const updates = stockCatalog.map((report) => report.updated).filter((value) => value && value !== "—").sort();
+  $("homeLastUpdated").textContent = updates.length ? `資料 ${updates.at(-1)}` : "等待更新";
+  renderMarketHomeSummary();
+
+  const digestRows = stockCatalog.filter((report) => reportEvents(report).length)
+    .sort((a, b) => Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)) || reportEvents(b).length - reportEvents(a).length).slice(0, 3);
+  $("todayDigest").innerHTML = digestRows.length ? digestRows.map((report) => {
+    const direction = homeDirection(report);
+    const event = reportEvents(report)[0] || {};
+    return `<button class="digest-row" type="button" data-home-stock="${report.id}">
+      <span class="digest-icon">${escapeHtml(sectorName(report.industry).slice(0, 1))}</span>
+      <span class="digest-copy"><b>${escapeHtml(report.name)} <small>${report.id}</small></b><em>${escapeHtml(event.title_zh || event.title || `${reportEvents(report).length} 項研究變化`)}</em></span>
+      <span class="digest-tag">${reportEvents(report).length} 項</span>
+      <span class="digest-direction ${direction.tone}">${direction.arrow} ${direction.label}</span>
+      <span class="digest-confidence">信心 ${Math.round(Number(report.confidence || 0))}%</span><span class="digest-arrow">›</span>
+    </button>`;
+  }).join("") : `<p class="home-empty">目前沒有可顯示的今日變化；報告更新後會自動出現在這裡。</p>`;
+
+  const saved = new Set(watchlist());
+  const savedReports = stockCatalog.filter((report) => saved.has(report.id)).slice(0, 4);
+  $("homeWatchlistNotice").textContent = savedReports.length ? `${savedReports.length} 檔自選` : "尚未加入";
+  $("watchlistPreview").innerHTML = savedReports.length ? savedReports.map((report) => {
+    const delta = scoreChange(report);
+    return `<button class="watch-preview-card warm-card" type="button" data-home-stock="${report.id}">
+      <span><b>${escapeHtml(report.name)}</b><small>${report.id}</small></span><strong>${Number(report.score).toFixed(1)}</strong><em>健康分數</em>
+      <i class="${delta == null ? "neutral" : delta >= 0 ? "positive" : "negative"}">${delta == null ? "等待第二個日期" : `${delta >= 0 ? "↑" : "↓"} ${Math.abs(delta).toFixed(1)} 分`}</i>
+    </button>`;
+  }).join("") : `<div class="warm-card home-empty">加入自選股後，這裡會顯示健康分數與最新變化。</div>`;
+
+  document.querySelectorAll("[data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
+  renderProfilePage();
+}
+
+function watchlistCard(report) {
+  const delta = scoreChange(report);
+  const direction = homeDirection(report);
+  const price = latestPrice(report);
+  return `<article class="watchlist-detail-card warm-card">
+    <button type="button" data-home-stock="${report.id}" aria-label="查看 ${escapeHtml(report.name)}">
+      <div><span class="watch-stock-name"><b>${escapeHtml(report.name)}</b><small>${report.id} · ${escapeHtml(report.industry)}</small></span><strong>${Number(report.score).toFixed(1)}</strong></div>
+      <p>${escapeHtml(report.summary || "持續追蹤最新研究變化。")}</p>
+      <div class="watch-price-row"><span>${price == null ? "最新股價待補" : `最新股價 ${price.toLocaleString("zh-TW")} 元`}</span>${scoreSparkline(report)}</div>
+      <dl><div><dt>健康變化</dt><dd class="${delta == null ? "neutral" : delta >= 0 ? "positive" : "negative"}">${delta == null ? "基準建立中" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} 分`}</dd></div><div><dt>風險</dt><dd>${escapeHtml(report.risk_level || "待確認")}</dd></div><div><dt>今日事件</dt><dd>${reportEvents(report).length} 項</dd></div></dl>
+      <span class="watch-card-state ${direction.tone}">${direction.arrow} ${direction.label}</span>
+    </button><button type="button" class="remove-watch" data-remove-watch="${report.id}">移出自選</button>
+  </article>`;
+}
+
+function renderWatchlistPage() {
+  const saved = new Set(watchlist());
+  let rows = stockCatalog.filter((report) => saved.has(report.id));
+  if (watchlistFilter === "changed") rows = rows.filter((report) => reportEvents(report).length > 0);
+  if (watchlistFilter === "risk") rows = rows.filter((report) => Number(report.risk || 0) >= 50 || /高/.test(report.risk_level || ""));
+  if (watchlistFilter === "down") rows = rows.filter((report) => Number(scoreChange(report)) < 0);
+  $("watchlistPageSummary").innerHTML = `<div><span>自選總數</span><b>${saved.size} 檔</b></div><div><span>今日有變化</span><b>${stockCatalog.filter((report) => saved.has(report.id) && reportEvents(report).length).length} 檔</b></div><div><span>需要注意</span><b>${stockCatalog.filter((report) => saved.has(report.id) && homeDirection(report).tone === "negative").length} 檔</b></div>`;
+  $("watchlistPageGrid").innerHTML = rows.map(watchlistCard).join("");
+  $("watchlistPageEmpty").classList.toggle("hidden", rows.length > 0);
+  document.querySelectorAll("#watchlistPage [data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
+  document.querySelectorAll("[data-remove-watch]").forEach((button) => button.addEventListener("click", () => {
+    saveWatchlist(watchlist().filter((id) => id !== button.dataset.removeWatch));
+    showToast("已移出自選");
+  }));
+}
+
+function allResearchEvents() {
+  return stockCatalog.flatMap((report) => reportEvents(report).map((event) => ({...event, stock_id:report.id, stock_name:report.name, report})));
+}
+
+function eventTone(event) {
+  const impact = Number(event.score_impact || event.impact || 0);
+  return impact > 0 ? "positive" : impact < 0 ? "negative" : "neutral";
+}
+
+function renderEventsPage() {
+  const saved = new Set(watchlist());
+  let rows = allResearchEvents();
+  if (eventFilter === "positive" || eventFilter === "negative") rows = rows.filter((event) => eventTone(event) === eventFilter);
+  if (eventFilter === "watchlist") rows = rows.filter((event) => saved.has(event.stock_id));
+  rows.sort((a, b) => Math.abs(Number(b.score_impact || b.impact || 0)) - Math.abs(Number(a.score_impact || a.impact || 0)));
+  $("eventsPageList").innerHTML = rows.slice(0, 80).map((event) => {
+    const tone = eventTone(event);
+    const impact = Number(event.score_impact || event.impact || 0);
+    const title = event.title_zh || event.title || event.what_happened || "研究事件";
+    const explanation = event.beginner_explanation_zh || event.explanation_zh || event.meaning || event.reason || "點入股票查看完整證據。";
+    return `<article class="event-list-card warm-card ${tone}"><button type="button" data-home-stock="${event.stock_id}"><span class="event-stock">${escapeHtml(event.stock_name)} <small>${event.stock_id}</small></span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(explanation)}</p><div class="event-card-meta"><span>${escapeHtml(event.category_zh || categoryLabel(event.category))}</span><b>${impact ? `${impact > 0 ? "+" : ""}${impact.toFixed(2)} 分` : "持續追蹤"}</b></div></button>${event.source_url ? `<a href="${escapeHtml(event.source_url)}" target="_blank" rel="noopener noreferrer">查看來源 ↗</a>` : ""}</article>`;
+  }).join("");
+  $("eventsPageEmpty").classList.toggle("hidden", rows.length > 0);
+  document.querySelectorAll("#eventsPage [data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
+}
+
+function renderProfilePage() {
+  if (!$("profileTesterCode")) return;
+  $("profileTesterCode").textContent = betaSession?.tester_code || "本機擁有者";
+  $("profileWatchlistCount").textContent = `${watchlist().length} 檔`;
+  $("profileReportCount").textContent = `${stockCatalog.length} 份`;
+  const updates = stockCatalog.map((report) => report.updated).filter((value) => value && value !== "—").sort();
+  $("profileUpdatedAt").textContent = updates.length ? `最新資料 ${updates.at(-1)}` : "等待報告更新";
 }
 
 function showToast(message) {
@@ -600,6 +810,10 @@ async function loadAvailable() {
     $("stockCenterLoading").classList.add("hidden");
     renderSectorFilters();
     renderStockCenter();
+    renderHomeDashboard();
+    renderWatchlistPage();
+    renderEventsPage();
+    renderProfilePage();
   } catch {
     $("formHint").textContent = "可先試用 2330、2891";
     $("stockCenterLoading").textContent = "股票中心目前無法讀取，請稍後重新整理。";
@@ -609,9 +823,20 @@ async function loadAvailable() {
 $("searchForm").addEventListener("submit", (event) => { event.preventDefault(); loadStock($("stockSearch").value.trim()); });
 $("retryButton").addEventListener("click", () => loadStock($("stockSearch").value.trim()));
 $("saveButton").addEventListener("click", toggleSaved);
-$("backToCenterButton").addEventListener("click", () => showHomeView());
-$("brandHomeLink").addEventListener("click", (event) => { event.preventDefault(); showHomeView({restoreScroll:false}); window.scrollTo({top:0, behavior:"smooth"}); });
+$("backToCenterButton").addEventListener("click", () => { activePage = detailOriginPage; showHomeView({restoreScroll:false}); });
+$("brandHomeLink").addEventListener("click", (event) => { event.preventDefault(); activePage = "home"; showHomeView({restoreScroll:false}); window.scrollTo({top:0, behavior:"smooth"}); });
 $("watchlistOnlyButton").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockCenter(); });
+$("viewAllChanges").addEventListener("click", () => switchPage("events"));
+$("viewWatchlist").addEventListener("click", () => switchPage("watchlist"));
+$("addWatchlistStock").addEventListener("click", () => switchPage("explore"));
+$("exploreSearch").addEventListener("input", (event) => { exploreQuery = event.target.value; renderStockCenter(); });
+$("exploreSort").addEventListener("change", (event) => { exploreSort = event.target.value; renderStockCenter(); });
+document.querySelectorAll("[data-watch-filter]").forEach((button) => button.addEventListener("click", () => { watchlistFilter = button.dataset.watchFilter; document.querySelectorAll("[data-watch-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderWatchlistPage(); }));
+document.querySelectorAll("[data-event-filter]").forEach((button) => button.addEventListener("click", () => { eventFilter = button.dataset.eventFilter; document.querySelectorAll("[data-event-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderEventsPage(); }));
+document.querySelector(".notification-button").addEventListener("click", () => showToast("通知中心將在事件資料完成後開放"));
+$("profileFeedback").addEventListener("click", () => showToast("Beta 回饋表單將在下一階段接入"));
+$("profileDataSources").addEventListener("click", () => showToast("請進入個股報告查看各項原始資料來源"));
+$("profileLogout").addEventListener("click", () => betaSession?.invite_required ? logoutBeta() : showToast("本機擁有者模式不需要登出"));
 $("inviteForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const code = $("inviteCode").value.trim().toUpperCase();
@@ -623,11 +848,11 @@ $("inviteForm").addEventListener("submit", (event) => {
 });
 $("logoutButton").addEventListener("click", logoutBeta);
 document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEventListener("click", () => {
-  document.querySelectorAll(".mobile-nav button").forEach((item) => item.classList.toggle("active", item === button));
-  if (button.dataset.tab === "watchlist") { watchlistOnly = true; showHomeView({restoreScroll:false}); $("stockCenter").scrollIntoView({behavior:"smooth"}); }
-  if (button.dataset.tab === "about") document.querySelector(".explain-card").scrollIntoView({behavior: "smooth"});
-  if (button.dataset.tab === "home") { watchlistOnly = false; showHomeView({restoreScroll:false}); window.scrollTo({top: 0, behavior: "smooth"}); }
+  showHomeView({restoreScroll:false});
+  switchPage(button.dataset.tab);
 }));
+
+$("homeDate").textContent = formatHomeDate();
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
 initializeBetaAccess();

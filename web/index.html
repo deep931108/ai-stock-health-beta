@@ -8,10 +8,11 @@
   <link rel="manifest" href="/assets/manifest.webmanifest">
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/styles.css">
-  <link rel="stylesheet" href="/assets/evidence.css?v=2.5.1">
+  <link rel="stylesheet" href="/assets/evidence.css?v=2.8.0">
+  <link rel="stylesheet" href="/assets/home.css?v=2.8.0">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
-<body class="auth-pending">
+<body class="auth-pending home-mode">
   <section id="inviteGate" class="invite-gate" aria-labelledby="inviteTitle">
     <div class="invite-card">
       <span class="invite-mark">A</span>
@@ -30,11 +31,13 @@
   </section>
   <main class="site-shell">
     <header class="topbar">
-      <a id="brandHomeLink" class="brand" href="#top" aria-label="返回 AI 股票健康首頁">
-        <span class="brand-mark">A</span>
-        <span><b>AI 股票健康</b><small>研究輔助 Beta</small></span>
+      <a id="brandHomeLink" class="brand" href="#top" aria-label="返回 AI Stock Terminal 首頁">
+        <span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><b>AI Stock Terminal</b><small>Evidence Research</small></span>
       </a>
+      <div class="market-session"><i></i><span>盤後</span><small id="homeLastUpdated">等待更新</small></div>
       <div class="account-actions">
+        <button class="notification-button" type="button" aria-label="通知功能建立中">♧<i></i></button>
         <span id="testerBadge" class="tester-badge hidden"></span>
         <button id="logoutButton" class="logout-button hidden" type="button">登出／更換邀請碼</button>
         <button id="saveButton" class="save-button hidden" type="button">☆ 加入自選</button>
@@ -42,12 +45,13 @@
     </header>
 
     <div id="homeView">
-    <section id="top" class="intro">
-      <p class="eyebrow">每天，用更清楚的方式理解股票</p>
-      <h1>先看健康，<br>再看機會。</h1>
-      <p>整合財務、技術、籌碼、市場與新聞，提供一致、可追蹤的研究摘要。</p>
+    <div id="homePage" class="app-page active" data-page="home">
+    <section id="top" class="intro home-intro">
+      <p id="homeDate" class="home-date">今天</p>
+      <h1>早安，今天先看重點。</h1>
+      <p>用幾分鐘掌握市場、自選股與需要繼續追蹤的變化。</p>
       <form id="searchForm" class="search">
-        <label for="stockSearch">輸入台股代號</label>
+        <label for="stockSearch">搜尋股票</label>
         <div>
           <input id="stockSearch" inputmode="numeric" pattern="[0-9]*" value="2330" maxlength="4" placeholder="例如 2330" autocomplete="off">
           <button id="searchButton" type="submit">查看健康</button>
@@ -56,11 +60,60 @@
       </form>
     </section>
 
-    <section id="stockCenter" class="stock-center-section" aria-labelledby="stockCenterTitle">
+    <section class="daily-conclusion warm-card" aria-labelledby="dailyConclusionTitle">
+      <div class="home-card-heading"><div><span>每日結論</span><h2 id="dailyConclusionTitle">市場資料正在建立</h2></div><span id="marketDataStatus" class="data-status">資料建立中</span></div>
+      <p id="dailyConclusionCopy">大盤指數與市場風險尚未接入首頁合約；目前不顯示推測數字。</p>
+      <svg id="marketPreview" class="market-preview" viewBox="0 0 270 75" role="img" aria-label="加權指數近期走勢"></svg>
+      <div class="daily-metrics">
+        <article><span>加權指數</span><b id="marketIndexValue">—</b><small id="marketIndexChange">等待大盤資料</small></article>
+        <article><span>市場風險</span><b id="marketRiskValue">尚未評估</b><small id="marketRiskNote">不使用個股資料代替</small></article>
+        <article><span>資料狀態</span><b id="marketConfidenceValue">建立中</b><small id="marketDataDate">完成後自動更新</small></article>
+      </div>
+    </section>
+
+    <section class="home-section" aria-labelledby="todayDigestTitle">
+      <div class="home-section-heading"><div><span>今日摘要</span><h2 id="todayDigestTitle">今天有哪些股票值得注意？</h2></div><button id="viewAllChanges" type="button">查看全部 ›</button></div>
+      <div id="todayDigest" class="digest-card warm-card"><p class="home-empty">正在整理今日研究報告…</p></div>
+    </section>
+
+    <section class="home-section" aria-labelledby="watchlistPreviewTitle">
+      <div class="home-section-heading"><div><span>你的自選股</span><h2 id="watchlistPreviewTitle">快速掌握自選變化</h2></div><button id="viewWatchlist" type="button"><span id="homeWatchlistNotice">尚未加入</span> ›</button></div>
+      <div id="watchlistPreview" class="watchlist-preview"><div class="warm-card home-empty">加入自選股後，這裡會顯示健康分數與最新變化。</div></div>
+    </section>
+
+    <section class="home-section" aria-labelledby="futureEventsTitle">
+      <div class="home-section-heading"><div><span>未來 7 天</span><h2 id="futureEventsTitle">接下來要留意什麼？</h2></div><span class="data-status">資料建立中</span></div>
+      <div id="futureEvents" class="future-events">
+        <article class="warm-card event-placeholder"><time>待更新</time><span>事件資料尚未接入</span><p>完成正式事件來源後，將顯示法說會、財報、股東會及重要政策日程。</p></article>
+      </div>
+    </section>
+    </div>
+
+    <section id="watchlistPage" class="app-page shell-page" data-page="watchlist" aria-labelledby="watchlistPageTitle">
+      <div class="shell-page-heading"><div><span>你的自選</span><h1 id="watchlistPageTitle">每天只看真正關心的股票</h1><p>健康分數、風險與最新變化集中在這裡。</p></div><button id="addWatchlistStock" type="button">＋ 新增股票</button></div>
+      <div class="segmented-filter" id="watchlistFilters" aria-label="自選股篩選">
+        <button class="active" type="button" data-watch-filter="all">全部</button><button type="button" data-watch-filter="changed">有新變化</button><button type="button" data-watch-filter="risk">風險較高</button><button type="button" data-watch-filter="down">分數下降</button>
+      </div>
+      <div id="watchlistPageSummary" class="page-summary warm-card"></div>
+      <div id="watchlistPageGrid" class="watchlist-page-grid"></div>
+      <div id="watchlistPageEmpty" class="warm-card home-empty hidden">目前還沒有符合條件的自選股。</div>
+    </section>
+
+    <section id="eventsPage" class="app-page shell-page" data-page="events" aria-labelledby="eventsPageTitle">
+      <div class="shell-page-heading"><div><span>事件中心</span><h1 id="eventsPageTitle">發生什麼，以及為什麼重要</h1><p>目前先整理報告內已驗證的今日事件；未來日程資料仍在建立。</p></div><span class="data-status">Evidence</span></div>
+      <div class="segmented-filter" id="eventFilters" aria-label="事件篩選">
+        <button class="active" type="button" data-event-filter="all">全部</button><button type="button" data-event-filter="positive">正向</button><button type="button" data-event-filter="negative">注意</button><button type="button" data-event-filter="watchlist">只看自選</button>
+      </div>
+      <div id="eventsPageList" class="events-page-list"></div>
+      <div id="eventsPageEmpty" class="warm-card home-empty hidden">目前沒有符合條件的事件。</div>
+    </section>
+
+    <section id="stockCenter" class="stock-center-section app-page shell-page" data-page="explore" aria-labelledby="stockCenterTitle">
       <div class="stock-center-heading">
-        <div><span class="section-kicker">股票中心</span><h2 id="stockCenterTitle">找到值得深入理解的股票</h2></div>
+        <div><span class="section-kicker">探索股票</span><h2 id="stockCenterTitle">找到值得深入理解的股票</h2><p>依名稱、代號、產業與研究狀態快速篩選。</p></div>
         <div class="stock-center-count"><b id="stockCenterCount">0</b><span>份客戶研究報告</span></div>
       </div>
+      <div class="explore-search"><input id="exploreSearch" type="search" placeholder="輸入股票名稱或四位代號" autocomplete="off"><select id="exploreSort" aria-label="股票排序"><option value="default">預設排序</option><option value="score-desc">健康分數高至低</option><option value="score-asc">健康分數低至高</option><option value="risk">優先查看風險</option></select></div>
       <div class="stock-center-tools">
         <div id="sectorFilters" class="sector-filters" aria-label="板塊篩選"></div>
         <button id="watchlistOnlyButton" class="watchlist-only" type="button" aria-pressed="false">☆ 只看自選 <span id="watchlistCount">0</span></button>
@@ -69,10 +122,22 @@
       <div id="stockCenterGrid" class="stock-center-grid" aria-live="polite"></div>
       <div id="stockCenterEmpty" class="stock-center-empty hidden">目前沒有符合條件的股票。</div>
     </section>
+
+    <section id="profilePage" class="app-page shell-page" data-page="about" aria-labelledby="profilePageTitle">
+      <div class="shell-page-heading"><div><span>我的</span><h1 id="profilePageTitle">Beta 測試與個人設定</h1><p>管理自選、測試身分與產品資訊。</p></div></div>
+      <div class="profile-grid">
+        <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
+        <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
+        <article class="warm-card profile-card"><span>報告資料</span><b id="profileReportCount">0 份</b><small id="profileUpdatedAt">等待更新</small></article>
+        <article class="warm-card profile-card"><span>目前版本</span><b>Web v2.8 Preview</b><small>首頁官方大盤資料測試版</small></article>
+      </div>
+      <div class="profile-actions warm-card"><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
+      <div class="profile-notice warm-card"><b>研究輔助，不代替投資決策</b><p>AI Stock Terminal 用來整理公開資料與研究證據，不提供自動下單，也不保證未來報酬。</p></div>
+    </section>
     </div>
 
     <div id="detailNavigation" class="detail-navigation hidden">
-      <button id="backToCenterButton" type="button">← 返回股票中心</button>
+      <button id="backToCenterButton" type="button">← 返回上一頁</button>
       <span id="detailNavigationTitle">個股研究報告</span>
     </div>
 
@@ -196,10 +261,12 @@
     <nav class="mobile-nav" aria-label="主要導覽">
       <button class="active" data-tab="home"><span>⌂</span>首頁</button>
       <button data-tab="watchlist"><span>☆</span>自選</button>
-      <button data-tab="about"><span>?</span>說明</button>
+      <button data-tab="events"><span>□</span>事件</button>
+      <button data-tab="explore"><span>◇</span>探索</button>
+      <button data-tab="about"><span>○</span>我的</button>
     </nav>
     <div id="toast" class="toast" aria-live="polite"></div>
   </main>
-  <script src="/assets/app.js?v=2.5.1" defer></script>
+  <script src="/assets/app.js?v=2.8.0" defer></script>
 </body>
 </html>
