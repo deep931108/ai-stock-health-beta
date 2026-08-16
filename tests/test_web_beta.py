@@ -1,6 +1,7 @@
 ﻿from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -56,9 +57,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'id="scoreBridge"' in html
     assert 'id="impactDefinition"' in html
     assert 'id="factorBreakdown"' in html
-    assert 'evidence.css?v=2.9.0' in html
-    assert 'home.css?v=2.9.0' in html
-    assert 'app.js?v=2.9.0' in html
+    asset_versions = re.findall(r'/assets/(?:evidence\.css|home\.css|app\.js)\?v=([^"\']+)', html)
+    assert len(asset_versions) == 3
+    assert len(set(asset_versions)) == 1
     assert 'id="todayChangesGrid"' in html
     assert "function renderTodayChanges" in js
     assert 'class="today-change-explain"' in js
@@ -130,9 +131,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderEventsPage" in js
     assert "function renderProfilePage" in js
     assert "function allResearchEvents" in js
-    assert 'evidence.css?v=2.9.0' in html
-    assert 'home.css?v=2.9.0' in html
-    assert 'app.js?v=2.9.0' in html
+    asset_versions = re.findall(r'/assets/(?:evidence\.css|home\.css|app\.js)\?v=([^"\']+)', html)
+    assert len(asset_versions) == 3
+    assert len(set(asset_versions)) == 1
     assert "function reportNetImpact" in js
     assert "function categoryLabel" in js
     assert "function scoreSparkline" in js

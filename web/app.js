@@ -712,7 +712,15 @@ function formatEventDate(value) {
 }
 
 function upcomingEventLabel(type) {
-  return ({ex_dividend:"除息", ex_right:"除權", ex_right_dividend:"除權息", shareholder_meeting:"股東會"})[type] || "公司日程";
+  return ({
+    ex_dividend:"除息", ex_right:"除權", ex_right_dividend:"除權息",
+    shareholder_meeting:"股東會", investor_conference:"法說會",
+    financial_report_board:"財報", central_bank_meeting:"央行",
+    consumer_price_release:"物價", gdp_release:"總經",
+    employment_release:"就業", export_orders_release:"外銷訂單",
+    industrial_production_release:"產業", trade_release:"進出口",
+    foreign_reserves_release:"外匯"
+  })[type] || "重要日程";
 }
 
 function renderUpcomingEvents() {
@@ -722,12 +730,12 @@ function renderUpcomingEvents() {
   if (events.length) {
     status.textContent = `${events.length} 項已確認`;
     $("futureEvents").innerHTML = events.slice(0, 4).map((event) => `<article class="warm-card future-event-card">
-      <button type="button" data-home-stock="${escapeHtml(event.stock_id)}">
+      <button type="button" ${event.stock_id === "MARKET" ? "" : `data-home-stock="${escapeHtml(event.stock_id)}"`}>
         <time datetime="${escapeHtml(event.event_date)}">${escapeHtml(formatEventDate(event.event_date))}</time>
         <span class="future-event-type">${escapeHtml(upcomingEventLabel(event.event_type))}</span>
         <h3>${escapeHtml(event.title_zh || `${event.stock_name} 重要日程`)}</h3>
         <p>${escapeHtml(event.beginner_explanation_zh || "日期本身不是買賣訊號，請查看官方內容後再判斷。")}</p>
-        <small>${escapeHtml(event.stock_name || "")} ${escapeHtml(event.stock_id || "")}</small>
+        <small>${escapeHtml(event.stock_id === "MARKET" ? (event.source_name_zh || "官方市場資料") : `${event.stock_name || ""} ${event.stock_id || ""}`)}</small>
       </button>
       ${event.source_url ? `<a href="${escapeHtml(event.source_url)}" target="_blank" rel="noopener noreferrer">查看官方資料 ↗</a>` : ""}
     </article>`).join("");
