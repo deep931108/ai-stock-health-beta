@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-16T23:20:28+08:00",
+  "generated_at": "2026-08-17T00:56:31+08:00",
   "status": "success",
   "stock_id": "1795",
   "data_date": "2026-08-14",
@@ -3628,8 +3628,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "empty",
     "stock_id": "1795",
-    "window_start": "2026-08-16",
-    "window_end": "2026-08-22",
+    "window_start": "2026-08-17",
+    "window_end": "2026-08-23",
     "window_days": 7,
     "events": [],
     "event_count": 0,
@@ -3639,7 +3639,7 @@
     },
     "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
     "data_as_of": "2026-08-16",
-    "generated_at": "2026-08-16T22:30:32+08:00",
+    "generated_at": "2026-08-17T00:44:50+08:00",
     "sources": [
       {
         "source_id": "ex_right_dividend",
@@ -3654,6 +3654,37 @@
         "rows": 1119,
         "normalized_events": 1119,
         "url": "https://openapi.twse.com.tw/v1/opendata/t187ap41_L"
+      },
+      {
+        "source_id": "investor_conference",
+        "status": "success",
+        "rows": 7,
+        "normalized_events": 0,
+        "url": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L"
+      },
+      {
+        "source_id": "central_bank_meetings",
+        "status": "success",
+        "normalized_events": 5,
+        "url": "https://www.cbc.gov.tw/tw/cp-432-189514-82841-1.html"
+      },
+      {
+        "source_id": "statistics_calendar_1",
+        "status": "success",
+        "normalized_events": 0,
+        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?Dept=A59000000Nhttps%3A%2F%2Fwww.stat.gov.tw%2Fcp.aspx%3Fn%3D3867&IsControl=0&PageSize=10&_Hide=1&n=3717&page=1&s=1226&sms=11505"
+      },
+      {
+        "source_id": "statistics_calendar_2",
+        "status": "success",
+        "normalized_events": 0,
+        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?Dept=A59000000Nhttps%3A%2F%2Fwww.stat.gov.tw%2Fcp.aspx%3Fn%3D3867&IsControl=0&PageSize=10&_Hide=1&n=3717&page=18&s=1226&sms=11505"
+      },
+      {
+        "source_id": "statistics_calendar_3",
+        "status": "success",
+        "normalized_events": 0,
+        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?Dept=A59000000Nhttps%3A%2F%2Fwww.stat.gov.tw%2Fcp.aspx%3Fn%3D3867&IsControl=0&PageSize=10&_Hide=1&n=3717&page=34&s=1226&sms=11505"
       }
     ],
     "message_zh": "未來 7 天沒有已確認的官方事件。"
@@ -3742,7 +3773,7 @@
             "stock_id": "4105",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 2,
+            "stale_calendar_days": 3,
             "close_latest": 76.1,
             "return_20d_pct": -2.1851,
             "volatility_20d_pct": 1.0914,
@@ -3763,7 +3794,7 @@
             "stock_id": "6446",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 2,
+            "stale_calendar_days": 3,
             "close_latest": 1500.0,
             "return_20d_pct": 25.523,
             "volatility_20d_pct": 5.1528,
@@ -3784,7 +3815,7 @@
             "stock_id": "1795",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 2,
+            "stale_calendar_days": 3,
             "close_latest": 180.5,
             "return_20d_pct": -3.9894,
             "volatility_20d_pct": 2.4323,
@@ -3805,7 +3836,7 @@
             "stock_id": "4743",
             "status": "available",
             "data_date": "2026-08-14",
-            "stale_calendar_days": 2,
+            "stale_calendar_days": 3,
             "close_latest": 46.5,
             "return_20d_pct": -4.321,
             "volatility_20d_pct": 3.2995,
