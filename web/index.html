@@ -8,8 +8,8 @@
   <link rel="manifest" href="/assets/manifest.webmanifest">
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/styles.css">
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.0.0">
-  <link rel="stylesheet" href="/assets/home.css?v=3.0.0">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.1.0">
+  <link rel="stylesheet" href="/assets/home.css?v=3.1.0">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -71,6 +71,15 @@
       </div>
     </section>
 
+    <section id="dailyResearchSection" class="home-section daily-research-section" aria-labelledby="dailyResearchTitle">
+      <div class="home-section-heading"><div><span>今日研究</span><h2 id="dailyResearchTitle">把今天該看的看完</h2></div><span id="dailyResearchProgress" class="data-status">準備中</span></div>
+      <div class="daily-research-card warm-card">
+        <div class="daily-research-overview"><div><strong id="dailyResearchCount">0 / 0</strong><span>今日進度</span></div><div class="research-progress-track" aria-hidden="true"><i id="dailyResearchBar"></i></div><small id="dailyResearchEstimate">正在整理今日內容</small></div>
+        <div id="dailyResearchSteps" class="daily-research-steps"><p class="home-empty">報告讀取完成後會建立今日研究順序。</p></div>
+        <p id="dailyResearchNotice" class="daily-research-notice">只安排閱讀順序，不提供交易指令，也不改變健康分數。</p>
+      </div>
+    </section>
+
     <section class="home-section" aria-labelledby="todayDigestTitle">
       <div class="home-section-heading"><div><span>今日摘要</span><h2 id="todayDigestTitle">今天有哪些股票值得注意？</h2></div><button id="viewAllChanges" type="button">查看全部 ›</button></div>
       <div id="todayDigest" class="digest-card warm-card"><p class="home-empty">正在整理今日研究報告…</p></div>
@@ -129,7 +138,7 @@
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
         <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
         <article class="warm-card profile-card"><span>報告資料</span><b id="profileReportCount">0 份</b><small id="profileUpdatedAt">等待更新</small></article>
-        <article class="warm-card profile-card"><span>目前版本</span><b>Web v2.9 Preview</b><small>首頁官方大盤與預定事件測試版</small></article>
+        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.1 Preview</b><small>完整五頁與今日研究模式</small></article>
       </div>
       <div class="profile-actions warm-card"><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
       <div class="profile-notice warm-card"><b>研究輔助，不代替投資決策</b><p>AI Stock Terminal 用來整理公開資料與研究證據，不提供自動下單，也不保證未來報酬。</p></div>
@@ -267,6 +276,6 @@
     </nav>
     <div id="toast" class="toast" aria-live="polite"></div>
   </main>
-  <script src="/assets/app.js?v=3.0.0" defer></script>
+  <script src="/assets/app.js?v=3.1.0" defer></script>
 </body>
 </html>

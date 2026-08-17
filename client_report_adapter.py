@@ -118,12 +118,28 @@ class ClientReportRepository:
             "score_history": self._normalize_history(payload.get("score_history")),
             "data_sources": self._normalize_sources(payload.get("data_sources")),
             "today_changes": self._normalize_today_changes(payload.get("today_changes"), stock_id),
+            "daily_research": self._normalize_daily_research(payload.get("daily_research")),
             "market_home_summary": self._normalize_market_home_summary(payload.get("market_home_summary")),
             "upcoming_events": self._normalize_upcoming_events(payload.get("upcoming_events"), stock_id),
             "investment_research": self._normalize_investment_research(payload.get("investment_research")),
             "notices": notices,
             "disclaimer": payload.get("disclaimer_zh") or "本服務僅供資料整理與研究輔助，不構成投資建議。",
         }
+
+    @staticmethod
+    def _normalize_daily_research(raw: Any) -> dict[str, Any]:
+        if not isinstance(raw, dict):
+            return {
+                "version": "DailyResearch-v1.0", "mode": "guided", "steps": [],
+                "available_step_count": 0, "estimated_minutes": 0,
+                "score_policy": {"affects_health_score": False, "mode": "navigation_only"},
+            }
+        detached = json.loads(json.dumps(raw, ensure_ascii=False, default=str))
+        detached["steps"] = [
+            item for item in detached.get("steps", [])
+            if isinstance(item, dict) and item.get("key") in {"new", "change", "follow_up", "evidence"}
+        ]
+        return detached
 
     @staticmethod
     def _normalize_market_home_summary(raw: Any) -> dict[str, Any]:

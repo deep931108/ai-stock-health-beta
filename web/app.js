@@ -753,6 +753,7 @@ function renderHomeDashboard() {
   $("homeLastUpdated").textContent = updates.length ? `資料 ${updates.at(-1)}` : "等待更新";
   renderMarketHomeSummary();
   renderUpcomingEvents();
+  renderDailyResearch();
 
   const digestRows = stockCatalog.filter((report) => reportEvents(report).length)
     .sort((a, b) => Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)) || reportEvents(b).length - reportEvents(a).length).slice(0, 3);
@@ -781,6 +782,79 @@ function renderHomeDashboard() {
 
   document.querySelectorAll("[data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
   renderProfilePage();
+}
+
+function dailyResearchContract() {
+  const contracts = stockCatalog.map((report) => report.daily_research).filter((block) => block?.version === "DailyResearch-v1.0");
+  if (!contracts.length) return null;
+  const dataDate = contracts.map((block) => block.data_date).filter(Boolean).sort().at(-1) || formatHomeDate();
+  const order = ["new", "change", "follow_up", "evidence"];
+  const steps = order.map((key) => {
+    const candidates = contracts.flatMap((block) => block.steps || []).filter((step) => step.key === key);
+    const availableStep = candidates.find((step) => step.available) || candidates[0];
+    return availableStep ? {...availableStep, available:candidates.some((step) => step.available)} : null;
+  }).filter(Boolean);
+  return {data_date:dataDate, steps, notice_zh:contracts[0].notice_zh, estimated_minutes:Math.max(...contracts.map((block) => Number(block.estimated_minutes || 0)))};
+}
+
+function dailyResearchStorageKey(dataDate) {
+  return `aiStockDailyResearch:${dataDate}`;
+}
+
+function completedDailyResearch(dataDate) {
+  try { return new Set(JSON.parse(localStorage.getItem(dailyResearchStorageKey(dataDate)) || "[]")); }
+  catch { return new Set(); }
+}
+
+function completeDailyResearchStep(key, dataDate) {
+  const completed = completedDailyResearch(dataDate);
+  completed.add(key);
+  localStorage.setItem(dailyResearchStorageKey(dataDate), JSON.stringify([...completed]));
+  renderDailyResearch();
+}
+
+function startDailyResearchStep(key, dataDate) {
+  if (key === "new") {
+    activePage = "home";
+    showHomeView({restoreScroll:false});
+    switchPage("home", {scroll:false});
+    window.setTimeout(() => $("futureEvents").scrollIntoView({behavior:"smooth", block:"start"}), 30);
+  } else if (key === "change") {
+    showHomeView({restoreScroll:false});
+    switchPage("events");
+  } else if (key === "follow_up") {
+    showHomeView({restoreScroll:false});
+    switchPage("watchlist");
+  } else if (key === "evidence") {
+    const report = stockCatalog.filter((item) => reportEvents(item).length).sort((a, b) => Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)))[0] || stockCatalog[0];
+    if (report) loadStock(report.id);
+  }
+  completeDailyResearchStep(key, dataDate);
+}
+
+function renderDailyResearch() {
+  if (!$("dailyResearchSteps")) return;
+  const contract = dailyResearchContract();
+  if (!contract) {
+    $("dailyResearchProgress").textContent = "等待報告更新";
+    $("dailyResearchSteps").innerHTML = '<p class="home-empty">今日研究合約尚未建立；更新客戶報告後會自動出現。</p>';
+    return;
+  }
+  const availableSteps = contract.steps.filter((step) => step.available);
+  const completed = completedDailyResearch(contract.data_date);
+  const completedCount = availableSteps.filter((step) => completed.has(step.key)).length;
+  const total = availableSteps.length;
+  const percentage = total ? completedCount / total * 100 : 0;
+  $("dailyResearchCount").textContent = `${completedCount} / ${total}`;
+  $("dailyResearchProgress").textContent = total && completedCount === total ? "今日研究完成" : `${completedCount} / ${total} 完成`;
+  $("dailyResearchBar").style.width = `${percentage}%`;
+  $("dailyResearchEstimate").textContent = total && completedCount === total ? "今天的重要內容已看完" : `預計剩餘 ${Math.max(1, (total - completedCount) * 2)} 分鐘`;
+  $("dailyResearchNotice").textContent = contract.notice_zh || "只安排閱讀順序，不提供交易指令，也不改變健康分數。";
+  $("dailyResearchSteps").innerHTML = contract.steps.map((step) => {
+    const done = completed.has(step.key);
+    return `<button class="daily-task ${done ? "done" : ""} ${step.available ? "" : "unavailable"}" type="button" data-daily-task="${escapeHtml(step.key)}" ${step.available ? "" : "disabled"}><span class="daily-task-label">${escapeHtml(step.label)}</span><b>${escapeHtml(step.title_zh)}</b><p>${escapeHtml(step.description_zh)}</p><span class="daily-task-state">${step.available ? (done ? "✓ 已看完" : "開始研究 ›") : "今天沒有待看內容"}</span></button>`;
+  }).join("");
+  document.querySelectorAll("[data-daily-task]").forEach((button) => button.addEventListener("click", () => startDailyResearchStep(button.dataset.dailyTask, contract.data_date)));
 }
 
 function watchlistCard(report) {

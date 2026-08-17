@@ -119,6 +119,13 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'data-tab="events"' in html
     assert 'data-tab="explore"' in html
     assert "function renderHomeDashboard" in js
+    assert 'id="dailyResearchSection"' in html
+    assert 'id="dailyResearchSteps"' in html
+    assert "DailyResearch-v1.0" in js
+    assert "function renderDailyResearch" in js
+    assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
+    assert "function startDailyResearchStep" in js
+    assert "Web v3.1 Preview" in html
     assert "function homeDirection" in js
     assert 'id="homePage"' in html
     assert 'id="watchlistPage"' in html
