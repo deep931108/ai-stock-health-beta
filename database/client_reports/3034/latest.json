@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-18T00:29:39+08:00",
+  "generated_at": "2026-08-18T01:27:36+08:00",
   "status": "success",
   "stock_id": "3034",
   "data_date": "2026-08-17",
@@ -5876,5 +5876,51 @@
     },
     "summary_zh": "較前一交易日共有 15 項可說明資料：3 項正向、9 項負向；以下完整保留，沒有只挑前幾項。",
     "method_zh": "有前一交易日底層快照時逐項顯示所有真實指標變化；尚無底層快照時，先以五大面向變化或今日可量化證據建立基準，並清楚標示為相對中性基準，而非昨日變化。"
+  },
+  "daily_research": {
+    "version": "DailyResearch-v1.0",
+    "mode": "guided",
+    "data_date": "2026-08-17",
+    "steps": [
+      {
+        "key": "new",
+        "label": "New",
+        "title_zh": "今天新發生什麼？",
+        "description_zh": "查看已確認的公司與市場日程。",
+        "available": true,
+        "destination": "events"
+      },
+      {
+        "key": "change",
+        "label": "Change",
+        "title_zh": "哪些地方明顯改變？",
+        "description_zh": "查看今天所有可量化的加分與扣分變化。",
+        "available": true,
+        "destination": "events"
+      },
+      {
+        "key": "follow_up",
+        "label": "Follow-up",
+        "title_zh": "之前的事情有後續嗎？",
+        "description_zh": "回到自選股，確認仍需持續追蹤的研究問題。",
+        "available": true,
+        "destination": "watchlist"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence",
+        "title_zh": "證據支持這個變化嗎？",
+        "description_zh": "開啟個股報告，理解數字、基準、原因與資料來源。",
+        "available": true,
+        "destination": "report"
+      }
+    ],
+    "available_step_count": 4,
+    "estimated_minutes": 8,
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "navigation_only"
+    },
+    "notice_zh": "今日研究只安排閱讀順序，不提供交易指令，也不改變健康分數。"
   }
 }
