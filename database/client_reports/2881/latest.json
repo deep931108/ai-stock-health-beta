@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-17T23:20:23+08:00",
+  "generated_at": "2026-08-18T00:29:47+08:00",
   "status": "success",
   "stock_id": "2881",
   "data_date": "2026-08-17",
@@ -3639,20 +3639,57 @@
   },
   "upcoming_events": {
     "version": "UpcomingEvents-v1.0",
-    "status": "empty",
+    "status": "available",
     "stock_id": "2881",
-    "window_start": "2026-08-17",
-    "window_end": "2026-08-23",
+    "window_start": "2026-08-18",
+    "window_end": "2026-08-24",
     "window_days": 7,
-    "events": [],
-    "event_count": 0,
+    "events": [
+      {
+        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
+        "event_date": "2026-08-20",
+        "stock_id": "MARKET",
+        "stock_name": "台灣市場",
+        "event_type": "export_orders_release",
+        "title_zh": "外銷訂單統計發布",
+        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
+        "importance": "high",
+        "source_name_zh": "經濟部",
+        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
+        "verified": true,
+        "affects_health_score": false,
+        "event_time_zh": "16:00",
+        "statistical_item_zh": "外銷訂單統計",
+        "reference_period_zh": "(11507)",
+        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
+      },
+      {
+        "event_id": "TW:MARKET:employment_release:2026-08-24",
+        "event_date": "2026-08-24",
+        "stock_id": "MARKET",
+        "stock_name": "台灣市場",
+        "event_type": "employment_release",
+        "title_zh": "就業與失業率資料發布",
+        "beginner_explanation_zh": "就業資料反映景氣與家庭所得狀況，市場通常會觀察趨勢而不是只看單月數字。",
+        "importance": "high",
+        "source_name_zh": "行政院主計總處",
+        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
+        "verified": true,
+        "affects_health_score": false,
+        "event_time_zh": "16:00",
+        "statistical_item_zh": "勞動力、就業人數、失業人數、非勞動力、失業率、勞動力參與率",
+        "reference_period_zh": "(11507)",
+        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=149&year=2026&n=3717"
+      }
+    ],
+    "event_count": 2,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
     },
     "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
     "data_as_of": "2026-08-17",
-    "generated_at": "2026-08-17T22:30:53+08:00",
+    "generated_at": "2026-08-17T23:22:35+08:00",
     "sources": [
       {
         "source_id": "ex_right_dividend",
@@ -3678,29 +3715,17 @@
       {
         "source_id": "central_bank_meetings",
         "status": "success",
-        "normalized_events": 5,
+        "normalized_events": 4,
         "url": "https://www.cbc.gov.tw/tw/cp-432-189514-82841-1.html"
       },
       {
-        "source_id": "statistics_calendar_1",
+        "source_id": "statistics_calendar",
         "status": "success",
-        "normalized_events": 0,
-        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?Dept=A59000000Nhttps%3A%2F%2Fwww.stat.gov.tw%2Fcp.aspx%3Fn%3D3867&IsControl=0&PageSize=10&_Hide=1&n=3717&page=1&s=1226&sms=11505"
-      },
-      {
-        "source_id": "statistics_calendar_2",
-        "status": "success",
-        "normalized_events": 0,
-        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?Dept=A59000000Nhttps%3A%2F%2Fwww.stat.gov.tw%2Fcp.aspx%3Fn%3D3867&IsControl=0&PageSize=10&_Hide=1&n=3717&page=18&s=1226&sms=11505"
-      },
-      {
-        "source_id": "statistics_calendar_3",
-        "status": "success",
-        "normalized_events": 0,
-        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?Dept=A59000000Nhttps%3A%2F%2Fwww.stat.gov.tw%2Fcp.aspx%3Fn%3D3867&IsControl=0&PageSize=10&_Hide=1&n=3717&page=34&s=1226&sms=11505"
+        "normalized_events": 81,
+        "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天沒有已確認的官方事件。"
+    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -3787,7 +3812,7 @@
             "stock_id": "2881",
             "status": "available",
             "data_date": "2026-08-17",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 125.5,
             "return_20d_pct": 1.6194,
             "volatility_20d_pct": 2.009,
@@ -3808,7 +3833,7 @@
             "stock_id": "2882",
             "status": "available",
             "data_date": "2026-08-17",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 98.1,
             "return_20d_pct": 4.3617,
             "volatility_20d_pct": 2.2963,
@@ -3829,7 +3854,7 @@
             "stock_id": "2891",
             "status": "available",
             "data_date": "2026-08-17",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 65.6,
             "return_20d_pct": 6.6667,
             "volatility_20d_pct": 1.3334,
@@ -3850,7 +3875,7 @@
             "stock_id": "2886",
             "status": "available",
             "data_date": "2026-08-17",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 46.6,
             "return_20d_pct": -3.3195,
             "volatility_20d_pct": 2.315,
@@ -3871,7 +3896,7 @@
             "stock_id": "2884",
             "status": "available",
             "data_date": "2026-08-17",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 37.75,
             "return_20d_pct": 5.2999,
             "volatility_20d_pct": 1.5762,
