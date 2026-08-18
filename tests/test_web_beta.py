@@ -50,6 +50,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    adapter = (root / "client_report_adapter.py").read_text(encoding="utf-8")
     assert 'id="historyChart"' in html
     assert 'id="positiveFactors"' in html
     assert 'id="negativeFactors"' in html
@@ -125,7 +126,12 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.2.2 Preview" in html
+    assert "Web v3.3.0 Preview" in html
+    assert 'id="notificationPanel"' in html
+    assert 'id="notificationUnread"' in html
+    assert "function renderNotificationCenter" in js
+    assert 'aiStockNotificationReadIds' in js
+    assert 'research_notifications' in adapter
     assert 'id="themeToggle"' in html
     assert 'localStorage.getItem("aiStockTheme")' in html
     assert 'const THEME_STORAGE_KEY = "aiStockTheme"' in js

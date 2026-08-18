@@ -1,6 +1,7 @@
 ﻿const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
 const THEME_STORAGE_KEY = "aiStockTheme";
+const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
 let currentReport = null;
 let available = [];
 let stockCatalog = [];
@@ -14,6 +15,7 @@ let watchlistFilter = "all";
 let eventFilter = "all";
 let exploreQuery = "";
 let exploreSort = "default";
+let notificationFilter = "all";
 
 function preferredTheme() {
   const saved = localStorage.getItem(THEME_STORAGE_KEY);
@@ -39,6 +41,65 @@ function applyTheme(theme, {persist = false} = {}) {
 
 function toggleTheme() {
   applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", {persist: true});
+}
+
+function notificationReadIds() {
+  try { return new Set(JSON.parse(localStorage.getItem(NOTIFICATION_READ_KEY) || "[]")); }
+  catch { return new Set(); }
+}
+
+function saveNotificationReadIds(ids) {
+  localStorage.setItem(NOTIFICATION_READ_KEY, JSON.stringify([...ids].slice(-1000)));
+}
+
+function researchNotifications() {
+  const rows = stockCatalog.flatMap((report) => report?.research_notifications?.notifications || []);
+  const unique = new Map();
+  rows.forEach((item) => {
+    if (item?.notification_id && item.affects_health_score === false && !unique.has(item.notification_id)) unique.set(item.notification_id, item);
+  });
+  const priority = {high:0, medium:1, info:2};
+  return [...unique.values()].sort((a, b) => (priority[a.severity] ?? 3) - (priority[b.severity] ?? 3) || String(b.source_date || "").localeCompare(String(a.source_date || "")));
+}
+
+function notificationMatches(item) {
+  if (notificationFilter === "all") return true;
+  if (notificationFilter === "important") return item.severity === "high" || item.severity === "medium";
+  return item.type === notificationFilter;
+}
+
+function renderNotificationCenter() {
+  const rows = researchNotifications();
+  const read = notificationReadIds();
+  const unread = rows.filter((item) => !read.has(item.notification_id)).length;
+  const badge = $("notificationUnread");
+  badge.textContent = unread > 99 ? "99+" : String(unread);
+  badge.classList.toggle("hidden", unread === 0);
+  $("notificationSummary").textContent = rows.length ? `${unread} 則未讀，共 ${rows.length} 則研究提醒` : "目前沒有需要提醒的研究事項";
+  const visible = rows.filter(notificationMatches);
+  $("notificationList").innerHTML = visible.length ? visible.map((item) => `
+    <button class="notification-item ${read.has(item.notification_id) ? "read" : "unread"} severity-${escapeHtml(item.severity)}" type="button" data-notification-id="${escapeHtml(item.notification_id)}" data-notification-destination="${escapeHtml(item.destination)}" data-notification-stock="${escapeHtml(item.stock_id)}">
+      <span class="notification-item-top"><em>${escapeHtml(item.type === "official_event" ? "官方日程" : item.type === "follow_up" ? "持續追蹤" : item.type === "risk_attention" ? "風險注意" : "重要變化")}</em><time>${escapeHtml(item.source_date || "")}</time></span>
+      <b>${escapeHtml(item.title_zh)}</b><p>${escapeHtml(item.message_zh)}</p><small>${escapeHtml(item.reason_zh)}</small>
+    </button>`).join("") : '<p class="notification-empty">這個分類目前沒有通知。</p>';
+}
+
+function setNotificationPanel(open) {
+  $("notificationPanel").classList.toggle("hidden", !open);
+  $("notificationBackdrop").classList.toggle("hidden", !open);
+  $("notificationPanel").setAttribute("aria-hidden", String(!open));
+  $("notificationButton").setAttribute("aria-expanded", String(open));
+  document.body.classList.toggle("notification-open", open);
+  if (open) renderNotificationCenter();
+}
+
+function openNotification(item) {
+  const read = notificationReadIds(); read.add(item.dataset.notificationId); saveNotificationReadIds(read);
+  setNotificationPanel(false); renderNotificationCenter();
+  const destination = item.dataset.notificationDestination;
+  const stock = item.dataset.notificationStock;
+  if (destination === "report" && stock && stock !== "MARKET") loadStock(stock);
+  else switchPage(destination === "watchlist" ? "watchlist" : "events");
 }
 
 function escapeHtml(value) {
@@ -998,6 +1059,7 @@ async function loadAvailable() {
     renderWatchlistPage();
     renderEventsPage();
     renderProfilePage();
+    renderNotificationCenter();
   } catch {
     $("formHint").textContent = "可先試用 2330、2891";
     $("stockCenterLoading").textContent = "股票中心目前無法讀取，請稍後重新整理。";
@@ -1017,7 +1079,12 @@ $("exploreSearch").addEventListener("input", (event) => { exploreQuery = event.t
 $("exploreSort").addEventListener("change", (event) => { exploreSort = event.target.value; renderStockCenter(); });
 document.querySelectorAll("[data-watch-filter]").forEach((button) => button.addEventListener("click", () => { watchlistFilter = button.dataset.watchFilter; document.querySelectorAll("[data-watch-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderWatchlistPage(); }));
 document.querySelectorAll("[data-event-filter]").forEach((button) => button.addEventListener("click", () => { eventFilter = button.dataset.eventFilter; document.querySelectorAll("[data-event-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderEventsPage(); }));
-document.querySelector(".notification-button").addEventListener("click", () => showToast("通知中心將在事件資料完成後開放"));
+$("notificationButton").addEventListener("click", () => setNotificationPanel($("notificationPanel").classList.contains("hidden")));
+$("notificationClose").addEventListener("click", () => setNotificationPanel(false));
+$("notificationBackdrop").addEventListener("click", () => setNotificationPanel(false));
+$("notificationReadAll").addEventListener("click", () => { const read = notificationReadIds(); researchNotifications().forEach((item) => read.add(item.notification_id)); saveNotificationReadIds(read); renderNotificationCenter(); });
+$("notificationList").addEventListener("click", (event) => { const item = event.target.closest("[data-notification-id]"); if (item) openNotification(item); });
+document.querySelectorAll("[data-notification-filter]").forEach((button) => button.addEventListener("click", () => { notificationFilter = button.dataset.notificationFilter; document.querySelectorAll("[data-notification-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderNotificationCenter(); }));
 $("profileFeedback").addEventListener("click", () => showToast("Beta 回饋表單將在下一階段接入"));
 $("profileDataSources").addEventListener("click", () => showToast("請進入個股報告查看各項原始資料來源"));
 $("profileLogout").addEventListener("click", () => betaSession?.invite_required ? logoutBeta() : showToast("本機擁有者模式不需要登出"));

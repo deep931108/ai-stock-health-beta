@@ -119,6 +119,7 @@ class ClientReportRepository:
             "data_sources": self._normalize_sources(payload.get("data_sources")),
             "today_changes": self._normalize_today_changes(payload.get("today_changes"), stock_id),
             "daily_research": self._normalize_daily_research(payload.get("daily_research")),
+            "research_notifications": self._normalize_research_notifications(payload.get("research_notifications"), stock_id),
             "market_home_summary": self._normalize_market_home_summary(payload.get("market_home_summary")),
             "upcoming_events": self._normalize_upcoming_events(payload.get("upcoming_events"), stock_id),
             "investment_research": self._normalize_investment_research(payload.get("investment_research")),
@@ -139,6 +140,22 @@ class ClientReportRepository:
             item for item in detached.get("steps", [])
             if isinstance(item, dict) and item.get("key") in {"new", "change", "follow_up", "evidence"}
         ]
+        return detached
+
+    @staticmethod
+    def _normalize_research_notifications(raw: Any, stock_id: str) -> dict[str, Any]:
+        if not isinstance(raw, dict):
+            return {
+                "version": "ResearchNotifications-v1.0", "status": "empty",
+                "stock_id": str(stock_id), "notifications": [], "notification_count": 0,
+                "score_policy": {"affects_health_score": False, "mode": "attention_only"},
+            }
+        detached = json.loads(json.dumps(raw, ensure_ascii=False, default=str))
+        detached["notifications"] = [
+            item for item in detached.get("notifications", [])
+            if isinstance(item, dict) and item.get("affects_health_score") is False
+        ]
+        detached["notification_count"] = len(detached["notifications"])
         return detached
 
     @staticmethod
