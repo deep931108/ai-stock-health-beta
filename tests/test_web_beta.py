@@ -121,17 +121,21 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderHomeDashboard" in js
     assert 'id="dailyResearchSection"' in html
     assert 'id="dailyResearchSteps"' in html
-    assert "DailyResearch-v1.0" in js
+    assert "DailyResearch-v1" in js
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.2 Preview" in html
+    assert "Web v3.2.1 Preview" in html
     assert 'id="themeToggle"' in html
     assert 'localStorage.getItem("aiStockTheme")' in html
     assert 'const THEME_STORAGE_KEY = "aiStockTheme"' in js
     assert "function applyTheme" in js
     assert "function toggleTheme" in js
     assert 'document.documentElement.dataset.theme' in js
+    assert 'id="dailyResearchSummary"' in html
+    assert "why_it_matters_zh" in js
+    assert "item_count" in js
+    assert "今天整理出" in js
     assert "function homeDirection" in js
     assert 'id="homePage"' in html
     assert 'id="watchlistPage"' in html

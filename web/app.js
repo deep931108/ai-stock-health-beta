@@ -812,14 +812,19 @@ function renderHomeDashboard() {
 }
 
 function dailyResearchContract() {
-  const contracts = stockCatalog.map((report) => report.daily_research).filter((block) => block?.version === "DailyResearch-v1.0");
+  const contracts = stockCatalog.map((report) => report.daily_research).filter((block) => /^DailyResearch-v1\./.test(block?.version || ""));
   if (!contracts.length) return null;
   const dataDate = contracts.map((block) => block.data_date).filter(Boolean).sort().at(-1) || formatHomeDate();
   const order = ["new", "change", "follow_up", "evidence"];
   const steps = order.map((key) => {
     const candidates = contracts.flatMap((block) => block.steps || []).filter((step) => step.key === key);
     const availableStep = candidates.find((step) => step.available) || candidates[0];
-    return availableStep ? {...availableStep, available:candidates.some((step) => step.available)} : null;
+    if (!availableStep) return null;
+    let itemCount = candidates.reduce((sum, step) => sum + Number(step.item_count || 0), 0);
+    if (!itemCount && candidates.some((step) => step.available)) itemCount = candidates.filter((step) => step.available).length;
+    if (key === "new") itemCount = allUpcomingEvents().length;
+    if (key === "evidence") itemCount = contracts.filter((block) => (block.steps || []).some((step) => step.key === key && step.available)).length;
+    return {...availableStep, item_count:itemCount, unit_zh:key === "evidence" ? "份報告" : availableStep.unit_zh, available:itemCount > 0};
   }).filter(Boolean);
   return {data_date:dataDate, steps, notice_zh:contracts[0].notice_zh, estimated_minutes:Math.max(...contracts.map((block) => Number(block.estimated_minutes || 0)))};
 }
@@ -872,6 +877,12 @@ function renderDailyResearch() {
   const completedCount = availableSteps.filter((step) => completed.has(step.key)).length;
   const total = availableSteps.length;
   const percentage = total ? completedCount / total * 100 : 0;
+  const countFor = (key) => Number(contract.steps.find((step) => step.key === key)?.item_count || 0);
+  const summaryParts = [];
+  if (countFor("new")) summaryParts.push(`${countFor("new")} 個確認日程`);
+  if (countFor("change")) summaryParts.push(`${countFor("change")} 項指標變化`);
+  if (countFor("follow_up")) summaryParts.push(`${countFor("follow_up")} 個追蹤問題`);
+  $("dailyResearchSummary").textContent = summaryParts.length ? `今天整理出 ${summaryParts.join("、")}；照順序看完即可。` : "今天沒有新增待看內容，可以回到自選股查看目前狀態。";
   $("dailyResearchCount").textContent = `${completedCount} / ${total}`;
   $("dailyResearchProgress").textContent = total && completedCount === total ? "今日研究完成" : `${completedCount} / ${total} 完成`;
   $("dailyResearchBar").style.width = `${percentage}%`;
@@ -879,7 +890,8 @@ function renderDailyResearch() {
   $("dailyResearchNotice").textContent = contract.notice_zh || "只安排閱讀順序，不提供交易指令，也不改變健康分數。";
   $("dailyResearchSteps").innerHTML = contract.steps.map((step) => {
     const done = completed.has(step.key);
-    return `<button class="daily-task ${done ? "done" : ""} ${step.available ? "" : "unavailable"}" type="button" data-daily-task="${escapeHtml(step.key)}" ${step.available ? "" : "disabled"}><span class="daily-task-label">${escapeHtml(step.label)}</span><b>${escapeHtml(step.title_zh)}</b><p>${escapeHtml(step.description_zh)}</p><span class="daily-task-state">${step.available ? (done ? "✓ 已看完" : "開始研究 ›") : "今天沒有待看內容"}</span></button>`;
+    const countText = step.available ? `${Number(step.item_count || 0)} ${escapeHtml(step.unit_zh || "項")}` : "今天沒有";
+    return `<button class="daily-task ${done ? "done" : ""} ${step.available ? "" : "unavailable"}" type="button" data-daily-task="${escapeHtml(step.key)}" ${step.available ? "" : "disabled"}><span class="daily-task-top"><span class="daily-task-label">${escapeHtml(step.label_zh || step.label)}</span><em>${countText}</em></span><b>${escapeHtml(step.title_zh)}</b><p>${escapeHtml(step.why_it_matters_zh || step.description_zh)}</p><span class="daily-task-state">${step.available ? (done ? "✓ 已看完" : "去看看 ›") : "目前不用處理"}</span></button>`;
   }).join("");
   document.querySelectorAll("[data-daily-task]").forEach((button) => button.addEventListener("click", () => startDailyResearchStep(button.dataset.dailyTask, contract.data_date)));
 }

@@ -130,7 +130,7 @@ class ClientReportRepository:
     def _normalize_daily_research(raw: Any) -> dict[str, Any]:
         if not isinstance(raw, dict):
             return {
-                "version": "DailyResearch-v1.0", "mode": "guided", "steps": [],
+                "version": "DailyResearch-v1.1", "mode": "guided", "steps": [],
                 "available_step_count": 0, "estimated_minutes": 0,
                 "score_policy": {"affects_health_score": False, "mode": "navigation_only"},
             }
