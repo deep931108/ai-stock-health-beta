@@ -823,8 +823,11 @@ function dailyResearchContract() {
     let itemCount = candidates.reduce((sum, step) => sum + Number(step.item_count || 0), 0);
     if (!itemCount && candidates.some((step) => step.available)) itemCount = candidates.filter((step) => step.available).length;
     if (key === "new") itemCount = allUpcomingEvents().length;
-    if (key === "evidence") itemCount = contracts.filter((block) => (block.steps || []).some((step) => step.key === key && step.available)).length;
-    return {...availableStep, item_count:itemCount, unit_zh:key === "evidence" ? "份報告" : availableStep.unit_zh, available:itemCount > 0};
+    if (["change", "follow_up", "evidence"].includes(key)) {
+      itemCount = contracts.filter((block) => (block.steps || []).some((step) => step.key === key && step.available)).length;
+    }
+    const unit = {new:"個日程", change:"檔股票", follow_up:"檔股票", evidence:"份報告"}[key] || availableStep.unit_zh;
+    return {...availableStep, item_count:itemCount, unit_zh:unit, available:itemCount > 0};
   }).filter(Boolean);
   return {data_date:dataDate, steps, notice_zh:contracts[0].notice_zh, estimated_minutes:Math.max(...contracts.map((block) => Number(block.estimated_minutes || 0)))};
 }
@@ -880,8 +883,8 @@ function renderDailyResearch() {
   const countFor = (key) => Number(contract.steps.find((step) => step.key === key)?.item_count || 0);
   const summaryParts = [];
   if (countFor("new")) summaryParts.push(`${countFor("new")} 個確認日程`);
-  if (countFor("change")) summaryParts.push(`${countFor("change")} 項指標變化`);
-  if (countFor("follow_up")) summaryParts.push(`${countFor("follow_up")} 個追蹤問題`);
+  if (countFor("change")) summaryParts.push(`${countFor("change")} 檔股票有變化`);
+  if (countFor("follow_up")) summaryParts.push(`${countFor("follow_up")} 檔股票待追蹤`);
   $("dailyResearchSummary").textContent = summaryParts.length ? `今天整理出 ${summaryParts.join("、")}；照順序看完即可。` : "今天沒有新增待看內容，可以回到自選股查看目前狀態。";
   $("dailyResearchCount").textContent = `${completedCount} / ${total}`;
   $("dailyResearchProgress").textContent = total && completedCount === total ? "今日研究完成" : `${completedCount} / ${total} 完成`;

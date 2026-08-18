@@ -125,7 +125,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.2.1 Preview" in html
+    assert "Web v3.2.2 Preview" in html
     assert 'id="themeToggle"' in html
     assert 'localStorage.getItem("aiStockTheme")' in html
     assert 'const THEME_STORAGE_KEY = "aiStockTheme"' in js
@@ -136,6 +136,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "why_it_matters_zh" in js
     assert "item_count" in js
     assert "今天整理出" in js
+    assert 'change:"檔股票"' in js
+    assert 'follow_up:"檔股票"' in js
+    assert "檔股票有變化" in js
     assert "function homeDirection" in js
     assert 'id="homePage"' in html
     assert 'id="watchlistPage"' in html
