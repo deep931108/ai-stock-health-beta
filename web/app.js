@@ -1,5 +1,6 @@
 ﻿const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
+const THEME_STORAGE_KEY = "aiStockTheme";
 let currentReport = null;
 let available = [];
 let stockCatalog = [];
@@ -13,6 +14,32 @@ let watchlistFilter = "all";
 let eventFilter = "all";
 let exploreQuery = "";
 let exploreSort = "default";
+
+function preferredTheme() {
+  const saved = localStorage.getItem(THEME_STORAGE_KEY);
+  if (saved === "light" || saved === "dark") return saved;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme, {persist = false} = {}) {
+  const value = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = value;
+  if (persist) localStorage.setItem(THEME_STORAGE_KEY, value);
+  const toggle = $("themeToggle");
+  if (toggle) {
+    const dark = value === "dark";
+    toggle.setAttribute("aria-pressed", String(dark));
+    toggle.setAttribute("aria-label", dark ? "切換淺色模式" : "切換深色模式");
+    toggle.querySelector("span").textContent = dark ? "☀" : "☾";
+    toggle.querySelector("b").textContent = dark ? "淺色" : "深色";
+  }
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.content = value === "dark" ? "#111713" : "#f5f1ea";
+}
+
+function toggleTheme() {
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", {persist: true});
+}
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -989,12 +1016,18 @@ $("inviteForm").addEventListener("submit", (event) => {
   activateInvite(code);
 });
 $("logoutButton").addEventListener("click", logoutBeta);
+$("themeToggle").addEventListener("click", toggleTheme);
 document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEventListener("click", () => {
   showHomeView({restoreScroll:false});
   switchPage(button.dataset.tab);
 }));
 
 $("homeDate").textContent = formatHomeDate();
+applyTheme(preferredTheme());
+
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+  if (!localStorage.getItem(THEME_STORAGE_KEY)) applyTheme(event.matches ? "dark" : "light");
+});
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
 initializeBetaAccess();
