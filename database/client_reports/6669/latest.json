@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-18T22:20:56+08:00",
+  "generated_at": "2026-08-18T23:20:23+08:00",
   "status": "success",
   "stock_id": "6669",
   "data_date": "2026-08-18",
@@ -3355,7 +3355,7 @@
     },
     "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
     "data_as_of": "2026-08-18",
-    "generated_at": "2026-08-18T20:00:15+08:00",
+    "generated_at": "2026-08-18T22:30:49+08:00",
     "sources": [
       {
         "source_id": "ex_right_dividend",
