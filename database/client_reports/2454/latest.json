@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-18T23:20:24+08:00",
+  "generated_at": "2026-08-19T00:41:14+08:00",
   "status": "success",
   "stock_id": "2454",
   "data_date": "2026-08-18",
@@ -3361,8 +3361,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2454",
-    "window_start": "2026-08-18",
-    "window_end": "2026-08-24",
+    "window_start": "2026-08-19",
+    "window_end": "2026-08-25",
     "window_days": 7,
     "events": [
       {
@@ -3400,9 +3400,27 @@
         "statistical_item_zh": "勞動力、就業人數、失業人數、非勞動力、失業率、勞動力參與率",
         "reference_period_zh": "(11507)",
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=149&year=2026&n=3717"
+      },
+      {
+        "event_id": "TW:MARKET:industrial_production_release:2026-08-25",
+        "event_date": "2026-08-25",
+        "stock_id": "MARKET",
+        "stock_name": "台灣市場",
+        "event_type": "industrial_production_release",
+        "title_zh": "工業生產統計發布",
+        "beginner_explanation_zh": "工業生產反映製造活動強弱，可用來交叉確認景氣與企業接單狀況。",
+        "importance": "high",
+        "source_name_zh": "經濟部",
+        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
+        "verified": true,
+        "affects_health_score": false,
+        "event_time_zh": "16:00",
+        "statistical_item_zh": "工業生產統計",
+        "reference_period_zh": "(11507)",
+        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 2,
+    "event_count": 3,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -3445,7 +3463,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -3532,7 +3550,7 @@
             "stock_id": "2330",
             "status": "available",
             "data_date": "2026-08-18",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 2380.0,
             "return_20d_pct": -1.2448,
             "volatility_20d_pct": 2.8786,
@@ -3551,7 +3569,7 @@
             "stock_id": "2454",
             "status": "available",
             "data_date": "2026-08-18",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 3885.0,
             "return_20d_pct": 5.8583,
             "volatility_20d_pct": 4.8353,
@@ -3572,7 +3590,7 @@
             "stock_id": "2303",
             "status": "available",
             "data_date": "2026-08-18",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 119.0,
             "return_20d_pct": -11.5242,
             "volatility_20d_pct": 5.1214,
@@ -3593,7 +3611,7 @@
             "stock_id": "3034",
             "status": "available",
             "data_date": "2026-08-18",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 505.0,
             "return_20d_pct": 6.0924,
             "volatility_20d_pct": 2.8531,
@@ -3614,7 +3632,7 @@
             "stock_id": "3711",
             "status": "available",
             "data_date": "2026-08-18",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 599.0,
             "return_20d_pct": -5.3712,
             "volatility_20d_pct": 5.1955,
@@ -6408,7 +6426,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 2,
+        "item_count": 3,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -6452,12 +6470,98 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 39 項內容可以確認",
+    "headline_zh": "今天有 40 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
       "mode": "navigation_only"
     },
     "notice_zh": "今日研究只安排閱讀順序，不提供交易指令，也不改變健康分數。"
+  },
+  "research_notifications": {
+    "version": "ResearchNotifications-v1.0",
+    "status": "available",
+    "stock_id": "2454",
+    "data_date": "2026-08-18",
+    "notifications": [
+      {
+        "notification_id": "ea9d1d76d3fbebc406d2",
+        "type": "material_change",
+        "severity": "medium",
+        "stock_id": "2454",
+        "source_date": "2026-08-18",
+        "title_zh": "2454｜均線趨勢結構轉弱",
+        "message_zh": "這項變化讓健康分數扣分 0.90 分。",
+        "reason_zh": "均線趨勢結構由 4,050.00 元 變為 3,885.00 元（變化 -165.00 元）。這代表比較股價與中短期均線位置，判斷趨勢方向與強度。；因此相較昨日扣分 0.90 分。",
+        "destination": "events",
+        "affects_health_score": false
+      },
+      {
+        "notification_id": "8bb9745b4ef082452dc7",
+        "type": "risk_attention",
+        "severity": "medium",
+        "stock_id": "2454",
+        "source_date": "2026-08-18",
+        "title_zh": "2454｜目前風險偏高",
+        "message_zh": "目前風險分數為 54.3 分，建議先查看風險來源再判斷。",
+        "reason_zh": "這是目前狀態提醒；沒有前期證據時，不會宣稱風險正在上升。",
+        "destination": "report",
+        "affects_health_score": false
+      },
+      {
+        "notification_id": "43ce1c94b14d7a06eb8e",
+        "type": "follow_up",
+        "severity": "info",
+        "stock_id": "2454",
+        "source_date": "2026-08-18",
+        "title_zh": "2454｜有一項研究問題待追蹤",
+        "message_zh": "補齊 ROE、自由現金流與負債資料，再判斷長期財務品質。",
+        "reason_zh": "持續追蹤能確認先前觀察是否延續，避免只看單日數字。",
+        "destination": "watchlist",
+        "affects_health_score": false
+      },
+      {
+        "notification_id": "f6a039e20881574a1213",
+        "type": "official_event",
+        "severity": "info",
+        "stock_id": "MARKET",
+        "source_date": "2026-08-20",
+        "title_zh": "2026-08-20｜外銷訂單統計發布",
+        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
+        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
+        "destination": "events",
+        "affects_health_score": false
+      },
+      {
+        "notification_id": "9cf91cc92347f2c0154a",
+        "type": "official_event",
+        "severity": "info",
+        "stock_id": "MARKET",
+        "source_date": "2026-08-24",
+        "title_zh": "2026-08-24｜就業與失業率資料發布",
+        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
+        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
+        "destination": "events",
+        "affects_health_score": false
+      },
+      {
+        "notification_id": "b52fc9e5f1b97b115571",
+        "type": "official_event",
+        "severity": "info",
+        "stock_id": "MARKET",
+        "source_date": "2026-08-25",
+        "title_zh": "2026-08-25｜工業生產統計發布",
+        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
+        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
+        "destination": "events",
+        "affects_health_score": false
+      }
+    ],
+    "notification_count": 6,
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "attention_only"
+    },
+    "notice_zh": "通知只整理需要留意的研究事項，不是交易指令，也不會改變健康分數。"
   }
 }
