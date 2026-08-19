@@ -268,12 +268,18 @@ function render(report) {
   );
   const incomeProfile = report.income_profile || {};
   const growthProfile = report.growth_profile || {};
+  const cyclicalProfile = report.cyclical_profile || {};
+  const eventProfile = report.event_profile || {};
   const decisionProfile =
     incomeProfile.status === "available" && incomeProfile.decision
       ? incomeProfile
       : growthProfile.status === "available" && growthProfile.decision
         ? growthProfile
-        : null;
+        : cyclicalProfile.status === "available" && cyclicalProfile.decision
+          ? cyclicalProfile
+          : eventProfile.status === "available" && eventProfile.decision
+            ? eventProfile
+            : null;
 
   $("researchLabel").textContent = decisionProfile
     ? `${decisionProfile.label_zh}判斷`
