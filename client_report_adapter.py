@@ -122,6 +122,8 @@ class ClientReportRepository:
             "stock_profile": self._normalize_stock_profile(payload.get("stock_profile"), stock_id),
             "income_profile": json.loads(json.dumps(payload.get("income_profile") or {}, ensure_ascii=False, default=str)),
             "growth_profile": json.loads(json.dumps(payload.get("growth_profile") or {}, ensure_ascii=False, default=str)),
+            "cyclical_profile": json.loads(json.dumps(payload.get("cyclical_profile") or {}, ensure_ascii=False, default=str)),
+            "event_profile": json.loads(json.dumps(payload.get("event_profile") or {}, ensure_ascii=False, default=str)),
             "research_notifications": self._normalize_research_notifications(payload.get("research_notifications"), stock_id),
             "market_home_summary": self._normalize_market_home_summary(payload.get("market_home_summary")),
             "upcoming_events": self._normalize_upcoming_events(payload.get("upcoming_events"), stock_id),
