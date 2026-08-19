@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -119,6 +119,8 @@ class ClientReportRepository:
             "data_sources": self._normalize_sources(payload.get("data_sources")),
             "today_changes": self._normalize_today_changes(payload.get("today_changes"), stock_id),
             "daily_research": self._normalize_daily_research(payload.get("daily_research")),
+            "stock_profile": self._normalize_stock_profile(payload.get("stock_profile"), stock_id),
+            "income_profile": json.loads(json.dumps(payload.get("income_profile") or {}, ensure_ascii=False, default=str)),
             "research_notifications": self._normalize_research_notifications(payload.get("research_notifications"), stock_id),
             "market_home_summary": self._normalize_market_home_summary(payload.get("market_home_summary")),
             "upcoming_events": self._normalize_upcoming_events(payload.get("upcoming_events"), stock_id),
@@ -141,6 +143,25 @@ class ClientReportRepository:
             if isinstance(item, dict) and item.get("key") in {"new", "change", "follow_up", "evidence"}
         ]
         return detached
+
+    @staticmethod
+    def _normalize_stock_profile(raw: Any, stock_id: str) -> dict[str, Any]:
+        if not isinstance(raw, dict):
+            return {
+                "version": "StockProfile-v1.0",
+                "stock_id": str(stock_id),
+                "sector": "unknown",
+                "sector_label_zh": "待確認",
+                "profile_id": "default",
+                "label_zh": "待確認",
+                "comparison_group_zh": "一般股票",
+                "classification_confidence": "low",
+                "score_policy": {
+                    "affects_health_score": False,
+                    "mode": "comparison_only",
+                },
+            }
+        return json.loads(json.dumps(raw, ensure_ascii=False, default=str))
 
     @staticmethod
     def _normalize_research_notifications(raw: Any, stock_id: str) -> dict[str, Any]:

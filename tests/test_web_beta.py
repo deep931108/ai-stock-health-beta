@@ -126,11 +126,15 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.3.3 Preview" in html
+    assert "Web v3.4.1 Preview" in html
     assert 'id="notificationPanel"' in html
     assert 'id="notificationUnread"' in html
     assert 'class="notification-bell"' in html
     assert "function renderNotificationCenter" in js
+    assert '"income_profile":' in adapter
+    assert 'id="incomeDecision"' in html
+    assert 'incomeProfile.status === "available"' in js
+    assert 'classList.remove("score-good", "score-neutral", "score-watch")' in js
     assert 'aiStockNotificationReadIds' in js
     assert 'research_notifications' in adapter
     assert 'const saved = new Set(watchlist());' in js

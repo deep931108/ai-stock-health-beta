@@ -69,3 +69,162 @@ html[data-theme="dark"] .daily-conclusion>p,html[data-theme="dark"] .digest-copy
 .notification-unread{position:absolute;right:-8px;top:-9px;min-width:18px;height:18px;padding:0 5px;border:2px solid var(--warm-bg);border-radius:999px;background:var(--warm-red);color:#fff;font:700 10px/14px system-ui;text-align:center}.notification-backdrop{position:fixed;inset:0;z-index:90;background:rgba(22,18,14,.28);backdrop-filter:blur(2px)}.notification-panel{position:fixed;z-index:91;right:18px;top:18px;bottom:18px;width:min(430px,calc(100vw - 36px));overflow:auto;padding:22px;border:1px solid var(--warm-line);border-radius:24px;background:var(--warm-card);box-shadow:0 28px 80px rgba(48,38,29,.25);color:var(--warm-ink)}.notification-panel>header{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:15px;border-bottom:1px solid var(--warm-line)}.notification-panel>header span{color:var(--warm-brand);font-size:11px}.notification-panel h2{margin:4px 0 0;font-size:23px}.notification-panel>header button{width:34px;height:34px;border:1px solid var(--warm-line);border-radius:50%;background:transparent;color:var(--warm-ink);font-size:24px;cursor:pointer}.notification-tools{display:flex;gap:7px;padding:16px 0}.notification-tools button{padding:7px 11px;border:1px solid var(--warm-line);border-radius:999px;background:transparent;color:var(--warm-muted);cursor:pointer}.notification-tools button.active{border-color:var(--warm-brand);background:var(--warm-brand);color:#fff}.notification-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;color:var(--warm-muted);font-size:11px}.notification-meta button{border:0;background:transparent;color:var(--warm-brand);cursor:pointer}.notification-list{display:grid;gap:9px}.notification-item{position:relative;width:100%;padding:14px 14px 14px 17px;border:1px solid var(--warm-line);border-radius:16px;background:transparent;color:var(--warm-ink);text-align:left;cursor:pointer}.notification-item:before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:var(--warm-green)}.notification-item.severity-high:before{background:var(--warm-red)}.notification-item.severity-medium:before{background:var(--warm-gold)}.notification-item.read{opacity:.62}.notification-item-top{display:flex;justify-content:space-between;color:var(--warm-muted);font-size:10px}.notification-item-top em{color:var(--warm-brand);font-style:normal}.notification-item b{display:block;margin-top:7px;font-size:14px}.notification-item p{margin:6px 0;color:var(--warm-ink);font-size:12px;line-height:1.55}.notification-item small{color:var(--warm-muted);font-size:10px;line-height:1.5}.notification-empty{padding:28px 10px;color:var(--warm-muted);text-align:center}.notification-notice{margin:16px 0 0;color:var(--warm-muted);font-size:10px;line-height:1.5}.notification-open{overflow:hidden}html[data-theme="dark"] .notification-panel{background:#18211c;box-shadow:0 28px 80px rgba(0,0,0,.5)}html[data-theme="dark"] .notification-backdrop{background:rgba(0,0,0,.55)}
 @media(max-width:600px){.notification-panel{top:auto;right:0;bottom:0;width:100%;max-height:86vh;border-radius:24px 24px 0 0}.notification-tools{overflow-x:auto}.notification-meta{align-items:flex-start}}
 .notification-bell{display:inline-flex;width:22px;height:22px;vertical-align:middle}.notification-bell svg{display:block;width:100%;height:100%}@media(max-width:470px){.notification-bell{width:20px;height:20px}}
+/* v3.4 compact stock overview */
+body:not(.home-mode) #reportContent .dashboard-grid{
+  grid-template-columns:1fr;
+  max-width:1120px;
+}
+
+body:not(.home-mode) #reportContent .hero-card{
+  padding:26px;
+  border-color:var(--warm-line);
+  border-radius:24px;
+  background:var(--warm-card);
+  color:var(--warm-ink);
+  box-shadow:0 18px 55px rgba(63,49,36,.08);
+}
+
+body:not(.home-mode) #reportContent .side-card{
+  display:none;
+}
+
+body:not(.home-mode) #reportContent .stock-title h2{
+  color:var(--warm-ink);
+}
+
+body:not(.home-mode) #reportContent .score-area{
+  grid-template-columns:145px minmax(0,1fr);
+  gap:26px;
+  margin:22px 0;
+}
+
+body:not(.home-mode) #reportContent .score-ring{
+  width:136px;
+  height:136px;
+  padding:9px;
+  box-shadow:none;
+}
+
+body:not(.home-mode) #reportContent .score-ring>div{
+  background:var(--warm-card);
+}
+
+body:not(.home-mode) #reportContent .score-ring strong{
+  font-size:38px;
+}
+
+body:not(.home-mode) #reportContent .score-copy h3{
+  max-width:720px;
+  margin:7px 0 9px;
+  color:var(--warm-ink);
+  font-size:clamp(22px,3vw,30px);
+}
+
+body:not(.home-mode) #reportContent .score-copy p,
+body:not(.home-mode) #reportContent .stock-title span{
+  color:var(--warm-muted);
+}
+
+body:not(.home-mode) #reportContent .quick-stats article{
+  padding:14px 16px;
+  border-color:var(--warm-line);
+  background:var(--warm-soft);
+}
+
+body:not(.home-mode) #reportContent .quick-stats strong{
+  color:var(--warm-ink);
+}
+
+body:not(.home-mode) #reportContent .quick-stats span,
+body:not(.home-mode) #reportContent .quick-stats small{
+  color:var(--warm-muted);
+}
+
+@media(max-width:700px){
+  body:not(.home-mode) #reportContent .hero-card{
+    padding:19px;
+  }
+
+  body:not(.home-mode) #reportContent .score-area{
+    grid-template-columns:1fr;
+    justify-items:start;
+    text-align:left;
+  }
+
+  body:not(.home-mode) #reportContent .score-ring{
+    width:112px;
+    height:112px;
+  }
+
+  body:not(.home-mode) #reportContent .quick-stats{
+    grid-template-columns:1fr;
+  }
+}
+.stock-meta-row{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:9px;
+}
+
+.stock-profile-chip{
+  display:inline-flex;
+  padding:5px 9px;
+  border:1px solid var(--warm-line);
+  border-radius:999px;
+  background:var(--warm-soft);
+  color:var(--warm-brand)!important;
+  font-size:11px!important;
+  font-weight:700;
+}
+.income-decision{display:flex;align-items:center;gap:10px;margin-top:12px}
+.income-decision span{font-size:12px;color:var(--muted)}
+.income-decision strong{padding:6px 11px;border:1px solid rgba(211,157,91,.42);border-radius:999px;color:#d39d5b;background:rgba(211,157,91,.08)}
+/* v3.4 semantic stock colors */
+body:not(.home-mode) #reportContent .score-ring{
+  --score-tone:#9b672d;
+  --score-track:#d7dce1;
+  background:conic-gradient(var(--score-tone) 0 var(--score-angle),var(--score-track) var(--score-angle));
+  box-shadow:none;
+}
+body:not(.home-mode) #reportContent .score-ring.score-good{--score-tone:#39765a}
+body:not(.home-mode) #reportContent .score-ring.score-neutral{--score-tone:#9b672d}
+body:not(.home-mode) #reportContent .score-ring.score-watch{--score-tone:#a94f48}
+body:not(.home-mode) #reportContent .score-ring strong{color:var(--score-tone)}
+body:not(.home-mode) #reportContent .research-label{color:#8b572b}
+body:not(.home-mode) #reportContent .score-copy p{color:#625d56}
+body:not(.home-mode) #reportContent .stock-profile-chip{
+  border-color:#d9b58e;
+  background:#f8ecdf;
+  color:#815027;
+}
+body:not(.home-mode) #reportContent .income-decision strong{
+  border-color:#c99b68;
+  background:#f6e9d9;
+  color:#7c4c25;
+}
+body:not(.home-mode) #reportContent .status-chip{
+  border-color:#d2ae68;
+  background:#fbf1d9;
+  color:#765713!important;
+}
+
+html[data-theme="dark"] body:not(.home-mode) #reportContent .score-ring{
+  --score-track:#314038;
+}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .score-ring.score-good{--score-tone:#72ae8b}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .score-ring.score-neutral{--score-tone:#d19a5e}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .score-ring.score-watch{--score-tone:#dc746c}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .research-label{color:#d7a066}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .score-copy p{color:#c4bdb3}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .stock-profile-chip,
+html[data-theme="dark"] body:not(.home-mode) #reportContent .income-decision strong{
+  border-color:#76583d;
+  background:#30271f;
+  color:#e0a66e;
+}
+html[data-theme="dark"] body:not(.home-mode) #reportContent .status-chip{
+  border-color:#73612d;
+  background:#302b1c;
+  color:#e7c65d!important;
+}

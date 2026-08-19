@@ -252,11 +252,37 @@ function render(report) {
   $("saveButton").classList.remove("hidden");
   $("detailNavigationTitle").textContent = `${report.name}（${report.id}）研究報告`;
   $("stockMeta").textContent = `${report.id} · ${report.industry}`;
+  $("stockProfile").textContent = report.stock_profile?.label_zh || "待確認";
+  $("stockProfile").title = report.stock_profile?.comparison_group_zh || "一般股票";
   $("stockName").textContent = report.name;
   $("assessment").textContent = report.assessment;
   $("healthScore").textContent = Number(report.score).toFixed(1);
   $("scoreRing").style.setProperty("--score-angle", `${Math.min(100, Math.max(0, report.score)) * 3.6}deg`);
-  $("summary").textContent = report.summary;
+  $("scoreRing").classList.remove("score-good", "score-neutral", "score-watch");
+  $("scoreRing").classList.add(
+    report.score >= 75
+      ? "score-good"
+      : report.score >= 55
+        ? "score-neutral"
+        : "score-watch"
+  );
+  const incomeProfile = report.income_profile || {};
+  const incomeAvailable =
+    incomeProfile.status === "available" &&
+    incomeProfile.decision;
+
+  $("summary").textContent = incomeAvailable
+    ? `未持有：${incomeProfile.decision.unheld}`
+    : report.summary;
+
+  $("incomeDecision").classList.toggle("hidden", !incomeAvailable);
+  $("heldDecision").textContent = incomeAvailable
+    ? incomeProfile.decision.held
+    : "";
+
+  $("summaryNote").textContent = incomeAvailable
+    ? incomeProfile.decision.reason_zh
+    : "這是研究狀態，不是買進或賣出訊號。";
   $("grade").textContent = report.grade;
   $("confidence").textContent = `${Math.round(report.confidence)} · ${report.confidence_level}`;
   $("risk").textContent = `${Math.round(report.risk)} · ${report.risk_level}`;
