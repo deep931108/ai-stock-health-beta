@@ -53,13 +53,28 @@ function saveNotificationReadIds(ids) {
 }
 
 function researchNotifications() {
-  const rows = stockCatalog.flatMap((report) => report?.research_notifications?.notifications || []);
+  const saved = new Set(watchlist());
+  const rows = stockCatalog.flatMap(
+    (report) => report?.research_notifications?.notifications || []
+  );
   const unique = new Map();
+
   rows.forEach((item) => {
-    if (item?.notification_id && item.affects_health_score === false && !unique.has(item.notification_id)) unique.set(item.notification_id, item);
+    if (!item?.notification_id || item.affects_health_score !== false) return;
+
+    const stockId = String(item.stock_id || "");
+    const visibleToUser = stockId === "MARKET" || saved.has(stockId);
+    if (!visibleToUser || unique.has(item.notification_id)) return;
+
+    unique.set(item.notification_id, item);
   });
-  const priority = {high:0, medium:1, info:2};
-  return [...unique.values()].sort((a, b) => (priority[a.severity] ?? 3) - (priority[b.severity] ?? 3) || String(b.source_date || "").localeCompare(String(a.source_date || "")));
+
+  const priority = {high: 0, medium: 1, info: 2};
+  return [...unique.values()].sort(
+    (a, b) =>
+      (priority[a.severity] ?? 3) - (priority[b.severity] ?? 3) ||
+      String(b.source_date || "").localeCompare(String(a.source_date || ""))
+  );
 }
 
 function notificationMatches(item) {
@@ -1113,4 +1128,3 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (ev
 
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
 initializeBetaAccess();
-

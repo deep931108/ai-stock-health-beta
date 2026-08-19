@@ -126,12 +126,14 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.3.0 Preview" in html
+    assert "Web v3.3.1 Preview" in html
     assert 'id="notificationPanel"' in html
     assert 'id="notificationUnread"' in html
     assert "function renderNotificationCenter" in js
     assert 'aiStockNotificationReadIds' in js
     assert 'research_notifications' in adapter
+    assert 'const saved = new Set(watchlist());' in js
+    assert 'stockId === "MARKET" || saved.has(stockId)' in js
     assert 'id="themeToggle"' in html
     assert 'localStorage.getItem("aiStockTheme")' in html
     assert 'const THEME_STORAGE_KEY = "aiStockTheme"' in js
@@ -264,6 +266,3 @@ def test_upcoming_event_adapter_only_keeps_verified_non_scoring_events(tmp_path:
     assert report is not None
     assert [item["event_id"] for item in report["upcoming_events"]["events"]] == ["safe"]
     assert report["upcoming_events"]["event_count"] == 1
-
-
-
