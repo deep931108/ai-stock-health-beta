@@ -126,7 +126,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.3.2 Preview" in html
+    assert "Web v3.3.3 Preview" in html
     assert 'id="notificationPanel"' in html
     assert 'id="notificationUnread"' in html
     assert 'class="notification-bell"' in html
@@ -135,6 +135,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'research_notifications' in adapter
     assert 'const saved = new Set(watchlist());' in js
     assert 'stockId === "MARKET" || saved.has(stockId)' in js
+    assert "refreshWatchlistUI();\n  renderNotificationCenter();" in js
     assert 'id="themeToggle"' in html
     assert 'localStorage.getItem("aiStockTheme")' in html
     assert 'const THEME_STORAGE_KEY = "aiStockTheme"' in js

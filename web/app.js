@@ -611,6 +611,7 @@ function watchlist() {
 function saveWatchlist(items) {
   localStorage.setItem("aiStockWatchlist", JSON.stringify([...new Set(items.map(String))]));
   refreshWatchlistUI();
+  renderNotificationCenter();
 }
 
 function refreshSavedButton() {
