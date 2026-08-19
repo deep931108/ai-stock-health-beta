@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:20:19+08:00",
+  "generated_at": "2026-08-19T23:36:53+08:00",
   "status": "success",
   "stock_id": "2881",
   "data_date": "2026-08-19",
@@ -4048,6 +4048,16 @@
   },
   "notices_zh": [],
   "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
+  "growth_profile": {
+    "version": "GrowthProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2881",
+    "reason": "not_growth_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
     "schema_version": "CustomerEvidence-v2.0",

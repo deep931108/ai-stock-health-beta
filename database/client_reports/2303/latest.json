@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:20:14+08:00",
+  "generated_at": "2026-08-19T23:36:45+08:00",
   "status": "success",
   "stock_id": "2303",
   "data_date": "2026-08-19",
@@ -3944,6 +3944,45 @@
   },
   "notices_zh": [],
   "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
+  "growth_profile": {
+    "version": "GrowthProfile-v1.0",
+    "status": "available",
+    "stock_id": "2303",
+    "profile_id": "growth_quality",
+    "label_zh": "成長品質型",
+    "comparison_group_zh": "成長型股票",
+    "metrics": {
+      "revenue_yoy_pct": 22.8544,
+      "eps_growth_yoy_pct": 377.4648,
+      "relative_market_pct_point": -16.81,
+      "sector_rank": 5,
+      "sector_peer_count": 5,
+      "pe_ratio": 17.89,
+      "pb_ratio": 3.36,
+      "pe_rank": 2,
+      "pb_rank": 1,
+      "peer_count": 5
+    },
+    "decision": {
+      "unheld": "成長強，但等待價格確認",
+      "held": "續抱，觀察成長是否延續",
+      "reason_zh": "營收年增 22.85%、EPS 年增 377.46%；同組近 20 日動能為第 5/5 名，目前不宜只因成長數字追價。"
+    },
+    "missing_evidence_zh": [
+      "ROE",
+      "自由現金流",
+      "負債比"
+    ],
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    },
+    "source": {
+      "market_comparison": "InvestmentResearchContext-v1.0",
+      "valuation_provider": "TWSE",
+      "valuation_dataset": "BWIBBU_ALL"
+    }
+  },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
     "schema_version": "CustomerEvidence-v2.0",

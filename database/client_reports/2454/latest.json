@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:20:13+08:00",
+  "generated_at": "2026-08-19T23:36:48+08:00",
   "status": "success",
   "stock_id": "2454",
   "data_date": "2026-08-19",
@@ -4093,6 +4093,45 @@
   },
   "notices_zh": [],
   "disclaimer_zh": "本系統提供研究觀察資訊，不構成投資建議、要約或獲利保證。",
+  "growth_profile": {
+    "version": "GrowthProfile-v1.0",
+    "status": "available",
+    "stock_id": "2454",
+    "profile_id": "growth_quality",
+    "label_zh": "成長品質型",
+    "comparison_group_zh": "成長型股票",
+    "metrics": {
+      "revenue_yoy_pct": 4.9881,
+      "eps_growth_yoy_pct": -12.6857,
+      "relative_market_pct_point": -0.03,
+      "sector_rank": 2,
+      "sector_peer_count": 5,
+      "pe_ratio": 64.16,
+      "pb_ratio": 14.62,
+      "pe_rank": 5,
+      "pb_rank": 5,
+      "peer_count": 5
+    },
+    "decision": {
+      "unheld": "等待，不急著布局",
+      "held": "重新檢視成長",
+      "reason_zh": "目前成長證據不足，需確認營收與 EPS 是否持續改善。"
+    },
+    "missing_evidence_zh": [
+      "ROE",
+      "自由現金流",
+      "負債比"
+    ],
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    },
+    "source": {
+      "market_comparison": "InvestmentResearchContext-v1.0",
+      "valuation_provider": "TWSE",
+      "valuation_dataset": "BWIBBU_ALL"
+    }
+  },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
     "schema_version": "CustomerEvidence-v2.0",
