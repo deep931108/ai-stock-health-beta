@@ -267,21 +267,29 @@ function render(report) {
         : "score-watch"
   );
   const incomeProfile = report.income_profile || {};
-  const incomeAvailable =
-    incomeProfile.status === "available" &&
-    incomeProfile.decision;
+  const growthProfile = report.growth_profile || {};
+  const decisionProfile =
+    incomeProfile.status === "available" && incomeProfile.decision
+      ? incomeProfile
+      : growthProfile.status === "available" && growthProfile.decision
+        ? growthProfile
+        : null;
 
-  $("summary").textContent = incomeAvailable
-    ? `未持有：${incomeProfile.decision.unheld}`
+  $("researchLabel").textContent = decisionProfile
+    ? `${decisionProfile.label_zh}判斷`
+    : "AI 研究摘要";
+
+  $("summary").textContent = decisionProfile
+    ? `未持有：${decisionProfile.decision.unheld}`
     : report.summary;
 
-  $("incomeDecision").classList.toggle("hidden", !incomeAvailable);
-  $("heldDecision").textContent = incomeAvailable
-    ? incomeProfile.decision.held
+  $("incomeDecision").classList.toggle("hidden", !decisionProfile);
+  $("heldDecision").textContent = decisionProfile
+    ? decisionProfile.decision.held
     : "";
 
-  $("summaryNote").textContent = incomeAvailable
-    ? incomeProfile.decision.reason_zh
+  $("summaryNote").textContent = decisionProfile
+    ? decisionProfile.decision.reason_zh
     : "這是研究狀態，不是買進或賣出訊號。";
   $("grade").textContent = report.grade;
   $("confidence").textContent = `${Math.round(report.confidence)} · ${report.confidence_level}`;

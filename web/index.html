@@ -15,8 +15,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.4.1">
-  <link rel="stylesheet" href="/assets/home.css?v=3.4.1">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.4.2">
+  <link rel="stylesheet" href="/assets/home.css?v=3.4.2">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -147,7 +147,7 @@
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
         <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
         <article class="warm-card profile-card"><span>報告資料</span><b id="profileReportCount">0 份</b><small id="profileUpdatedAt">等待更新</small></article>
-        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.4.1 Preview</b><small>站內通知依共用引擎合約顯示，不影響健康分數</small></article>
+        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.4.2 Preview</b><small>站內通知依共用引擎合約顯示，不影響健康分數</small></article>
       </div>
       <div class="profile-actions warm-card"><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
       <div class="profile-notice warm-card"><b>研究輔助，不代替投資決策</b><p>AI Stock Terminal 用來整理公開資料與研究證據，不提供自動下單，也不保證未來報酬。</p></div>
@@ -177,7 +177,7 @@
           <div class="score-area">
             <div id="scoreRing" class="score-ring"><div><strong id="healthScore">59.7</strong><span>健康分數</span></div></div>
             <div class="score-copy">
-              <span class="research-label">AI 研究摘要</span>
+              <span id="researchLabel" class="research-label">AI 研究摘要</span>
               <h3 id="summary">目前適合持續追蹤，尚不足以提高研究優先級。</h3>
               <div id="incomeDecision" class="income-decision hidden"><span>已持有</span><strong id="heldDecision">續抱觀察</strong></div>
               <p id="summaryNote">這是研究狀態，不是買進或賣出訊號。</p>
@@ -294,6 +294,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.4.1" defer></script>
+  <script src="/assets/app.js?v=3.4.2" defer></script>
 </body>
 </html>
