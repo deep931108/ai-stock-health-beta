@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:36:59+08:00",
+  "generated_at": "2026-08-20T00:22:53+08:00",
   "status": "success",
   "stock_id": "1301",
   "data_date": "2026-08-19",
@@ -3394,8 +3394,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "1301",
-    "window_start": "2026-08-19",
-    "window_end": "2026-08-25",
+    "window_start": "2026-08-20",
+    "window_end": "2026-08-26",
     "window_days": 7,
     "events": [
       {
@@ -3568,7 +3568,7 @@
             "stock_id": "1301",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 56.8,
             "return_20d_pct": -10.5512,
             "volatility_20d_pct": 3.013,
@@ -3589,7 +3589,7 @@
             "stock_id": "1303",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 187.5,
             "return_20d_pct": -9.8558,
             "volatility_20d_pct": 5.8463,
@@ -3610,7 +3610,7 @@
             "stock_id": "1216",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 77.5,
             "return_20d_pct": 0.9115,
             "volatility_20d_pct": 1.4882,
@@ -3631,7 +3631,7 @@
             "stock_id": "1101",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 24.05,
             "return_20d_pct": 0.8386,
             "volatility_20d_pct": 1.3078,
@@ -3747,6 +3747,51 @@
     "status": "unavailable",
     "stock_id": "1301",
     "reason": "not_growth_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "cyclical_profile": {
+    "version": "CyclicalProfile-v1.0",
+    "status": "available",
+    "stock_id": "1301",
+    "profile_id": "cyclical",
+    "label_zh": "景氣循環型",
+    "comparison_group_zh": "景氣循環型股票",
+    "metrics": {
+      "revenue_yoy_pct": 0.6693,
+      "revenue_mom_pct": -18.4154,
+      "return_20d_pct": -10.5512,
+      "rsi_14": 48.5484,
+      "volume_ratio_20": 0.6269,
+      "breakout_20": false,
+      "margin_change_5d_pct": 65.812,
+      "institution_flow_acceleration": -85574.8,
+      "pe_ratio": null,
+      "pb_ratio": null,
+      "dividend_yield_pct": null
+    },
+    "decision": {
+      "unheld": "等待循環轉強",
+      "held": "重新檢視景氣方向",
+      "reason_zh": "營運與價格趨勢尚未同時轉強，暫不因單一指標布局。"
+    },
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    },
+    "source": {
+      "evidence": "ClientEvidence-v1.0",
+      "valuation_provider": "TWSE",
+      "valuation_dataset": "BWIBBU_ALL"
+    }
+  },
+  "event_profile": {
+    "version": "EventProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "1301",
+    "reason": "not_event_profile",
     "score_policy": {
       "affects_health_score": false,
       "mode": "comparison_only"

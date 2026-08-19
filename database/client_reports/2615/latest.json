@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:36:55+08:00",
+  "generated_at": "2026-08-20T00:22:49+08:00",
   "status": "success",
   "stock_id": "2615",
   "data_date": "2026-08-19",
@@ -3365,8 +3365,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2615",
-    "window_start": "2026-08-19",
-    "window_end": "2026-08-25",
+    "window_start": "2026-08-20",
+    "window_end": "2026-08-26",
     "window_days": 7,
     "events": [
       {
@@ -3619,6 +3619,51 @@
     "status": "unavailable",
     "stock_id": "2615",
     "reason": "not_growth_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "cyclical_profile": {
+    "version": "CyclicalProfile-v1.0",
+    "status": "available",
+    "stock_id": "2615",
+    "profile_id": "cyclical",
+    "label_zh": "景氣循環型",
+    "comparison_group_zh": "景氣循環型股票",
+    "metrics": {
+      "revenue_yoy_pct": 32.4394,
+      "revenue_mom_pct": 17.1115,
+      "return_20d_pct": 25.1469,
+      "rsi_14": 84.4649,
+      "volume_ratio_20": 2.3177,
+      "breakout_20": true,
+      "margin_change_5d_pct": 381.1297,
+      "institution_flow_acceleration": 160455.4,
+      "pe_ratio": 7.21,
+      "pb_ratio": 1.02,
+      "dividend_yield_pct": 2.86
+    },
+    "decision": {
+      "unheld": "趨勢強，但等待拉回",
+      "held": "續抱，留意過熱與籌碼反轉",
+      "reason_zh": "營收年增 32.44%、20 日上漲 25.15%，但 RSI 為 84.46，且融資或法人動能出現追價風險，目前不宜追高。"
+    },
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    },
+    "source": {
+      "evidence": "ClientEvidence-v1.0",
+      "valuation_provider": "TWSE",
+      "valuation_dataset": "BWIBBU_ALL"
+    }
+  },
+  "event_profile": {
+    "version": "EventProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2615",
+    "reason": "not_event_profile",
     "score_policy": {
       "affects_health_score": false,
       "mode": "comparison_only"

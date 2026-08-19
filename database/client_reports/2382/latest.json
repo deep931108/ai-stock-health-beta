@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:36:45+08:00",
+  "generated_at": "2026-08-20T00:22:41+08:00",
   "status": "success",
   "stock_id": "2382",
   "data_date": "2026-08-19",
@@ -3395,8 +3395,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2382",
-    "window_start": "2026-08-19",
-    "window_end": "2026-08-25",
+    "window_start": "2026-08-20",
+    "window_end": "2026-08-26",
     "window_days": 7,
     "events": [
       {
@@ -3570,7 +3570,7 @@
             "stock_id": "2317",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 245.0,
             "return_20d_pct": -2.5845,
             "volatility_20d_pct": 3.178,
@@ -3591,7 +3591,7 @@
             "stock_id": "2382",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 331.0,
             "return_20d_pct": 0.6079,
             "volatility_20d_pct": 3.1977,
@@ -3612,7 +3612,7 @@
             "stock_id": "3231",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 182.0,
             "return_20d_pct": 10.9756,
             "volatility_20d_pct": 4.0574,
@@ -3633,7 +3633,7 @@
             "stock_id": "2376",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 348.5,
             "return_20d_pct": 0.1437,
             "volatility_20d_pct": 3.9336,
@@ -3654,7 +3654,7 @@
             "stock_id": "6669",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 6375.0,
             "return_20d_pct": 15.9091,
             "volatility_20d_pct": 4.532,
@@ -3816,6 +3816,26 @@
       "market_comparison": "InvestmentResearchContext-v1.0",
       "valuation_provider": "TWSE",
       "valuation_dataset": "BWIBBU_ALL"
+    }
+  },
+  "cyclical_profile": {
+    "version": "CyclicalProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2382",
+    "reason": "not_cyclical_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "event_profile": {
+    "version": "EventProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2382",
+    "reason": "not_event_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
     }
   },
   "today_changes": {

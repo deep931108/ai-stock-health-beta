@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:36:54+08:00",
+  "generated_at": "2026-08-20T00:22:48+08:00",
   "status": "success",
   "stock_id": "2886",
   "data_date": "2026-08-19",
@@ -3451,8 +3451,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2886",
-    "window_start": "2026-08-19",
-    "window_end": "2026-08-25",
+    "window_start": "2026-08-20",
+    "window_end": "2026-08-26",
     "window_days": 7,
     "events": [
       {
@@ -3640,7 +3640,7 @@
             "stock_id": "2881",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 128.5,
             "return_20d_pct": 1.1811,
             "volatility_20d_pct": 2.0453,
@@ -3661,7 +3661,7 @@
             "stock_id": "2882",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 98.3,
             "return_20d_pct": 1.5496,
             "volatility_20d_pct": 2.2762,
@@ -3682,7 +3682,7 @@
             "stock_id": "2891",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 64.9,
             "return_20d_pct": 1.4063,
             "volatility_20d_pct": 1.3654,
@@ -3703,7 +3703,7 @@
             "stock_id": "2886",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 47.05,
             "return_20d_pct": -2.3859,
             "volatility_20d_pct": 2.308,
@@ -3724,7 +3724,7 @@
             "stock_id": "2884",
             "status": "available",
             "data_date": "2026-08-19",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 37.8,
             "return_20d_pct": 4.8544,
             "volatility_20d_pct": 1.3296,
@@ -3861,6 +3861,26 @@
     "status": "unavailable",
     "stock_id": "2886",
     "reason": "not_growth_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "cyclical_profile": {
+    "version": "CyclicalProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2886",
+    "reason": "not_cyclical_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "event_profile": {
+    "version": "EventProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2886",
+    "reason": "not_event_profile",
     "score_policy": {
       "affects_health_score": false,
       "mode": "comparison_only"

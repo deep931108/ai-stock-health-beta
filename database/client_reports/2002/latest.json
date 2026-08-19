@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:37:00+08:00",
+  "generated_at": "2026-08-20T00:22:54+08:00",
   "status": "success",
   "stock_id": "2002",
   "data_date": "2026-08-18",
@@ -3519,8 +3519,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2002",
-    "window_start": "2026-08-19",
-    "window_end": "2026-08-25",
+    "window_start": "2026-08-20",
+    "window_end": "2026-08-26",
     "window_days": 7,
     "events": [
       {
@@ -3773,6 +3773,51 @@
     "status": "unavailable",
     "stock_id": "2002",
     "reason": "not_growth_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "cyclical_profile": {
+    "version": "CyclicalProfile-v1.0",
+    "status": "available",
+    "stock_id": "2002",
+    "profile_id": "cyclical",
+    "label_zh": "景氣循環型",
+    "comparison_group_zh": "景氣循環型股票",
+    "metrics": {
+      "revenue_yoy_pct": 9.6077,
+      "revenue_mom_pct": -6.547,
+      "return_20d_pct": 0.7979,
+      "rsi_14": 47.7223,
+      "volume_ratio_20": 0.3963,
+      "breakout_20": false,
+      "margin_change_5d_pct": -84.2506,
+      "institution_flow_acceleration": -13667.4,
+      "pe_ratio": null,
+      "pb_ratio": null,
+      "dividend_yield_pct": null
+    },
+    "decision": {
+      "unheld": "等待循環轉強",
+      "held": "重新檢視景氣方向",
+      "reason_zh": "營運與價格趨勢尚未同時轉強，暫不因單一指標布局。"
+    },
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    },
+    "source": {
+      "evidence": "ClientEvidence-v1.0",
+      "valuation_provider": "TWSE",
+      "valuation_dataset": "BWIBBU_ALL"
+    }
+  },
+  "event_profile": {
+    "version": "EventProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "2002",
+    "reason": "not_event_profile",
     "score_policy": {
       "affects_health_score": false,
       "mode": "comparison_only"

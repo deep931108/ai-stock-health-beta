@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-19T23:37:00+08:00",
+  "generated_at": "2026-08-20T00:22:54+08:00",
   "status": "success",
   "stock_id": "1795",
   "data_date": "2026-08-18",
@@ -3409,8 +3409,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "1795",
-    "window_start": "2026-08-19",
-    "window_end": "2026-08-25",
+    "window_start": "2026-08-20",
+    "window_end": "2026-08-26",
     "window_days": 7,
     "events": [
       {
@@ -3666,6 +3666,51 @@
     "score_policy": {
       "affects_health_score": false,
       "mode": "comparison_only"
+    }
+  },
+  "cyclical_profile": {
+    "version": "CyclicalProfile-v1.0",
+    "status": "unavailable",
+    "stock_id": "1795",
+    "reason": "not_cyclical_profile",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    }
+  },
+  "event_profile": {
+    "version": "EventProfile-v1.0",
+    "status": "available",
+    "stock_id": "1795",
+    "profile_id": "high_volatility_event",
+    "label_zh": "高波動事件型",
+    "comparison_group_zh": "生技事件型股票",
+    "metrics": {
+      "return_20d_pct": -3.4121,
+      "volatility_20d_pct": 2.4551,
+      "atr_14_pct": 3.2333,
+      "volume_ratio_20": 0.488,
+      "breakout_20": false,
+      "max_drawdown_full_pct": -67.1218,
+      "institution_flow_acceleration": 423.8,
+      "sector_rank": null,
+      "sector_peer_count": 1,
+      "confirmed_company_event_count": 0
+    },
+    "confirmed_company_events": [],
+    "decision": {
+      "unheld": "等待事件與價格確認",
+      "held": "控制部位並持續觀察",
+      "reason_zh": "事件證據或價格方向仍不完整，不宜只看新聞或單日波動。"
+    },
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "comparison_only"
+    },
+    "source": {
+      "evidence": "ClientEvidence-v1.0",
+      "events": "UpcomingEvents-v1.0",
+      "comparison": "SectorPeerComparison-v1.1"
     }
   },
   "today_changes": {
