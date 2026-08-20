@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
@@ -15,8 +15,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.4.4">
-  <link rel="stylesheet" href="/assets/home.css?v=3.4.4">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.4.5">
+  <link rel="stylesheet" href="/assets/home.css?v=3.4.5">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -133,7 +133,8 @@
       </div>
       <div class="explore-search"><input id="exploreSearch" type="search" placeholder="輸入股票名稱或四位代號" autocomplete="off"><select id="exploreSort" aria-label="股票排序"><option value="default">預設排序</option><option value="score-desc">健康分數高至低</option><option value="score-asc">健康分數低至高</option><option value="risk">優先查看風險</option></select></div>
       <div class="stock-center-tools">
-        <div id="sectorFilters" class="sector-filters" aria-label="板塊篩選"></div>
+        <div id="sectorFilters" class="sector-filters" aria-label="股票類型篩選"></div>
+        <select id="industryFilter" class="industry-filter" aria-label="產業篩選"><option value="全部產業">全部產業</option></select>
         <button id="watchlistOnlyButton" class="watchlist-only" type="button" aria-pressed="false">☆ 只看自選 <span id="watchlistCount">0</span></button>
       </div>
       <div id="stockCenterLoading" class="stock-center-empty">正在整理股票中心…</div>
@@ -147,7 +148,7 @@
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
         <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
         <article class="warm-card profile-card"><span>報告資料</span><b id="profileReportCount">0 份</b><small id="profileUpdatedAt">等待更新</small></article>
-        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.4.4 Preview</b><small>站內通知依共用引擎合約顯示，不影響健康分數</small></article>
+        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.4.5 Preview</b><small>站內通知依共用引擎合約顯示，不影響健康分數</small></article>
       </div>
       <div class="profile-actions warm-card"><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
       <div class="profile-notice warm-card"><b>研究輔助，不代替投資決策</b><p>AI Stock Terminal 用來整理公開資料與研究證據，不提供自動下單，也不保證未來報酬。</p></div>
@@ -294,6 +295,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.4.4" defer></script>
+  <script src="/assets/app.js?v=3.4.5" defer></script>
 </body>
 </html>

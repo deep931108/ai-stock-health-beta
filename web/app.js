@@ -1,4 +1,4 @@
-﻿const $ = (id) => document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
 const THEME_STORAGE_KEY = "aiStockTheme";
 const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
@@ -6,6 +6,7 @@ let currentReport = null;
 let available = [];
 let stockCatalog = [];
 let activeSector = "全部";
+let activeIndustry = "全部產業";
 let watchlistOnly = false;
 let homeScrollPosition = 0;
 let betaSession = null;
@@ -679,11 +680,33 @@ function sectorName(industry) {
   return "傳統產業";
 }
 
+function stockDecisionProfile(item) {
+  const profileId = item.stock_profile?.profile_id || "default";
+  const profiles = {
+    financial_income: item.income_profile,
+    growth_quality: item.growth_profile,
+    cyclical: item.cyclical_profile,
+    high_volatility_event: item.event_profile,
+  };
+  return profiles[profileId] || {};
+}
+
 function renderSectorFilters() {
-  const preferred = ["全部", "AI電子業", "傳統產業", "半導體業", "生技醫療業", "航運業", "金融保險業"];
-  const present = new Set(stockCatalog.map((item) => item.sector));
-  const sectors = preferred.filter((item) => item === "全部" || present.has(item));
-  $("sectorFilters").innerHTML = sectors.map((sector) => `<button type="button" class="sector-filter ${sector === activeSector ? "active" : ""}" data-sector="${escapeHtml(sector)}">${escapeHtml(sector)}</button>`).join("");
+  const preferred = [
+    {id: "全部", label: "全部"},
+    {id: "financial_income", label: "收益"},
+    {id: "growth_quality", label: "成長"},
+    {id: "cyclical", label: "循環"},
+    {id: "high_volatility_event", label: "事件"},
+  ];
+  const present = new Set(stockCatalog.map((item) => item.stock_profile?.profile_id));
+  const types = preferred.filter((item) => item.id === "全部" || present.has(item.id));
+  const preferredIndustries = ["全部產業", "AI電子業", "傳統產業", "半導體業", "生技醫療業", "航運業", "金融保險業"];
+  const presentIndustries = new Set(stockCatalog.map((item) => item.sector));
+  const industries = preferredIndustries.filter((item) => item === "全部產業" || presentIndustries.has(item));
+  $("industryFilter").innerHTML = industries.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join("");
+  $("industryFilter").value = activeIndustry;
+  $("sectorFilters").innerHTML = types.map((item) => `<button type="button" class="sector-filter ${item.id === activeSector ? "active" : ""}" data-sector="${escapeHtml(item.id)}">${escapeHtml(item.label)}</button>`).join("");
   document.querySelectorAll(".sector-filter").forEach((button) => button.addEventListener("click", () => {
     activeSector = button.dataset.sector;
     renderSectorFilters();
@@ -695,7 +718,8 @@ function renderStockCenter() {
   const saved = new Set(watchlist());
   const query = exploreQuery.trim().toLowerCase();
   const riskOrder = (item) => Number(item.risk || 0);
-  const rows = stockCatalog.filter((item) => (activeSector === "全部" || item.sector === activeSector)
+  const rows = stockCatalog.filter((item) => (activeSector === "全部" || item.stock_profile?.profile_id === activeSector)
+    && (activeIndustry === "全部產業" || item.sector === activeIndustry)
     && (!watchlistOnly || saved.has(item.id))
     && (!query || item.id.includes(query) || String(item.name).toLowerCase().includes(query) || String(item.industry).toLowerCase().includes(query)))
     .sort((a, b) => exploreSort === "score-desc" ? Number(b.score) - Number(a.score)
@@ -706,8 +730,8 @@ function renderStockCenter() {
   $("watchlistOnlyButton").classList.toggle("active", watchlistOnly);
   $("watchlistOnlyButton").setAttribute("aria-pressed", String(watchlistOnly));
   $("stockCenterGrid").innerHTML = rows.map((item) => `<article class="stock-center-card ${currentReport?.id === item.id ? "current" : ""}" data-stock-card="${item.id}" role="link" tabindex="0" aria-label="查看 ${escapeHtml(item.name)}（${item.id}）研究報告">
-    <div class="stock-card-title"><div><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.id)} · ${escapeHtml(item.industry)}</small></div><strong class="stock-card-score ${levelTone(item.score)}">${Number(item.score).toFixed(1)}</strong></div>
-    <div class="stock-card-meta"><span>研究等級<b>${escapeHtml(item.grade)}</b></span><span>風險<b>${escapeHtml(item.risk_level)}</b></span></div>
+    <div class="stock-card-title"><div><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.id)} · ${escapeHtml(item.industry)}</small><em class="stock-card-profile">${escapeHtml(item.stock_profile?.label_zh || "待確認")}</em></div><strong class="stock-card-score ${levelTone(item.score)}">${Number(item.score).toFixed(1)}</strong></div>
+    <p class="stock-card-decision">${escapeHtml(stockDecisionProfile(item).decision?.unheld || "等待更多證據")}</p><div class="stock-card-meta"><span>研究等級<b>${escapeHtml(item.grade)}</b></span><span>風險<b>${escapeHtml(item.risk_level)}</b></span></div>
     <div class="stock-card-actions"><span class="stock-card-assessment">${escapeHtml(item.assessment)}</span><button type="button" data-save-stock="${item.id}" aria-label="${saved.has(item.id) ? "移出" : "加入"}${escapeHtml(item.name)}自選">${saved.has(item.id) ? "★ 已自選" : "☆ 加入自選"}</button><button type="button" data-open-stock="${item.id}">查看報告 →</button></div>
   </article>`).join("");
   $("stockCenterEmpty").classList.toggle("hidden", rows.length > 0);
@@ -1133,6 +1157,7 @@ $("viewWatchlist").addEventListener("click", () => switchPage("watchlist"));
 $("addWatchlistStock").addEventListener("click", () => switchPage("explore"));
 $("exploreSearch").addEventListener("input", (event) => { exploreQuery = event.target.value; renderStockCenter(); });
 $("exploreSort").addEventListener("change", (event) => { exploreSort = event.target.value; renderStockCenter(); });
+$("industryFilter").addEventListener("change", (event) => { activeIndustry = event.target.value; renderStockCenter(); });
 document.querySelectorAll("[data-watch-filter]").forEach((button) => button.addEventListener("click", () => { watchlistFilter = button.dataset.watchFilter; document.querySelectorAll("[data-watch-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderWatchlistPage(); }));
 document.querySelectorAll("[data-event-filter]").forEach((button) => button.addEventListener("click", () => { eventFilter = button.dataset.eventFilter; document.querySelectorAll("[data-event-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderEventsPage(); }));
 $("notificationButton").addEventListener("click", () => setNotificationPanel($("notificationPanel").classList.contains("hidden")));
