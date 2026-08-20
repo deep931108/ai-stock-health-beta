@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 import re
@@ -126,7 +126,15 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.4.4 Preview" in html
+    assert "Web v3.4.5 Preview" in html
+    assert "function stockDecisionProfile" in js
+    assert 'financial_income: item.income_profile' in js
+    assert 'growth_quality: item.growth_profile' in js
+    assert 'cyclical: item.cyclical_profile' in js
+    assert 'high_volatility_event: item.event_profile' in js
+    assert 'item.stock_profile?.profile_id === activeSector' in js
+    assert 'class="stock-card-profile"' in js
+    assert 'class="stock-card-decision"' in js
     assert 'id="notificationPanel"' in html
     assert 'id="notificationUnread"' in html
     assert 'class="notification-bell"' in html
