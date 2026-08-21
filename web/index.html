@@ -15,8 +15,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.4.5">
-  <link rel="stylesheet" href="/assets/home.css?v=3.4.5">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.4.7.8">
+  <link rel="stylesheet" href="/assets/home.css?v=3.4.7.8">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -94,6 +94,19 @@
       <div id="todayDigest" class="digest-card warm-card"><p class="home-empty">正在整理今日研究報告…</p></div>
     </section>
 
+    <section class="home-section material-news-section" aria-labelledby="materialNewsTitle">
+      <div class="home-section-heading">
+        <div>
+          <span>近期重要消息</span>
+          <h2 id="materialNewsTitle">哪些公司出現值得確認的新事件？</h2>
+        </div>
+        <button id="viewAllMaterialNews" class="material-news-all-button" type="button">查看全部 <span id="materialNewsStatus">0 項</span> ›</button>
+      </div>
+      <div id="materialNewsHome" class="material-news-grid">
+        <div class="warm-card home-empty">正在整理近期公司消息…</div>
+      </div>
+      <p class="material-news-notice">依公開新聞標題整理，請開啟原文確認完整內容；不直接改變健康分數。</p>
+    </section>
     <section class="home-section" aria-labelledby="watchlistPreviewTitle">
       <div class="home-section-heading"><div><span>你的自選股</span><h2 id="watchlistPreviewTitle">快速掌握自選變化</h2></div><button id="viewWatchlist" type="button"><span id="homeWatchlistNotice">尚未加入</span> ›</button></div>
       <div id="watchlistPreview" class="watchlist-preview"><div class="warm-card home-empty">加入自選股後，這裡會顯示健康分數與最新變化。</div></div>
@@ -107,6 +120,29 @@
     </section>
     </div>
 
+    <section id="materialNewsPage" class="app-page shell-page" data-page="news" aria-labelledby="materialNewsPageTitle">
+      <div class="shell-page-heading">
+        <div>
+          <span>近期重要消息</span>
+          <h1 id="materialNewsPageTitle">公司事件與原文來源</h1>
+          <p>只顯示多來源支持的近期事件；消息本身不直接改變健康分數。</p>
+        </div>
+        <span id="materialNewsPageCount" class="data-status">0 項</span>
+      </div>
+
+      <div class="material-news-page-tools">
+        <select id="materialNewsStockFilter" aria-label="依股票篩選">
+          <option value="all">全部股票</option>
+        </select>
+        <select id="materialNewsCategoryFilter" aria-label="依事件類型篩選">
+          <option value="all">全部類型</option>
+        </select>
+      </div>
+
+      <div id="materialNewsPageGrid" class="material-news-page-grid">
+        <div class="warm-card home-empty">正在整理近期重要消息…</div>
+      </div>
+    </section>
     <section id="watchlistPage" class="app-page shell-page" data-page="watchlist" aria-labelledby="watchlistPageTitle">
       <div class="shell-page-heading"><div><span>你的自選</span><h1 id="watchlistPageTitle">每天只看真正關心的股票</h1><p>健康分數、風險與最新變化集中在這裡。</p></div><button id="addWatchlistStock" type="button">＋ 新增股票</button></div>
       <div class="segmented-filter" id="watchlistFilters" aria-label="自選股篩選">
@@ -148,7 +184,7 @@
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
         <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
         <article class="warm-card profile-card"><span>報告資料</span><b id="profileReportCount">0 份</b><small id="profileUpdatedAt">等待更新</small></article>
-        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.4.5 Preview</b><small>站內通知依共用引擎合約顯示，不影響健康分數</small></article>
+        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.4.7 Preview</b><small>站內通知依共用引擎合約顯示，不影響健康分數</small></article>
       </div>
       <div class="profile-actions warm-card"><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
       <div class="profile-notice warm-card"><b>研究輔助，不代替投資決策</b><p>AI Stock Terminal 用來整理公開資料與研究證據，不提供自動下單，也不保證未來報酬。</p></div>
@@ -172,8 +208,21 @@
       <div class="dashboard-grid">
         <section class="hero-card">
           <div class="stock-title">
-            <div><div class="stock-meta-row"><span id="stockMeta">2330 · 半導體業</span><span id="stockProfile" class="stock-profile-chip">待確認</span></div><h2 id="stockName">台積電</h2></div>
-            <span id="assessment" class="status-chip">中性</span>
+            <div class="stock-heading">
+              <div class="stock-meta-row">
+                <span id="stockMeta">2330 · 半導體業</span>
+                <span id="stockProfile" class="stock-profile-chip">待確認</span>
+              </div>
+              <h2 id="stockName">台積電</h2>
+            </div>
+            <div class="stock-title-side">
+              <div class="latest-price-card">
+                <span>最新收盤</span>
+                <strong id="latestPrice">股價待補</strong>
+                <small id="priceDate" class="price-date">資料日期 —</small>
+              </div>
+              <span id="assessment" class="status-chip">整體健康：中性</span>
+            </div>
           </div>
           <div class="score-area">
             <div id="scoreRing" class="score-ring"><div><strong id="healthScore">59.7</strong><span>健康分數</span></div></div>
@@ -185,9 +234,38 @@
             </div>
           </div>
           <div class="quick-stats">
-            <article><span>研究等級</span><strong id="grade">資料待補</strong><small>依完整資料與驗證進度判定</small></article>
-            <article><span>AI 信心</span><strong id="confidence">70 · 中等信心</strong><small>反映資料一致性與樣本充分度</small></article>
-            <article><span>風險等級</span><strong id="risk">41 · 中等風險</strong><small>仍需留意市場波動</small></article>
+            <article class="research-state-card">
+              <div class="quick-stat-heading">
+                <span>研究狀態</span>
+                <em>追蹤中</em>
+              </div>
+              <strong id="grade">資料待補</strong>
+              <small>依目前證據與驗證進度判定</small>
+            </article>
+
+            <article class="confidence-card">
+              <div class="quick-stat-heading">
+                <span>證據信心</span>
+                <em id="confidenceTone">待確認</em>
+              </div>
+              <strong id="confidence">70 / 100</strong>
+              <div class="quick-stat-bar" role="progressbar" aria-label="證據信心">
+                <i id="confidenceBar"></i>
+              </div>
+              <small>反映資料一致性與樣本充分度</small>
+            </article>
+
+            <article class="risk-card">
+              <div class="quick-stat-heading">
+                <span>風險壓力</span>
+                <em id="riskTone">待確認</em>
+              </div>
+              <strong id="risk">41 / 100</strong>
+              <div class="quick-stat-bar risk" role="progressbar" aria-label="風險壓力">
+                <i id="riskBar"></i>
+              </div>
+              <small>分數越高，代表目前需留意的風險越多</small>
+            </article>
           </div>
         </section>
 
@@ -205,6 +283,35 @@
         </aside>
       </div>
 
+      <section id="integratedDecision" class="integrated-decision" aria-labelledby="integratedDecisionTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">整合研究判斷</span>
+            <h2 id="integratedDecisionTitle">為什麼這樣判斷？</h2>
+          </div>
+          <small id="integratedDecisionType">依股票類型整理</small>
+        </div>
+        <div id="integratedReasonGrid" class="integrated-reason-grid"></div>
+      </section>
+
+      <section class="integrated-follow-up" aria-labelledby="integratedFollowUpTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">後續觀察</span>
+            <h2 id="integratedFollowUpTitle">接下來看什麼？</h2>
+          </div>
+        </div>
+        <ol id="integratedFollowUpList"></ol>
+      </section>
+
+      <section class="integrated-trend" aria-labelledby="integratedTrendTitle">
+        <div>
+          <span class="section-kicker">研究趨勢</span>
+          <h2 id="integratedTrendTitle">近 10 個交易日研究分數</h2>
+        </div>
+        <div id="integratedTrendChart" class="integrated-trend-chart"></div>
+        <small id="integratedTrendSummary">正在整理趨勢…</small>
+      </section>
       <section class="today-changes-section" aria-labelledby="todayChangesTitle">
         <div class="section-heading">
           <div><span class="section-kicker">今日重要變化</span><h2 id="todayChangesTitle">今天發生什麼？</h2></div>
@@ -295,6 +402,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.4.5" defer></script>
+  <script src="/assets/app.js?v=3.4.7.8" defer></script>
 </body>
 </html>
