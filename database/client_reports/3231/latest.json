@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-20T23:20:19+08:00",
+  "generated_at": "2026-08-21T07:23:11+08:00",
   "status": "success",
   "stock_id": "3231",
   "data_date": "2026-08-20",
@@ -2782,28 +2782,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "3231",
-    "window_start": "2026-08-20",
-    "window_end": "2026-08-26",
+    "window_start": "2026-08-21",
+    "window_end": "2026-08-27",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
-        "event_date": "2026-08-20",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "export_orders_release",
-        "title_zh": "外銷訂單統計發布",
-        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
-        "importance": "high",
-        "source_name_zh": "經濟部",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "外銷訂單統計",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:employment_release:2026-08-24",
         "event_date": "2026-08-24",
@@ -2841,7 +2823,7 @@
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 3,
+    "event_count": 2,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -2884,7 +2866,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -2971,7 +2953,7 @@
             "stock_id": "2317",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 246.5,
             "return_20d_pct": -4.2718,
             "volatility_20d_pct": 3.1298,
@@ -2992,7 +2974,7 @@
             "stock_id": "2382",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 327.0,
             "return_20d_pct": -2.6786,
             "volatility_20d_pct": 3.1721,
@@ -3013,7 +2995,7 @@
             "stock_id": "3231",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 180.0,
             "return_20d_pct": 3.7464,
             "volatility_20d_pct": 3.8819,
@@ -3034,7 +3016,7 @@
             "stock_id": "2376",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 344.0,
             "return_20d_pct": -2.9619,
             "volatility_20d_pct": 3.9216,
@@ -3055,7 +3037,7 @@
             "stock_id": "6669",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 6325.0,
             "return_20d_pct": 15.6307,
             "volatility_20d_pct": 4.5361,
@@ -3196,8 +3178,8 @@
       "relative_market_pct_point": 5.2,
       "sector_rank": 2,
       "sector_peer_count": 5,
-      "pe_ratio": 14.46,
-      "pb_ratio": 2.98,
+      "pe_ratio": 14.3,
+      "pb_ratio": 2.95,
       "pe_rank": 3,
       "pb_rank": 2,
       "peer_count": 5
@@ -3241,6 +3223,34 @@
       "affects_health_score": false,
       "mode": "comparison_only"
     }
+  },
+  "material_news": {
+    "version": "MaterialNews-v1.0",
+    "status": "available",
+    "stock_id": "3231",
+    "data_date": "2026-08-20",
+    "window_days": 7,
+    "item_count": 1,
+    "items": [
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "富士康、台積電、廣達電腦、緯創、華碩、台達電子等台灣20家電子企業2026年第二季度財報業績彙總",
+        "source_name": "鉅亨號",
+        "source_url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5xbFB6Qi1oWV93bzBSc2JpMmpINmNnc2w2VTVXTWgyUWlFNExHb1VnV1h2YWZhbHZtTkdmbjdqV0xIM0J3VU1lTQ?oc=5",
+        "published_at": "2026-08-16T02:39:33+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "64a73c4b03f4aeda",
+        "confirmed_by_count": 2
+      }
+    ],
+    "message_zh": "近 7 日整理出 1 項值得確認的公司消息。",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "evidence_only"
+    },
+    "notice_zh": "重大程度依公開標題與事件類型整理，仍應開啟原文確認完整內容。"
   },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
@@ -5659,7 +5669,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 3,
+        "item_count": 2,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -5703,7 +5713,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 51 項內容可以確認",
+    "headline_zh": "今天有 50 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
@@ -5726,18 +5736,6 @@
         "title_zh": "3231｜正負面新聞比例",
         "message_zh": "這項變化讓健康分數加分 2.09 分。",
         "reason_zh": "正負面新聞數量差異可補充單一平均值。",
-        "destination": "events",
-        "affects_health_score": false
-      },
-      {
-        "notification_id": "f6a039e20881574a1213",
-        "type": "official_event",
-        "severity": "info",
-        "stock_id": "MARKET",
-        "source_date": "2026-08-20",
-        "title_zh": "2026-08-20｜外銷訂單統計發布",
-        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
-        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
         "destination": "events",
         "affects_health_score": false
       },
@@ -5778,7 +5776,7 @@
         "affects_health_score": false
       }
     ],
-    "notification_count": 5,
+    "notification_count": 4,
     "score_policy": {
       "affects_health_score": false,
       "mode": "attention_only"

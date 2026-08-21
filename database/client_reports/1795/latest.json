@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-20T23:21:08+08:00",
+  "generated_at": "2026-08-21T07:23:24+08:00",
   "status": "success",
   "stock_id": "1795",
   "data_date": "2026-08-18",
@@ -12,7 +12,7 @@
   },
   "overview": {
     "health_score": 57.3,
-    "health_score_v1": 54.42,
+    "health_score_v1": 54.44,
     "health_score_v2": 57.3,
     "health_score_interval": "50-59",
     "health_score_band_zh": "中性",
@@ -21,7 +21,7 @@
     "score_explanation_zh": "先比較五大面向，再依資料完整度、權重與單調校準形成展示分數；原始分數保留供稽核，校準不改變股票排序。",
     "research_grade": "保持觀望",
     "confidence_level": "中等信心",
-    "confidence_score": 77.99,
+    "confidence_score": 77.98,
     "risk_level": "中等風險",
     "risk_score": 43.58,
     "summary_zh": "目前適合持續追蹤，尚不足以提高研究優先級。"
@@ -589,14 +589,14 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 67.32,
+      "score": 67.44,
       "level": "中性",
       "description": "正負面新聞比例為 80.9 分，屬於加分因子。",
       "coverage_pct": 100.0,
       "reasons": [
         "正負面新聞比例為 80.9 分，屬於加分因子。",
         "新聞情緒分數為 62.7 分，屬於加分因子。",
-        "近期新聞熱度為 58.5 分，屬於中性因子。"
+        "近期新聞熱度為 59.1 分，屬於中性因子。"
       ],
       "source_label_zh": "公開新聞索引",
       "contributions": [
@@ -641,15 +641,15 @@
         {
           "factor": "news",
           "label_zh": "近期新聞熱度",
-          "value": 35,
+          "value": 33,
           "unit": "則",
           "baseline_value": 0,
           "baseline_label_zh": "無相關新聞",
           "comparison_window": "近 7 日",
-          "score": 58.5,
+          "score": 59.1,
           "sub_weight_pct": 20.0,
           "factor_weight_pct": 17.53,
-          "health_impact": 0.3,
+          "health_impact": 0.32,
           "direction": "positive",
           "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
           "source_label_zh": "公開新聞索引",
@@ -667,7 +667,7 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 67.32,
+        "score": 67.44,
         "direction": "positive",
         "reason_zh": "正負面新聞比例為 80.9 分，屬於加分因子。",
         "source_label_zh": "公開新聞索引"
@@ -867,15 +867,15 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "value": 35,
+        "value": 33,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
         "comparison_window": "近 7 日",
-        "score": 58.5,
+        "score": 59.1,
         "sub_weight_pct": 20.0,
         "factor_weight_pct": 17.53,
-        "health_impact": 0.3,
+        "health_impact": 0.32,
         "direction": "positive",
         "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "source_label_zh": "公開新聞索引",
@@ -1479,15 +1479,15 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "value": 35,
+        "value": 33,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
         "comparison_window": "近 7 日",
-        "score": 58.5,
+        "score": 59.1,
         "sub_weight_pct": 20.0,
         "factor_weight_pct": 17.53,
-        "health_impact": 0.3,
+        "health_impact": 0.32,
         "direction": "positive",
         "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "source_label_zh": "公開新聞索引",
@@ -2306,14 +2306,14 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 67.32,
+        "score": 67.44,
         "level": "中性",
         "description": "正負面新聞比例為 80.9 分，屬於加分因子。",
         "coverage_pct": 100.0,
         "reasons": [
           "正負面新聞比例為 80.9 分，屬於加分因子。",
           "新聞情緒分數為 62.7 分，屬於加分因子。",
-          "近期新聞熱度為 58.5 分，屬於中性因子。"
+          "近期新聞熱度為 59.1 分，屬於中性因子。"
         ],
         "source_label_zh": "公開新聞索引",
         "contributions": [
@@ -2358,15 +2358,15 @@
           {
             "factor": "news",
             "label_zh": "近期新聞熱度",
-            "value": 35,
+            "value": 33,
             "unit": "則",
             "baseline_value": 0,
             "baseline_label_zh": "無相關新聞",
             "comparison_window": "近 7 日",
-            "score": 58.5,
+            "score": 59.1,
             "sub_weight_pct": 20.0,
             "factor_weight_pct": 17.53,
-            "health_impact": 0.3,
+            "health_impact": 0.32,
             "direction": "positive",
             "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "source_label_zh": "公開新聞索引",
@@ -2427,7 +2427,7 @@
       "date": "2026-08-18",
       "score": 57.3,
       "risk": 43.58,
-      "confidence": 77.99
+      "confidence": 77.98
     }
   ],
   "score_delta": {
@@ -2493,15 +2493,15 @@
         "key": "news",
         "label": "新聞情緒",
         "previous_score": 67.35,
-        "current_score": 67.32,
-        "score_change": -0.03,
+        "current_score": 67.44,
+        "score_change": 0.09,
         "previous_weight_pct": 18.0,
         "current_weight_pct": null,
         "previous_weighted_contribution": 11.81,
         "current_weighted_contribution": null,
         "weighted_change": null,
         "direction": "neutral",
-        "reason_zh": "新聞情緒由 67.35 分變為 67.32 分（-0.03）；在當日權重下，原始加權貢獻沒有改變 0.00。"
+        "reason_zh": "新聞情緒由 67.35 分變為 67.44 分（+0.09）；在當日權重下，原始加權貢獻沒有改變 0.00。"
       }
     ],
     "indicator_detail_available": true,
@@ -2710,28 +2710,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "1795",
-    "window_start": "2026-08-20",
-    "window_end": "2026-08-26",
+    "window_start": "2026-08-21",
+    "window_end": "2026-08-27",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
-        "event_date": "2026-08-20",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "export_orders_release",
-        "title_zh": "外銷訂單統計發布",
-        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
-        "importance": "high",
-        "source_name_zh": "經濟部",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "外銷訂單統計",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:employment_release:2026-08-24",
         "event_date": "2026-08-24",
@@ -2769,7 +2751,7 @@
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 3,
+    "event_count": 2,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -2812,7 +2794,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -3016,6 +2998,46 @@
       "events": "UpcomingEvents-v1.0",
       "comparison": "SectorPeerComparison-v1.1"
     }
+  },
+  "material_news": {
+    "version": "MaterialNews-v1.0",
+    "status": "available",
+    "stock_id": "1795",
+    "data_date": "2026-08-18",
+    "window_days": 7,
+    "item_count": 2,
+    "items": [
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "(1795) 美時化學製藥法說會 2026/08、美時2026年第二季與上半年財報、美時未來營運展望與策略、美時財報投資｜理柴知道:法說最速報! - 方格子",
+        "source_name": "Vocus",
+        "source_url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5GanEwRmVwUE9iOVRCSHhyRjRNNElrZnk5YTNpRUJ2bFdFb0MtSUxaTmtzX1c5MjRMMm5RNzk2azJ1TGJ4YTh5VnRPaGJvMmt6dDY0TWRhUWRYWmg0elHSAWNBVV95cUxPcjBVc19EbWV0bnFOdEJSMng0cEV6RXVZc1BvdXFRT0NRdW5JRE1KSC1DZXZRWFRFaWh2TkFXNTNmQnU2TUdvWmppYTAzU0xEaFpjS0JhMzVhRW5WMTlpZThZRmc?oc=5",
+        "published_at": "2026-08-18T05:46:45+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "be8782acd6090d70",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "【美時Q2 2026 法說會】美時上半年營收174.5億元創新高、年增84%，獲利卻下滑42%，20億美元首發學名藥機會浮現",
+        "source_name": "BigGo 財經",
+        "source_url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1ZQ1RXcnlKRUUzckloc0hscWtFN3o2QlJNcjVxUWtFZndzVUFyMHZFQVM3RTlENEwyQ1dLaC1CZnowdzcwYTVuZEFac0R4OVg5U3YwQWdmYlA4QnBlTWZXaDc4emd4dw?oc=5",
+        "published_at": "2026-08-14T10:26:00+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "ce25672610d87041",
+        "confirmed_by_count": 8
+      }
+    ],
+    "message_zh": "近 7 日整理出 2 項值得確認的公司消息。",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "evidence_only"
+    },
+    "notice_zh": "重大程度依公開標題與事件類型整理，仍應開啟原文確認完整內容。"
   },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
@@ -3609,12 +3631,12 @@
         "category": "news",
         "title_zh": "近期新聞熱度",
         "direction": "positive",
-        "current_value": 35,
+        "current_value": 33,
         "current_unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
         "comparison_window": "近 7 日",
-        "score_impact": 0.3,
+        "score_impact": 0.32,
         "impact_kind": "raw_health_impact",
         "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "source": "公開新聞索引",
@@ -3623,22 +3645,22 @@
         "source_url": null,
         "schema_version": "CustomerEvidence-v2.0",
         "explain_engine_version": "CustomerExplainEngine-v2.2",
-        "what_happened_zh": "目前資料顯示，近期新聞熱度為 35則，比較基準為 0則；對健康度有正面影響。",
+        "what_happened_zh": "目前資料顯示，近期新聞熱度為 33則，比較基準為 0則；對健康度有正面影響。",
         "metric_explanation_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
-        "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.30 分。",
-        "change_value": 35.0,
+        "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.32 分。",
+        "change_value": 33.0,
         "impact_category_zh": "健康分加分",
         "source_link_status": "not_preserved",
         "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
         "is_true_daily_change": false,
         "state": "current_state",
         "six_questions": {
-          "what_happened_zh": "目前資料顯示，近期新聞熱度為 35則，比較基準為 0則；對健康度有正面影響。",
-          "current_value_zh": "35則",
+          "what_happened_zh": "目前資料顯示，近期新聞熱度為 33則，比較基準為 0則；對健康度有正面影響。",
+          "current_value_zh": "33則",
           "comparison_zh": "0則",
           "baseline_value_zh": "0則",
           "meaning_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
-          "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.30 分。",
+          "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.32 分。",
           "source_zh": "公開新聞索引｜2026-08-18",
           "source_url": null
         }
@@ -5106,11 +5128,11 @@
         "event_count": 3,
         "positive_count": 3,
         "negative_count": 0,
-        "positive_impact": 3.03,
+        "positive_impact": 3.05,
         "negative_impact": 0.0,
-        "net_impact": 3.03,
-        "headline_zh": "新聞消息整體加分 3.03 分",
-        "summary_zh": "加分主要來自正負面新聞比例、新聞情緒分數、近期新聞熱度，合計 +3.03 分；所以新聞消息本次淨增加 3.03 分。",
+        "net_impact": 3.05,
+        "headline_zh": "新聞消息整體加分 3.05 分",
+        "summary_zh": "加分主要來自正負面新聞比例、新聞情緒分數、近期新聞熱度，合計 +3.05 分；所以新聞消息本次淨增加 3.05 分。",
         "events": [
           {
             "event_id": "DRIVER-01",
@@ -5201,12 +5223,12 @@
             "category": "news",
             "title_zh": "近期新聞熱度",
             "direction": "positive",
-            "current_value": 35,
+            "current_value": 33,
             "current_unit": "則",
             "baseline_value": 0,
             "baseline_label_zh": "無相關新聞",
             "comparison_window": "近 7 日",
-            "score_impact": 0.3,
+            "score_impact": 0.32,
             "impact_kind": "raw_health_impact",
             "reason_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "source": "公開新聞索引",
@@ -5215,22 +5237,22 @@
             "source_url": null,
             "schema_version": "CustomerEvidence-v2.0",
             "explain_engine_version": "CustomerExplainEngine-v2.2",
-            "what_happened_zh": "目前資料顯示，近期新聞熱度為 35則，比較基準為 0則；對健康度有正面影響。",
+            "what_happened_zh": "目前資料顯示，近期新聞熱度為 33則，比較基準為 0則；對健康度有正面影響。",
             "metric_explanation_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
-            "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.30 分。",
-            "change_value": 35.0,
+            "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.32 分。",
+            "change_value": 33.0,
             "impact_category_zh": "健康分加分",
             "source_link_status": "not_preserved",
             "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
             "is_true_daily_change": false,
             "state": "current_state",
             "six_questions": {
-              "what_happened_zh": "目前資料顯示，近期新聞熱度為 35則，比較基準為 0則；對健康度有正面影響。",
-              "current_value_zh": "35則",
+              "what_happened_zh": "目前資料顯示，近期新聞熱度為 33則，比較基準為 0則；對健康度有正面影響。",
+              "current_value_zh": "33則",
               "comparison_zh": "0則",
               "baseline_value_zh": "0則",
               "meaning_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
-              "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.30 分。",
+              "score_reason_zh": "系統認為「近期新聞熱度」相對支持公司目前的健康狀態，因此健康分增加 0.32 分。",
               "source_zh": "公開新聞索引｜2026-08-18",
               "source_url": null
             }
@@ -5241,11 +5263,11 @@
     "event_group_overview": {
       "title_zh": "總分變化總覽",
       "event_count": 26,
-      "positive_impact": 8.34,
+      "positive_impact": 8.36,
       "negative_impact": -4.86,
-      "net_impact": 3.48,
+      "net_impact": 3.5,
       "direction": "positive",
-      "summary_zh": "全部 26 項變化合計：加分 +8.34、扣分 -4.86，健康分淨影響 +3.48 分。點開下方五個面向，可查看每一項加扣分原因。"
+      "summary_zh": "全部 26 項變化合計：加分 +8.36、扣分 -4.86，健康分淨影響 +3.50 分。點開下方五個面向，可查看每一項加扣分原因。"
     },
     "indicator_events": [],
     "factor_events": [],
@@ -5270,7 +5292,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 3,
+        "item_count": 2,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -5314,7 +5336,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 49 項內容可以確認",
+    "headline_zh": "今天有 48 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
@@ -5353,18 +5375,6 @@
         "affects_health_score": false
       },
       {
-        "notification_id": "f6a039e20881574a1213",
-        "type": "official_event",
-        "severity": "info",
-        "stock_id": "MARKET",
-        "source_date": "2026-08-20",
-        "title_zh": "2026-08-20｜外銷訂單統計發布",
-        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
-        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
-        "destination": "events",
-        "affects_health_score": false
-      },
-      {
         "notification_id": "9cf91cc92347f2c0154a",
         "type": "official_event",
         "severity": "info",
@@ -5389,7 +5399,7 @@
         "affects_health_score": false
       }
     ],
-    "notification_count": 5,
+    "notification_count": 4,
     "score_policy": {
       "affects_health_score": false,
       "mode": "attention_only"

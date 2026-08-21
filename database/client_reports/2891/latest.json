@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-20T23:20:42+08:00",
+  "generated_at": "2026-08-21T07:23:14+08:00",
   "status": "success",
   "stock_id": "2891",
   "data_date": "2026-08-20",
@@ -2629,21 +2629,21 @@
     "profile_id": "financial_income",
     "label_zh": "金融收益型",
     "comparison_group_zh": "金融收益型股票",
-    "source_date": "2026-08-19",
+    "source_date": "2026-08-20",
     "metrics": {
       "stock_id": "2891",
-      "pe_ratio": 15.64,
-      "dividend_yield_pct": 3.85,
-      "pb_ratio": 2.32,
-      "source_date": "2026-08-19",
-      "dividend_yield_rank": 2,
-      "pb_rank": 8,
+      "pe_ratio": 15.28,
+      "dividend_yield_pct": 3.94,
+      "pb_ratio": 2.27,
+      "source_date": "2026-08-20",
+      "dividend_yield_rank": 1,
+      "pb_rank": 7,
       "peer_count": 8
     },
     "peer_summary": {
       "peer_count": 8,
-      "dividend_yield_median_pct": 3.71,
-      "pb_median": 2.06
+      "dividend_yield_median_pct": 3.75,
+      "pb_median": 2.04
     },
     "decision": {
       "unheld": "等待更多證據",
@@ -2814,28 +2814,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2891",
-    "window_start": "2026-08-20",
-    "window_end": "2026-08-26",
+    "window_start": "2026-08-21",
+    "window_end": "2026-08-27",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
-        "event_date": "2026-08-20",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "export_orders_release",
-        "title_zh": "外銷訂單統計發布",
-        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
-        "importance": "high",
-        "source_name_zh": "經濟部",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "外銷訂單統計",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:employment_release:2026-08-24",
         "event_date": "2026-08-24",
@@ -2873,7 +2855,7 @@
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 3,
+    "event_count": 2,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -2916,7 +2898,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -3003,7 +2985,7 @@
             "stock_id": "2881",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 128.0,
             "return_20d_pct": -0.3891,
             "volatility_20d_pct": 2.0309,
@@ -3024,7 +3006,7 @@
             "stock_id": "2882",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 97.7,
             "return_20d_pct": 0.4111,
             "volatility_20d_pct": 2.2794,
@@ -3045,7 +3027,7 @@
             "stock_id": "2891",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 63.4,
             "return_20d_pct": -0.1575,
             "volatility_20d_pct": 1.456,
@@ -3066,7 +3048,7 @@
             "stock_id": "2886",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 46.4,
             "return_20d_pct": -3.6345,
             "volatility_20d_pct": 2.3258,
@@ -3087,7 +3069,7 @@
             "stock_id": "2884",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 37.35,
             "return_20d_pct": 4.7686,
             "volatility_20d_pct": 1.3341,
@@ -3251,6 +3233,70 @@
       "affects_health_score": false,
       "mode": "comparison_only"
     }
+  },
+  "material_news": {
+    "version": "MaterialNews-v1.0",
+    "status": "available",
+    "stock_id": "2891",
+    "data_date": "2026-08-20",
+    "window_days": 7,
+    "item_count": 4,
+    "items": [
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "中信金(2891)淨值突破7000億！獲利創新高、股利能變多？高麗雪：配發率朝60~65%目標前進",
+        "source_name": "Yahoo新聞",
+        "source_url": "https://news.google.com/rss/articles/CBMiuwJBVV95cUxNV3kwRFo0Y2dHVHBveU01bVp0SFpaVWtwUVFmN1JGY2Yyc2pUXzQ4TUI0eE5VMkFHQzRXVmJ2NE1wZjRWS0JoYzlWVDkxZDRBa1RRUEpQQW1rY0hYZVRTSVdIZjFUVzNGMGhLbmZWLW1nU0JXaFo4X3hQc2taOTJSYnNSaVlMdmFWaFhBeG92VFRUQzV2LVNIR2h4OGZsalBOdk4yLU40WHdHRHkwLWFfalMteUJFbnNBU1kwLUliR1h3QmQ5WlNGQzZaUjVIeU5ueERRUHB3dmtTZUQ5eGdWdXVuSnpTRm9DbFVfX3BvV0k1NnE4RDV2aldKNmg1OFF5NmpKQ0Z6N3Jkei1lcGR0bEozOVhORHhpLU1uSlQ0eUFwa005aGN4dkhNSFVFZVpuNDdDQTk5NGpGX00?oc=5",
+        "published_at": "2026-08-19T06:13:45+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "cfbc9e8873534d1a",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "中信金H1狂賺395億！財管、台壽雙引擎超強 1770億獲利水庫在手、Q2卻亮兩黃燈",
+        "source_name": "鏡報",
+        "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9kU0o4b0tHM1BkZmdaaTlDQjdQNkpaX25aekhoeWFON192SGk0NFNwRE5Ra3dVNFRmcFdOVDZqb2hpdHNmSWQ0alpCLUxhdXlNY3c?oc=5",
+        "published_at": "2026-08-18T23:46:03+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "7a59a39df0f88775",
+        "confirmed_by_count": 29
+      },
+      {
+        "severity": "medium",
+        "category": "dividend_capital",
+        "category_label_zh": "股利與資本事件",
+        "title": "逾58萬小股東敲碗！中信金何時重回7字頭？法人「1原因」估明年股利加碼不止2.5元 - 上市櫃",
+        "source_name": "旺得富理財網",
+        "source_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9VQmM3SS0ySmVBZE1XN0QzdThLQkk0a3VaanBibEF0UnVrcUwxWXBXVmRCVVVERVA5eFJja1c3b1NlV3RrclhSMnJ4TzV2dHNDTHFlTDJuaWo5cHlra1RxQmNZdU5ycURpSVE?oc=5",
+        "published_at": "2026-08-19T22:03:45+00:00",
+        "reason_zh": "涉及股東權益、股利或資本結構。",
+        "duplicate_group_id": "e66e78c51cf09bd2",
+        "confirmed_by_count": 2
+      },
+      {
+        "severity": "medium",
+        "category": "dividend_capital",
+        "category_label_zh": "股利與資本事件",
+        "title": "中信金四大利多 增強配息動能",
+        "source_name": "UDN",
+        "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1fZWJUbjJVYlRITFppMVZxNHlBVDhZNVRmWXNlT2wtZ1o5RWxRUTIybzhZTF9QRUVnRjU4N203V0hvRDBzT0V4cDBRbzV0ald6am5NOFpn0gFWQVVfeXFMTV9lYlRuMlViVEhMWmkxVnE0eUFUOFk1VGZZc2VPbC1nWjlFbFFRMjJvOFlMX1BFRWdGNTg3bTdXSG9EMHNPRXhwMFFvNXRqV3pqbk04Wmc?oc=5",
+        "published_at": "2026-08-18T19:01:17+00:00",
+        "reason_zh": "涉及股東權益、股利或資本結構。",
+        "duplicate_group_id": "5c043b27f8b38fc3",
+        "confirmed_by_count": 16
+      }
+    ],
+    "message_zh": "近 7 日整理出 4 項值得確認的公司消息。",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "evidence_only"
+    },
+    "notice_zh": "重大程度依公開標題與事件類型整理，仍應開啟原文確認完整內容。"
   },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
@@ -5669,7 +5715,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 3,
+        "item_count": 2,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -5713,7 +5759,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 52 項內容可以確認",
+    "headline_zh": "今天有 51 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
@@ -5736,18 +5782,6 @@
         "title_zh": "2891｜正負面新聞比例",
         "message_zh": "這項變化讓健康分數加分 2.14 分。",
         "reason_zh": "正負面新聞數量差異可補充單一平均值。",
-        "destination": "events",
-        "affects_health_score": false
-      },
-      {
-        "notification_id": "f6a039e20881574a1213",
-        "type": "official_event",
-        "severity": "info",
-        "stock_id": "MARKET",
-        "source_date": "2026-08-20",
-        "title_zh": "2026-08-20｜外銷訂單統計發布",
-        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
-        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
         "destination": "events",
         "affects_health_score": false
       },
@@ -5788,7 +5822,7 @@
         "affects_health_score": false
       }
     ],
-    "notification_count": 5,
+    "notification_count": 4,
     "score_policy": {
       "affects_health_score": false,
       "mode": "attention_only"

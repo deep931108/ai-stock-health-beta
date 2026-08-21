@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-20T23:20:19+08:00",
+  "generated_at": "2026-08-21T07:23:07+08:00",
   "status": "success",
   "stock_id": "2330",
   "data_date": "2026-08-20",
@@ -2788,28 +2788,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2330",
-    "window_start": "2026-08-20",
-    "window_end": "2026-08-26",
+    "window_start": "2026-08-21",
+    "window_end": "2026-08-27",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
-        "event_date": "2026-08-20",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "export_orders_release",
-        "title_zh": "外銷訂單統計發布",
-        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
-        "importance": "high",
-        "source_name_zh": "經濟部",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "外銷訂單統計",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:employment_release:2026-08-24",
         "event_date": "2026-08-24",
@@ -2865,7 +2847,7 @@
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 4,
+    "event_count": 3,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -2908,7 +2890,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 4 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -3003,7 +2985,7 @@
             "stock_id": "2330",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 2375.0,
             "return_20d_pct": -1.2474,
             "volatility_20d_pct": 2.9014,
@@ -3022,7 +3004,7 @@
             "stock_id": "2454",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 3700.0,
             "return_20d_pct": -4.5161,
             "volatility_20d_pct": 4.8005,
@@ -3043,7 +3025,7 @@
             "stock_id": "2303",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 115.5,
             "return_20d_pct": -16.6065,
             "volatility_20d_pct": 5.0689,
@@ -3064,7 +3046,7 @@
             "stock_id": "3034",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 527.0,
             "return_20d_pct": 4.7714,
             "volatility_20d_pct": 2.9232,
@@ -3085,7 +3067,7 @@
             "stock_id": "3711",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 590.0,
             "return_20d_pct": -9.0909,
             "volatility_20d_pct": 5.1299,
@@ -3212,8 +3194,8 @@
       "relative_market_pct_point": 0.21,
       "sector_rank": 2,
       "sector_peer_count": 5,
-      "pe_ratio": 27.24,
-      "pb_ratio": 9.47,
+      "pe_ratio": 27.53,
+      "pb_ratio": 9.57,
       "pe_rank": 3,
       "pb_rank": 4,
       "peer_count": 5
@@ -3257,6 +3239,82 @@
       "affects_health_score": false,
       "mode": "comparison_only"
     }
+  },
+  "material_news": {
+    "version": "MaterialNews-v1.0",
+    "status": "available",
+    "stock_id": "2330",
+    "data_date": "2026-08-20",
+    "window_days": 7,
+    "item_count": 5,
+    "items": [
+      {
+        "severity": "high",
+        "category": "legal_regulatory",
+        "category_label_zh": "裁罰與法律事件",
+        "title": "2奈米洩密案定讞，台積電護城河還在？艾蜜莉：仍具優勢，但要觀察這些數據",
+        "source_name": "Smart自學網",
+        "source_url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5JODU2STBfR1JxTG5meVdBVVR3U2tBZ0ZMSW92UkxhTFd2amktN1k0bXR6MDN3T1dScmd5M1dCTmdLWXk2Q2NQbHhKSEI5VkRjSks3ckp1TFF0WW1YbzdkU0ZKdTlzdG5wemdMY1NzYV9HSXBicF9TZE4tLWI?oc=5",
+        "published_at": "2026-08-20T03:04:29+00:00",
+        "reason_zh": "涉及法律或監管風險，需要持續確認後續影響。",
+        "duplicate_group_id": "ec05f21d67659f96",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "high",
+        "category": "legal_regulatory",
+        "category_label_zh": "裁罰與法律事件",
+        "title": "台積電竹科20廠發生工安死亡事件！ 公司回應已自主停工處理後續事宜",
+        "source_name": "Yahoo新聞",
+        "source_url": "https://news.google.com/rss/articles/CBMiswNBVV95cUxNZmx4NlQxZGFpNWY2bkVDaUlfVndhRkctUG84eWswdU9Ua3lkT0lMdjRPSjlYTmpoQ0J0c2tRX1l5d1VsWUFQd3hKMGxGTGhvS2xEMzU2Q2xKeFlEZGxkN2pqa3pQdmozeTAxOWE4RW9ISXhPTTFBNzRzc2hsU21lcXFYM0RTRGV3amtlSHl2dG1GTVZ5QzE5OFJ4TkdOdXg3TFZvX1BiNkowdUo2R3VVdmpkMXpodTBoOUgtRkYtYWNqYjZXaHVqZk5LS3lmeU8wUkFZVDdEVXU5Q19jWVJock9FdnNIQzE4b0w4bzJyQUpxY0psY2lTRVYyb0gxNDVEVGhPTFVMekxkR2NvZllVNDRLNG5XQmNtOVdTQkJJY1o4eEJTcS1GZFZOVl9jVVdxX1FzZ19vLVY1UUZDMHgtTlFUdEwtTTBqaFNYYmgxbGxLQ21yQ1hSa0d3czdwaDFDSTZFbFJpakFOUHRDQThaTWRkVVdpNjRZVDhfZmtmbzVfQXFKLWt3ejR4NnA3Wl8tSDJRUUxZeUk3NUlyYmxvZzFSeWVJek9GV0NWY2R6YnZCdHM?oc=5",
+        "published_at": "2026-08-18T08:45:00+00:00",
+        "reason_zh": "涉及法律或監管風險，需要持續確認後續影響。",
+        "duplicate_group_id": "17b9044a0897d27c",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "台積電3大優勢! 美廠H1認列獲利逾去年94%",
+        "source_name": "Yahoo股市",
+        "source_url": "https://news.google.com/rss/articles/CBMilwJBVV95cUxOUGVTdXR3azFaYmRLUE9JRzN1c3Y4d0ZXbGo4X0VRdTk5UUVzejc0cTZQRnNlLWJmdHNhanVxZWU2RExmeDNPc19jbU16MEFWcVROVWVwa3hSemJpczluT2E4aXI0Rzg0akFqbHg0TEstQk0weV95MkxwNFl4bWxJbExsVzcwbVhpd1BicjZlMVJCVGJLOW5JcHpweXU3NnJTb2hvNEtpcEhoNkNZSER2czlzOEZuY000Ym5zZF92UVd4Wl9GQThGUWVqaEkyM3M2VDAwcjlwdkdoelhqa1h5NFVTUXpHVjlZMkU3V0ZCbjJGOVRXMVFWM1czT281dXJuS3dDb1BTZ1RDeXpWMV9rY19KREpkNlE?oc=5",
+        "published_at": "2026-08-17T08:27:12+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "80b0eb77d7b94212",
+        "confirmed_by_count": 2
+      },
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "台積電美國廠今年獲利衝高 法人預期將大幅優於去年 | 產業熱點 | 產業",
+        "source_name": "經濟日報",
+        "source_url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9NS2w5RWJHMFBCbXFfSnk3WUtULWVTcXJkQTVLV3F4TXdTeXROdHR3b1J0cFNreEE0NnA1b01xcGl4MjBkTjZmOWhXeTlSMXlCSWM3amRHMW9DZw?oc=5",
+        "published_at": "2026-08-16T18:11:04+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "6ad9ae61b2e9ce2a",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "medium",
+        "category": "operations",
+        "category_label_zh": "營運重大變化",
+        "title": "台積電楠梓園區擴建都計變更案通過 5座晶圓廠明年第4季全數量產",
+        "source_name": "UDN",
+        "source_url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1MMkstZXlqVzk2c2plT1FJRDJMXzdJMFVHQ09NNjJPb3dCTFg2VTZ5T3RjWEEtYmZ5QlpkWF9HTlpuYm1HOGw4ZlZ6NlNKUENG0gFWQVVfeXFMTkh5eDl5Z3I3NVZXa2s0TGhGdzRCeVNzYVdkMWpESnJoNmJHUXZqejlsOFluMkpCOHhJVV9KT3NOdmo4QjY2NkJWSHg4T2lmd3JubWdueEE?oc=5",
+        "published_at": "2026-08-20T10:29:58+00:00",
+        "reason_zh": "涉及產能、訂單或營運規模的重要變化。",
+        "duplicate_group_id": "6835ed0788a9fe62",
+        "confirmed_by_count": 1
+      }
+    ],
+    "message_zh": "近 7 日整理出 5 項值得確認的公司消息。",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "evidence_only"
+    },
+    "notice_zh": "重大程度依公開標題與事件類型整理，仍應開啟原文確認完整內容。"
   },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
@@ -5675,7 +5733,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 4,
+        "item_count": 3,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -5719,7 +5777,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 54 項內容可以確認",
+    "headline_zh": "今天有 53 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
@@ -5742,18 +5800,6 @@
         "title_zh": "2330｜正負面新聞比例",
         "message_zh": "這項變化讓健康分數加分 1.47 分。",
         "reason_zh": "正負面新聞數量差異可補充單一平均值。",
-        "destination": "events",
-        "affects_health_score": false
-      },
-      {
-        "notification_id": "f6a039e20881574a1213",
-        "type": "official_event",
-        "severity": "info",
-        "stock_id": "MARKET",
-        "source_date": "2026-08-20",
-        "title_zh": "2026-08-20｜外銷訂單統計發布",
-        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
-        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
         "destination": "events",
         "affects_health_score": false
       },
@@ -5806,7 +5852,7 @@
         "affects_health_score": false
       }
     ],
-    "notification_count": 6,
+    "notification_count": 5,
     "score_policy": {
       "affects_health_score": false,
       "mode": "attention_only"

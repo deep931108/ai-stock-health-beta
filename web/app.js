@@ -255,6 +255,18 @@ function render(report) {
   $("stockMeta").textContent = `${report.id} · ${report.industry}`;
   $("stockProfile").textContent = report.stock_profile?.label_zh || "待確認";
   $("stockProfile").title = report.stock_profile?.comparison_group_zh || "一般股票";
+
+  const valuationMetrics = Array.isArray(report.investment_research?.valuation?.metrics)
+    ? report.investment_research.valuation.metrics
+    : [];
+  const latestPriceMetric = valuationMetrics.find((item) =>
+    String(item.label_zh || "").includes("收盤價") ||
+    String(item.basis_zh || "").includes("最新交易日收盤價")
+  );
+  const latestPriceValue = Number(latestPriceMetric?.value);
+  $("latestPrice").textContent = Number.isFinite(latestPriceValue)
+    ? `最新 ${latestPriceValue.toLocaleString("zh-TW")} ${latestPriceMetric?.unit || "元"}`
+    : "股價待補";
   $("stockName").textContent = report.name;
   $("assessment").textContent = report.assessment;
   $("healthScore").textContent = Number(report.score).toFixed(1);
@@ -298,10 +310,30 @@ function render(report) {
   $("summaryNote").textContent = decisionProfile
     ? decisionProfile.decision.reason_zh
     : "這是研究狀態，不是買進或賣出訊號。";
+  const confidenceValue = Math.min(100, Math.max(0, Number(report.confidence) || 0));
+  const riskValue = Math.min(100, Math.max(0, Number(report.risk) || 0));
+
   $("grade").textContent = report.grade;
-  $("confidence").textContent = `${Math.round(report.confidence)} · ${report.confidence_level}`;
-  $("risk").textContent = `${Math.round(report.risk)} · ${report.risk_level}`;
+  $("confidence").textContent = `${Math.round(confidenceValue)} / 100`;
+  $("confidenceTone").textContent = report.confidence_level || "待確認";
+  $("confidenceBar").style.width = `${confidenceValue}%`;
+  $("confidenceBar").parentElement.setAttribute(
+    "aria-valuenow",
+    String(Math.round(confidenceValue))
+  );
+
+  $("risk").textContent = `${Math.round(riskValue)} / 100`;
+  $("riskTone").textContent = report.risk_level || "待確認";
+  $("riskBar").style.width = `${riskValue}%`;
+  $("riskBar").parentElement.setAttribute(
+    "aria-valuenow",
+    String(Math.round(riskValue))
+  );
+
   $("updated").textContent = report.updated;
+  $("priceDate").textContent = report.updated && report.updated !== "—"
+    ? `資料日期 ${report.updated}`
+    : "資料日期待確認";
   $("source").textContent = report.source === "engine" ? "AI 引擎客戶報告" : "Beta 展示資料";
   $("strategyLabel").textContent = report.strategy?.label_zh || "研究累積中";
   $("strategyCopy").textContent = report.strategy?.message_zh || "系統持續更新與驗證，不會因單日波動任意改變研究門檻。";
@@ -309,6 +341,7 @@ function render(report) {
   renderIndicators(report.indicators);
   renderInvestmentResearch(report.investment_research || {});
   renderTodayChanges(report.today_changes || {});
+  renderIntegratedDecision(report);
   renderEvidence(report);
   renderHistory(report.score_history || []);
   renderSources(report.data_sources || []);
@@ -359,6 +392,138 @@ function comparisonValues(items) {
   return `<dl class="comparison-values">${items.map((item) => `<div><dt>${escapeHtml(item.label)}</dt><dd>${escapeHtml(item.value)}</dd></div>`).join("")}</dl>`;
 }
 
+function renderIntegratedDecision(report) {
+  const profileId = report.stock_profile?.profile_id || "default";
+  const profile = stockDecisionProfile(report);
+  const metrics = profile.metrics || {};
+  const decision = profile.decision || {};
+  const available = (value) => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+  const number = (value, digits = 2, suffix = "") => available(value) ? `${Number(value).toFixed(digits)}${suffix}` : "資料待補";
+  const rank = (position, count) => available(position) && available(count) ? `第 ${Number(position)} / ${Number(count)} 名` : "排名待補";
+  const reason = (tone, title, primary, secondary, copy, source) => ({tone, title, primary, secondary, copy, source});
+
+  let reasons = [];
+  let followUp = [];
+
+  if (profileId === "financial_income") {
+    reasons = [
+      reason("positive", "股息吸引力", number(metrics.dividend_yield_pct, 2, "%"), rank(metrics.dividend_yield_rank, metrics.peer_count), "和其他金融收益型股票比較目前殖利率位置。", "TWSE 殖利率與同組比較"),
+      reason("neutral", "估值位置", number(metrics.pb_ratio, 2, " 倍"), rank(metrics.pb_rank, metrics.peer_count), "股價淨值比用來輔助判斷收益型股票是否昂貴。", "TWSE 股價淨值比"),
+      reason("caution", "目前判斷", decision.unheld || "等待更多證據", decision.held || "續抱觀察", decision.reason_zh || "仍需確認配息品質與估值。", "收益型研究模型"),
+    ];
+    followUp = ["歷年配息是否穩定", "最新 ROE 是否支持股息品質", "估值是否回到同組合理區間"];
+  } else if (profileId === "growth_quality") {
+    reasons = [
+      reason("positive", "成長仍強", number(metrics.revenue_yoy_pct, 2, "%"), number(metrics.eps_growth_yoy_pct, 2, "%"), "營收與 EPS 年增率用來確認成長是否仍在延續。", "公開財報與營收資料"),
+      reason("neutral", "價格位置", number(metrics.pe_ratio, 2, " 倍"), rank(metrics.pe_rank, metrics.peer_count), "成長良好不代表任何價格都適合追進。", "TWSE 估值與同組比較"),
+      reason("caution", "短期動能", rank(metrics.sector_rank, metrics.sector_peer_count), number(metrics.relative_market_pct_point, 2, " 個百分點"), decision.reason_zh || "目前仍需等待價格確認。", "近 20 日市場與同組比較"),
+    ];
+    followUp = ["營收與 EPS 成長是否延續", "價格是否回到合理區間", "ROE、自由現金流與負債資料是否補齊"];
+  } else if (profileId === "cyclical") {
+    reasons = [
+      reason("positive", "景氣與營運", number(metrics.revenue_yoy_pct, 2, "%"), number(metrics.revenue_mom_pct, 2, "%"), "營收年增與月增用來觀察循環是否正在轉強。", "公開營收資料"),
+      reason("neutral", "價格趨勢", number(metrics.return_20d_pct, 2, "%"), number(metrics.rsi_14, 2), "漲幅與 RSI 一起判斷趨勢強度及是否過熱。", "交易所價格資料"),
+      reason("caution", "籌碼風險", number(metrics.margin_change_5d_pct, 2, "%"), decision.unheld || "等待循環確認", decision.reason_zh || "仍需留意追價與籌碼反轉。", "法人與融資資料"),
+    ];
+    followUp = ["營收循環是否持續改善", "RSI 過熱是否降溫", "融資與法人籌碼是否反轉"];
+  } else if (profileId === "high_volatility_event") {
+    reasons = [
+      reason("positive", "同組表現", number(metrics.return_20d_pct, 2, "%"), rank(metrics.sector_rank, metrics.sector_peer_count), "近期漲幅僅代表相對表現，不代表事件已被證實。", "近 20 日同組比較"),
+      reason("caution", "波動風險", number(metrics.volatility_20d_pct, 2, "%"), number(metrics.atr_14_pct, 2, "%"), "高波動股票需要同時確認可能回撤的幅度。", "交易所價格資料"),
+      reason("neutral", "公司事件", `${Number(metrics.confirmed_company_event_count || 0)} 項`, decision.unheld || "等待事件確認", decision.reason_zh || "目前仍需等待公司專屬事件證據。", "已確認官方事件"),
+    ];
+    followUp = ["是否出現已確認的公司專屬事件", "成交量是否支持價格突破", "高波動是否出現反轉"];
+  } else {
+    const indicators = Array.isArray(report.indicators) ? report.indicators.slice(0, 3) : [];
+    reasons = indicators.map((item) => reason("neutral", item.label || "研究證據", number(item.score, 1, " 分"), item.level || "待確認", item.description || "等待更多研究資料。", item.source_label_zh || "公開資料"));
+    followUp = ["補齊股票類型資料", "確認主要風險來源", "等待更多同組比較證據"];
+  }
+
+  $("integratedDecisionType").textContent = report.stock_profile?.label_zh || "依股票類型整理";
+  $("integratedReasonGrid").innerHTML = reasons.slice(0, 3).map((item, index) => `
+    <article class="integrated-reason ${item.tone}">
+      <span>理由 ${index + 1}</span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <div class="integrated-reason-values"><b>${escapeHtml(item.primary)}</b><em>${escapeHtml(item.secondary)}</em></div>
+      <p>${escapeHtml(item.copy)}</p>
+      <small>資料來源：${escapeHtml(item.source)}</small>
+    </article>
+  `).join("");
+
+  const missing = Array.isArray(profile.missing_evidence_zh) ? profile.missing_evidence_zh : [];
+  const tracking = [...new Set([...followUp, ...missing])].slice(0, 3);
+  $("integratedFollowUpList").innerHTML = tracking.map((item, index) => `<li><b>${index + 1}</b><span>${escapeHtml(item)}</span></li>`).join("");
+
+  const history = (Array.isArray(report.score_history) ? report.score_history : [])
+    .slice(-10)
+    .map((item) => ({
+      date: String(item.date || ""),
+      score: Number(item.score),
+    }))
+    .filter((item) => Number.isFinite(item.score));
+
+  if (history.length < 2) {
+    $("integratedTrendChart").innerHTML = "";
+    $("integratedTrendSummary").textContent = "累積至少兩個不同日期後，即可顯示趨勢。";
+    return;
+  }
+
+  const width = 1000;
+  const height = 82;
+  const paddingY = 12;
+  const scores = history.map((item) => item.score);
+  const minimum = Math.min(...scores);
+  const maximum = Math.max(...scores);
+  const range = maximum - minimum || 1;
+
+  const coordinates = history.map((item, index) => {
+    const x = (index + 0.5) * (width / history.length);
+    const y = height - paddingY - ((item.score - minimum) / range) * (height - paddingY * 2);
+    return {x, y, ...item};
+  });
+
+  const points = coordinates
+    .map((item) => `${item.x.toFixed(1)},${item.y.toFixed(1)}`)
+    .join(" ");
+
+  const circles = coordinates.map((item, index) => `
+    <circle
+      cx="${item.x.toFixed(1)}"
+      cy="${item.y.toFixed(1)}"
+      r="${index === coordinates.length - 1 ? 5 : 3.5}"
+      class="${index === coordinates.length - 1 ? "latest" : ""}">
+    </circle>
+  `).join("");
+
+  const valueItems = history.map((item, index) => `
+    <span class="${index === history.length - 1 ? "latest" : ""}">
+      <b>${item.score.toFixed(1)}</b>
+      <small>${escapeHtml(item.date.slice(5).replace("-", "/"))}</small>
+    </span>
+  `).join("");
+
+  $("integratedTrendChart").innerHTML = `
+    <div class="integrated-trend-inner">
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="近 10 日研究分數">
+        <polyline
+          points="${points}"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+        </polyline>
+        ${circles}
+      </svg>
+      <div class="integrated-trend-values">${valueItems}</div>
+    </div>
+  `;
+
+  const change = history[history.length - 1].score - history[0].score;
+  $("integratedTrendSummary").textContent =
+    `最新 ${history[history.length - 1].score.toFixed(1)} 分，較區間起點` +
+    `${change >= 0 ? "增加" : "減少"} ${Math.abs(change).toFixed(1)} 分。`;
+}
 function renderInvestmentResearch(block) {
   const company = block.company_profile || {};
   const valuation = block.valuation || {};
@@ -915,6 +1080,278 @@ function renderUpcomingEvents() {
   $("futureEvents").innerHTML = `<article class="warm-card event-placeholder"><time>${ready ? "未來 7 天" : "尚未建立"}</time><span>${ready ? "沒有已確認的官方事件" : "官方預定事件資料尚未接入"}</span><p>${ready ? "目前不需要因為預定日程採取動作；系統每日更新後會重新檢查。" : "不顯示推測日期，完成官方來源更新後會自動出現。"}</p></article>`;
 }
 
+function renderMaterialNewsHome() {
+  const container = $("materialNewsHome");
+  const status = $("materialNewsStatus");
+
+  if (!container || !status) return;
+
+  const severityOrder = {high: 0, medium: 1};
+
+  const rankedItems = stockCatalog
+    .flatMap((report) => {
+      const newsItems = Array.isArray(report.material_news?.items)
+        ? report.material_news.items
+        : [];
+
+      return newsItems.map((item) => ({
+        ...item,
+        stock_id: report.id,
+        stock_name: report.name,
+      }));
+    })
+    .filter((item) => {
+      if (!item.title || !item.source_url) return false;
+
+      const sourceCount = Number(item.confirmed_by_count || 1);
+      const sourceText = `${item.source_name || ""} ${item.title || ""}`;
+
+      const lowAuthority =
+        /CMoney|\u6295\u8cc7\u7db2\u8a8c|\u80a1\u5e02\u7206\u6599|\u81ea\u5b78\u7db2|\u65b9\u683c\u5b50|Vocus|facebook/i
+          .test(sourceText);
+
+      const commentary =
+        /\u63db\u80a1|\u80fd\u5426|\u8a72\u8cb7\u55ce|\u52a0\u78bc|\u7372\u5229\u6a21\u5f0f|\u8b77\u57ce\u6cb3\u9084\u5728|\u89c0\u5bdf\u9019\u4e9b\u6578\u64da/i
+          .test(item.title);
+
+      return sourceCount > 1 && !commentary;
+    })
+    .sort((a, b) => {
+      const severity =
+        (severityOrder[a.severity] ?? 9) -
+        (severityOrder[b.severity] ?? 9);
+
+      if (severity !== 0) return severity;
+
+      return String(b.published_at || "")
+        .localeCompare(String(a.published_at || ""));
+    })
+    .slice(0, 100);
+
+  const seenStocks = new Set();
+  const seenEvents = new Set();
+
+  const uniqueItems = rankedItems.filter((item) => {
+    const eventKey = String(item.title || "")
+      .toLowerCase()
+      .replace(/[^0-9a-z\u4e00-\u9fff]+/g, "");
+
+    if (seenStocks.has(item.stock_id)) return false;
+    if (seenEvents.has(eventKey)) return false;
+
+    seenStocks.add(item.stock_id);
+    seenEvents.add(eventKey);
+    return true;
+  });
+  const items = uniqueItems.slice(0, 5);
+
+  status.textContent = materialNewsPageItems().length ? `${materialNewsPageItems().length} 項` : "近 7 日";
+
+  if (!items.length) {
+    container.innerHTML =
+      '<div class="warm-card home-empty">近 7 日未發現值得確認的公司重大消息。</div>';
+    return;
+  }
+
+  container.innerHTML = items.map((item) => {
+    const date = String(item.published_at || "")
+      .slice(5, 10)
+      .replace("-", "/");
+
+    const high = item.severity === "high";
+    const sourceCount = Number(item.confirmed_by_count || 1);
+
+    return `
+      <article class="material-news-card warm-card ${high ? "high" : "medium"}">
+        <button type="button" data-material-stock="${escapeHtml(item.stock_id)}">
+          <div class="material-news-meta">
+            <span>${escapeHtml(item.stock_name)} · ${escapeHtml(item.stock_id)}</span>
+            <time>${escapeHtml(date)}</time>
+          </div>
+          <div class="material-news-labels">
+            <em>${
+              high
+                ? sourceCount > 1
+                  ? "\u591a\u4f86\u6e90\u91cd\u8981"
+                  : "\u512a\u5148\u78ba\u8a8d"
+                : "\u503c\u5f97\u7559\u610f"
+            }</em>
+            <span>${escapeHtml(item.category_label_zh || "公司消息")}</span>
+          </div>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.reason_zh || "這項消息值得進一步確認。")}</p>
+          <small>
+            ${escapeHtml(item.source_name || "新聞來源")} ·
+            ${sourceCount > 1
+              ? `${sourceCount} 個來源報導`
+              : "單一來源，待確認"}
+          </small>
+        </button>
+        <a href="${escapeHtml(item.source_url)}"
+           target="_blank"
+           rel="noopener noreferrer">查看原文 ↗</a>
+      </article>
+    `;
+  }).join("");
+
+  document
+    .querySelectorAll("[data-material-stock]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        loadStock(button.dataset.materialStock);
+      });
+    });
+}
+function materialNewsPageItems() {
+  const severityOrder = {high: 0, medium: 1};
+  const seenEvents = new Set();
+
+  return stockCatalog
+    .flatMap((report) => {
+      const items = Array.isArray(report.material_news?.items)
+        ? report.material_news.items
+        : [];
+
+      return items.map((item) => ({
+        ...item,
+        stock_id: report.id,
+        stock_name: report.name,
+      }));
+    })
+    .filter((item) => {
+      if (!item.title || !item.source_url) return false;
+
+      const sourceCount = Number(item.confirmed_by_count || 1);
+      const commentary =
+        /\u63db\u80a1|\u80fd\u5426|\u8a72\u8cb7\u55ce|\u52a0\u78bc|\u7372\u5229\u6a21\u5f0f|\u8b77\u57ce\u6cb3\u9084\u5728|\u89c0\u5bdf\u9019\u4e9b\u6578\u64da|\u4eca\u65e5\u6700\u592f\u80a1|\u5e02\u5834\u7126\u9ede|\u80a1\u50f9\u8d70\u9ad8|\u53e9\u95dc\u524d\u9ad8|\u6cd5\u4eba\u770b\u6cd5|\u5916\u8cc7\u5927\u8cb7|\u9078\u80a1|\u76e4\u52e2/i
+          .test(item.title);
+
+      return sourceCount > 1 && !commentary;
+    })
+    .sort((a, b) => {
+      const severity =
+        (severityOrder[a.severity] ?? 9) -
+        (severityOrder[b.severity] ?? 9);
+
+      if (severity !== 0) return severity;
+
+      return String(b.published_at || "")
+        .localeCompare(String(a.published_at || ""));
+    })
+    .filter((item) => {
+      const eventKey = String(item.title || "")
+        .toLowerCase()
+        .replace(/[^0-9a-z\u4e00-\u9fff]+/g, "");
+
+      if (!eventKey || seenEvents.has(eventKey)) return false;
+
+      seenEvents.add(eventKey);
+      return true;
+    });
+}
+
+function renderMaterialNewsPage() {
+  const container = $("materialNewsPageGrid");
+  const count = $("materialNewsPageCount");
+  const stockFilter = $("materialNewsStockFilter");
+  const categoryFilter = $("materialNewsCategoryFilter");
+
+  if (!container || !count || !stockFilter || !categoryFilter) return;
+
+  const allItems = materialNewsPageItems();
+  const selectedStock = stockFilter.value || "all";
+  const selectedCategory = categoryFilter.value || "all";
+
+  const stocks = [...new Map(
+    allItems.map((item) => [
+      item.stock_id,
+      {id: item.stock_id, name: item.stock_name},
+    ])
+  ).values()].sort((a, b) => a.id.localeCompare(b.id));
+
+  const categories = [...new Set(
+    allItems.map((item) => item.category_label_zh || "公司消息")
+  )].sort();
+
+  stockFilter.innerHTML = [
+    '<option value="all">全部股票</option>',
+    ...stocks.map((item) =>
+      `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)} · ${escapeHtml(item.id)}</option>`
+    ),
+  ].join("");
+
+  categoryFilter.innerHTML = [
+    '<option value="all">全部類型</option>',
+    ...categories.map((item) =>
+      `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`
+    ),
+  ].join("");
+
+  stockFilter.value = stocks.some((item) => item.id === selectedStock)
+    ? selectedStock
+    : "all";
+
+  categoryFilter.value = categories.includes(selectedCategory)
+    ? selectedCategory
+    : "all";
+
+  const items = allItems.filter((item) =>
+    (stockFilter.value === "all" || item.stock_id === stockFilter.value) &&
+    (
+      categoryFilter.value === "all" ||
+      (item.category_label_zh || "公司消息") === categoryFilter.value
+    )
+  );
+
+  count.textContent = `${items.length} 項`;
+
+  if (!items.length) {
+    container.innerHTML =
+      '<div class="warm-card home-empty">目前沒有符合篩選條件的重要消息。</div>';
+    return;
+  }
+
+  container.innerHTML = items.map((item) => {
+    const date = String(item.published_at || "")
+      .slice(5, 10)
+      .replace("-", "/");
+
+    const sourceCount = Number(item.confirmed_by_count || 1);
+    const high = item.severity === "high";
+
+    return `
+      <article class="material-news-card warm-card ${high ? "high" : "medium"}">
+        <button type="button" data-news-page-stock="${escapeHtml(item.stock_id)}">
+          <div class="material-news-meta">
+            <span>${escapeHtml(item.stock_name)} · ${escapeHtml(item.stock_id)}</span>
+            <time>${escapeHtml(date)}</time>
+          </div>
+          <div class="material-news-labels">
+            <em>${high ? "多來源重要" : "值得留意"}</em>
+            <span>${escapeHtml(item.category_label_zh || "公司消息")}</span>
+          </div>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.reason_zh || "這項消息值得進一步確認。")}</p>
+          <small>
+            ${escapeHtml(item.source_name || "新聞來源")} ·
+            ${sourceCount} 個來源報導
+          </small>
+        </button>
+        <a href="${escapeHtml(item.source_url)}"
+           target="_blank"
+           rel="noopener noreferrer">查看原文 ↗</a>
+      </article>
+    `;
+  }).join("");
+
+  document
+    .querySelectorAll("[data-news-page-stock]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        loadStock(button.dataset.newsPageStock);
+      });
+    });
+}
 function renderHomeDashboard() {
   $("homeDate").textContent = formatHomeDate();
   const updates = stockCatalog.map((report) => report.updated).filter((value) => value && value !== "—").sort();
@@ -922,6 +1359,7 @@ function renderHomeDashboard() {
   renderMarketHomeSummary();
   renderUpcomingEvents();
   renderDailyResearch();
+  renderMaterialNewsHome();
 
   const digestRows = stockCatalog.filter((report) => reportEvents(report).length)
     .sort((a, b) => Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)) || reportEvents(b).length - reportEvents(a).length).slice(0, 3);
@@ -987,6 +1425,7 @@ function completeDailyResearchStep(key, dataDate) {
   completed.add(key);
   localStorage.setItem(dailyResearchStorageKey(dataDate), JSON.stringify([...completed]));
   renderDailyResearch();
+  renderMaterialNewsHome();
 }
 
 function startDailyResearchStep(key, dataDate) {
@@ -1153,6 +1592,12 @@ $("backToCenterButton").addEventListener("click", () => { activePage = detailOri
 $("brandHomeLink").addEventListener("click", (event) => { event.preventDefault(); activePage = "home"; showHomeView({restoreScroll:false}); window.scrollTo({top:0, behavior:"smooth"}); });
 $("watchlistOnlyButton").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockCenter(); });
 $("viewAllChanges").addEventListener("click", () => switchPage("events"));
+$("viewAllMaterialNews").addEventListener("click", () => {
+  renderMaterialNewsPage();
+  switchPage("news");
+});
+$("materialNewsStockFilter").addEventListener("change", () => renderMaterialNewsPage());
+$("materialNewsCategoryFilter").addEventListener("change", () => renderMaterialNewsPage());
 $("viewWatchlist").addEventListener("click", () => switchPage("watchlist"));
 $("addWatchlistStock").addEventListener("click", () => switchPage("explore"));
 $("exploreSearch").addEventListener("input", (event) => { exploreQuery = event.target.value; renderStockCenter(); });

@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-20T23:20:20+08:00",
+  "generated_at": "2026-08-21T07:23:11+08:00",
   "status": "success",
   "stock_id": "6669",
   "data_date": "2026-08-20",
@@ -2558,28 +2558,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "6669",
-    "window_start": "2026-08-20",
-    "window_end": "2026-08-26",
+    "window_start": "2026-08-21",
+    "window_end": "2026-08-27",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
-        "event_date": "2026-08-20",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "export_orders_release",
-        "title_zh": "外銷訂單統計發布",
-        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
-        "importance": "high",
-        "source_name_zh": "經濟部",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "外銷訂單統計",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:employment_release:2026-08-24",
         "event_date": "2026-08-24",
@@ -2617,7 +2599,7 @@
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 3,
+    "event_count": 2,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -2660,7 +2642,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -2733,7 +2715,7 @@
             "stock_id": "2317",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 246.5,
             "return_20d_pct": -4.2718,
             "volatility_20d_pct": 3.1298,
@@ -2754,7 +2736,7 @@
             "stock_id": "2382",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 327.0,
             "return_20d_pct": -2.6786,
             "volatility_20d_pct": 3.1721,
@@ -2775,7 +2757,7 @@
             "stock_id": "3231",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 180.0,
             "return_20d_pct": 3.7464,
             "volatility_20d_pct": 3.8819,
@@ -2796,7 +2778,7 @@
             "stock_id": "2376",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 344.0,
             "return_20d_pct": -2.9619,
             "volatility_20d_pct": 3.9216,
@@ -2817,7 +2799,7 @@
             "stock_id": "6669",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 6325.0,
             "return_20d_pct": 15.6307,
             "volatility_20d_pct": 4.5361,
@@ -2958,8 +2940,8 @@
       "relative_market_pct_point": 17.09,
       "sector_rank": 1,
       "sector_peer_count": 5,
-      "pe_ratio": 20.44,
-      "pb_ratio": 8.68,
+      "pe_ratio": 20.28,
+      "pb_ratio": 8.61,
       "pe_rank": 5,
       "pb_rank": 5,
       "peer_count": 5
@@ -3003,6 +2985,58 @@
       "affects_health_score": false,
       "mode": "comparison_only"
     }
+  },
+  "material_news": {
+    "version": "MaterialNews-v1.0",
+    "status": "available",
+    "stock_id": "6669",
+    "data_date": "2026-08-20",
+    "window_days": 7,
+    "item_count": 3,
+    "items": [
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "擺脫財報亂流 多方猛攻！緯穎飆出6740元歷史新天價",
+        "source_name": "鏡報",
+        "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1RWFc2cnBsLUdYbmh1R0tSVkt2ZlNaWXM3aVlXbHJadTRnbnZUbmtUQlJvYk5BejlEZGlWRzFIaEkwSzV2ZGNPRk5mTUUxRllrQ1E?oc=5",
+        "published_at": "2026-08-17T03:53:00+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "d6ca36fc63648f7c",
+        "confirmed_by_count": 3
+      },
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "廣達（2382）＆緯穎（6669）｜AI伺服器放量，ODM雙雄獲利持續優預期且上修｜豐雲學堂2026 年 08 月",
+        "source_name": "sinotrade.com.tw",
+        "source_url": "https://news.google.com/rss/articles/CBMimwNBVV95cUxObEJKT19vOHkzbVVma1dzMXBUY0RtZVc3bTYydGZuZG1fakljS2ZhWkpRa21QU2JVd3dkSHZUM0YybjB4SmlaYzJROWt3ZnU4VHpnelVsVE1xdVYtUE5BNUhpVU9hY0J5eGtxcWRvenliMXJmX1VNdEc2Y25qUkdXNm1pR2xtWGxZdHpCdG9mMGc3c1J6S1dCZG91R0dGSHpRLWJqZTE2MHZld2tPX1lsWHRmSGFveEFpTnZMSHYyWUkybE13bXF0TEI2bmEzUkw5b3JBN1pYODRqbUEtV3pZTmJlWjIyTmRIczFQTnZTWXhEd0ZPTWtDaUtkN25RSzMycVNXakF1SnduU3hLSkdIOUZOMVJVNHhuS0xyRWhsa3U2dGFGcE9yRGNFTFAzdFViMkpLVERicGdaaklFR1hHSG5sSVA0ZGNvZnFaZE9jcGw5QjBXbWpnMVNCTEVTdGEwbEJYOHlNZ2lyeXpqa1o3ejNhcUFRdnJfcjUtcXdrQndBTGUzVHptaEhsMlpod3hWeG9QenBoeEhLdmM?oc=5",
+        "published_at": "2026-08-14T01:31:27+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "487d60a1400418d9",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "medium",
+        "category": "operations",
+        "category_label_zh": "營運重大變化",
+        "title": "緯穎持續擴充美、墨兩地產能 滿足客戶需求",
+        "source_name": "udn.com",
+        "source_url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9GTDVSQk14cEx5UFRZN3R4M2tQSEd5Y0xibWsxOTR2NVFCem5LOERYd2xLTG05YjIxYThfOFpvOFJIMUYxQWhPLWJ4RFJBMVYx0gFWQVVfeXFMTVo0T0JaV2c0a2NHaDUyWEQtNEFYT18xc3FMMUJ4U214dUF4d1hnOTJsZ3ZhRnZqek5lQklqbjlzMFpxZEpsay0zdGpxbDlCQURSTjcxblE?oc=5",
+        "published_at": "2026-08-14T08:31:35+00:00",
+        "reason_zh": "涉及產能、訂單或營運規模的重要變化。",
+        "duplicate_group_id": "0379243124ef1e8a",
+        "confirmed_by_count": 2
+      }
+    ],
+    "message_zh": "近 7 日整理出 3 項值得確認的公司消息。",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "evidence_only"
+    },
+    "notice_zh": "重大程度依公開標題與事件類型整理，仍應開啟原文確認完整內容。"
   },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
@@ -5175,7 +5209,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 3,
+        "item_count": 2,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -5219,7 +5253,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 48 項內容可以確認",
+    "headline_zh": "今天有 47 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
@@ -5242,18 +5276,6 @@
         "title_zh": "6669｜均線趨勢結構",
         "message_zh": "這項變化讓健康分數加分 2.87 分。",
         "reason_zh": "比較股價與中短期均線位置，判斷趨勢方向與強度。",
-        "destination": "events",
-        "affects_health_score": false
-      },
-      {
-        "notification_id": "f6a039e20881574a1213",
-        "type": "official_event",
-        "severity": "info",
-        "stock_id": "MARKET",
-        "source_date": "2026-08-20",
-        "title_zh": "2026-08-20｜外銷訂單統計發布",
-        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
-        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
         "destination": "events",
         "affects_health_score": false
       },
@@ -5294,7 +5316,7 @@
         "affects_health_score": false
       }
     ],
-    "notification_count": 5,
+    "notification_count": 4,
     "score_policy": {
       "affects_health_score": false,
       "mode": "attention_only"

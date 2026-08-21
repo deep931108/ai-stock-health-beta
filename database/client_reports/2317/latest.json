@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-20T23:20:20+08:00",
+  "generated_at": "2026-08-21T07:23:11+08:00",
   "status": "success",
   "stock_id": "2317",
   "data_date": "2026-08-20",
@@ -641,7 +641,7 @@
         {
           "factor": "news",
           "label_zh": "近期新聞熱度",
-          "value": 126,
+          "value": 122,
           "unit": "則",
           "baseline_value": 0,
           "baseline_label_zh": "無相關新聞",
@@ -1192,7 +1192,7 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "value": 126,
+        "value": 122,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -1650,7 +1650,7 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "value": 126,
+        "value": 122,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -2396,7 +2396,7 @@
           {
             "factor": "news",
             "label_zh": "近期新聞熱度",
-            "value": 126,
+            "value": 122,
             "unit": "則",
             "baseline_value": 0,
             "baseline_label_zh": "無相關新聞",
@@ -2782,28 +2782,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2317",
-    "window_start": "2026-08-20",
-    "window_end": "2026-08-26",
+    "window_start": "2026-08-21",
+    "window_end": "2026-08-27",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:export_orders_release:2026-08-20",
-        "event_date": "2026-08-20",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "export_orders_release",
-        "title_zh": "外銷訂單統計發布",
-        "beginner_explanation_zh": "外銷訂單可協助觀察未來出口需求，對電子與製造產業特別有參考價值。",
-        "importance": "high",
-        "source_name_zh": "經濟部",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "外銷訂單統計",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=207&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:employment_release:2026-08-24",
         "event_date": "2026-08-24",
@@ -2841,7 +2823,7 @@
         "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
       }
     ],
-    "event_count": 3,
+    "event_count": 2,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
@@ -2884,7 +2866,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 3 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -2971,7 +2953,7 @@
             "stock_id": "2317",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 246.5,
             "return_20d_pct": -4.2718,
             "volatility_20d_pct": 3.1298,
@@ -2992,7 +2974,7 @@
             "stock_id": "2382",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 327.0,
             "return_20d_pct": -2.6786,
             "volatility_20d_pct": 3.1721,
@@ -3013,7 +2995,7 @@
             "stock_id": "3231",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 180.0,
             "return_20d_pct": 3.7464,
             "volatility_20d_pct": 3.8819,
@@ -3034,7 +3016,7 @@
             "stock_id": "2376",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 344.0,
             "return_20d_pct": -2.9619,
             "volatility_20d_pct": 3.9216,
@@ -3055,7 +3037,7 @@
             "stock_id": "6669",
             "status": "available",
             "data_date": "2026-08-20",
-            "stale_calendar_days": 0,
+            "stale_calendar_days": 1,
             "close_latest": 6325.0,
             "return_20d_pct": 15.6307,
             "volatility_20d_pct": 4.5361,
@@ -3196,8 +3178,8 @@
       "relative_market_pct_point": -2.81,
       "sector_rank": 5,
       "sector_peer_count": 5,
-      "pe_ratio": 16.15,
-      "pb_ratio": 1.8,
+      "pe_ratio": 16.25,
+      "pb_ratio": 1.81,
       "pe_rank": 4,
       "pb_rank": 1,
       "peer_count": 5
@@ -3241,6 +3223,82 @@
       "affects_health_score": false,
       "mode": "comparison_only"
     }
+  },
+  "material_news": {
+    "version": "MaterialNews-v1.0",
+    "status": "available",
+    "stock_id": "2317",
+    "data_date": "2026-08-20",
+    "window_days": 7,
+    "item_count": 5,
+    "items": [
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "【即時新聞】今日鴻海最新公告子公司轉讓臻鼎5,544張持股實現投資獲利",
+        "source_name": "CMoney投資網誌",
+        "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOU081SnFlQmE2MjAwOVF5aWpGdGZQc2FYbldMc1dzNFNVVXRvaWJHVWphRUswOUhlMFotZXRyZlBjUHFEMThsZGh4ajg5Q2tVOEVpWFVNZmZDeVA0TlEwSFE3TFlIbkpIT1FUUml3SFk2RW9ocUxRWkFqRnRjMnpQeVBmUUUwMEJxMkthc1FmTGU?oc=5",
+        "published_at": "2026-08-19T15:26:50+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "8ced41924126ebd3",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "high",
+        "category": "merger_acquisition",
+        "category_label_zh": "併購與重大投資",
+        "title": "鴻海旗下子公司斥資3億8,276萬墨西哥披索收購墨西哥土地 作者 Investing.com - Investing.com 香港",
+        "source_name": "Investing.com 香港 - 股市報價& 財經新聞",
+        "source_url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBxdEtvMFlrZ0VqY0lZLWlsRktYVzVKZkFtQkR3bGRSQ1p0alBybVV1X2g0T0JyQzB5TWtsVWlTQVpBQm1DZXpDTk41NF9tRTR1ajhBQURCc0NtWGE2anF0OXhrY2FlUzQ5MVlnMjhfSU4?oc=5",
+        "published_at": "2026-08-18T09:56:29+00:00",
+        "reason_zh": "涉及公司資產或事業結構的重大變化。",
+        "duplicate_group_id": "54bf12e2d9d9b39d",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "high",
+        "category": "earnings",
+        "category_label_zh": "財報與獲利",
+        "title": "台廠中國收益不降反升！CRIF：鴻海穩坐獲利王、台光電成科技大黑馬",
+        "source_name": "TechNews 科技新報",
+        "source_url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE94U0xBQS1QQmVKcDVDbUVUMUVWcGdaY3g0Qnd4M2tGU3dmREVLRFE1SDk1XzNYd3NNNF80Uk0ya1dVMUxtcDJaeS1ZM0hEbVlUS1htR3REanR1VlZWSzgxVjVlWQ?oc=5",
+        "published_at": "2026-08-18T03:11:08+00:00",
+        "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
+        "duplicate_group_id": "3c6c159fdfecdf96",
+        "confirmed_by_count": 4
+      },
+      {
+        "severity": "medium",
+        "category": "operations",
+        "category_label_zh": "營運重大變化",
+        "title": "【即時新聞】最新宣布！鴻海增資越南子公司114.75億元，衝刺CPO矽光子產能佈局",
+        "source_name": "CMoney投資網誌",
+        "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQS2RzanNWMXZnLWtfU2VMZ0QwWE9DVGI4QlV2amJYWDVaMVJEZW5jWkU3aGxmTkhuSjU5Ty1uUXZRZS1GNWxHU2syTGlFbWo4LUE0d2UwaDNqbmtHVnUyM0FMUGJIenJjMXNlS1BBWjE3b2FmS1JTNHlkVkZKSHBrX2RWMzVpb1Y5Tlk1N2lmVnI?oc=5",
+        "published_at": "2026-08-19T10:07:13+00:00",
+        "reason_zh": "涉及產能、訂單或營運規模的重要變化。",
+        "duplicate_group_id": "65e5eda24b5f9efd",
+        "confirmed_by_count": 1
+      },
+      {
+        "severity": "medium",
+        "category": "operations",
+        "category_label_zh": "營運重大變化",
+        "title": "鴻海AI訂單能見度已達2027年？",
+        "source_name": "UDN",
+        "source_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPVk5CSE1MS05pLUpMQ0JUZWc4TTlyTHJDZFhFUEY5UGVLYjF3ZDZvRHk3MkkyTEhNYkc3U3lmR0xzSTRGb0NFSmx5RDJQbG56RGNDTDR5SEV3Y0cwRmRiSVJLYVBEZ044aWlMdTZ5dXY2Sjh0M3Q1U1g3VlRWZEN0Z19hd2w?oc=5",
+        "published_at": "2026-08-19T09:47:07+00:00",
+        "reason_zh": "涉及產能、訂單或營運規模的重要變化。",
+        "duplicate_group_id": "b6031c09a1652441",
+        "confirmed_by_count": 1
+      }
+    ],
+    "message_zh": "近 7 日整理出 5 項值得確認的公司消息。",
+    "score_policy": {
+      "affects_health_score": false,
+      "mode": "evidence_only"
+    },
+    "notice_zh": "重大程度依公開標題與事件類型整理，仍應開啟原文確認完整內容。"
   },
   "today_changes": {
     "version": "DailyEvidence-v1.1",
@@ -4121,7 +4179,7 @@
         "category": "news",
         "title_zh": "近期新聞熱度",
         "direction": "negative",
-        "current_value": 126,
+        "current_value": 122,
         "current_unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -4135,18 +4193,18 @@
         "source_url": null,
         "schema_version": "CustomerEvidence-v2.0",
         "explain_engine_version": "CustomerExplainEngine-v2.2",
-        "what_happened_zh": "目前資料顯示，近期新聞熱度為 126則，比較基準為 0則；使健康度承受扣分。",
+        "what_happened_zh": "目前資料顯示，近期新聞熱度為 122則，比較基準為 0則；使健康度承受扣分。",
         "metric_explanation_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
         "score_reason_zh": "系統認為「近期新聞熱度」增加不確定性或低於比較基準，因此健康分扣除 0.18 分。",
-        "change_value": 126.0,
+        "change_value": 122.0,
         "impact_category_zh": "健康分扣分",
         "source_link_status": "not_preserved",
         "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
         "is_true_daily_change": false,
         "state": "current_state",
         "six_questions": {
-          "what_happened_zh": "目前資料顯示，近期新聞熱度為 126則，比較基準為 0則；使健康度承受扣分。",
-          "current_value_zh": "126則",
+          "what_happened_zh": "目前資料顯示，近期新聞熱度為 122則，比較基準為 0則；使健康度承受扣分。",
+          "current_value_zh": "122則",
           "comparison_zh": "0則",
           "baseline_value_zh": "0則",
           "meaning_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
@@ -5590,7 +5648,7 @@
             "category": "news",
             "title_zh": "近期新聞熱度",
             "direction": "negative",
-            "current_value": 126,
+            "current_value": 122,
             "current_unit": "則",
             "baseline_value": 0,
             "baseline_label_zh": "無相關新聞",
@@ -5604,18 +5662,18 @@
             "source_url": null,
             "schema_version": "CustomerEvidence-v2.0",
             "explain_engine_version": "CustomerExplainEngine-v2.2",
-            "what_happened_zh": "目前資料顯示，近期新聞熱度為 126則，比較基準為 0則；使健康度承受扣分。",
+            "what_happened_zh": "目前資料顯示，近期新聞熱度為 122則，比較基準為 0則；使健康度承受扣分。",
             "metric_explanation_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
             "score_reason_zh": "系統認為「近期新聞熱度」增加不確定性或低於比較基準，因此健康分扣除 0.18 分。",
-            "change_value": 126.0,
+            "change_value": 122.0,
             "impact_category_zh": "健康分扣分",
             "source_link_status": "not_preserved",
             "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
             "is_true_daily_change": false,
             "state": "current_state",
             "six_questions": {
-              "what_happened_zh": "目前資料顯示，近期新聞熱度為 126則，比較基準為 0則；使健康度承受扣分。",
-              "current_value_zh": "126則",
+              "what_happened_zh": "目前資料顯示，近期新聞熱度為 122則，比較基準為 0則；使健康度承受扣分。",
+              "current_value_zh": "122則",
               "comparison_zh": "0則",
               "baseline_value_zh": "0則",
               "meaning_zh": "新聞指標整理近期公開消息的正負向比例；熱度高不一定代表利多。",
@@ -5659,7 +5717,7 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 3,
+        "item_count": 2,
         "unit_zh": "個",
         "available": true,
         "destination": "events"
@@ -5703,7 +5761,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 50 項內容可以確認",
+    "headline_zh": "今天有 49 項內容可以確認",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
@@ -5726,18 +5784,6 @@
         "title_zh": "2317｜正負面新聞比例",
         "message_zh": "這項變化讓健康分數加分 2.02 分。",
         "reason_zh": "正負面新聞數量差異可補充單一平均值。",
-        "destination": "events",
-        "affects_health_score": false
-      },
-      {
-        "notification_id": "f6a039e20881574a1213",
-        "type": "official_event",
-        "severity": "info",
-        "stock_id": "MARKET",
-        "source_date": "2026-08-20",
-        "title_zh": "2026-08-20｜外銷訂單統計發布",
-        "message_zh": "這是已確認的官方日程，可先安排追蹤。",
-        "reason_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
         "destination": "events",
         "affects_health_score": false
       },
@@ -5778,7 +5824,7 @@
         "affects_health_score": false
       }
     ],
-    "notification_count": 5,
+    "notification_count": 4,
     "score_policy": {
       "affects_health_score": false,
       "mode": "attention_only"

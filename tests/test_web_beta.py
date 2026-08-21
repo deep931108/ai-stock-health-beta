@@ -126,7 +126,13 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.4.5 Preview" in html
+    assert "Web v3.4.7 Preview" in html
+    assert 'id="integratedDecision"' in html
+    assert 'id="integratedReasonGrid"' in html
+    assert 'id="integratedFollowUpList"' in html
+    assert 'id="integratedTrendChart"' in html
+    assert "function renderIntegratedDecision" in js
+    assert "renderIntegratedDecision(report);" in js
     assert "function stockDecisionProfile" in js
     assert 'financial_income: item.income_profile' in js
     assert 'growth_quality: item.growth_profile' in js
