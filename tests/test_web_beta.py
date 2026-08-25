@@ -566,3 +566,15 @@ def test_gc16_result_supports_private_safe_social_sharing() -> None:
         "stockCatalog",
     ]:
         assert private_term not in share_function
+
+
+
+def test_gc16_visible_question_count_matches_twelve_question_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+
+    assert "<b>12</b><span>個連續情境</span>" in html
+    assert "第 1 題，共 12 題" in html
+    assert 'id="personalityProgressText">8%</b>' in html
+    assert "<b>8</b><span>個情境問題</span>" not in html
+    assert "第 1 題，共 8 題" not in html
