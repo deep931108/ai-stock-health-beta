@@ -126,7 +126,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.5.0 Beta" in html
+    assert "Web v3.6.0 Beta" in html
     assert 'id="integratedDecision"' in html
     assert 'id="integratedReasonGrid"' in html
     assert 'id="integratedFollowUpList"' in html
@@ -321,3 +321,248 @@ def test_beginner_onboarding_is_versioned_and_restartable() -> None:
     assert "不是預測報酬，也不是買賣分數" in js
     assert "不提供明牌、目標價或買賣指令" in js
     assert "/* Beginner onboarding v1 */" in css
+
+def test_research_personality_quiz_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    required_html = [
+        'id="personalityPage"',
+        'id="personalityIntro"',
+        'id="personalityQuiz"',
+        'id="personalityResult"',
+        'id="personalityOptions"',
+        'id="personalityProgressBar"',
+        'id="personalityPrevious"',
+        'id="personalityNext"',
+        'id="personalityRetake"',
+        'id="personalityFinish"',
+        'id="profilePersonality"',
+        'id="profilePersonalityName"',
+    ]
+
+    for item in required_html:
+        assert item in html
+
+    assert "12 個連續情境" in html
+    assert re.search(r"<b>16</b>\s*<span>種研究人格</span>", html)
+    assert "不評估金融風險承受度" in html
+    assert "不會改變任何股票的健康分數" in html
+    assert "人格只改變閱讀方式，不改變研究結果" in html
+
+    required_profiles = [
+        "地基守衡者",
+        "價值校準師",
+        "長曜培育者",
+        "曙光驗證者",
+        "星盤定衡者",
+        "逆勢校準者",
+        "長軌觀測者",
+        "星軌驗證者",
+        "地訊守值者",
+        "事件定價師",
+        "萌星培育者",
+        "躍遷尋星者",
+        "雷達定錨者",
+        "轉折測繪者",
+        "新軌領航者",
+        "星訊先鋒者",
+    ]
+
+    for profile in required_profiles:
+        assert profile in js
+
+    required_functions = [
+        "function savedPersonalityResult",
+        "function openPersonalityPage",
+        "function startPersonalityQuiz",
+        "function renderPersonalityQuestion",
+        "function selectPersonalityOption",
+        "function completePersonalityQuiz",
+        "function renderPersonalityResult",
+        "function renderProfilePersonality",
+    ]
+
+    for function_name in required_functions:
+        assert function_name in js
+
+    assert 'const PERSONALITY_VERSION = "2"' in js
+    assert 'const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality"' in js
+    assert "researchPersonalityQuestions" in js
+    assert "researchPersonalityProfiles" in js
+    assert "personalityAnswers = Array(12).fill(null)" in js
+    assert "affectsHealthScore: false" in js
+
+    required_css = [
+        "/* Research personality quiz v1 */",
+        ".personality-intro",
+        ".personality-quiz",
+        ".personality-option",
+        ".personality-result-hero",
+        ".personality-result-grid",
+        ".profile-personality-card",
+    ]
+
+    for selector in required_css:
+        assert selector in css
+
+def test_personality_result_has_dimension_report() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    assert 'id="personalityDimensionChart"' in html
+    assert 'id="personalityDimensionSummary"' in html
+    assert "你的研究風格座標" in html
+    assert "這不是金融風險屬性評估" in html
+
+    assert "function personalityDimensionRows" in js
+    assert "function renderPersonalityDimensions" in js
+    assert "renderPersonalityDimensions(result)" in js
+
+    for label in [
+        "守證",
+        "探訊",
+        "營運",
+        "市場",
+        "定錨",
+        "尋星",
+        "築流",
+        "應變",
+    ]:
+        assert label in js
+
+    assert "/* Research personality dimension report v5 */" in css
+    assert "--personality-report-bg" in css
+    assert ".personality-dimension-chart" in css
+    assert ".personality-dimension-track" in css
+
+
+def test_gc16_personality_axis_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+
+    assert "12 個連續情境" in html
+    assert '<b>16</b><span>種研究人格</span>' in html
+    assert 'const PERSONALITY_VERSION = "2"' in js
+    assert "researchPersonalityAxisDefinitions" in js
+    assert "researchPersonalityProfileRows" in js
+    assert 'system: "GC-16"' in js
+    assert "axisScores" in js
+    assert "personalityDimensionRows(scores)" in js
+    assert "averageMargin" in js
+    assert "affectsHealthScore: false" in js
+    for name in (
+        "地基守衡者", "價值校準師", "長曜培育者", "曙光驗證者",
+        "星盤定衡者", "逆勢校準者", "長軌觀測者", "星軌驗證者",
+        "地訊守值者", "事件定價師", "萌星培育者", "躍遷尋星者",
+        "雷達定錨者", "轉折測繪者", "新軌領航者", "星訊先鋒者",
+    ):
+        assert name in js
+
+
+
+def test_gc16_result_uses_branded_inspection_report() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for element_id in [
+        'id="personalityResultCode"',
+        'id="personalityResultClarity"',
+        'id="personalityReportMeta"',
+        'id="personalityResultSymbol"',
+    ]:
+        assert element_id in html
+
+    assert "function personalityTotemSvg" in js
+    assert "personalityTotemSvg(result.primary)" in js
+    assert 'result.clarity || "研究方式較為平衡"' in js
+    assert "GC-16 personality inspection report v2" in css
+    assert "personality-report-meta" in css
+    assert "border-top:3px solid #e39a58" in css
+
+
+
+def test_gc16_questions_form_one_continuous_everyday_story() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+
+    story_markers = [
+        "星期一早上 · 一則朋友訊息",
+        "星期三早上 9:10 · 股價突然下跌",
+        "星期三上午 · 群組消息擴散",
+        "星期三午休 · 公司發布說明",
+        "三個月後 · 第一份成績單",
+        "週末晚上 · 整理這段研究",
+    ]
+
+    for marker in story_markers:
+        assert marker in js
+
+    question_block = js.split(
+        "const researchPersonalityQuestions = [",
+        1,
+    )[1].split("const onboardingSteps = [", 1)[0]
+
+    assert question_block.count('axis: "') == 12
+    assert question_block.count("axisScores:") == 36
+
+    for product_term in [
+        "GC",
+        "AI Stock Terminal",
+        "Guided",
+        "Pro",
+        "健康分數",
+    ]:
+        assert product_term not in question_block
+
+
+
+def test_gc16_result_supports_private_safe_social_sharing() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for element_id in [
+        'id="personalityShare"',
+        'id="personalityCopy"',
+        'id="personalityDownload"',
+        'id="personalityShareStatus"',
+    ]:
+        assert element_id in html
+
+    for function_name in [
+        "function personalityShareText",
+        "function sharePersonalityResult",
+        "function copyPersonalityResult",
+        "function personalityShareCanvas",
+        "function downloadPersonalityReport",
+    ]:
+        assert function_name in js
+
+    assert "navigator.share" in js
+    assert 'canvas.width = 1080' in js
+    assert 'canvas.height = 1350' in js
+    assert 'link.download = `GC-16-' in js
+    assert "GC-16 result sharing v1" in css
+    assert "safe-area-inset-bottom" in css
+
+    share_function = js.split(
+        "function personalityShareText",
+        1,
+    )[1].split("function copyTextSafely", 1)[0]
+
+    for private_term in [
+        "aiStockWatchlist",
+        "inviteCode",
+        "profileTesterCode",
+        "stockCatalog",
+    ]:
+        assert private_term not in share_function

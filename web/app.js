@@ -5,6 +5,10 @@ const RESEARCH_MODE_STORAGE_KEY = "aiStockResearchMode";
 const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
 const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion";
 const ONBOARDING_VERSION = "1";
+const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality";
+const PERSONALITY_VERSION = "2";
+let personalityQuestionIndex = 0;
+let personalityAnswers = Array(12).fill(null);
 let onboardingStepIndex = 0;
 let onboardingActive = false;
 let onboardingTarget = null;
@@ -106,6 +110,388 @@ function setResearchMode(mode) {
   applyResearchMode(mode, {persist: true, announce: true});
   renderProfilePage();
 }
+const researchPersonalityAxisDefinitions = [
+  {
+    key: "evidence",
+    leftKey: "verify",
+    leftLabel: "守證",
+    rightKey: "scan",
+    rightLabel: "探訊",
+    description: "面對新資訊時，你偏向先等待證據完整，或先追蹤可能正在形成的訊號。",
+  },
+  {
+    key: "focus",
+    leftKey: "business",
+    leftLabel: "營運",
+    rightKey: "market",
+    rightLabel: "市場",
+    description: "理解公司變化時，你較常先看營運數字，或市場、法人與相對表現。",
+  },
+  {
+    key: "opportunity",
+    leftKey: "anchor",
+    leftLabel: "定錨",
+    rightKey: "growth",
+    rightLabel: "尋星",
+    description: "判斷研究機會時，你更重視價格基準，或成長空間與改善速度。",
+  },
+  {
+    key: "cadence",
+    leftKey: "compound",
+    leftLabel: "築流",
+    rightKey: "react",
+    rightLabel: "應變",
+    description: "持續研究時，你偏向長期累積紀錄，或快速回應新的轉折與變化。",
+  },
+];
+
+const researchPersonalityProfileRows = [
+  ["vbac", "地基守衡者", "用長期營運證據與價格基準，建立穩固而可反覆檢查的研究地基。", "能讓判斷建立在營運與價格基準上", "你會等待數字形成一致方向，也會確認目前價格是否仍有支撐。", "可能較晚注意正在形成的新變化", "當證據尚未完整時，你可能暫時忽略值得提前追蹤的早期訊號。"],
+  ["vbar", "價值校準師", "當公司營運出現變化時，你會快速重新校準目前的價格位置。", "能把營運改變轉成清楚的價格檢查", "你不會只看股價漲跌，而會先確認公司數字是否足以改變估值基準。", "可能過度等待正式數字才採取研究行動", "部分市場轉折會早於財報出現，需要保留追蹤早期訊號的空間。"],
+  ["vbgc", "長曜培育者", "你尋找能經過多期驗證、持續累積的品質成長。", "能分辨短期成長與長期品質", "你會要求收入與獲利反覆證明成長，而不是只看單期亮眼表現。", "可能錯過成長剛開始加速的階段", "等待多期確認能降低誤判，也可能讓新趨勢較晚進入你的研究範圍。"],
+  ["vbgr", "曙光驗證者", "你會在新成長獲得營運數字證實時，迅速辨認公司的轉折。", "能抓住剛被財報確認的營運改善", "你重視正式證據，也願意在證據出現後快速調整原有看法。", "可能把單次改善看成完整轉折", "第一道曙光仍需後續數字延續，避免只靠一季表現建立長期結論。"],
+  ["vmac", "星盤定衡者", "你用市場相對表現與長期價格基準，判斷公司目前的位置。", "能把市場方向放進可比較的座標", "你會比較大盤、同業與歷史位置，不容易被單一漲跌帶走。", "可能低估公司內部正在發生的改變", "相對表現是市場結果，仍需要回頭確認營運原因與正式來源。"],
+  ["vmar", "逆勢校準者", "當市場錯價或相對位置快速改變時，你會重新評估研究基準。", "能辨識價格與市場共識的落差", "你會先確認比較基準，再判斷反轉是否值得進一步研究。", "可能過早假設價格終將回到原有基準", "產業結構與公司品質可能已經改變，歷史價格不一定仍是有效錨點。"],
+  ["vmgc", "長軌觀測者", "你追蹤市場與基本面共同確認、能夠長期延續的成長軌跡。", "能觀察趨勢是否具有持續性", "你不只看價格強勢，也會確認營運是否支撐長期方向。", "可能等到趨勢成熟後才開始重視", "高度確認能提升理解，但也會降低對早期轉折的敏感度。"],
+  ["vmgr", "星軌驗證者", "確認市場趨勢獲得證據支撐後，你會快速調整研究方向。", "能交叉驗證市場訊號與公司證據", "你擅長辨認價格先行、法人變化與營運改善是否逐漸會合。", "可能把市場共識看得過於重要", "市場與法人方向仍可能反轉，不能取代收入、獲利與正式公告。"],
+  ["sbac", "地訊守值者", "你會提早注意公司變化，同時用價格紀律限制過度期待。", "能提早追蹤又不失去價格基準", "你願意研究早期公司訊號，但不會因一則消息忽略目前價格。", "可能長時間追蹤尚未落實的線索", "早期訊號需要設定明確的後續驗證條件，避免研究議題無限延伸。"],
+  ["sbar", "事件定價師", "你關心公司事件是否足以改變營運，並造成市場重新定價。", "能快速連結事件、營運與價格", "你會追查正式來源，並思考事件是否真的改變公司的獲利基礎。", "可能高估單一事件的重新定價效果", "市場關注不等於長期價值改變，仍需等待後續營運數字證實。"],
+  ["sbgc", "萌星培育者", "你會提早發現成長萌芽，再觀察它能否逐期形成穩定軌跡。", "能看到尚未被廣泛注意的成長線索", "你願意長期追蹤收入、產品或產業中的早期改善。", "可能對尚未獲利的成長保有太多耐心", "早期成長需要明確里程碑，避免只因故事仍在就持續等待。"],
+  ["sbgr", "躍遷尋星者", "你尋找事件與營運同步轉強、可能快速改變公司的成長躍遷。", "能迅速辨認營運加速與新催化劑", "你對收入、獲利與重大事件同時轉強的情境特別敏感。", "可能把短期加速外推成長期成長", "快速躍遷仍可能回落，需要確認成長品質與後續延續性。"],
+  ["smac", "雷達定錨者", "你會掃描市場新訊號，但仍以價格與比較基準限制判斷。", "能兼顧早期市場訊號與價格紀律", "你會注意法人、同業與大盤的異常，同時避免在價格失去支撐時追逐熱度。", "可能把太多市場波動列入研究", "不是每個異常都是有效訊號，需要設定重要性與持續時間門檻。"],
+  ["smar", "轉折測繪者", "你擅長測繪錯價、反轉與市場方向正在改變的位置。", "能快速發現相對強弱與市場轉折", "你會比較價格、法人與同業，找出市場共識開始移動的地方。", "容易把短期反彈誤認為完整反轉", "轉折需要營運或更長時間的市場證據，不能只靠一段價格變化。"],
+  ["smgc", "新軌領航者", "你會提早識別新趨勢，並觀察它能否逐步形成長期軌道。", "能在市場早期辨認值得追蹤的新方向", "你願意先建立觀察，再等待市場與營運共同形成趨勢。", "可能長期追蹤最後沒有形成的題材", "新軌道需要退出條件，當營運沒有跟上時應降低研究優先度。"],
+  ["smgr", "星訊先鋒者", "你最快捕捉市場、事件與成長訊號交會所形成的研究轉折。", "能快速整合多種正在變化的訊號", "你對市場方向、事件催化與成長加速的同時出現非常敏感。", "容易受到快速變化與市場情緒干擾", "反應速度不能取代證據品質，需要持續核對正式來源與營運結果。"],
+];
+
+function personalityReadingOrder(code) {
+  const order = [];
+  order.push(code[1] === "b" ? "健康狀態" : "近期變化");
+  order.push(code[2] === "a" ? "價格位置" : "成長與獲利");
+  order.push(code[0] === "v" ? "判斷把握度" : "重要事件");
+  order.push(code[3] === "c" ? "歷史與持續追蹤" : "目前風險");
+  return [...new Set(order)].slice(0, 4);
+}
+
+const researchPersonalityProfiles = Object.fromEntries(
+  researchPersonalityProfileRows.map((row, index) => {
+    const [
+      key,
+      name,
+      summary,
+      strengthTitle,
+      strengthCopy,
+      blindSpotTitle,
+      blindSpotCopy,
+    ] = row;
+
+    const preferPro = key[1] === "m" || key[3] === "r";
+
+    return [key, {
+      id: `GC16-${String(index + 1).padStart(2, "0")}`,
+      name,
+      symbol: "GC",
+      axes: {
+        evidence: key[0] === "v" ? "verify" : "scan",
+        focus: key[1] === "b" ? "business" : "market",
+        opportunity: key[2] === "a" ? "anchor" : "growth",
+        cadence: key[3] === "c" ? "compound" : "react",
+      },
+      summary,
+      strengthTitle,
+      strengthCopy,
+      blindSpotTitle,
+      blindSpotCopy,
+      readingOrder: personalityReadingOrder(key),
+      modeTitle: preferPro
+        ? "先用 Guided 掌握方向，再用 Pro 核對完整證據"
+        : "先用 Guided 建立固定研究順序",
+      modeCopy: preferPro
+        ? "市場、事件與快速轉折需要比較基準；先讀白話摘要，再到 Pro 核對數字、歷史與來源。"
+        : "依照建議順序完成每日研究；需要核對完整數字時，再切換 Pro 查看證據。",
+    }];
+  })
+);
+
+const researchPersonalityQuestions = [
+  {
+    axis: "evidence",
+    kicker: "星期一早上 · 一則朋友訊息",
+    title: "通勤途中，朋友傳來一檔最近很熱門的股票，問你要不要一起研究。",
+    copy: "你對這家公司幾乎沒有印象，聊天室裡卻已經有人說它可能是下一波熱門股。你通常會從哪裡開始？",
+    options: [
+      {
+        label: "我先找公司資料與正式公告，弄清楚它靠什麼賺錢",
+        copy: "在相信任何說法以前，我想先建立可以核對的基本認識。",
+        axisScores: {verify: 2},
+      },
+      {
+        label: "我先看看市場在討論什麼，再把有用的線索記下來",
+        copy: "我想快速理解大家注意它的原因，再決定哪些內容值得查證。",
+        axisScores: {scan: 2},
+      },
+      {
+        label: "我會兩邊都看一點，先判斷它值不值得花時間",
+        copy: "先取得基本輪廓，不急著把所有資料一次查完。",
+        axisScores: {verify: 1, scan: 1},
+      },
+    ],
+  },
+  {
+    axis: "focus",
+    kicker: "星期一晚上 · 第一次做功課",
+    title: "回到家後，你真的打開資料，準備花半小時認識這家公司。",
+    copy: "時間不算多，你不可能把所有內容看完。今晚你最想先弄懂哪一件事？",
+    options: [
+      {
+        label: "它的收入、獲利和產品到底有沒有持續變好",
+        copy: "我想先知道公司的基本狀況，而不是先看股價熱度。",
+        axisScores: {business: 2},
+      },
+      {
+        label: "最近股價、法人與同業為什麼同時開始有動靜",
+        copy: "我想先掌握市場目前正在反映什麼。",
+        axisScores: {market: 2},
+      },
+      {
+        label: "我先各看幾個重點，確認營運和市場有沒有互相呼應",
+        copy: "公司的數字與市場反應，我都不想完全忽略。",
+        axisScores: {business: 1, market: 1},
+      },
+    ],
+  },
+  {
+    axis: "opportunity",
+    kicker: "星期二晚上 · 加入觀察名單",
+    title: "初步看完後，你覺得公司有些亮點，但股價也已經漲了一段。",
+    copy: "你決定先觀察，不急著下結論。接下來什麼最容易吸引你的注意？",
+    options: [
+      {
+        label: "目前價格和同業、歷史相比，是否還站得住腳",
+        copy: "再好的故事，我也希望有一個可以比較的價格基準。",
+        axisScores: {anchor: 2},
+      },
+      {
+        label: "新的產品和市場空間，可能把公司帶到多大的規模",
+        copy: "我更想知道現在的數字還沒反映哪些未來可能性。",
+        axisScores: {growth: 2},
+      },
+      {
+        label: "我會一邊看成長空間，一邊提醒自己不要忽略價格",
+        copy: "機會與基準都重要，我會先保留彈性。",
+        axisScores: {anchor: 1, growth: 1},
+      },
+    ],
+  },
+  {
+    axis: "cadence",
+    kicker: "星期三早上 9:10 · 股價突然下跌",
+    title: "你剛拿起手機，就看到這檔股票下跌 7%，群組訊息不斷跳出來。",
+    copy: "你暫時不知道真正原因。面對這個突然變化，你第一個反應比較接近哪一種？",
+    options: [
+      {
+        label: "我先回到原本的觀察紀錄，看長期條件是否真的改變",
+        copy: "單日波動很大，但我不想立刻推翻原本的研究。",
+        axisScores: {compound: 2},
+      },
+      {
+        label: "我會立刻重新查資料，確認是不是出現需要反應的新狀況",
+        copy: "突然的變化值得快速檢查，避免錯過重要轉折。",
+        axisScores: {react: 2},
+      },
+      {
+        label: "我先確認有沒有重大事件，再決定要不要調整原本看法",
+        copy: "先做必要檢查，但不因價格本身立刻改變結論。",
+        axisScores: {compound: 1, react: 1},
+      },
+    ],
+  },
+  {
+    axis: "evidence",
+    kicker: "星期三上午 · 群組消息擴散",
+    title: "有人在群組裡說「主力正在出貨」，還貼了一張沒有來源的截圖。",
+    copy: "這個說法傳得很快，也有人開始恐慌。你接下來比較可能怎麼做？",
+    options: [
+      {
+        label: "我先找公司公告與可信來源，確認到底發生了什麼",
+        copy: "在事件內容被證實以前，我不想被群組說法帶著走。",
+        axisScores: {verify: 2},
+      },
+      {
+        label: "我先蒐集不同人的說法，看看是否出現一致線索",
+        copy: "市場消息未必全錯，我會先從多方反應找出值得追查的方向。",
+        axisScores: {scan: 2},
+      },
+      {
+        label: "我會記下這個說法，同時等待更可靠的資訊出現",
+        copy: "既不直接相信，也不完全忽略可能有用的早期訊號。",
+        axisScores: {verify: 1, scan: 1},
+      },
+    ],
+  },
+  {
+    axis: "focus",
+    kicker: "星期三午休 · 公司發布說明",
+    title: "公司公告營運照常，但你發現股價沒有立刻回到下跌前的位置。",
+    copy: "正式說明已經出現，市場仍然有疑慮。你會把注意力放在哪裡？",
+    options: [
+      {
+        label: "我回頭檢查收入、獲利與財務狀態，確認公司是否真的沒變",
+        copy: "公告只是起點，我更在意營運證據能不能支持它。",
+        axisScores: {business: 2},
+      },
+      {
+        label: "我觀察成交量、法人與同業反應，看市場是否接受這份說明",
+        copy: "市場怎麼消化消息，也能反映目前仍有哪些疑問。",
+        axisScores: {market: 2},
+      },
+      {
+        label: "我同時看營運與市場，等兩邊出現比較一致的方向",
+        copy: "只有一邊改善，還不足以讓我完全放心。",
+        axisScores: {business: 1, market: 1},
+      },
+    ],
+  },
+  {
+    axis: "opportunity",
+    kicker: "星期四晚上 · 數字開始分歧",
+    title: "最新月收入增加了，但最近一季獲利沒有跟上，股價卻快速反彈。",
+    copy: "你原本只是觀察，現在必須決定下一步最值得追蹤的問題。",
+    options: [
+      {
+        label: "獲利還沒跟上時，目前價格是否已經反映太多期待",
+        copy: "我想先確認價格與已有成果之間是否出現落差。",
+        axisScores: {anchor: 2},
+      },
+      {
+        label: "收入成長能不能在接下來幾季真正轉成獲利",
+        copy: "短期落差可以接受，但我要看到成長逐步兌現。",
+        axisScores: {growth: 2},
+      },
+      {
+        label: "我先保留判斷，同時追蹤價格壓力與獲利兌現速度",
+        copy: "現在還不足以只採用其中一種解釋。",
+        axisScores: {anchor: 1, growth: 1},
+      },
+    ],
+  },
+  {
+    axis: "cadence",
+    kicker: "隔週 · 市場重新轉熱",
+    title: "法人連續買進，討論熱度升高，股價很快突破前一波高點。",
+    copy: "原本的疑慮還沒有完全消失，但市場方向已明顯改變。你通常會怎麼處理？",
+    options: [
+      {
+        label: "我維持原本追蹤節奏，等營運結果逐步補上再調整判斷",
+        copy: "市場變熱不代表研究條件已經全部成熟。",
+        axisScores: {compound: 2},
+      },
+      {
+        label: "我提高追蹤頻率，重新評估這次突破是否代表新的階段",
+        copy: "方向快速改變時，我願意更快更新自己的研究。",
+        axisScores: {react: 2},
+      },
+      {
+        label: "我先記錄市場轉強，但仍用下一份營運數字決定是否改觀",
+        copy: "先承認變化存在，再等待更完整的確認。",
+        axisScores: {compound: 1, react: 1},
+      },
+    ],
+  },
+  {
+    axis: "evidence",
+    kicker: "月底 · 法說會提出新計畫",
+    title: "公司宣布要進入新市場，簡報裡的成長目標很吸引人。",
+    copy: "媒體很快用了「下一個成長引擎」當標題。你怎麼判斷這個計畫的分量？",
+    options: [
+      {
+        label: "我先看投入金額、時程與正式說明，確認計畫是否具體",
+        copy: "目標可以很大，但我需要能持續核對的里程碑。",
+        axisScores: {verify: 2},
+      },
+      {
+        label: "我先追蹤產業消息、競爭者與市場回應，理解機會有多大",
+        copy: "新市場還沒有完整數字，外部線索能幫我提早建立輪廓。",
+        axisScores: {scan: 2},
+      },
+      {
+        label: "我先記下公司的承諾，再用後續消息與數字逐步驗證",
+        copy: "現在先不急著相信或否定，讓證據慢慢累積。",
+        axisScores: {verify: 1, scan: 1},
+      },
+    ],
+  },
+  {
+    axis: "focus",
+    kicker: "三個月後 · 第一份成績單",
+    title: "新計畫帶來一些訂單，但成本也上升，整體獲利只小幅改善。",
+    copy: "結果不是失敗，也還稱不上完全成功。你會先用什麼角度理解這份成績？",
+    options: [
+      {
+        label: "我拆解收入、成本與獲利，確認商業模式能不能逐步成立",
+        copy: "我想知道成長是否能留下真正的營運成果。",
+        axisScores: {business: 2},
+      },
+      {
+        label: "我比較股價、法人與同業表現，看市場如何評價這份結果",
+        copy: "數字公布後的相對反應，能顯示市場原本期待有多高。",
+        axisScores: {market: 2},
+      },
+      {
+        label: "我把營運成果和市場反應放在一起，找出兩邊的落差",
+        copy: "公司做到了多少，以及市場原本期待多少，都值得比較。",
+        axisScores: {business: 1, market: 1},
+      },
+    ],
+  },
+  {
+    axis: "opportunity",
+    kicker: "同一天晚上 · 配息與投資計畫",
+    title: "公司宣布配息，同時準備投入一筆大型投資，未來幾季現金可能變少。",
+    copy: "這項決定可能影響短期回報，也可能換來下一段成長。你最在意什麼？",
+    options: [
+      {
+        label: "這筆投資的回報與風險，是否符合目前價格和財務能力",
+        copy: "我希望公司在可承受的範圍內使用資金。",
+        axisScores: {anchor: 2},
+      },
+      {
+        label: "這筆投資能否打開更大的市場，建立下一段成長曲線",
+        copy: "短期現金減少可以理解，關鍵是未來空間是否值得。",
+        axisScores: {growth: 2},
+      },
+      {
+        label: "我會同時檢查資金壓力與成長潛力，不先偏向其中一邊",
+        copy: "投資計畫既要有想像，也要有承受失敗的能力。",
+        axisScores: {anchor: 1, growth: 1},
+      },
+    ],
+  },
+  {
+    axis: "cadence",
+    kicker: "週末晚上 · 整理這段研究",
+    title: "從朋友傳來股票到現在，你已經看過下跌、消息、公告、反彈與第一份成果。",
+    copy: "你準備關掉電腦，為這檔股票留下下一步。哪一種做法最像你？",
+    options: [
+      {
+        label: "建立固定檢查清單，按月或按季確認原本條件是否延續",
+        copy: "我偏好用一致節奏累積證據，不讓每天的波動打亂研究。",
+        axisScores: {compound: 2},
+      },
+      {
+        label: "設定重要事件提醒，只要方向改變就立即重新整理判斷",
+        copy: "我希望在新狀況出現時快速反應，不錯過關鍵轉折。",
+        axisScores: {react: 2},
+      },
+      {
+        label: "保留固定追蹤，同時為重大事件設定額外檢查點",
+        copy: "平常維持節奏，真的出現變化時再提高研究頻率。",
+        axisScores: {compound: 1, react: 1},
+      },
+    ],
+  },
+];
+
 const onboardingSteps = [
   {
     anchor: "#top",
@@ -347,6 +733,775 @@ function finishOnboarding({skipped = false} = {}) {
   document.body.classList.remove("onboarding-open");
 
   showToast(skipped ? "已略過新手導覽" : "新手導覽完成");
+}
+
+function savedPersonalityResult() {
+  try {
+    const result = JSON.parse(
+      localStorage.getItem(PERSONALITY_STORAGE_KEY) || "null"
+    );
+
+    return result?.version === PERSONALITY_VERSION
+      ? result
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function setPersonalityView(view) {
+  $("personalityIntro").classList.toggle(
+    "hidden",
+    view !== "intro"
+  );
+  $("personalityQuiz").classList.toggle(
+    "hidden",
+    view !== "quiz"
+  );
+  $("personalityResult").classList.toggle(
+    "hidden",
+    view !== "result"
+  );
+}
+
+function openPersonalityPage() {
+  showHomeView({restoreScroll: false});
+  switchPage("personality", {scroll: false});
+
+  const result = savedPersonalityResult();
+
+  if (result) {
+    renderPersonalityResult(result);
+  } else {
+    setPersonalityView("intro");
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+}
+
+function startPersonalityQuiz() {
+  personalityQuestionIndex = 0;
+  personalityAnswers = Array(
+    researchPersonalityQuestions.length
+  ).fill(null);
+
+  setPersonalityView("quiz");
+  renderPersonalityQuestion();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function renderPersonalityQuestion() {
+  const question =
+    researchPersonalityQuestions[personalityQuestionIndex];
+
+  const questionNumber = personalityQuestionIndex + 1;
+  const progress = Math.round(
+    questionNumber /
+    researchPersonalityQuestions.length *
+    100
+  );
+
+  $("personalityQuestionLabel").textContent =
+    `第 ${questionNumber} 題，共 ${researchPersonalityQuestions.length} 題`;
+  $("personalityProgressText").textContent =
+    `${progress}%`;
+  $("personalityProgressBar").style.width =
+    `${progress}%`;
+  $("personalityQuestionKicker").textContent =
+    question.kicker;
+  $("personalityQuestionTitle").textContent =
+    question.title;
+  $("personalityQuestionCopy").textContent =
+    question.copy;
+
+  const selected =
+    personalityAnswers[personalityQuestionIndex];
+
+  $("personalityOptions").innerHTML =
+    question.options.map((option, index) => `
+      <button class="personality-option ${
+        selected === index ? "selected" : ""
+      }" type="button" role="radio"
+        aria-checked="${selected === index}"
+        data-personality-option="${index}">
+        <span>${String.fromCharCode(65 + index)}</span>
+        <div>
+          <b>${escapeHtml(option.label)}</b>
+          <small>${escapeHtml(option.copy)}</small>
+        </div>
+      </button>
+    `).join("");
+
+  $("personalityPrevious").disabled =
+    personalityQuestionIndex === 0;
+  $("personalityNext").disabled =
+    selected === null;
+  $("personalityNext").textContent =
+    personalityQuestionIndex ===
+      researchPersonalityQuestions.length - 1
+      ? "查看結果"
+      : "下一題";
+}
+
+function selectPersonalityOption(index) {
+  const question =
+    researchPersonalityQuestions[personalityQuestionIndex];
+
+  if (!question.options[index]) return;
+
+  personalityAnswers[personalityQuestionIndex] = index;
+  renderPersonalityQuestion();
+}
+
+function completePersonalityQuiz() {
+  const scores = {
+    verify: 0,
+    scan: 0,
+    business: 0,
+    market: 0,
+    anchor: 0,
+    growth: 0,
+    compound: 0,
+    react: 0,
+  };
+
+  personalityAnswers.forEach((answer, questionIndex) => {
+    const option =
+      researchPersonalityQuestions[questionIndex]
+        ?.options?.[answer];
+
+    Object.entries(option?.axisScores || {})
+      .forEach(([key, points]) => {
+        if (Object.hasOwn(scores, key)) {
+          scores[key] += Number(points || 0);
+        }
+      });
+  });
+
+  const dimensions = personalityDimensionRows(scores);
+
+  const primary = [
+    scores.verify >= scores.scan ? "v" : "s",
+    scores.business >= scores.market ? "b" : "m",
+    scores.anchor >= scores.growth ? "a" : "g",
+    scores.compound >= scores.react ? "c" : "r",
+  ].join("");
+
+  const weakestDimension = [...dimensions]
+    .sort((left, right) =>
+      left.margin - right.margin
+    )[0];
+
+  const secondaryCharacters = primary.split("");
+
+  if (weakestDimension) {
+    const index = weakestDimension.index;
+    const alternatives = [
+      ["v", "s"],
+      ["b", "m"],
+      ["a", "g"],
+      ["c", "r"],
+    ];
+    const pair = alternatives[index];
+    secondaryCharacters[index] =
+      secondaryCharacters[index] === pair[0]
+        ? pair[1]
+        : pair[0];
+  }
+
+  const secondary = secondaryCharacters.join("");
+  const averageMargin = dimensions.length
+    ? dimensions.reduce(
+        (total, row) => total + row.margin,
+        0
+      ) / dimensions.length
+    : 0;
+
+  const clarity = averageMargin >= 50
+    ? "輪廓非常清楚"
+    : averageMargin >= 30
+      ? "輪廓清楚"
+      : averageMargin >= 16
+        ? "具有明顯傾向"
+        : "研究方式較為平衡";
+
+  const result = {
+    version: PERSONALITY_VERSION,
+    system: "GC-16",
+    primary,
+    secondary,
+    scores,
+    dimensions,
+    clarity,
+    answers: [...personalityAnswers],
+    completedAt: new Date().toISOString(),
+    affectsHealthScore: false,
+  };
+
+  localStorage.setItem(
+    PERSONALITY_STORAGE_KEY,
+    JSON.stringify(result)
+  );
+
+  renderPersonalityResult(result);
+  renderProfilePage();
+}
+
+function personalityDimensionRows(scores = {}) {
+  const score = (key) => {
+    const value = Number(scores?.[key] || 0);
+    return Number.isFinite(value) ? value : 0;
+  };
+
+  return researchPersonalityAxisDefinitions.map(
+    (axis, index) => {
+      const leftScore = score(axis.leftKey);
+      const rightScore = score(axis.rightKey);
+      const total = leftScore + rightScore;
+      const leftPercent = total > 0
+        ? Math.round(leftScore / total * 100)
+        : 50;
+      const rightPercent = 100 - leftPercent;
+
+      return {
+        index,
+        key: axis.key,
+        leftKey: axis.leftKey,
+        leftLabel: axis.leftLabel,
+        leftScore,
+        leftPercent,
+        rightKey: axis.rightKey,
+        rightLabel: axis.rightLabel,
+        rightScore,
+        rightPercent,
+        margin: Math.abs(leftPercent - rightPercent),
+        description: axis.description,
+      };
+    }
+  );
+}
+
+function renderPersonalityDimensions(result) {
+  const chart = $("personalityDimensionChart");
+  const summary = $("personalityDimensionSummary");
+
+  if (!chart || !summary) return;
+
+  const rows = personalityDimensionRows(
+    result?.scores || {}
+  );
+
+  const strongest = rows
+    .flatMap((row) => [
+      {
+        label: row.leftLabel,
+        percent: row.leftPercent,
+      },
+      {
+        label: row.rightLabel,
+        percent: row.rightPercent,
+      },
+    ])
+    .sort((a, b) => b.percent - a.percent)[0];
+
+  summary.textContent = strongest
+    ? `你的研究習慣最明顯偏向「${strongest.label}」，但仍會搭配其他方向交叉確認。`
+    : "根據十二個研究情境，整理你做判斷時自然偏重的方向。";
+
+  chart.innerHTML = rows.map((row) => `
+    <article class="personality-dimension-row">
+      <div class="personality-dimension-labels">
+        <span>
+          <b>${escapeHtml(row.leftLabel)}</b>
+          <strong>${row.leftPercent}%</strong>
+        </span>
+        <span>
+          <strong>${row.rightPercent}%</strong>
+          <b>${escapeHtml(row.rightLabel)}</b>
+        </span>
+      </div>
+
+      <div class="personality-dimension-track"
+        role="img"
+        aria-label="${escapeHtml(
+          `${row.leftLabel} ${row.leftPercent}%，` +
+          `${row.rightLabel} ${row.rightPercent}%`
+        )}">
+        <i style="width:${row.leftPercent}%"></i>
+        <em style="width:${row.rightPercent}%"></em>
+        <u></u>
+      </div>
+
+      <p>${escapeHtml(row.description)}</p>
+    </article>
+  `).join("");
+}
+
+
+function personalityTotemSvg(typeKey = "vbac") {
+  const key = /^[vs][bm][ag][cr]$/.test(String(typeKey))
+    ? String(typeKey)
+    : "vbac";
+
+  const verifies = key[0] === "v";
+  const business = key[1] === "b";
+  const anchored = key[2] === "a";
+  const compounds = key[3] === "c";
+  const accent = "currentColor";
+
+  const evidenceShape = verifies
+    ? `<path d="M24 49 34 24h28l10 25-24 23Z" />`
+    : `<circle cx="48" cy="48" r="28" />
+       <path d="M19 48h10M67 48h10M48 19v10M48 67v10" />`;
+
+  const focusShape = business
+    ? `<path d="M34 57V43M48 57V32M62 57V38" />`
+    : `<path d="M28 55c8-15 17 8 25-7s13-3 17-10" />`;
+
+  const opportunityShape = anchored
+    ? `<circle cx="48" cy="48" r="8" />
+       <path d="M48 35v26M35 48h26" />`
+    : `<path d="m48 31 4.2 10.8L64 43l-9 7.5L58 62l-10-6.3L38 62l3-11.5L32 43l11.8-1.2Z" />`;
+
+  const cadenceShape = compounds
+    ? `<path d="M26 73c13 7 31 7 44 0M31 79c10 5 24 5 34 0" />`
+    : `<path d="m70 66-12-1 5-11-17 15 12 1-5 11Z" />`;
+
+  return `
+    <svg viewBox="0 0 96 96" role="img"
+      aria-label="${escapeHtml(key.toUpperCase())} 研究人格圖騰"
+      fill="none" stroke="${accent}" stroke-width="2.4"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle class="totem-orbit" cx="48" cy="48" r="42" />
+      ${evidenceShape}
+      ${focusShape}
+      ${opportunityShape}
+      ${cadenceShape}
+      <circle class="totem-star" cx="77" cy="24" r="2.5" fill="${accent}" stroke="none" />
+    </svg>
+  `;
+}
+
+function renderPersonalityResult(result) {
+  const primary =
+    researchPersonalityProfiles[result?.primary];
+  const secondary =
+    researchPersonalityProfiles[result?.secondary];
+
+  if (!primary) {
+    setPersonalityView("intro");
+    return;
+  }
+
+  renderPersonalityDimensions(result);
+
+  const resultCode = `${primary.id} · ${String(result.primary).toUpperCase()}`;
+
+  $("personalityResultSymbol").innerHTML =
+    personalityTotemSvg(result.primary);
+  $("personalityResultCode").textContent = resultCode;
+  $("personalityResultClarity").textContent =
+    result.clarity || "研究方式較為平衡";
+  $("personalityResultTitle").textContent =
+    primary.name;
+  $("personalityResultSummary").textContent =
+    primary.summary;
+  $("personalitySecondaryType").textContent =
+    secondary
+      ? `次要傾向：${secondary.name}`
+      : "研究風格已完成";
+
+  $("personalityStrengthTitle").textContent =
+    primary.strengthTitle;
+  $("personalityStrengthCopy").textContent =
+    primary.strengthCopy;
+  $("personalityBlindSpotTitle").textContent =
+    primary.blindSpotTitle;
+  $("personalityBlindSpotCopy").textContent =
+    primary.blindSpotCopy;
+  $("personalityReadingOrder").innerHTML =
+    primary.readingOrder
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  $("personalityModeTitle").textContent =
+    primary.modeTitle;
+  $("personalityModeCopy").textContent =
+    primary.modeCopy;
+
+  document.documentElement.dataset.researchPersonality =
+    result.primary;
+
+  setPersonalityView("result");
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+
+function currentPersonalityShareData() {
+  const result = savedPersonalityResult();
+  const profile = researchPersonalityProfiles[result?.primary];
+
+  if (!result || !profile) return null;
+
+  const dimensions = personalityDimensionRows(result.scores || {});
+
+  return {
+    result,
+    profile,
+    dimensions,
+    code: `${profile.id} · ${String(result.primary).toUpperCase()}`,
+  };
+}
+
+function personalityShareText(data = currentPersonalityShareData()) {
+  if (!data) return "";
+
+  const axes = data.dimensions
+    .map((row) => {
+      const preferred = row.leftPercent >= row.rightPercent
+        ? `${row.leftLabel} ${row.leftPercent}%`
+        : `${row.rightLabel} ${row.rightPercent}%`;
+      return preferred;
+    })
+    .join("｜");
+
+  return [
+    `我的研究人格是「${data.profile.name}」`,
+    data.profile.summary,
+    `研究座標：${axes}`,
+    `結果清晰度：${data.result.clarity || "研究方式較為平衡"}`,
+    "人格只改變閱讀方式，不改變任何股票的研究結果。",
+    "#GC研究人格 #投資研究",
+  ].join("\n");
+}
+
+async function copyTextSafely(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+}
+
+function setPersonalityShareStatus(message) {
+  const status = $("personalityShareStatus");
+  if (status) status.textContent = message;
+}
+
+async function sharePersonalityResult() {
+  const data = currentPersonalityShareData();
+  if (!data) {
+    showToast("請先完成人格測驗");
+    return;
+  }
+
+  const text = personalityShareText(data);
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: `我的研究人格｜${data.profile.name}`,
+        text,
+        url: window.location.origin,
+      });
+      setPersonalityShareStatus("已開啟系統分享選單");
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await copyTextSafely(`${text}\n${window.location.origin}`);
+    setPersonalityShareStatus("這個瀏覽器不支援直接分享，已改為複製文字");
+    showToast("結果文字已複製");
+  } catch (_error) {
+    setPersonalityShareStatus("目前無法開啟分享，請改用下載報告圖");
+  }
+}
+
+async function copyPersonalityResult() {
+  const text = personalityShareText();
+  if (!text) {
+    showToast("請先完成人格測驗");
+    return;
+  }
+
+  try {
+    await copyTextSafely(text);
+    setPersonalityShareStatus("結果文字已複製，可貼到 Threads、LINE 或其他社群");
+    showToast("結果文字已複製");
+  } catch (_error) {
+    setPersonalityShareStatus("瀏覽器未允許複製，請改用系統分享");
+  }
+}
+
+function drawRoundedRect(context, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  context.beginPath();
+  context.moveTo(x + r, y);
+  context.arcTo(x + width, y, x + width, y + height, r);
+  context.arcTo(x + width, y + height, x, y + height, r);
+  context.arcTo(x, y + height, x, y, r);
+  context.arcTo(x, y, x + width, y, r);
+  context.closePath();
+}
+
+function canvasWrappedLines(context, text, maxWidth) {
+  const characters = Array.from(String(text || ""));
+  const lines = [];
+  let current = "";
+
+  characters.forEach((character) => {
+    const next = current + character;
+    if (current && context.measureText(next).width > maxWidth) {
+      lines.push(current);
+      current = character;
+    } else {
+      current = next;
+    }
+  });
+
+  if (current) lines.push(current);
+  return lines;
+}
+
+function drawPersonalityTotem(context, typeKey, centerX, centerY, size) {
+  const key = /^[vs][bm][ag][cr]$/.test(String(typeKey))
+    ? String(typeKey)
+    : "vbac";
+  const scale = size / 96;
+  const point = (value) => value * scale;
+
+  context.save();
+  context.translate(centerX - size / 2, centerY - size / 2);
+  context.strokeStyle = "#e39a58";
+  context.fillStyle = "#e39a58";
+  context.lineWidth = point(2.4);
+  context.lineCap = "round";
+  context.lineJoin = "round";
+
+  context.globalAlpha = .35;
+  context.beginPath();
+  context.arc(point(48), point(48), point(42), 0, Math.PI * 2);
+  context.stroke();
+  context.globalAlpha = 1;
+
+  if (key[0] === "v") {
+    context.beginPath();
+    context.moveTo(point(24), point(49));
+    context.lineTo(point(34), point(24));
+    context.lineTo(point(62), point(24));
+    context.lineTo(point(72), point(49));
+    context.lineTo(point(48), point(72));
+    context.closePath();
+    context.stroke();
+  } else {
+    context.beginPath();
+    context.arc(point(48), point(48), point(28), 0, Math.PI * 2);
+    context.stroke();
+    [[19,48,29,48],[67,48,77,48],[48,19,48,29],[48,67,48,77]]
+      .forEach(([x1,y1,x2,y2]) => {
+        context.beginPath();
+        context.moveTo(point(x1), point(y1));
+        context.lineTo(point(x2), point(y2));
+        context.stroke();
+      });
+  }
+
+  context.beginPath();
+  if (key[1] === "b") {
+    [[34,57,34,43],[48,57,48,32],[62,57,62,38]]
+      .forEach(([x1,y1,x2,y2]) => {
+        context.moveTo(point(x1), point(y1));
+        context.lineTo(point(x2), point(y2));
+      });
+  } else {
+    context.moveTo(point(28), point(55));
+    context.bezierCurveTo(point(36),point(40),point(45),point(63),point(53),point(48));
+    context.bezierCurveTo(point(61),point(33),point(66),point(45),point(70),point(38));
+  }
+  context.stroke();
+
+  if (key[2] === "a") {
+    context.beginPath();
+    context.arc(point(48), point(48), point(8), 0, Math.PI * 2);
+    context.stroke();
+    [[48,35,48,61],[35,48,61,48]].forEach(([x1,y1,x2,y2]) => {
+      context.beginPath();
+      context.moveTo(point(x1),point(y1));
+      context.lineTo(point(x2),point(y2));
+      context.stroke();
+    });
+  } else {
+    const star = [[48,31],[52,42],[64,43],[55,51],[58,62],[48,56],[38,62],[41,51],[32,43],[44,42]];
+    context.beginPath();
+    star.forEach(([x,y], index) => {
+      if (index === 0) context.moveTo(point(x),point(y));
+      else context.lineTo(point(x),point(y));
+    });
+    context.closePath();
+    context.stroke();
+  }
+
+  context.beginPath();
+  if (key[3] === "c") {
+    context.moveTo(point(26),point(73));
+    context.quadraticCurveTo(point(48),point(84),point(70),point(73));
+    context.moveTo(point(31),point(79));
+    context.quadraticCurveTo(point(48),point(87),point(65),point(79));
+  } else {
+    [[70,66],[58,65],[63,54],[46,69],[58,70],[53,81]].forEach(([x,y], index) => {
+      if (index === 0) context.moveTo(point(x),point(y));
+      else context.lineTo(point(x),point(y));
+    });
+  }
+  context.stroke();
+
+  context.beginPath();
+  context.arc(point(77),point(24),point(2.5),0,Math.PI*2);
+  context.fill();
+  context.restore();
+}
+
+function personalityShareCanvas(data) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1350;
+  const context = canvas.getContext("2d");
+
+  context.fillStyle = "#08110d";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  const glow = context.createRadialGradient(540, 190, 20, 540, 190, 560);
+  glow.addColorStop(0, "rgba(227,154,88,.14)");
+  glow.addColorStop(1, "rgba(8,17,13,0)");
+  context.fillStyle = glow;
+  context.fillRect(0, 0, canvas.width, 760);
+
+  context.fillStyle = "#75c59d";
+  context.font = "700 24px Arial, sans-serif";
+  context.fillText("GC RESEARCH PERSONALITY REPORT", 72, 82);
+
+  context.textAlign = "right";
+  context.fillStyle = "#e8c9a7";
+  context.font = "600 22px Consolas, monospace";
+  context.fillText(data.code, 1008, 82);
+  context.textAlign = "left";
+
+  drawPersonalityTotem(context, data.result.primary, 540, 235, 190);
+
+  context.textAlign = "center";
+  context.fillStyle = "#e39a58";
+  context.font = "700 22px Arial, sans-serif";
+  context.fillText("你的研究人格", 540, 380);
+
+  context.fillStyle = "#f4efe7";
+  context.font = "800 66px Arial, sans-serif";
+  context.fillText(data.profile.name, 540, 468);
+
+  context.fillStyle = "#b8c4bb";
+  context.font = "400 28px Arial, sans-serif";
+  const summaryLines = canvasWrappedLines(context, data.profile.summary, 840).slice(0, 2);
+  summaryLines.forEach((line, index) => context.fillText(line, 540, 528 + index * 42));
+
+  context.textAlign = "left";
+  let y = 650;
+  data.dimensions.forEach((row) => {
+    context.fillStyle = "#f4efe7";
+    context.font = "700 25px Arial, sans-serif";
+    context.fillText(`${row.leftLabel}  ${row.leftPercent}%`, 80, y);
+    context.textAlign = "right";
+    context.fillText(`${row.rightPercent}%  ${row.rightLabel}`, 1000, y);
+    context.textAlign = "left";
+
+    context.fillStyle = "#27372f";
+    drawRoundedRect(context, 80, y + 24, 920, 18, 9);
+    context.fill();
+
+    context.fillStyle = "#e39a58";
+    drawRoundedRect(context, 80, y + 24, 920 * row.leftPercent / 100, 18, 9);
+    context.fill();
+
+    context.fillStyle = "#80c7a3";
+    drawRoundedRect(
+      context,
+      80 + 920 * row.leftPercent / 100,
+      y + 24,
+      920 * row.rightPercent / 100,
+      18,
+      9
+    );
+    context.fill();
+    y += 120;
+  });
+
+  context.fillStyle = "#111c16";
+  drawRoundedRect(context, 72, 1110, 936, 130, 24);
+  context.fill();
+  context.strokeStyle = "#30443a";
+  context.lineWidth = 2;
+  context.stroke();
+
+  context.fillStyle = "#819187";
+  context.font = "500 20px Arial, sans-serif";
+  context.fillText("RESULT CLARITY", 104, 1155);
+  context.fillStyle = "#f4efe7";
+  context.font = "700 30px Arial, sans-serif";
+  context.fillText(data.result.clarity || "研究方式較為平衡", 104, 1204);
+
+  context.textAlign = "center";
+  context.fillStyle = "#718078";
+  context.font = "400 19px Arial, sans-serif";
+  context.fillText("人格只改變閱讀方式，不改變股票研究結果", 540, 1300);
+  context.textAlign = "left";
+
+  return canvas;
+}
+
+function downloadPersonalityReport() {
+  const data = currentPersonalityShareData();
+  if (!data) {
+    showToast("請先完成人格測驗");
+    return;
+  }
+
+  const canvas = personalityShareCanvas(data);
+  const link = document.createElement("a");
+  link.download = `GC-16-${String(data.result.primary).toUpperCase()}-${data.profile.name}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+  setPersonalityShareStatus("1080 × 1350 人格報告圖已下載");
+  showToast("人格報告圖已下載");
+}
+
+function renderProfilePersonality() {
+  const result = savedPersonalityResult();
+  const profile =
+    researchPersonalityProfiles[result?.primary];
+
+  $("profilePersonalityName").textContent =
+    profile?.name || "尚未測驗";
+  $("profilePersonalityNote").textContent =
+    profile
+      ? "已建立個人化閱讀順序，可隨時重新測驗"
+      : "完成 12 題，建立個人化閱讀順序";
+  $("profilePersonality").textContent =
+    profile
+      ? "查看我的研究人格"
+      : "了解我的研究人格";
+
+  if (profile) {
+    document.documentElement.dataset.researchPersonality =
+      result.primary;
+  }
 }
 
 function notificationReadIds() {
@@ -5782,6 +6937,7 @@ function renderProfilePage() {
   $("profileReportCount").textContent = `${stockCatalog.length} 份`;
   const updates = stockCatalog.map((report) => report.updated).filter((value) => value && value !== "—").sort();
   $("profileUpdatedAt").textContent = updates.length ? `最新資料 ${updates.at(-1)}` : "等待報告更新";
+  renderProfilePersonality();
   applyResearchMode(preferredResearchMode());
 }
 
@@ -5957,6 +7113,88 @@ $("proResearchTabs").addEventListener("click", (event) => {
     setProResearchTab(button.dataset.proTab);
   }
 });
+$("profilePersonality").addEventListener(
+  "click",
+  openPersonalityPage
+);
+
+$("personalityBack").addEventListener("click", () => {
+  showHomeView({restoreScroll: false});
+  switchPage("about");
+});
+
+$("personalityStart").addEventListener(
+  "click",
+  startPersonalityQuiz
+);
+
+$("personalityOptions").addEventListener(
+  "click",
+  (event) => {
+    const option = event.target.closest(
+      "[data-personality-option]"
+    );
+
+    if (option) {
+      selectPersonalityOption(
+        Number(option.dataset.personalityOption)
+      );
+    }
+  }
+);
+
+$("personalityPrevious").addEventListener("click", () => {
+  if (personalityQuestionIndex <= 0) return;
+  personalityQuestionIndex -= 1;
+  renderPersonalityQuestion();
+});
+
+$("personalityNext").addEventListener("click", () => {
+  if (
+    personalityAnswers[personalityQuestionIndex] === null
+  ) {
+    return;
+  }
+
+  if (
+    personalityQuestionIndex >=
+    researchPersonalityQuestions.length - 1
+  ) {
+    completePersonalityQuiz();
+    return;
+  }
+
+  personalityQuestionIndex += 1;
+  renderPersonalityQuestion();
+});
+
+$("personalityShare").addEventListener(
+  "click",
+  sharePersonalityResult
+);
+
+$("personalityCopy").addEventListener(
+  "click",
+  copyPersonalityResult
+);
+
+$("personalityDownload").addEventListener(
+  "click",
+  downloadPersonalityReport
+);
+
+$("personalityRetake").addEventListener(
+  "click",
+  startPersonalityQuiz
+);
+
+$("personalityFinish").addEventListener("click", () => {
+  showHomeView({restoreScroll: false});
+  switchPage("about");
+  renderProfilePage();
+  showToast("已套用你的個人化研究閱讀順序");
+});
+
 $("profileFeedback").addEventListener("click", () => showToast("Beta 回饋表單將在下一階段接入"));
 $("profileDataSources").addEventListener("click", () => showToast("請進入個股報告查看各項原始資料來源"));
 $("profileLogout").addEventListener("click", () => betaSession?.invite_required ? logoutBeta() : showToast("本機擁有者模式不需要登出"));

@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.5.0.7">
-  <link rel="stylesheet" href="/assets/home.css?v=3.5.0.7">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.6.0.4">
+  <link rel="stylesheet" href="/assets/home.css?v=3.6.0.4">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -186,6 +186,177 @@
       <div id="stockCenterEmpty" class="stock-center-empty hidden">目前沒有符合條件的股票。</div>
     </section>
 
+    <section id="personalityPage" class="app-page shell-page personality-page"
+      data-page="personality" aria-labelledby="personalityPageTitle">
+
+      <div class="shell-page-heading personality-page-heading">
+        <div>
+          <span>研究風格</span>
+          <h1 id="personalityPageTitle">找出你習慣怎麼研究股票</h1>
+          <p>12 個連續情境，約 2～3 分鐘。沒有標準答案，也不評估金融風險承受度。</p>
+        </div>
+        <button id="personalityBack" type="button">返回我的</button>
+      </div>
+
+      <section id="personalityIntro" class="personality-intro warm-card">
+        <div class="personality-intro-copy">
+          <span>GC RESEARCH STYLE</span>
+          <h2>先了解你會注意什麼，再安排適合的閱讀順序</h2>
+          <p>結果只會調整 GC 的說明與閱讀建議，不會改變任何股票的健康分數、風險、估值或判斷把握度。</p>
+        </div>
+
+        <div class="personality-intro-meta">
+          <article><b>8</b><span>個情境問題</span></article>
+          <article><b>16</b><span>種研究人格</span></article>
+          <article><b>3</b><span>分鐘內完成</span></article>
+        </div>
+
+        <button id="personalityStart" class="personality-primary-action" type="button">
+          開始測驗
+        </button>
+
+        <small>這不是適合度、風險屬性或投資建議測驗。</small>
+      </section>
+
+      <section id="personalityQuiz" class="personality-quiz warm-card hidden"
+        aria-live="polite">
+        <div class="personality-quiz-progress">
+          <div>
+            <span id="personalityQuestionLabel">第 1 題，共 8 題</span>
+            <b id="personalityProgressText">12%</b>
+          </div>
+          <div class="personality-progress-track" aria-hidden="true">
+            <i id="personalityProgressBar"></i>
+          </div>
+        </div>
+
+        <div class="personality-question">
+          <span id="personalityQuestionKicker">研究情境</span>
+          <h2 id="personalityQuestionTitle">正在整理問題</h2>
+          <p id="personalityQuestionCopy">請選最接近你真實反應的答案。</p>
+        </div>
+
+        <div id="personalityOptions" class="personality-options"
+          role="radiogroup" aria-label="選擇最接近的答案"></div>
+
+        <div class="personality-quiz-actions">
+          <button id="personalityPrevious" type="button">上一題</button>
+          <button id="personalityNext" type="button" disabled>下一題</button>
+        </div>
+      </section>
+
+      <section id="personalityResult" class="personality-result hidden"
+        aria-live="polite">
+        <article class="personality-result-hero personality-report-hero warm-card">
+          <div class="personality-report-overline">
+            <span>GC RESEARCH PERSONALITY REPORT</span>
+            <b id="personalityResultCode">GC-16 · —</b>
+          </div>
+
+          <div class="personality-report-identity">
+            <div id="personalityResultSymbol" class="personality-result-symbol"
+              aria-label="研究人格品牌圖騰"></div>
+            <div>
+              <span>你的主要研究人格</span>
+              <h2 id="personalityResultTitle">研究人格</h2>
+              <p id="personalityResultSummary">完成後會顯示你的研究習慣。</p>
+              <small id="personalitySecondaryType">次要研究人格</small>
+            </div>
+          </div>
+
+          <div id="personalityReportMeta" class="personality-report-meta">
+            <article>
+              <span>結果清晰度</span>
+              <b id="personalityResultClarity">正在計算</b>
+            </article>
+            <article>
+              <span>分析基礎</span>
+              <b>12 個連續情境</b>
+            </article>
+            <article>
+              <span>研究座標</span>
+              <b>4 組閱讀偏好</b>
+            </article>
+            <article>
+              <span>報告版本</span>
+              <b>GC-16 v2</b>
+            </article>
+          </div>
+        </article>
+
+        <section class="personality-dimension-report personality-report-panel warm-card"
+          aria-labelledby="personalityDimensionTitle">
+          <div class="personality-dimension-heading">
+            <div>
+              <span>GC RESEARCH PROFILE</span>
+              <h3 id="personalityDimensionTitle">你的研究風格座標</h3>
+              <p id="personalityDimensionSummary">
+                根據十二個研究情境，整理你做判斷時自然偏重的方向。
+              </p>
+            </div>
+            <small>這不是金融風險屬性評估</small>
+          </div>
+
+          <div id="personalityDimensionChart"
+            class="personality-dimension-chart"></div>
+        </section>
+
+        <div class="personality-result-grid personality-report-grid">
+          <article class="warm-card">
+            <span>01 · 你的研究優勢</span>
+            <h3 id="personalityStrengthTitle">—</h3>
+            <p id="personalityStrengthCopy">—</p>
+          </article>
+
+          <article class="warm-card caution">
+            <span>02 · 容易忽略的地方</span>
+            <h3 id="personalityBlindSpotTitle">—</h3>
+            <p id="personalityBlindSpotCopy">—</p>
+          </article>
+
+          <article class="warm-card">
+            <span>03 · 建議閱讀順序</span>
+            <ol id="personalityReadingOrder"></ol>
+          </article>
+
+          <article class="warm-card">
+            <span>04 · 適合你的 GC 使用方式</span>
+            <h3 id="personalityModeTitle">—</h3>
+            <p id="personalityModeCopy">—</p>
+          </article>
+        </div>
+
+        <article class="personality-result-notice warm-card">
+          <b>人格只改變閱讀方式，不改變研究結果</b>
+          <p>同一檔股票的健康分數、風險、價格位置與判斷把握度，對所有研究人格都完全相同。</p>
+        </article>
+
+        <section class="personality-share-panel warm-card"
+          aria-labelledby="personalityShareTitle">
+          <div>
+            <span>SHARE YOUR RESEARCH STYLE</span>
+            <h3 id="personalityShareTitle">分享你的研究人格報告</h3>
+            <p>分享內容只包含人格名稱、四軸比例與研究偏好，不會包含股票、自選清單或帳號資料。</p>
+          </div>
+          <div class="personality-share-actions">
+            <button id="personalityShare" class="personality-primary-action" type="button">
+              分享結果
+            </button>
+            <button id="personalityCopy" type="button">複製文字</button>
+            <button id="personalityDownload" type="button">下載報告圖</button>
+          </div>
+          <small id="personalityShareStatus" aria-live="polite"></small>
+        </section>
+
+        <div class="personality-result-actions">
+          <button id="personalityRetake" type="button">重新測驗</button>
+          <button id="personalityFinish" class="personality-primary-action" type="button">
+            使用這個研究風格
+          </button>
+        </div>
+      </section>
+    </section>
+
     <section id="profilePage" class="app-page shell-page" data-page="about" aria-labelledby="profilePageTitle">
       <div class="shell-page-heading"><div><span>我的</span><h1 id="profilePageTitle">Beta 測試與個人設定</h1><p>管理自選、測試身分與產品資訊。</p></div></div>
       <section class="research-mode-setting warm-card" aria-labelledby="researchModeTitle">
@@ -224,9 +395,10 @@
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
         <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
         <article class="warm-card profile-card"><span>報告資料</span><b id="profileReportCount">0 份</b><small id="profileUpdatedAt">等待更新</small></article>
-        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.5.0 Beta</b><small>Guided、Pro 與新手導覽使用相同研究引擎，不影響健康分數</small></article>
+        <article class="warm-card profile-card personality-profile-card"><span>研究人格</span><b id="profilePersonalityName">尚未測驗</b><small id="profilePersonalityNote">完成 12 題，建立個人化閱讀順序</small></article>
+        <article class="warm-card profile-card"><span>目前版本</span><b>Web v3.6.0 Beta</b><small>Guided、Pro 與新手導覽使用相同研究引擎，不影響健康分數</small></article>
       </div>
-      <div class="profile-actions warm-card"><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
+      <div class="profile-actions warm-card"><button id="profilePersonality" type="button">了解我的研究人格</button><button id="profileFeedback" type="button">提供 Beta 回饋</button><button id="profileDataSources" type="button">資料來源與方法</button><button id="profileLogout" type="button">登出／更換邀請碼</button></div>
       <div class="profile-notice warm-card"><b>研究輔助，不代替投資決策</b><p>AI Stock Terminal 用來整理公開資料與研究證據，不提供自動下單，也不保證未來報酬。</p></div>
     </section>
     </div>
@@ -550,6 +722,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.5.0.7" defer></script>
+  <script src="/assets/app.js?v=3.6.0.4" defer></script>
 </body>
 </html>

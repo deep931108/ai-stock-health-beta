@@ -3477,3 +3477,1417 @@ html[data-theme="dark"] .onboarding-progress button{
 html[data-theme="dark"] .onboarding-actions button{
   color:#f4efe6;
 }
+/* Research personality quiz v1 */
+
+.personality-page{
+  display:none;
+  max-width:1180px;
+  margin:0 auto;
+  padding-bottom:120px;
+}
+
+.personality-page.active{
+  display:block;
+}
+
+.personality-page-heading{
+  align-items:flex-start;
+}
+
+.personality-page-heading>div{
+  max-width:760px;
+}
+
+.personality-page-heading>div>span,
+.personality-intro-copy>span,
+.personality-question>span,
+.personality-result-hero>span,
+.personality-result-grid article>span{
+  display:block;
+  margin-bottom:10px;
+  color:var(--warm-brand);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.personality-page-heading p{
+  max-width:680px;
+  margin-top:10px;
+  color:var(--warm-muted);
+  line-height:1.75;
+}
+
+#personalityBack{
+  flex:0 0 auto;
+  min-height:42px;
+  padding:0 18px;
+  border:1px solid var(--warm-line);
+  border-radius:999px;
+  background:transparent;
+  color:var(--warm-text);
+  cursor:pointer;
+}
+
+#personalityBack:hover{
+  border-color:var(--warm-brand);
+  color:var(--warm-brand);
+}
+
+.personality-intro{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:34px 48px;
+  align-items:center;
+  margin-top:24px;
+  padding:44px;
+}
+
+.personality-intro-copy h2{
+  max-width:720px;
+  margin:0;
+  font-size:clamp(25px,3vw,38px);
+  line-height:1.25;
+}
+
+.personality-intro-copy p{
+  max-width:700px;
+  margin:18px 0 0;
+  color:var(--warm-muted);
+  font-size:15px;
+  line-height:1.85;
+}
+
+.personality-intro-meta{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(92px,1fr));
+  gap:12px;
+  grid-column:1/-1;
+}
+
+.personality-intro-meta article{
+  min-height:104px;
+  padding:18px;
+  border:1px solid var(--warm-line);
+  border-radius:18px;
+  background:color-mix(in srgb,var(--warm-surface) 88%,transparent);
+}
+
+.personality-intro-meta b{
+  display:block;
+  color:var(--warm-brand);
+  font-size:28px;
+  line-height:1;
+}
+
+.personality-intro-meta span{
+  display:block;
+  margin-top:10px;
+  color:var(--warm-muted);
+  font-size:12px;
+}
+
+.personality-primary-action{
+  min-height:50px;
+  padding:0 26px;
+  border:1px solid var(--warm-brand);
+  border-radius:999px;
+  background:var(--warm-brand);
+  color:#17120d;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.personality-primary-action:hover{
+  filter:brightness(1.06);
+  transform:translateY(-1px);
+}
+
+.personality-intro>.personality-primary-action{
+  justify-self:start;
+}
+
+.personality-intro>small{
+  color:var(--warm-muted);
+  font-size:11px;
+  line-height:1.65;
+}
+
+.personality-quiz{
+  max-width:900px;
+  margin:24px auto 0;
+  padding:42px;
+}
+
+.personality-quiz-progress>div:first-child{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:var(--warm-muted);
+  font-size:12px;
+}
+
+.personality-quiz-progress b{
+  color:var(--warm-brand);
+}
+
+.personality-progress-track{
+  height:7px;
+  margin-top:12px;
+  overflow:hidden;
+  border-radius:999px;
+  background:var(--warm-line);
+}
+
+.personality-progress-track i{
+  display:block;
+  width:12.5%;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(
+    90deg,
+    var(--warm-brand),
+    var(--warm-green)
+  );
+  transition:width .28s ease;
+}
+
+.personality-question{
+  margin-top:40px;
+}
+
+.personality-question h2{
+  max-width:720px;
+  margin:0;
+  font-size:clamp(23px,3vw,32px);
+  line-height:1.4;
+}
+
+.personality-question p{
+  margin:14px 0 0;
+  color:var(--warm-muted);
+  line-height:1.7;
+}
+
+.personality-options{
+  display:grid;
+  gap:14px;
+  margin-top:28px;
+}
+
+.personality-option{
+  position:relative;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr);
+  gap:16px;
+  align-items:center;
+  width:100%;
+  min-height:82px;
+  padding:18px 22px;
+  border:1px solid var(--warm-line);
+  border-radius:18px;
+  background:color-mix(in srgb,var(--warm-surface) 92%,transparent);
+  color:var(--warm-text);
+  text-align:left;
+  cursor:pointer;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
+
+.personality-option:hover{
+  border-color:color-mix(
+    in srgb,
+    var(--warm-brand) 72%,
+    var(--warm-line)
+  );
+  transform:translateY(-1px);
+}
+
+.personality-option::before{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border:1px solid var(--warm-line);
+  border-radius:50%;
+  color:var(--warm-muted);
+  font-size:12px;
+  font-weight:800;
+  content:attr(data-option-label);
+}
+
+.personality-option strong{
+  display:block;
+  font-size:15px;
+  line-height:1.6;
+}
+
+.personality-option small{
+  display:block;
+  margin-top:5px;
+  color:var(--warm-muted);
+  line-height:1.55;
+}
+
+.personality-option.selected,
+.personality-option[aria-checked="true"]{
+  border-color:var(--warm-brand);
+  background:color-mix(
+    in srgb,
+    var(--warm-brand) 12%,
+    var(--warm-surface)
+  );
+  box-shadow:0 0 0 1px
+    color-mix(in srgb,var(--warm-brand) 35%,transparent);
+}
+
+.personality-option.selected::before,
+.personality-option[aria-checked="true"]::before{
+  border-color:var(--warm-brand);
+  background:var(--warm-brand);
+  color:#17120d;
+  content:"✓";
+}
+
+.personality-quiz-actions,
+.personality-result-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:34px;
+}
+
+.personality-quiz-actions button,
+.personality-result-actions button{
+  min-width:120px;
+  min-height:46px;
+  padding:0 22px;
+  border:1px solid var(--warm-line);
+  border-radius:999px;
+  background:transparent;
+  color:var(--warm-text);
+  font-weight:700;
+  cursor:pointer;
+}
+
+.personality-quiz-actions button:last-child{
+  border-color:var(--warm-brand);
+  background:var(--warm-brand);
+  color:#17120d;
+}
+
+.personality-quiz-actions button:disabled{
+  opacity:.38;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.personality-result{
+  margin-top:24px;
+}
+
+.personality-result-hero{
+  position:relative;
+  overflow:hidden;
+  padding:48px;
+  text-align:center;
+}
+
+.personality-result-hero::after{
+  position:absolute;
+  top:-110px;
+  left:50%;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background:color-mix(
+    in srgb,
+    var(--warm-brand) 13%,
+    transparent
+  );
+  filter:blur(12px);
+  content:"";
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+
+.personality-result-hero>*{
+  position:relative;
+  z-index:1;
+}
+
+.personality-result-symbol{
+  display:grid;
+  place-items:center;
+  width:84px;
+  height:84px;
+  margin:8px auto 20px;
+  border:1px solid var(--warm-brand);
+  border-radius:50%;
+  background:color-mix(
+    in srgb,
+    var(--warm-brand) 11%,
+    var(--warm-surface)
+  );
+  color:var(--warm-brand);
+  font-size:37px;
+}
+
+.personality-result-hero h2{
+  margin:0;
+  font-size:clamp(30px,4vw,46px);
+}
+
+.personality-result-hero p{
+  max-width:680px;
+  margin:18px auto 0;
+  color:var(--warm-muted);
+  font-size:15px;
+  line-height:1.85;
+}
+
+.personality-result-hero small{
+  display:inline-block;
+  margin-top:20px;
+  padding:8px 14px;
+  border:1px solid var(--warm-line);
+  border-radius:999px;
+  color:var(--warm-muted);
+}
+
+.personality-result-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin-top:16px;
+}
+
+.personality-result-grid article{
+  min-height:220px;
+  padding:30px;
+}
+
+.personality-result-grid article.caution{
+  border-top:3px solid var(--warm-red);
+}
+
+.personality-result-grid h3{
+  margin:0;
+  font-size:21px;
+  line-height:1.45;
+}
+
+.personality-result-grid p{
+  margin:16px 0 0;
+  color:var(--warm-muted);
+  line-height:1.8;
+}
+
+.personality-result-grid ol{
+  display:grid;
+  gap:12px;
+  margin:18px 0 0;
+  padding:0;
+  list-style:none;
+  counter-reset:personality-order;
+}
+
+.personality-result-grid li{
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  counter-increment:personality-order;
+  color:var(--warm-text);
+  line-height:1.55;
+}
+
+.personality-result-grid li::before{
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  border:1px solid var(--warm-line);
+  border-radius:50%;
+  color:var(--warm-brand);
+  font-size:11px;
+  font-weight:800;
+  content:counter(personality-order);
+}
+
+.personality-result-notice{
+  margin-top:16px;
+  padding:24px 30px;
+  border-left:3px solid var(--warm-green);
+}
+
+.personality-result-notice b{
+  font-size:15px;
+}
+
+.personality-result-notice p{
+  margin:8px 0 0;
+  color:var(--warm-muted);
+  line-height:1.7;
+}
+
+.personality-result-actions{
+  justify-content:flex-end;
+}
+
+.personality-result-actions .personality-primary-action{
+  border-color:var(--warm-brand);
+  background:var(--warm-brand);
+  color:#17120d;
+}
+
+.profile-personality-card{
+  border-top:3px solid var(--warm-brand);
+}
+
+.profile-personality-card b{
+  color:var(--warm-brand);
+}
+
+@media (max-width:760px){
+  .personality-page{
+    padding-bottom:96px;
+  }
+
+  .personality-page-heading{
+    display:grid;
+    gap:18px;
+  }
+
+  #personalityBack{
+    justify-self:start;
+  }
+
+  .personality-intro,
+  .personality-quiz{
+    padding:26px 20px;
+  }
+
+  .personality-intro{
+    grid-template-columns:1fr;
+    gap:26px;
+  }
+
+  .personality-intro-meta{
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+  }
+
+  .personality-intro-meta article{
+    min-height:88px;
+    padding:14px 10px;
+  }
+
+  .personality-intro-meta b{
+    font-size:23px;
+  }
+
+  .personality-question{
+    margin-top:30px;
+  }
+
+  .personality-option{
+    grid-template-columns:36px minmax(0,1fr);
+    gap:12px;
+    min-height:76px;
+    padding:16px;
+  }
+
+  .personality-option::before{
+    width:34px;
+    height:34px;
+  }
+
+  .personality-quiz-actions button{
+    min-width:0;
+    flex:1;
+  }
+
+  .personality-result-hero{
+    padding:36px 20px;
+  }
+
+  .personality-result-grid{
+    grid-template-columns:1fr;
+  }
+
+  .personality-result-grid article{
+    min-height:0;
+    padding:24px 20px;
+  }
+
+  .personality-result-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .personality-result-actions button{
+    width:100%;
+  }
+
+  .personality-result-actions .personality-primary-action{
+    grid-row:1;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .personality-option,
+  .personality-primary-action,
+  .personality-progress-track i{
+    transition:none;
+  }
+}
+/* Research personality option layout fix v1 */
+
+.personality-option::before{
+  display:none;
+  content:none;
+}
+
+.personality-option>span{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border:1px solid var(--warm-line);
+  border-radius:50%;
+  color:var(--warm-muted);
+  font-size:12px;
+  font-weight:800;
+  line-height:1;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    color .18s ease;
+}
+
+.personality-option>div{
+  min-width:0;
+  width:100%;
+}
+
+.personality-option>div>b{
+  display:block;
+  color:var(--warm-text);
+  font-size:15px;
+  font-weight:800;
+  line-height:1.55;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+
+.personality-option>div>small{
+  display:block;
+  margin-top:5px;
+  color:var(--warm-muted);
+  font-size:12px;
+  line-height:1.65;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+
+.personality-option.selected>span,
+.personality-option[aria-checked="true"]>span{
+  border-color:var(--warm-brand);
+  background:var(--warm-brand);
+  color:#17120d;
+}
+
+@media (max-width:760px){
+  .personality-option>span{
+    width:34px;
+    height:34px;
+  }
+
+  .personality-option>div>b{
+    font-size:14px;
+  }
+}
+/* Research personality visual refinement v2 */
+
+.personality-option>div>b{
+  font-size:18px;
+  line-height:1.5;
+}
+
+.personality-option>div>small{
+  margin-top:7px;
+  font-size:14px;
+  line-height:1.7;
+}
+
+.personality-result-grid article,
+.personality-result-grid article.caution{
+  border-top:3px solid var(--warm-brand);
+}
+
+@media (max-width:760px){
+  .personality-option>div>b{
+    font-size:16px;
+  }
+
+  .personality-option>div>small{
+    font-size:13px;
+  }
+}
+/* Research personality story presentation v3 */
+
+.personality-question>span{
+  max-width:780px;
+  margin-bottom:14px;
+  color:var(--warm-brand);
+  font-size:clamp(23px,3vw,32px);
+  font-weight:700;
+  letter-spacing:0;
+  line-height:1.4;
+  text-transform:none;
+}
+
+.personality-question h2{
+  font-size:clamp(23px,3vw,32px);
+}
+
+.personality-question p{
+  max-width:760px;
+  margin-top:16px;
+  font-size:16px;
+  line-height:1.85;
+}
+
+.personality-result-grid article,
+.personality-result-grid article.caution{
+  border-top:3px solid var(--warm-red);
+}
+
+@media (max-width:760px){
+  .personality-question>span,
+  .personality-question h2{
+    font-size:22px;
+  }
+
+  .personality-question p{
+    font-size:14px;
+  }
+}
+/* Research personality result workspace v4 */
+
+.personality-result{
+  max-width:1100px;
+  margin:28px auto 0;
+}
+
+.personality-result-hero{
+  padding:54px 42px;
+  border-top:3px solid #e47b70;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(224,151,87,.16),
+      transparent 38%
+    ),
+    var(--warm-surface);
+}
+
+.personality-result-symbol{
+  width:92px;
+  height:92px;
+  border:1px solid var(--warm-brand);
+  box-shadow:
+    0 0 0 8px rgba(224,151,87,.04),
+    0 18px 50px rgba(0,0,0,.16);
+  font-size:42px;
+}
+
+.personality-result-hero>span{
+  margin-bottom:12px;
+  font-size:13px;
+  letter-spacing:.08em;
+}
+
+.personality-result-hero h2{
+  font-size:clamp(36px,5vw,54px);
+  line-height:1.2;
+}
+
+.personality-result-hero p{
+  max-width:720px;
+  font-size:17px;
+  line-height:1.9;
+}
+
+.personality-result-hero small{
+  margin-top:22px;
+  padding:9px 16px;
+  font-size:12px;
+}
+
+.personality-result-grid{
+  gap:18px;
+  margin-top:18px;
+}
+
+.personality-result-grid>article,
+.personality-result-grid>article.warm-card,
+.personality-result-grid>article.caution,
+.personality-result-grid>article.warm-card.caution{
+  position:relative;
+  min-height:238px;
+  padding:32px;
+  overflow:hidden;
+  border-top:3px solid #e47b70 !important;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(224,151,87,.035),
+      transparent 48%
+    ),
+    var(--warm-surface);
+}
+
+.personality-result-grid>article::after{
+  position:absolute;
+  top:20px;
+  right:22px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#e47b70;
+  opacity:.7;
+  content:"";
+}
+
+.personality-result-grid>article>span{
+  margin-bottom:14px;
+  color:var(--warm-brand);
+  font-size:13px;
+  letter-spacing:.04em;
+  text-transform:none;
+}
+
+.personality-result-grid h3{
+  max-width:480px;
+  font-size:23px;
+  line-height:1.5;
+}
+
+.personality-result-grid p{
+  max-width:500px;
+  margin-top:16px;
+  font-size:16px;
+  line-height:1.9;
+}
+
+.personality-result-grid ol{
+  gap:9px;
+  margin-top:16px;
+}
+
+.personality-result-grid li{
+  min-height:42px;
+  padding:7px 12px 7px 8px;
+  border:1px solid
+    color-mix(in srgb,var(--warm-line) 78%,transparent);
+  border-radius:14px;
+  background:rgba(255,255,255,.012);
+  font-size:15px;
+}
+
+.personality-result-grid li::before{
+  width:28px;
+  height:28px;
+  border-color:rgba(224,151,87,.32);
+  background:rgba(224,151,87,.055);
+}
+
+.personality-result-notice{
+  position:relative;
+  margin-top:18px;
+  padding:27px 32px;
+  overflow:hidden;
+  border-top:1px solid
+    color-mix(in srgb,#e47b70 55%,var(--warm-line));
+  border-left:3px solid #e47b70;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(228,123,112,.07),
+      transparent 46%
+    ),
+    var(--warm-surface);
+}
+
+.personality-result-notice b{
+  font-size:17px;
+}
+
+.personality-result-notice p{
+  max-width:850px;
+  margin-top:9px;
+  font-size:14px;
+  line-height:1.8;
+}
+
+.personality-result-actions{
+  margin-top:22px;
+  padding-bottom:18px;
+}
+
+.personality-result-actions button{
+  min-height:50px;
+  padding:0 26px;
+}
+
+@media (max-width:760px){
+  .personality-result{
+    margin-top:18px;
+  }
+
+  .personality-result-hero{
+    padding:38px 20px;
+  }
+
+  .personality-result-symbol{
+    width:78px;
+    height:78px;
+    font-size:34px;
+  }
+
+  .personality-result-hero h2{
+    font-size:34px;
+  }
+
+  .personality-result-hero p{
+    font-size:15px;
+  }
+
+  .personality-result-grid{
+    gap:14px;
+  }
+
+  .personality-result-grid>article,
+  .personality-result-grid>article.warm-card,
+  .personality-result-grid>article.caution,
+  .personality-result-grid>article.warm-card.caution{
+    min-height:0;
+    padding:26px 20px;
+  }
+
+  .personality-result-grid h3{
+    font-size:21px;
+  }
+
+  .personality-result-grid p{
+    font-size:14px;
+  }
+
+  .personality-result-notice{
+    padding:24px 20px;
+  }
+}
+/* Research personality dimension report v5 */
+
+:root{
+  --personality-report-bg:rgba(24,33,28,.98);
+  --personality-axis-left:#73b491;
+  --personality-axis-right:#de985a;
+  --personality-accent:#e47b70;
+}
+
+html[data-theme="light"]{
+  --personality-report-bg:#f5f0e5;
+  --personality-axis-left:#4f9471;
+  --personality-axis-right:#cf7f3e;
+  --personality-accent:#d7645e;
+}
+
+.personality-result-hero,
+.personality-dimension-report,
+.personality-result-grid>article,
+.personality-result-grid>article.warm-card,
+.personality-result-grid>article.caution,
+.personality-result-grid>article.warm-card.caution,
+.personality-result-notice{
+  background-color:var(--personality-report-bg) !important;
+}
+
+.personality-result-grid>article,
+.personality-result-grid>article.warm-card,
+.personality-result-grid>article.caution,
+.personality-result-grid>article.warm-card.caution{
+  background-image:none !important;
+  border-top:3px solid
+    var(--personality-accent) !important;
+}
+
+.personality-dimension-report{
+  margin-top:18px;
+  padding:34px;
+  border-top:3px solid var(--personality-accent);
+}
+
+.personality-dimension-heading{
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+  align-items:flex-start;
+}
+
+.personality-dimension-heading>div{
+  max-width:720px;
+}
+
+.personality-dimension-heading span{
+  display:block;
+  margin-bottom:9px;
+  color:var(--warm-brand);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.1em;
+}
+
+.personality-dimension-heading h3{
+  margin:0;
+  color:var(--warm-text);
+  font-size:27px;
+}
+
+.personality-dimension-heading p{
+  margin:12px 0 0;
+  color:var(--warm-muted);
+  font-size:14px;
+  line-height:1.75;
+}
+
+.personality-dimension-heading>small{
+  flex:0 0 auto;
+  padding:8px 12px;
+  border:1px solid var(--warm-line);
+  border-radius:999px;
+  color:var(--warm-muted);
+  font-size:10px;
+}
+
+.personality-dimension-chart{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-top:28px;
+}
+
+.personality-dimension-row{
+  padding:20px;
+  border:1px solid var(--warm-line);
+  border-radius:17px;
+  background:rgba(255,255,255,.014);
+}
+
+.personality-dimension-labels{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.personality-dimension-labels span{
+  display:flex;
+  gap:8px;
+  align-items:baseline;
+}
+
+.personality-dimension-labels span:last-child{
+  justify-content:flex-end;
+  text-align:right;
+}
+
+.personality-dimension-labels b{
+  color:var(--warm-text);
+  font-size:14px;
+}
+
+.personality-dimension-labels strong{
+  color:var(--warm-brand);
+  font-size:18px;
+}
+
+.personality-dimension-track{
+  position:relative;
+  display:flex;
+  width:100%;
+  height:10px;
+  margin-top:14px;
+  overflow:hidden;
+  border-radius:999px;
+  background:var(--warm-line);
+}
+
+.personality-dimension-track i,
+.personality-dimension-track em{
+  display:block;
+  height:100%;
+}
+
+.personality-dimension-track i{
+  background:var(--personality-axis-left);
+}
+
+.personality-dimension-track em{
+  background:var(--personality-axis-right);
+}
+
+.personality-dimension-track u{
+  position:absolute;
+  top:-3px;
+  bottom:-3px;
+  left:50%;
+  width:2px;
+  background:var(--personality-report-bg);
+  content:"";
+  transform:translateX(-50%);
+}
+
+.personality-dimension-row p{
+  margin:13px 0 0;
+  color:var(--warm-muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+@media (max-width:760px){
+  .personality-dimension-report{
+    padding:26px 20px;
+  }
+
+  .personality-dimension-heading{
+    display:grid;
+    gap:14px;
+  }
+
+  .personality-dimension-heading>small{
+    justify-self:start;
+  }
+
+  .personality-dimension-chart{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .personality-dimension-row{
+    padding:17px;
+  }
+}
+
+
+/* GC-16 personality inspection report v2 */
+.personality-report-hero,
+.personality-report-panel,
+.personality-report-grid>article,
+.personality-result-notice{
+  background:#101914 !important;
+  background-image:none !important;
+  border-color:#30433a !important;
+}
+
+.personality-report-hero{
+  display:grid;
+  gap:28px;
+  padding:34px !important;
+  overflow:hidden;
+  position:relative;
+}
+
+.personality-report-hero::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:3px;
+  background:linear-gradient(90deg,#e39a58,#ee776f 55%,transparent);
+}
+
+.personality-report-overline{
+  align-items:center;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  position:relative;
+  z-index:1;
+}
+
+.personality-report-overline span{
+  color:#75c59d;
+  font-size:.74rem;
+  font-weight:800;
+  letter-spacing:.16em;
+}
+
+.personality-report-overline b{
+  border:1px solid #3a5045;
+  border-radius:999px;
+  color:#e8c9a7;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:.76rem;
+  letter-spacing:.08em;
+  padding:8px 12px;
+}
+
+.personality-report-identity{
+  align-items:center;
+  display:grid;
+  gap:28px;
+  grid-template-columns:148px minmax(0,1fr);
+  position:relative;
+  text-align:left;
+  z-index:1;
+}
+
+.personality-report-identity>div:last-child{
+  display:grid;
+  gap:10px;
+}
+
+.personality-report-identity>div:last-child>span{
+  color:#e39a58;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.personality-result-symbol{
+  align-items:center !important;
+  background:#17231c !important;
+  border:1px solid #b97b42 !important;
+  border-radius:34px !important;
+  box-shadow:0 18px 55px rgba(227,154,88,.14);
+  color:#e39a58 !important;
+  display:flex !important;
+  height:148px !important;
+  justify-content:center;
+  margin:0 !important;
+  width:148px !important;
+}
+
+.personality-result-symbol svg{
+  height:112px;
+  width:112px;
+}
+
+.personality-result-symbol .totem-orbit{
+  opacity:.28;
+  stroke-dasharray:3 7;
+}
+
+.personality-result-symbol .totem-star{
+  filter:drop-shadow(0 0 5px currentColor);
+}
+
+.personality-report-identity h2{
+  font-size:clamp(2.2rem,5vw,4rem) !important;
+  line-height:1.08 !important;
+  margin:0 !important;
+}
+
+.personality-report-identity p{
+  color:#c8d0c8 !important;
+  font-size:1.02rem !important;
+  line-height:1.85 !important;
+  margin:0 !important;
+  max-width:760px;
+}
+
+.personality-report-identity small{
+  border:1px solid #34483e !important;
+  border-radius:999px;
+  color:#aebdb2 !important;
+  justify-self:start;
+  padding:7px 12px !important;
+}
+
+.personality-report-meta{
+  display:grid;
+  gap:10px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  position:relative;
+  z-index:1;
+}
+
+.personality-report-meta article{
+  background:#131f18;
+  border:1px solid #2d4036;
+  border-radius:16px;
+  display:grid;
+  gap:8px;
+  padding:15px 16px;
+}
+
+.personality-report-meta span{
+  color:#819187;
+  font-size:.72rem;
+}
+
+.personality-report-meta b{
+  color:#f2ede4;
+  font-size:.9rem;
+}
+
+.personality-report-panel,
+.personality-report-grid>article{
+  border-top:3px solid #e39a58 !important;
+  box-shadow:none !important;
+}
+
+.personality-report-grid>article::after{
+  background:#e39a58 !important;
+  box-shadow:0 0 12px rgba(227,154,88,.48) !important;
+}
+
+.personality-report-grid>article>span{
+  color:#e39a58 !important;
+  letter-spacing:.08em;
+}
+
+.personality-report-panel{
+  padding:28px !important;
+}
+
+.personality-dimension-track i{
+  background:linear-gradient(90deg,#e39a58,#efbd79) !important;
+}
+
+.personality-dimension-track em{
+  background:linear-gradient(90deg,#6aa88a,#80c7a3) !important;
+}
+
+@media (max-width:760px){
+  .personality-report-hero{
+    gap:22px;
+    padding:24px 20px !important;
+  }
+
+  .personality-report-overline{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .personality-report-identity{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .personality-result-symbol{
+    height:124px !important;
+    justify-self:center;
+    width:124px !important;
+  }
+
+  .personality-result-symbol svg{
+    height:94px;
+    width:94px;
+  }
+
+  .personality-report-identity>div:last-child>span,
+  .personality-report-identity small{
+    justify-self:center;
+  }
+
+  .personality-report-meta{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .personality-report-panel{
+    padding:22px 18px !important;
+  }
+}
+
+
+/* GC-16 result sharing v1 */
+.personality-share-panel{
+  align-items:center;
+  background:#101914 !important;
+  border-color:#30433a !important;
+  border-top:3px solid #e39a58 !important;
+  display:grid;
+  gap:20px 28px;
+  grid-template-columns:minmax(0,1fr) auto;
+  padding:26px 28px !important;
+}
+
+.personality-share-panel>div:first-child{
+  display:grid;
+  gap:8px;
+}
+
+.personality-share-panel span{
+  color:#75c59d;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.14em;
+}
+
+.personality-share-panel h3{
+  font-size:1.35rem;
+  margin:0;
+}
+
+.personality-share-panel p{
+  color:#9eaaa2;
+  line-height:1.7;
+  margin:0;
+  max-width:720px;
+}
+
+.personality-share-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:flex-end;
+}
+
+.personality-share-actions button{
+  border:1px solid #3a5045;
+  border-radius:999px;
+  min-height:44px;
+  padding:0 18px;
+}
+
+.personality-share-actions .personality-primary-action{
+  background:#e39a58;
+  border-color:#e39a58;
+  color:#15100b;
+}
+
+.personality-share-panel>small{
+  color:#91a198;
+  grid-column:1/-1;
+  min-height:1.2em;
+}
+
+.personality-result{
+  padding-bottom:calc(120px + env(safe-area-inset-bottom));
+}
+
+@media (max-width:760px){
+  .personality-share-panel{
+    grid-template-columns:1fr;
+    padding:22px 18px !important;
+  }
+
+  .personality-share-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    justify-content:stretch;
+  }
+
+  .personality-share-actions .personality-primary-action{
+    grid-column:1/-1;
+  }
+
+  .personality-share-actions button{
+    width:100%;
+  }
+}
