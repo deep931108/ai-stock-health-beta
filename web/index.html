@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="/assets/styles.css">
   <script>
     (() => {
+      const researchMode = localStorage.getItem("aiStockResearchMode");
+      document.documentElement.dataset.researchMode =
+        researchMode === "pro" ? "pro" : "guided";
+
       const saved = localStorage.getItem("aiStockTheme");
       const dark = saved ? saved === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = dark ? "dark" : "light";
@@ -44,6 +48,10 @@
       </a>
       <div class="market-session"><i></i><span>盤後</span><small id="homeLastUpdated">等待更新</small></div>
       <div class="account-actions">
+        <button id="researchModeShortcut" class="research-mode-shortcut" type="button" aria-label="前往研究模式設定">
+          <span>研究模式</span>
+          <b>Guided</b>
+        </button>
         <button id="themeToggle" class="theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false"><span aria-hidden="true">☾</span><b>深色</b></button>
         <button id="notificationButton" class="notification-button" type="button" aria-label="開啟通知中心" aria-expanded="false"><span class="notification-bell" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span><b id="notificationUnread" class="notification-unread hidden">0</b></button>
         <span id="testerBadge" class="tester-badge hidden"></span>
@@ -154,9 +162,9 @@
     </section>
 
     <section id="eventsPage" class="app-page shell-page" data-page="events" aria-labelledby="eventsPageTitle">
-      <div class="shell-page-heading"><div><span>事件中心</span><h1 id="eventsPageTitle">發生什麼，以及為什麼重要</h1><p>目前先整理報告內已驗證的今日事件；未來日程資料仍在建立。</p></div><span class="data-status">Evidence</span></div>
+      <div class="shell-page-heading"><div><span>事件中心</span><h1 id="eventsPageTitle">發生什麼，以及為什麼重要</h1><p>這裡整理已驗證的今日指標變化；已確認日程可從首頁的「未來 7 天」查看。</p></div><span class="data-status">已驗證</span></div>
       <div class="segmented-filter" id="eventFilters" aria-label="事件篩選">
-        <button class="active" type="button" data-event-filter="all">全部</button><button type="button" data-event-filter="positive">正向</button><button type="button" data-event-filter="negative">注意</button><button type="button" data-event-filter="watchlist">只看自選</button>
+        <button class="active" type="button" data-event-filter="all">全部</button><button type="button" data-event-filter="positive">加分變化</button><button type="button" data-event-filter="negative">扣分變化</button><button type="button" data-event-filter="watchlist">只看自選</button>
       </div>
       <div id="eventsPageList" class="events-page-list"></div>
       <div id="eventsPageEmpty" class="warm-card home-empty hidden">目前沒有符合條件的事件。</div>
@@ -180,6 +188,35 @@
 
     <section id="profilePage" class="app-page shell-page" data-page="about" aria-labelledby="profilePageTitle">
       <div class="shell-page-heading"><div><span>我的</span><h1 id="profilePageTitle">Beta 測試與個人設定</h1><p>管理自選、測試身分與產品資訊。</p></div></div>
+      <section class="research-mode-setting warm-card" aria-labelledby="researchModeTitle">
+        <div class="research-mode-setting-copy">
+          <span>研究模式</span>
+          <h2 id="researchModeTitle">選擇適合你的資訊深度</h2>
+          <p>兩種模式使用相同研究引擎與判斷，只改變說明方式和顯示細節。</p>
+        </div>
+
+        <div class="research-mode-options" role="group" aria-label="研究模式">
+          <button class="research-mode-option guided" type="button"
+            data-research-mode-option="guided" aria-pressed="true">
+            <span>推薦入門</span>
+            <strong>Guided</strong>
+            <b>引導研究模式</b>
+            <small>白話解釋、每日任務與清楚的下一步。</small>
+          </button>
+
+          <button class="research-mode-option pro" type="button"
+            data-research-mode-option="pro" aria-pressed="false">
+            <span>完整資料</span>
+            <strong>Pro</strong>
+            <b>專業研究模式</b>
+            <small>完整指標、比較基準、判斷依據、歷史與拆解資料。</small>
+          </button>
+        </div>
+
+        <p id="researchModeStatus" class="research-mode-status">
+          目前使用 Guided，引導你完成每天真正重要的研究。
+        </p>
+      </section>
       <div class="profile-grid">
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
         <article class="warm-card profile-card"><span>自選股票</span><b id="profileWatchlistCount">0 檔</b><small>資料保存在這個瀏覽器</small></article>
@@ -231,40 +268,55 @@
               <h3 id="summary">目前適合持續追蹤，尚不足以提高研究優先級。</h3>
               <div id="incomeDecision" class="income-decision hidden"><span>已持有</span><strong id="heldDecision">續抱觀察</strong></div>
               <p id="summaryNote">這是研究狀態，不是買進或賣出訊號。</p>
+              <small id="summaryBasis" class="summary-basis">判斷依據整理中</small>
             </div>
           </div>
-          <div class="quick-stats">
-            <article class="research-state-card">
+          <div class="quick-stats guided-core-grid" data-guided-only>
+            <article class="guided-core-card health">
               <div class="quick-stat-heading">
-                <span>研究狀態</span>
-                <em>追蹤中</em>
+                <span>公司目前狀態</span>
+                <em id="guidedHealthTone">待確認</em>
               </div>
-              <strong id="grade">資料待補</strong>
-              <small>依目前證據與驗證進度判定</small>
+              <strong id="guidedHealth">正在整理</strong>
+              <p id="guidedHealthCopy">正在確認公司的整體狀態。</p>
+              <small id="guidedHealthScore">健康分數 —</small>
+              <span id="grade" class="hidden">資料待補</span>
             </article>
 
-            <article class="confidence-card">
+            <article class="guided-core-card risk">
               <div class="quick-stat-heading">
-                <span>證據信心</span>
-                <em id="confidenceTone">待確認</em>
-              </div>
-              <strong id="confidence">70 / 100</strong>
-              <div class="quick-stat-bar" role="progressbar" aria-label="證據信心">
-                <i id="confidenceBar"></i>
-              </div>
-              <small>反映資料一致性與樣本充分度</small>
-            </article>
-
-            <article class="risk-card">
-              <div class="quick-stat-heading">
-                <span>風險壓力</span>
+                <span>現在要小心什麼</span>
                 <em id="riskTone">待確認</em>
               </div>
-              <strong id="risk">41 / 100</strong>
-              <div class="quick-stat-bar risk" role="progressbar" aria-label="風險壓力">
+              <strong id="risk">正在整理</strong>
+              <p id="guidedRiskCopy">正在確認目前需要留意的風險。</p>
+              <div class="quick-stat-bar risk" role="progressbar" aria-label="目前風險">
                 <i id="riskBar"></i>
               </div>
-              <small>分數越高，代表目前需留意的風險越多</small>
+              <small id="guidedRiskScore">查看數據：風險分數 —</small>
+            </article>
+
+            <article class="guided-core-card valuation">
+              <div class="quick-stat-heading">
+                <span>現在的價格位置</span>
+                <em id="guidedValuationTone">待確認</em>
+              </div>
+              <strong id="guidedValuation">還不能確定</strong>
+              <p id="guidedValuationCopy">目前正在整理估值與同類公司比較。</p>
+              <small id="guidedValuationEvidence">查看依據：估值資料整理中</small>
+            </article>
+
+            <article class="guided-core-card confidence">
+              <div class="quick-stat-heading">
+                <span>這個判斷有多少證據</span>
+                <em id="confidenceTone">待確認</em>
+              </div>
+              <strong id="confidence">正在整理</strong>
+              <p id="guidedConfidenceCopy">正在確認資料是否足以支持目前判斷。</p>
+              <div class="quick-stat-bar" role="progressbar" aria-label="證據充分程度">
+                <i id="confidenceBar"></i>
+              </div>
+              <small id="guidedConfidenceScore">查看數據：證據充分程度 —</small>
             </article>
           </div>
         </section>
@@ -286,8 +338,8 @@
       <section id="integratedDecision" class="integrated-decision" aria-labelledby="integratedDecisionTitle">
         <div class="section-heading">
           <div>
-            <span class="section-kicker">整合研究判斷</span>
-            <h2 id="integratedDecisionTitle">為什麼這樣判斷？</h2>
+            <span class="section-kicker">GC 的判斷</span>
+            <h2 id="integratedDecisionTitle">GC 主要根據這三件事</h2>
           </div>
           <small id="integratedDecisionType">依股票類型整理</small>
         </div>
@@ -297,8 +349,8 @@
       <section class="integrated-follow-up" aria-labelledby="integratedFollowUpTitle">
         <div class="section-heading">
           <div>
-            <span class="section-kicker">後續觀察</span>
-            <h2 id="integratedFollowUpTitle">接下來看什麼？</h2>
+            <span class="section-kicker">持續追蹤</span>
+            <h2 id="integratedFollowUpTitle">哪些變化會讓判斷改變？</h2>
           </div>
         </div>
         <ol id="integratedFollowUpList"></ol>
@@ -306,11 +358,86 @@
 
       <section class="integrated-trend" aria-labelledby="integratedTrendTitle">
         <div>
-          <span class="section-kicker">研究趨勢</span>
-          <h2 id="integratedTrendTitle">近 10 個交易日研究分數</h2>
+          <span class="section-kicker">最近變化</span>
+          <h2 id="integratedTrendTitle">最近的判斷有沒有改變？</h2>
         </div>
         <div id="integratedTrendChart" class="integrated-trend-chart"></div>
         <small id="integratedTrendSummary">正在整理趨勢…</small>
+      </section>
+      <section id="proResearchWorkspace" class="pro-research-workspace" data-pro-only aria-labelledby="proResearchTitle">
+        <div class="pro-research-heading">
+          <div>
+            <span>PRO RESEARCH</span>
+            <h2 id="proResearchTitle">完整研究工作區</h2>
+            <p>使用同一份研究判斷，集中查看完整指標、比較基準與證據。</p>
+          </div>
+          <small id="proResearchDate">資料日期 —</small>
+        </div>
+
+        <div id="proResearchTabs" class="pro-research-tabs" role="tablist" aria-label="Pro 研究內容">
+          <button class="active" type="button" role="tab" aria-selected="true" data-pro-tab="overview">總覽</button>
+          <button type="button" role="tab" aria-selected="false" data-pro-tab="valuation">估值比較</button>
+          <button type="button" role="tab" aria-selected="false" data-pro-tab="evidence">判斷依據</button>
+          <button type="button" role="tab" aria-selected="false" data-pro-tab="history">歷史來源</button>
+        </div>
+
+        <div class="pro-research-panels">
+          <section class="pro-research-panel active" data-pro-panel="overview">
+            <div id="proCoreGrid" class="pro-core-grid"></div>
+            <div class="pro-panel-section">
+              <div class="pro-panel-heading">
+                <h3>核心指標</h3>
+                <small>完整分數拆解可在「判斷依據」查看</small>
+              </div>
+              <div id="proIndicatorList" class="pro-indicator-list"></div>
+            </div>
+          </section>
+
+          <section class="pro-research-panel" data-pro-panel="valuation" hidden>
+            <div class="pro-split-grid">
+              <article>
+                <span>VALUATION</span>
+                <h3 id="proValuationTitle">估值資料</h3>
+                <div id="proValuationSummary"></div>
+              </article>
+              <article>
+                <span>BENCHMARK</span>
+                <h3>市場、產業與同業比較</h3>
+                <div id="proComparisonSummary"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="pro-research-panel" data-pro-panel="evidence" hidden>
+            <div id="proEvidenceSummary" class="pro-evidence-summary"></div>
+            <details class="pro-disclosure">
+              <summary>
+                <span>完整判斷依據與權重拆解</span>
+                <small>需要時展開</small>
+              </summary>
+              <div id="proEvidenceDetail" class="pro-disclosure-content"></div>
+            </details>
+          </section>
+
+          <section class="pro-research-panel" data-pro-panel="history" hidden>
+            <div class="pro-panel-section">
+              <div class="pro-panel-heading">
+                <h3>研究分數歷史</h3>
+                <small>觀察趨勢，不用單日分數下結論</small>
+              </div>
+              <div id="proHistorySummary"></div>
+              <div id="proHistoryChart" class="pro-history-chart"></div>
+            </div>
+
+            <details class="pro-disclosure">
+              <summary>
+                <span>資料來源</span>
+                <small>查看完整來源</small>
+              </summary>
+              <div id="proSourceDetail" class="pro-disclosure-content"></div>
+            </details>
+          </section>
+        </div>
       </section>
       <section class="today-changes-section" aria-labelledby="todayChangesTitle">
         <div class="section-heading">

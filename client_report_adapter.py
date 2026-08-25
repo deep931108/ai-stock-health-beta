@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -125,6 +125,7 @@ class ClientReportRepository:
             "cyclical_profile": json.loads(json.dumps(payload.get("cyclical_profile") or {}, ensure_ascii=False, default=str)),
             "event_profile": json.loads(json.dumps(payload.get("event_profile") or {}, ensure_ascii=False, default=str)),
             "material_news": json.loads(json.dumps(payload.get("material_news") or {}, ensure_ascii=False, default=str)),
+            "historical_context": json.loads(json.dumps(payload.get("historical_context") or {}, ensure_ascii=False, default=str)),
             "research_notifications": self._normalize_research_notifications(payload.get("research_notifications"), stock_id),
             "market_home_summary": self._normalize_market_home_summary(payload.get("market_home_summary")),
             "upcoming_events": self._normalize_upcoming_events(payload.get("upcoming_events"), stock_id),

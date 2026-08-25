@@ -1,6 +1,7 @@
 const $ = (id) => document.getElementById(id);
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
 const THEME_STORAGE_KEY = "aiStockTheme";
+const RESEARCH_MODE_STORAGE_KEY = "aiStockResearchMode";
 const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
 let currentReport = null;
 let available = [];
@@ -44,6 +45,62 @@ function toggleTheme() {
   applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", {persist: true});
 }
 
+function preferredResearchMode() {
+  return localStorage.getItem(RESEARCH_MODE_STORAGE_KEY) === "pro"
+    ? "pro"
+    : "guided";
+}
+
+function applyResearchMode(mode, {persist = false, announce = false} = {}) {
+  const value = mode === "pro" ? "pro" : "guided";
+  const guided = value === "guided";
+
+  document.documentElement.dataset.researchMode = value;
+
+  if (persist) {
+    localStorage.setItem(RESEARCH_MODE_STORAGE_KEY, value);
+  }
+
+  const shortcut = $("researchModeShortcut");
+  if (shortcut) {
+    shortcut.querySelector("b").textContent = guided ? "Guided" : "Pro";
+    shortcut.classList.toggle("pro", !guided);
+    shortcut.setAttribute(
+      "aria-label",
+      guided
+        ? "目前為 Guided，引導研究模式；前往模式設定"
+        : "目前為 Pro，專業研究模式；前往模式設定"
+    );
+  }
+
+  document
+    .querySelectorAll("[data-research-mode-option]")
+    .forEach((button) => {
+      const selected = button.dataset.researchModeOption === value;
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+
+  const status = $("researchModeStatus");
+  if (status) {
+    status.textContent = guided
+      ? "目前使用 Guided，引導你完成每天真正重要的研究。"
+      : "目前使用 Pro，顯示完整指標、比較基準與研究證據。";
+  }
+
+  if (announce && typeof showToast === "function") {
+    showToast(
+      guided
+        ? "已切換為 Guided 引導研究模式"
+        : "已切換為 Pro 專業研究模式"
+    );
+  }
+}
+
+function setResearchMode(mode) {
+  applyResearchMode(mode, {persist: true, announce: true});
+  renderProfilePage();
+}
 function notificationReadIds() {
   try { return new Set(JSON.parse(localStorage.getItem(NOTIFICATION_READ_KEY) || "[]")); }
   catch { return new Set(); }
@@ -294,22 +351,424 @@ function render(report) {
             ? eventProfile
             : null;
 
-  $("researchLabel").textContent = decisionProfile
-    ? `${decisionProfile.label_zh}判斷`
-    : "AI 研究摘要";
+  const summaryProfile = stockDecisionProfile(report);
+  const summaryMetrics = summaryProfile?.metrics || {};
+  const summaryProfileId =
+    report.stock_profile?.profile_id || "default";
 
-  $("summary").textContent = decisionProfile
-    ? `未持有：${decisionProfile.decision.unheld}`
-    : report.summary;
+  const summaryAvailable = (value) =>
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    Number.isFinite(Number(value));
 
-  $("incomeDecision").classList.toggle("hidden", !decisionProfile);
-  $("heldDecision").textContent = decisionProfile
-    ? decisionProfile.decision.held
-    : "";
+  const summaryNumber = (value, digits = 1) =>
+    summaryAvailable(value)
+      ? Number(value).toFixed(digits)
+      : null;
 
-  $("summaryNote").textContent = decisionProfile
-    ? decisionProfile.decision.reason_zh
-    : "這是研究狀態，不是買進或賣出訊號。";
+  let summaryTitle = "";
+  let summaryCopy = "";
+  let summaryBasis = "";
+
+  if (summaryProfileId === "growth_quality") {
+    const growthHistoricalCategories =
+      report.historical_context?.categories || {};
+
+    const growthHistoricalRevenue =
+      growthHistoricalCategories.revenue || {};
+
+    const growthHistoricalFinancial =
+      growthHistoricalCategories.financial || {};
+
+    const monthlyRevenueGrowth =
+      summaryAvailable(growthHistoricalRevenue.year_over_year_pct)
+        ? Number(growthHistoricalRevenue.year_over_year_pct)
+        : null;
+
+    const incomeChange =
+      summaryAvailable(growthHistoricalFinancial.income_change_yoy_pct)
+        ? Number(growthHistoricalFinancial.income_change_yoy_pct)
+        : null;
+
+    const usualMonthlyRevenueGrowth =
+      summaryAvailable(
+        growthHistoricalRevenue.historical_yoy_median_pct
+      )
+        ? Number(
+            growthHistoricalRevenue.historical_yoy_median_pct
+          )
+        : null;
+
+    const revenueMonthCount =
+      Number(growthHistoricalRevenue.sample_count || 0);
+
+    const revenueComparisonCount =
+      Number(growthHistoricalRevenue.yoy_sample_count || 0);
+
+    const financialQuarterCount =
+      Number(growthHistoricalFinancial.quarter_sample_count || 0);
+
+    if (
+      monthlyRevenueGrowth !== null &&
+      incomeChange !== null
+    ) {
+      if (
+        monthlyRevenueGrowth > 0 &&
+        incomeChange > 0
+      ) {
+        summaryTitle =
+          "公司的收入和獲利仍在成長";
+
+        summaryCopy =
+          `最新一個月收入比去年同期增加 ${monthlyRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利也增加 ${incomeChange.toFixed(1)}%。`;
+
+        if (
+          usualMonthlyRevenueGrowth !== null &&
+          monthlyRevenueGrowth > usualMonthlyRevenueGrowth
+        ) {
+          summaryCopy +=
+            `目前收入成長也高於過去常見的 ${usualMonthlyRevenueGrowth.toFixed(1)}%。`;
+        }
+      } else if (
+        monthlyRevenueGrowth > 0 &&
+        incomeChange <= 0
+      ) {
+        summaryTitle =
+          "收入仍在增加，但獲利尚未跟上";
+
+        summaryCopy =
+          `最新一個月收入比去年同期增加 ${monthlyRevenueGrowth.toFixed(1)}%，` +
+          `但最近四季獲利減少 ${Math.abs(incomeChange).toFixed(1)}%。`;
+      } else if (
+        monthlyRevenueGrowth <= 0 &&
+        incomeChange > 0
+      ) {
+        summaryTitle =
+          "獲利仍在增加，但收入正在放慢";
+
+        summaryCopy =
+          `最近四季獲利比一年前增加 ${incomeChange.toFixed(1)}%，` +
+          `但最新一個月收入減少 ${Math.abs(monthlyRevenueGrowth).toFixed(1)}%。`;
+      } else {
+        summaryTitle =
+          "公司的收入和獲利都在減少";
+
+        summaryCopy =
+          `最新一個月收入比去年同期減少 ${Math.abs(monthlyRevenueGrowth).toFixed(1)}%，` +
+          `最近四季獲利也減少 ${Math.abs(incomeChange).toFixed(1)}%。`;
+      }
+    } else {
+      summaryTitle =
+        "公司的成長歷史尚未形成完整比較";
+
+      summaryCopy =
+        "收入年度比較或最近四季獲利仍有一項尚未形成，GC 暫時不判定公司的成長方向。";
+    }
+
+    const basis = [
+      `${revenueMonthCount} 個月收入歷史`,
+      `${revenueComparisonCount} 次年度比較`,
+      `${financialQuarterCount} 季財報`,
+    ];
+
+    if (monthlyRevenueGrowth !== null) {
+      basis.push(
+        `最新單月收入 ${monthlyRevenueGrowth >= 0 ? "+" : ""}${monthlyRevenueGrowth.toFixed(1)}%`
+      );
+    }
+
+    if (incomeChange !== null) {
+      basis.push(
+        `最近四季獲利 ${incomeChange >= 0 ? "+" : ""}${incomeChange.toFixed(1)}%`
+      );
+    }
+
+    summaryBasis =
+      `比較資料：${basis.join("｜")}`;
+  } else if (summaryProfileId === "financial_income") {
+    const financialHistory =
+      report.historical_context?.categories?.financial || {};
+
+
+    const incomeChange =
+      summaryAvailable(financialHistory.income_change_yoy_pct)
+        ? Number(financialHistory.income_change_yoy_pct)
+        : null;
+
+    const currentRoe =
+      summaryAvailable(financialHistory.roe_pct)
+        ? Number(financialHistory.roe_pct)
+        : null;
+
+    const usualRoe =
+      summaryAvailable(financialHistory.historical_roe_median_pct)
+        ? Number(financialHistory.historical_roe_median_pct)
+        : null;
+
+    if (incomeChange !== null && incomeChange <= -5) {
+      summaryTitle = "最近四季獲利比一年前少";
+
+      summaryCopy =
+        `最近四季合計獲利比一年前減少 ${Math.abs(incomeChange).toFixed(1)}%。` +
+        (
+          currentRoe !== null && usualRoe !== null
+            ? `目前每 100 元股東資金約賺回 ${currentRoe.toFixed(1)} 元，` +
+              `低於公司過去常見的 ${usualRoe.toFixed(1)} 元。`
+            : ""
+        );
+    } else if (incomeChange !== null && incomeChange >= 5) {
+      summaryTitle = "最近四季獲利比一年前多";
+
+      summaryCopy =
+        `最近四季合計獲利比一年前增加 ${incomeChange.toFixed(1)}%。` +
+        "GC 會繼續比較這項改善能不能延續。";
+    } else {
+      summaryTitle = "最近四季獲利和一年前接近";
+
+      summaryCopy =
+        "最近四季合計獲利沒有明顯增加或減少，" +
+        "目前經營表現大致維持原來水準。";
+    }
+
+    const financialBasis = [];
+
+    if (currentRoe !== null && usualRoe !== null) {
+      financialBasis.push(
+        `目前每 100 元股東資金約賺回 ${currentRoe.toFixed(1)} 元`
+      );
+      financialBasis.push(
+        `過去常見約 ${usualRoe.toFixed(1)} 元`
+      );
+    }
+
+    if (summaryAvailable(summaryMetrics.dividend_yield_pct)) {
+      financialBasis.push(
+        `目前殖利率 ${Number(summaryMetrics.dividend_yield_pct).toFixed(2)}%`
+      );
+    }
+
+    summaryBasis =
+      financialBasis.length
+        ? `比較資料：${financialBasis.join("｜")}`
+        : "比較資料：公司季度財報與交易所正式資料";
+  } else if (summaryProfileId === "cyclical") {
+    const cyclicalHistory =
+      report.historical_context?.categories || {};
+
+    const cyclicalRevenue =
+      cyclicalHistory.revenue || {};
+
+    const cyclicalFinancial =
+      cyclicalHistory.financial || {};
+
+    const cyclicalPrice =
+      cyclicalHistory.price || {};
+
+    const cyclicalInstitutional =
+      cyclicalHistory.institutional || {};
+
+    const cyclicalRevenueGrowth =
+      summaryAvailable(cyclicalRevenue.year_over_year_pct)
+        ? Number(cyclicalRevenue.year_over_year_pct)
+        : null;
+
+    const cyclicalIncomeChange =
+      summaryAvailable(cyclicalFinancial.income_change_yoy_pct)
+        ? Number(cyclicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const cyclicalPrice30d =
+      summaryAvailable(cyclicalPrice.changes?.["30d_pct"])
+        ? Number(cyclicalPrice.changes["30d_pct"])
+        : null;
+
+    const cyclicalInstitutional20d =
+      summaryAvailable(cyclicalInstitutional.windows?.["20d_net_buy"])
+        ? Number(cyclicalInstitutional.windows["20d_net_buy"])
+        : null;
+
+    const operatingCycleConfirmed =
+      cyclicalRevenueGrowth !== null &&
+      cyclicalIncomeChange !== null &&
+      cyclicalRevenueGrowth > 0 &&
+      cyclicalIncomeChange > 0;
+
+    const marketSignalsPositive =
+      cyclicalPrice30d !== null &&
+      cyclicalPrice30d > 10 &&
+      cyclicalInstitutional20d !== null &&
+      cyclicalInstitutional20d > 0;
+
+    if (operatingCycleConfirmed) {
+      summaryTitle = "收入與獲利一起改善，營運循環正在轉強";
+      summaryCopy =
+        `最新收入比去年同期增加 ${cyclicalRevenueGrowth.toFixed(1)}%，` +
+        `最近四季獲利也增加 ${cyclicalIncomeChange.toFixed(1)}%。` +
+        "收入與獲利同時改善，才支持營運回溫的判斷。";
+    } else if (marketSignalsPositive) {
+      summaryTitle = "股價與法人買盤轉強，但營運循環尚未確認";
+      summaryCopy =
+        `近 30 個交易日股價上漲 ${cyclicalPrice30d.toFixed(1)}%，` +
+        "法人近一個月也買進多於賣出。" +
+        "但收入與獲利尚未一起改善，因此不能把市場轉強直接當成生意回溫。";
+    } else {
+      summaryTitle = "目前還不能確認公司的營運循環已經轉強";
+      summaryCopy =
+        "目前沒有看到收入與獲利一起改善，GC 不會只靠股價或單一指標判定景氣回溫。";
+    }
+
+    const cyclicalBasis = [];
+
+    if (cyclicalPrice30d !== null) {
+      cyclicalBasis.push(
+        `近 30 日股價變化 ${cyclicalPrice30d.toFixed(1)}%`
+      );
+    }
+
+    if (summaryAvailable(cyclicalInstitutional.percentile_20d)) {
+      cyclicalBasis.push(
+        `法人近 20 日買賣位於自身歷史第 ${Number(cyclicalInstitutional.percentile_20d).toFixed(1)} 百分位`
+      );
+    }
+
+    cyclicalBasis.push(
+      `營收年度比較 ${Number(cyclicalRevenue.yoy_sample_count || 0)} 次`
+    );
+
+    summaryBasis =
+      `比較資料：${cyclicalBasis.join("｜")}`;
+  } else if (summaryProfileId === "high_volatility_event") {
+    const eventHistoricalCategories =
+      report.historical_context?.categories || {};
+
+    const eventHistoricalRevenue =
+      eventHistoricalCategories.revenue || {};
+
+    const eventHistoricalFinancial =
+      eventHistoricalCategories.financial || {};
+
+    const eventRevenueGrowth =
+      summaryAvailable(eventHistoricalRevenue.year_over_year_pct)
+        ? Number(eventHistoricalRevenue.year_over_year_pct)
+        : null;
+
+    const eventIncomeChange =
+      summaryAvailable(eventHistoricalFinancial.income_change_yoy_pct)
+        ? Number(eventHistoricalFinancial.income_change_yoy_pct)
+        : null;
+
+    const confirmedEventCount =
+      Number(summaryMetrics.confirmed_company_event_count || 0);
+
+    const eventRevenueMonths =
+      Number(eventHistoricalRevenue.sample_count || 0);
+
+    const eventRevenueComparisons =
+      Number(eventHistoricalRevenue.yoy_sample_count || 0);
+
+    const eventFinancialQuarters =
+      Number(eventHistoricalFinancial.quarter_sample_count || 0);
+
+    if (
+      eventRevenueGrowth !== null &&
+      eventIncomeChange !== null
+    ) {
+      if (
+        eventRevenueGrowth > 0 &&
+        eventIncomeChange > 0
+      ) {
+        summaryTitle =
+          confirmedEventCount > 0
+            ? "重要事件出現後，收入與獲利都在改善"
+            : "收入與獲利都在改善，目前沒有新的重大事件";
+
+        summaryCopy =
+          `最新一個月收入比去年同期增加 ${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利也增加 ${eventIncomeChange.toFixed(1)}%。` +
+          (
+            confirmedEventCount > 0
+              ? `目前另有 ${confirmedEventCount} 項重要公司事件需要持續追蹤。`
+              : "目前的改善主要來自實際營運資料，不是單一消息。"
+          );
+      } else if (
+        eventRevenueGrowth > 0 &&
+        eventIncomeChange <= 0
+      ) {
+        summaryTitle =
+          "收入增加，但獲利尚未同步改善";
+
+        summaryCopy =
+          `最新一個月收入增加 ${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%。` +
+          (
+            confirmedEventCount > 0
+              ? `目前有 ${confirmedEventCount} 項重要事件，但尚未看到獲利同步改善。`
+              : "目前沒有新的重大事件足以改變這項營運判斷。"
+          );
+      } else if (
+        eventRevenueGrowth <= 0 &&
+        eventIncomeChange > 0
+      ) {
+        summaryTitle =
+          "獲利改善，但收入尚未回升";
+
+        summaryCopy =
+          `最近四季獲利增加 ${eventIncomeChange.toFixed(1)}%，` +
+          `但最新一個月收入變化 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%。`;
+      } else {
+        summaryTitle =
+          confirmedEventCount > 0
+            ? "重要事件尚未帶動收入與獲利改善"
+            : "目前沒有重大事件，收入與獲利也尚未改善";
+
+        summaryCopy =
+          `最新一個月收入變化 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%。` +
+          "GC 不會只靠股價或消息判定公司的營運已經轉好。";
+      }
+    } else {
+      summaryTitle =
+        confirmedEventCount > 0
+          ? "有重要公司事件，但營運影響尚未形成完整比較"
+          : "目前沒有新的重大事件";
+
+      summaryCopy =
+        "收入年度比較或最近四季獲利仍有一項尚未形成，因此目前只描述已確認事件，不推測事件已改善營運。";
+    }
+
+    summaryBasis =
+      `比較資料：${eventRevenueMonths} 個月收入歷史｜` +
+      `${eventRevenueComparisons} 次年度比較｜` +
+      `${eventFinancialQuarters} 季財報｜` +
+      `${confirmedEventCount} 項確認公司事件`;  } else {
+    summaryTitle =
+      Number(report.score) >= 75
+        ? "公司目前的整體狀況不錯"
+        : Number(report.score) >= 55
+          ? "公司目前的整體狀況還算穩定"
+          : "公司目前有幾個地方需要注意";
+
+    summaryCopy =
+      "GC 已整理公司的收入、獲利、股價與重要消息，並依目前資料判斷公司的整體狀況。";
+
+    summaryBasis =
+      `判斷依據：公司財務、股價與公開消息｜綜合分數 ${Number(report.score).toFixed(1)}`;
+  }
+
+  $("researchLabel").textContent = "GC 整理後的結果";
+  $("summary").textContent = summaryTitle;
+
+  $("incomeDecision").classList.add("hidden");
+  $("heldDecision").textContent = "";
+
+  $("summaryNote").textContent = summaryCopy;
+
+  if ($("summaryBasis")) {
+    $("summaryBasis").textContent = summaryBasis;
+  }
+
   const confidenceValue = Math.min(100, Math.max(0, Number(report.confidence) || 0));
   const riskValue = Math.min(100, Math.max(0, Number(report.risk) || 0));
 
@@ -330,6 +789,8 @@ function render(report) {
     String(Math.round(riskValue))
   );
 
+  renderGuidedCore(report);
+
   $("updated").textContent = report.updated;
   $("priceDate").textContent = report.updated && report.updated !== "—"
     ? `資料日期 ${report.updated}`
@@ -345,6 +806,7 @@ function render(report) {
   renderEvidence(report);
   renderHistory(report.score_history || []);
   renderSources(report.data_sources || []);
+  renderProResearch(report);
   refreshSavedButton();
   if (stockCatalog.length) renderStockCenter();
 }
@@ -392,73 +854,3200 @@ function comparisonValues(items) {
   return `<dl class="comparison-values">${items.map((item) => `<div><dt>${escapeHtml(item.label)}</dt><dd>${escapeHtml(item.value)}</dd></div>`).join("")}</dl>`;
 }
 
+function renderGuidedCore(report) {
+  if (!$("guidedHealth")) return;
+
+  const clamp = (value) =>
+    Math.min(100, Math.max(0, Number(value) || 0));
+
+  const score = clamp(report.score);
+  const risk = clamp(report.risk);
+  const confidence = clamp(report.confidence);
+
+  const profile = stockDecisionProfile(report);
+  const profileId =
+    report.stock_profile?.profile_id ||
+    report.stock_profile?.id ||
+    "default";
+
+  const metrics = profile?.metrics || {};
+
+  const historicalCategories =
+    report.historical_context?.categories || {};
+
+  const historicalPrice =
+    historicalCategories.price || {};
+
+  const historicalRevenue =
+    historicalCategories.revenue || {};
+
+  const historicalFinancial =
+    historicalCategories.financial || {};
+  const historicalInstitutional =
+    historicalCategories.institutional || {};
+
+  const historicalMargin =
+    historicalCategories.margin || {};
+
+  const historicalDividend =
+    historicalCategories.dividend || {};
+
+  const available = (value) =>
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    Number.isFinite(Number(value));
+
+  const percent = (value) =>
+    available(value) ? `${Number(value).toFixed(1)}%` : null;
+
+  const number = (value, digits = 2) =>
+    available(value) ? Number(value).toFixed(digits) : null;
+
+  const history = (
+    Array.isArray(report.score_history)
+      ? report.score_history
+      : []
+  )
+    .map((item) => Number(item.score))
+    .filter(Number.isFinite);
+
+  const change =
+    history.length > 1
+      ? history[history.length - 1] - history[0]
+      : null;
+
+  const revenueGrowth = percent(metrics.revenue_yoy_pct);
+  const epsGrowth = percent(metrics.eps_growth_yoy_pct);
+  const sectorRank = available(metrics.sector_rank)
+    ? Number(metrics.sector_rank)
+    : null;
+  const sectorCount = available(metrics.sector_peer_count)
+    ? Number(metrics.sector_peer_count)
+    : null;
+  const marketLead = number(metrics.relative_market_pct_point, 2);
+  const peRatio = number(metrics.pe_ratio, 2);
+
+  let healthTitle = "";
+  let healthCopy = "";
+  let healthBasis = "";
+
+  if (profileId === "growth_quality") {
+    const growthRevenueChange =
+      available(historicalRevenue.year_over_year_pct)
+        ? Number(historicalRevenue.year_over_year_pct)
+        : null;
+
+    const growthIncomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    if (
+      growthRevenueChange !== null &&
+      growthIncomeChange !== null
+    ) {
+      if (
+        growthRevenueChange > 0 &&
+        growthIncomeChange > 0
+      ) {
+        healthTitle =
+          "收入與獲利都比一年前增加";
+
+        healthCopy =
+          `最新一個月收入增加 ${growthRevenueChange.toFixed(1)}%，` +
+          `最近四季獲利也增加 ${growthIncomeChange.toFixed(1)}%。` +
+          "兩項營運資料同時成長。";
+      } else if (
+        growthRevenueChange > 0 &&
+        growthIncomeChange <= 0
+      ) {
+        healthTitle =
+          "收入增加，但獲利尚未跟上";
+
+        healthCopy =
+          `最新一個月收入增加 ${growthRevenueChange.toFixed(1)}%，` +
+          `但最近四季獲利減少 ${Math.abs(growthIncomeChange).toFixed(1)}%。`;
+      } else if (
+        growthRevenueChange <= 0 &&
+        growthIncomeChange > 0
+      ) {
+        healthTitle =
+          "獲利增加，但收入正在放慢";
+
+        healthCopy =
+          `最近四季獲利增加 ${growthIncomeChange.toFixed(1)}%，` +
+          `但最新一個月收入減少 ${Math.abs(growthRevenueChange).toFixed(1)}%。`;
+      } else {
+        healthTitle =
+          "收入與獲利都比一年前減少";
+
+        healthCopy =
+          `最新一個月收入減少 ${Math.abs(growthRevenueChange).toFixed(1)}%，` +
+          `最近四季獲利也減少 ${Math.abs(growthIncomeChange).toFixed(1)}%。`;
+      }
+    } else {
+      healthTitle =
+        "成長歷史尚未形成完整比較";
+
+      healthCopy =
+        "收入年度比較或最近四季獲利仍有一項尚未形成，因此暫時不判定成長方向。";
+    }
+
+    const growthHealthFacts = [
+      `${Number(historicalRevenue.sample_count || 0)} 個月收入歷史`,
+      `${Number(historicalRevenue.yoy_sample_count || 0)} 次年度比較`,
+      `${Number(historicalFinancial.quarter_sample_count || 0)} 季財報`,
+    ];
+
+    healthBasis =
+      `比較資料：${growthHealthFacts.join("｜")}`;
+  } else if (profileId === "financial_income") {
+    const incomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const currentRoe =
+      available(historicalFinancial.roe_pct)
+        ? Number(historicalFinancial.roe_pct)
+        : null;
+
+    const usualRoe =
+      available(historicalFinancial.historical_roe_median_pct)
+        ? Number(historicalFinancial.historical_roe_median_pct)
+        : null;
+
+    if (incomeChange !== null && incomeChange <= -5) {
+      healthTitle = "最近四季獲利比一年前少";
+
+      healthCopy =
+        `最近四季合計獲利比一年前減少 ${Math.abs(incomeChange).toFixed(1)}%。` +
+        (
+          currentRoe !== null && usualRoe !== null
+            ? `目前用股東資金賺錢的效率，也低於公司過去常見水準。`
+            : ""
+        );
+    } else if (incomeChange !== null && incomeChange >= 5) {
+      healthTitle = "最近四季獲利比一年前多";
+
+      healthCopy =
+        `最近四季合計獲利比一年前增加 ${incomeChange.toFixed(1)}%，` +
+        "目前賺錢能力正在改善。";
+    } else {
+      healthTitle = "最近四季獲利大致穩定";
+
+      healthCopy =
+        "最近四季合計獲利和一年前接近，沒有明顯增加或減少。";
+    }
+
+    const financialFacts = [];
+
+    if (currentRoe !== null) {
+      financialFacts.push(
+        `目前每 100 元股東資金約賺回 ${currentRoe.toFixed(1)} 元`
+      );
+    }
+
+    if (usualRoe !== null) {
+      financialFacts.push(
+        `過去常見約 ${usualRoe.toFixed(1)} 元`
+      );
+    }
+
+    if (available(historicalFinancial.quarter_sample_count)) {
+      financialFacts.push(
+        `${Number(historicalFinancial.quarter_sample_count)} 季財報`
+      );
+    }
+
+    healthBasis =
+      financialFacts.length
+        ? `比較資料：${financialFacts.join("｜")}`
+        : "比較資料：公司季度財務報告";
+  } else if (profileId === "cyclical") {
+    const cyclicalRevenueGrowth =
+      available(historicalRevenue.year_over_year_pct)
+        ? Number(historicalRevenue.year_over_year_pct)
+        : null;
+
+    const cyclicalIncomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    if (
+      cyclicalRevenueGrowth === null ||
+      cyclicalIncomeChange === null
+    ) {
+      healthTitle = "營運歷史尚未形成完整比較";
+      healthCopy =
+        "目前收入年度比較或最近四季獲利仍有一項尚未形成。" +
+        "因此 GC 不會只靠股價或法人買盤判定生意回溫。";
+    } else if (
+      cyclicalRevenueGrowth > 0 &&
+      cyclicalIncomeChange > 0
+    ) {
+      healthTitle = "收入與獲利一起改善";
+      healthCopy =
+        `最新收入比去年同期增加 ${cyclicalRevenueGrowth.toFixed(1)}%，` +
+        `最近四季獲利增加 ${cyclicalIncomeChange.toFixed(1)}%。` +
+        "兩項營運資料同時改善，支持營運循環正在回溫。";
+    } else if (
+      cyclicalRevenueGrowth > 0 &&
+      cyclicalIncomeChange <= 0
+    ) {
+      healthTitle = "收入增加，但獲利尚未跟上";
+      healthCopy =
+        `最新收入比去年同期增加 ${cyclicalRevenueGrowth.toFixed(1)}%，` +
+        `但最近四季獲利比一年前減少 ${Math.abs(cyclicalIncomeChange).toFixed(1)}%。` +
+        "生意規模正在增加，但獲利尚未同步改善，因此還不能確認營運回溫。";
+    } else if (
+      cyclicalRevenueGrowth <= 0 &&
+      cyclicalIncomeChange > 0
+    ) {
+      healthTitle = "獲利改善，但收入尚未回升";
+      healthCopy =
+        `最近四季獲利比一年前增加 ${cyclicalIncomeChange.toFixed(1)}%，` +
+        `但最新收入比去年同期減少 ${Math.abs(cyclicalRevenueGrowth).toFixed(1)}%。` +
+        "獲利已有改善，但生意規模尚未一起回升。";
+    } else {
+      healthTitle = "收入與獲利都還沒有回升";
+      healthCopy =
+        `最新收入比去年同期減少 ${Math.abs(cyclicalRevenueGrowth).toFixed(1)}%，` +
+        `最近四季獲利比一年前減少 ${Math.abs(cyclicalIncomeChange).toFixed(1)}%。` +
+        "兩項營運資料都尚未支持景氣回溫。";
+    }
+
+    const cyclicalHealthFacts = [
+      `${Number(historicalRevenue.sample_count || 0)} 個月收入歷史資料`,
+      `${Number(historicalRevenue.yoy_sample_count || 0)} 次年度比較`,
+    ];
+
+    if (available(historicalFinancial.quarter_sample_count)) {
+      cyclicalHealthFacts.push(
+        `${Number(historicalFinancial.quarter_sample_count)} 季財報資料`
+      );
+    } else {
+      cyclicalHealthFacts.push("財報歷史尚未形成比較");
+    }
+
+    healthBasis =
+      `比較資料：${cyclicalHealthFacts.join("｜")}`;
+  } else if (profileId === "high_volatility_event") {
+    const eventRevenueGrowth =
+      available(historicalRevenue.year_over_year_pct)
+        ? Number(historicalRevenue.year_over_year_pct)
+        : null;
+
+    const eventIncomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const confirmedEventCount =
+      Number(metrics.confirmed_company_event_count || 0);
+
+    if (
+      eventRevenueGrowth !== null &&
+      eventIncomeChange !== null
+    ) {
+      if (
+        eventRevenueGrowth > 0 &&
+        eventIncomeChange > 0
+      ) {
+        healthTitle =
+          "收入與獲利都比一年前增加";
+
+        healthCopy =
+          `最新一個月收入增加 ${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利也增加 ${eventIncomeChange.toFixed(1)}%。` +
+          "這項改善有實際營運資料支持，不只來自股價或消息。";
+      } else if (
+        eventRevenueGrowth > 0 &&
+        eventIncomeChange <= 0
+      ) {
+        healthTitle =
+          "收入增加，但獲利尚未跟上";
+
+        healthCopy =
+          `最新一個月收入增加 ${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%。`;
+      } else if (
+        eventRevenueGrowth <= 0 &&
+        eventIncomeChange > 0
+      ) {
+        healthTitle =
+          "獲利增加，但收入尚未回升";
+
+        healthCopy =
+          `最近四季獲利增加 ${eventIncomeChange.toFixed(1)}%，` +
+          `最新一個月收入變化 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%。`;
+      } else {
+        healthTitle =
+          "收入與獲利都尚未改善";
+
+        healthCopy =
+          `最新一個月收入變化 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%。`;
+      }
+
+      if (confirmedEventCount > 0) {
+        healthCopy +=
+          ` 目前另有 ${confirmedEventCount} 項重要公司事件需要追蹤，` +
+          "但事件本身不能取代營運證據。";
+      } else {
+        healthCopy +=
+          " 目前沒有新的重大公司事件改變這項判斷。";
+      }
+    } else {
+      healthTitle =
+        confirmedEventCount > 0
+          ? "重要事件的營運影響尚未形成完整比較"
+          : "目前沒有新的重大公司事件";
+
+      healthCopy =
+        "GC 只呈現已確認的公司事件；收入或獲利比較尚未形成時，不推測事件已經改變營運。";
+    }
+
+    healthBasis =
+      `比較資料：${Number(historicalRevenue.sample_count || 0)} 個月收入歷史｜` +
+      `${Number(historicalRevenue.yoy_sample_count || 0)} 次年度比較｜` +
+      `${Number(historicalFinancial.quarter_sample_count || 0)} 季財報｜` +
+      `${confirmedEventCount} 項確認公司事件`;
+  } else {
+    healthTitle =
+      score >= 75
+        ? "公司目前的狀況不錯"
+        : score >= 55
+          ? "公司目前的狀況還算穩定"
+          : "公司目前有幾個地方需要注意";
+
+    healthCopy =
+      score >= 75
+        ? "目前多數資料沒有出現明顯轉弱。"
+        : score >= 55
+          ? "目前有些表現不錯，也有部分狀況需要留意。"
+          : "目前較弱的地方比較多，整體狀況不像之前穩定。";
+
+    healthBasis =
+      `比較資料：收入、獲利、股價與公司消息｜綜合分數 ${score.toFixed(1)}`;
+  }
+
+  if (change != null && Math.abs(change) >= 1) {
+    healthCopy +=
+      change > 0
+        ? " 和前一段時間相比，整體表現正在變好。"
+        : " 和前一段時間相比，整體表現有些轉弱。";
+
+    healthBasis +=
+      `｜近期變化 ${change > 0 ? "+" : ""}${change.toFixed(1)} 分`;
+  }
+
+  if (
+    profileId === "growth_quality" &&
+    historicalRevenue.status === "available" &&
+    available(historicalRevenue.year_over_year_pct)
+  ) {
+    const latestRevenueGrowth =
+      Number(historicalRevenue.year_over_year_pct);
+
+    const usualRevenueGrowth =
+      available(historicalRevenue.historical_yoy_median_pct)
+        ? Number(historicalRevenue.historical_yoy_median_pct)
+        : null;
+
+    if (usualRevenueGrowth !== null) {
+      if (latestRevenueGrowth > usualRevenueGrowth + 5) {
+        healthCopy +=
+          ` 目前收入成長速度也明顯高於過去常見的 ${usualRevenueGrowth.toFixed(1)}%。`;
+      } else if (
+        latestRevenueGrowth >= usualRevenueGrowth - 5
+      ) {
+        healthCopy +=
+          ` 目前收入變化接近過去常見的 ${usualRevenueGrowth.toFixed(1)}%。`;
+      } else {
+        healthCopy +=
+          ` 目前收入變化低於過去常見的 ${usualRevenueGrowth.toFixed(1)}%。`;
+      }
+
+      healthBasis +=
+        `｜過去收入典型增幅 ${usualRevenueGrowth.toFixed(1)}%`;
+    }
+  }
+  $("guidedHealthTone").textContent = "公司最近表現";
+  $("guidedHealth").textContent = healthTitle;
+  $("guidedHealthCopy").textContent = healthCopy;
+  $("guidedHealthScore").textContent = healthBasis;
+
+  let riskTitle = "";
+  let riskCopy = "";
+  const riskFacts = [];
+
+  if (
+    sectorRank !== null &&
+    sectorCount !== null &&
+    sectorCount > 0 &&
+    sectorRank <= Math.ceil(sectorCount / 2)
+  ) {
+    riskTitle = "最近股價表現比較強";
+    riskCopy =
+      "最近的股價比大盤和不少同類公司漲得更快。股價漲得快不代表公司突然變得更會賺錢，GC 會繼續比較兩者的變化。";
+
+    riskFacts.push(`近 20 日同組第 ${sectorRank}/${sectorCount} 名`);
+
+    if (marketLead !== null) {
+      riskFacts.push(`比大盤多漲 ${marketLead} 個百分點`);
+    }
+  } else if (risk >= 65) {
+    riskTitle = "目前有幾個明顯風險";
+    riskCopy =
+      "最近同時出現多項不利變化，短期內股價更容易出現較大的起伏。";
+  } else if (risk >= 40) {
+    riskTitle = "目前有幾個地方需要小心";
+    riskCopy =
+      "現在有一些不利因素，但還沒有看到公司的整體狀況全面轉差。";
+  } else {
+    riskTitle = "目前沒有特別突出的風險";
+    riskCopy =
+      "現有資料沒有顯示風險明顯升高，但 GC 仍會持續檢查新的公司與市場變化。";
+  }
+
+
+  riskFacts.push(`風險程度 ${Math.round(risk)}/100`);
+
+  const price90d =
+    available(historicalPrice.changes?.["90d_pct"])
+      ? Number(historicalPrice.changes["90d_pct"])
+      : null;
+
+  const institutional20d =
+    available(
+      historicalInstitutional.windows?.["20d_net_buy"]
+    )
+      ? Number(
+          historicalInstitutional.windows["20d_net_buy"]
+        )
+      : null;
+
+  const institutionalPercentile =
+    available(historicalInstitutional.percentile_20d)
+      ? Number(historicalInstitutional.percentile_20d)
+      : null;
+
+  const margin20d =
+    available(historicalMargin.changes?.["20d_pct"])
+      ? Number(historicalMargin.changes["20d_pct"])
+      : null;
+
+  const guidedDividendYears =
+    available(historicalDividend.consecutive_dividend_years)
+      ? Number(historicalDividend.consecutive_dividend_years)
+      : null;
+
+  const guidedLatestCashDividend =
+    available(historicalDividend.latest_cash_dividend)
+      ? Number(historicalDividend.latest_cash_dividend)
+      : null;
+
+  const guidedFiveYearDividendAverage =
+    available(historicalDividend.average_cash_dividend_5y)
+      ? Number(historicalDividend.average_cash_dividend_5y)
+      : null;
+
+  const guidedDividendFreshness =
+    String(historicalDividend.dividend_freshness || "");
+
+  const guidedDividendType =
+    String(historicalDividend.latest_dividend_type || "");
+
+  const guidedLatestDividendYear =
+    available(historicalDividend.latest_dividend_year)
+      ? Number(historicalDividend.latest_dividend_year)
+      : null;
+
+  const guidedLatestStockDividend =
+    available(historicalDividend.latest_stock_dividend)
+      ? Number(historicalDividend.latest_stock_dividend)
+      : null;
+
+  if (
+    price90d !== null &&
+    price90d > 10 &&
+    institutional20d !== null &&
+    institutional20d < 0
+  ) {
+    riskTitle =
+      "股價漲得快，法人沒有跟著買";
+
+    riskCopy =
+      `近 90 個交易日股價上漲 ${price90d.toFixed(1)}%，` +
+      "但法人近一個月略偏向賣出。";
+
+    if (
+      institutionalPercentile !== null &&
+      institutionalPercentile >= 35 &&
+      institutionalPercentile <= 65
+    ) {
+      riskCopy +=
+        " 這個程度仍接近過去常態。";
+    }
+  } else if (price90d !== null) {
+    riskFacts.push(
+      `近 90 個交易日股價` +
+      `${price90d >= 0 ? "上漲" : "下跌"} ` +
+      `${Math.abs(price90d).toFixed(1)}%`
+    );
+  }
+
+  if (institutional20d !== null) {
+    riskFacts.push(
+      `法人近一個月` +
+      `${institutional20d >= 0 ? "買進較多" : "賣出較多"}`
+    );
+  }
+
+  if (margin20d !== null) {
+    riskFacts.push(
+      `借錢買股票的部位近一個月` +
+      `${margin20d >= 0 ? "增加" : "減少"} ` +
+      `${Math.abs(margin20d).toFixed(1)}%`
+    );
+
+    if (margin20d < -10) {
+      riskCopy +=
+        " 借錢買股票的部位也在減少，短期追價的人比之前少。";
+    }
+  }
+
+  if (profileId === "growth_quality") {
+    const growthRiskRevenueChange =
+      available(historicalRevenue.year_over_year_pct)
+        ? Number(historicalRevenue.year_over_year_pct)
+        : null;
+
+    const growthRiskIncomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const growthRiskPrice30d =
+      available(historicalPrice.changes?.["30d_pct"])
+        ? Number(historicalPrice.changes["30d_pct"])
+        : null;
+
+    const growthRiskPrice90d =
+      available(historicalPrice.changes?.["90d_pct"])
+        ? Number(historicalPrice.changes["90d_pct"])
+        : null;
+
+    const growthOperatingAvailable =
+      growthRiskRevenueChange !== null &&
+      growthRiskIncomeChange !== null;
+
+    if (!growthOperatingAvailable) {
+      riskTitle =
+        "成長比較尚未形成完整結果";
+
+      riskCopy =
+        "收入年度比較或最近四季獲利仍有一項尚未形成，" +
+        "因此目前不直接判定公司的成長方向。";
+    } else if (
+      growthRiskRevenueChange > 0 &&
+      growthRiskIncomeChange > 0
+    ) {
+      if (
+        growthRiskPrice30d !== null &&
+        growthRiskPrice30d <= -10
+      ) {
+        riskTitle =
+          "營運仍在成長，但近期股價明顯回檔";
+
+        riskCopy =
+          `收入比去年同期增加 ${growthRiskRevenueChange.toFixed(1)}%，` +
+          `最近四季獲利增加 ${growthRiskIncomeChange.toFixed(1)}%，` +
+          `但近 30 個交易日股價下跌 ${Math.abs(growthRiskPrice30d).toFixed(1)}%。`;
+
+        if (
+          growthRiskPrice90d !== null &&
+          growthRiskPrice90d >= 30
+        ) {
+          riskCopy +=
+            ` 雖然近 90 個交易日仍上漲 ${growthRiskPrice90d.toFixed(1)}%，` +
+            "但近期價格已開始回落。";
+        }
+
+        riskCopy +=
+          "營運與短期市場方向不同，仍要確認回檔是否只是價格修正。";
+      } else if (
+        growthRiskPrice30d !== null &&
+        growthRiskPrice30d >= 15
+      ) {
+        riskTitle =
+          "營運正在成長，但股價也漲得很快";
+
+        riskCopy =
+          `收入比去年同期增加 ${growthRiskRevenueChange.toFixed(1)}%，` +
+          `最近四季獲利增加 ${growthRiskIncomeChange.toFixed(1)}%，` +
+          `近 30 個交易日股價上漲 ${growthRiskPrice30d.toFixed(1)}%。` +
+          "目前股價與營運方向一致，但短期漲幅可能已反映部分成長期待。";
+      } else if (
+        growthRiskPrice90d !== null &&
+        growthRiskPrice90d >= 50
+      ) {
+        riskTitle =
+          "營運仍在成長，但中期股價漲幅已大";
+
+        riskCopy =
+          `收入比去年同期增加 ${growthRiskRevenueChange.toFixed(1)}%，` +
+          `最近四季獲利增加 ${growthRiskIncomeChange.toFixed(1)}%，` +
+          `近 90 個交易日股價上漲 ${growthRiskPrice90d.toFixed(1)}%。` +
+          "成長有營運資料支持，但仍要確認後續獲利能否跟上市場期待。";
+      } else {
+        riskTitle =
+          "營運仍在成長，主要風險是成長能否延續";
+
+        riskCopy =
+          `收入比去年同期增加 ${growthRiskRevenueChange.toFixed(1)}%，` +
+          `最近四季獲利增加 ${growthRiskIncomeChange.toFixed(1)}%。`;
+
+        if (growthRiskPrice30d !== null) {
+          riskCopy +=
+            ` 近 30 個交易日股價` +
+            `${growthRiskPrice30d >= 0 ? "上漲" : "下跌"} ` +
+            `${Math.abs(growthRiskPrice30d).toFixed(1)}%。`;
+        }
+
+        riskCopy +=
+          "目前沒有明顯的價格先行問題，後續要確認收入與獲利是否持續成長。";
+      }
+    } else if (
+      growthRiskRevenueChange > 0 &&
+      growthRiskIncomeChange <= 0
+    ) {
+      riskTitle =
+        growthRiskPrice30d !== null &&
+        growthRiskPrice30d >= 10
+          ? "股價正在上漲，但獲利尚未跟上"
+          : "收入增加，但獲利正在減少";
+
+      riskCopy =
+        `收入比去年同期增加 ${growthRiskRevenueChange.toFixed(1)}%，` +
+        `但最近四季獲利減少 ${Math.abs(growthRiskIncomeChange).toFixed(1)}%。`;
+
+      if (growthRiskPrice30d !== null) {
+        riskCopy +=
+          ` 近 30 個交易日股價` +
+          `${growthRiskPrice30d >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(growthRiskPrice30d).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "目前收入規模成長，但還不能確認成長已經轉化成更多獲利。";
+    } else if (
+      growthRiskRevenueChange <= 0 &&
+      growthRiskIncomeChange > 0
+    ) {
+      riskTitle =
+        "獲利增加，但收入成長已經轉弱";
+
+      riskCopy =
+        `最近四季獲利增加 ${growthRiskIncomeChange.toFixed(1)}%，` +
+        `但收入比去年同期減少 ${Math.abs(growthRiskRevenueChange).toFixed(1)}%。` +
+        "獲利可能受到成本或比較基期影響，仍要確認收入能否重新成長。";
+    } else {
+      riskTitle =
+        "收入與獲利都在減少";
+
+      riskCopy =
+        `收入比去年同期減少 ${Math.abs(growthRiskRevenueChange).toFixed(1)}%，` +
+        `最近四季獲利減少 ${Math.abs(growthRiskIncomeChange).toFixed(1)}%。`;
+
+      if (
+        growthRiskPrice90d !== null &&
+        growthRiskPrice90d >= 30
+      ) {
+        riskCopy +=
+          ` 但近 90 個交易日股價仍上漲 ${growthRiskPrice90d.toFixed(1)}%，` +
+          "目前價格方向與營運變化不一致。";
+      } else if (growthRiskPrice30d !== null) {
+        riskCopy +=
+          ` 近 30 個交易日股價` +
+          `${growthRiskPrice30d >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(growthRiskPrice30d).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "目前營運資料尚未支持成長仍在延續。";
+    }
+
+    if (
+      institutional20d !== null &&
+      institutional20d < 0
+    ) {
+      riskCopy +=
+        " 法人近一個月賣出多於買進，短期市場資金也偏弱。";
+    } else if (
+      institutional20d !== null &&
+      institutional20d > 0
+    ) {
+      riskCopy +=
+        " 法人近一個月買進多於賣出，但市場買盤不能取代獲利成長。";
+    }
+
+    if (
+      margin20d !== null &&
+      margin20d >= 20
+    ) {
+      riskCopy +=
+        ` 借錢買股票的部位增加 ${margin20d.toFixed(1)}%，` +
+        "需要留意短期追價壓力。";
+    }
+
+    if (growthRiskPrice30d !== null) {
+      riskFacts.push(
+        `近 30 日股價 ` +
+        `${growthRiskPrice30d >= 0 ? "+" : ""}` +
+        `${growthRiskPrice30d.toFixed(1)}%`
+      );
+    }
+
+    if (growthRiskRevenueChange !== null) {
+      riskFacts.push(
+        `收入年變化 ` +
+        `${growthRiskRevenueChange >= 0 ? "+" : ""}` +
+        `${growthRiskRevenueChange.toFixed(1)}%`
+      );
+    }
+
+    if (growthRiskIncomeChange !== null) {
+      riskFacts.push(
+        `最近四季獲利 ` +
+        `${growthRiskIncomeChange >= 0 ? "+" : ""}` +
+        `${growthRiskIncomeChange.toFixed(1)}%`
+      );
+    }
+  }
+  if (profileId === "high_volatility_event") {
+    const eventVolatility20d =
+      available(historicalPrice.volatility_20d_pct)
+        ? Number(historicalPrice.volatility_20d_pct)
+        : (
+            available(metrics.volatility_20d_pct)
+              ? Number(metrics.volatility_20d_pct)
+              : null
+          );
+
+    const eventAtr14 =
+      available(metrics.atr_14_pct)
+        ? Number(metrics.atr_14_pct)
+        : null;
+
+    const eventPrice30d =
+      available(historicalPrice.changes?.["30d_pct"])
+        ? Number(historicalPrice.changes["30d_pct"])
+        : null;
+
+    const eventPrice90d =
+      available(historicalPrice.changes?.["90d_pct"])
+        ? Number(historicalPrice.changes["90d_pct"])
+        : null;
+
+    const eventPriceChange =
+      eventPrice30d !== null
+        ? eventPrice30d
+        : eventPrice90d;
+
+    const eventPriceWindow =
+      eventPrice30d !== null
+        ? "近 30 個交易日"
+        : "近 90 個交易日";
+
+    const confirmedEventCount =
+      Number(metrics.confirmed_company_event_count || 0);
+
+    if (
+      eventVolatility20d !== null &&
+      eventVolatility20d >= 50
+    ) {
+      riskTitle =
+        eventPriceChange !== null &&
+        eventPriceChange >= 10
+          ? "股價上漲很快，也可能快速回吐"
+          : eventPriceChange !== null &&
+              eventPriceChange <= -10
+            ? "股價起伏很大，近期跌幅也較明顯"
+            : "股價起伏很大，短期可能快速反轉";
+
+      riskCopy =
+        `依最近 20 個交易日價格換算，股價波動程度約 ${eventVolatility20d.toFixed(1)}%。`;
+
+      if (eventPriceChange !== null) {
+        riskCopy +=
+          ` ${eventPriceWindow}股價` +
+          `${eventPriceChange >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(eventPriceChange).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "即使營運方向判斷正確，短期價格仍可能出現明顯反向變化。";
+    } else if (
+      eventVolatility20d !== null &&
+      eventVolatility20d >= 35
+    ) {
+      riskTitle =
+        "股價起伏偏大，仍要留意短期反轉";
+
+      riskCopy =
+        `最近 20 個交易日的波動程度約 ${eventVolatility20d.toFixed(1)}%。`;
+
+      if (eventPriceChange !== null) {
+        riskCopy +=
+          ` ${eventPriceWindow}股價` +
+          `${eventPriceChange >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(eventPriceChange).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "價格變化仍可能快於公司的營運變化。";
+    } else if (
+      eventPriceChange !== null &&
+      Math.abs(eventPriceChange) >= 10
+    ) {
+      riskTitle =
+        eventPriceChange >= 0
+          ? "近期股價上漲較快"
+          : "近期股價下跌較多";
+
+      riskCopy =
+        `${eventPriceWindow}股價` +
+        `${eventPriceChange >= 0 ? "上漲" : "下跌"} ` +
+        `${Math.abs(eventPriceChange).toFixed(1)}%。` +
+        "這是市場價格變化，不代表公司的營運已經同步改變。";
+    } else if (
+      institutional20d !== null &&
+      institutional20d < 0 &&
+      margin20d !== null &&
+      margin20d > 0
+    ) {
+      riskTitle =
+        "法人偏向賣出，融資部位卻在增加";
+
+      riskCopy =
+        "法人近一個月賣出多於買進，" +
+        `但借錢買股票的部位增加 ${Math.abs(margin20d).toFixed(1)}%。` +
+        "市場資金方向不一致，需要留意短期承接力道。";
+    } else {
+      riskTitle =
+        "目前價格沒有出現明顯的極端變化";
+
+      riskCopy =
+        eventVolatility20d !== null
+          ? `最近 20 個交易日的波動程度約 ${eventVolatility20d.toFixed(1)}%。`
+          : "目前可用的價格資料沒有顯示極端波動。";
+
+      if (eventPriceChange !== null) {
+        riskCopy +=
+          ` ${eventPriceWindow}股價` +
+          `${eventPriceChange >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(eventPriceChange).toFixed(1)}%。`;
+      }
+    }
+
+    if (institutional20d !== null) {
+      riskCopy +=
+        ` 法人近一個月` +
+        `${institutional20d >= 0 ? "買進多於賣出" : "賣出多於買進"}。`;
+    }
+
+    if (margin20d !== null) {
+      riskCopy +=
+        ` 借錢買股票的部位近一個月` +
+        `${margin20d >= 0 ? "增加" : "減少"} ` +
+        `${Math.abs(margin20d).toFixed(1)}%。`;
+    }
+
+    if (confirmedEventCount === 0) {
+      riskCopy +=
+        "目前沒有新的重大公司事件可解釋這項價格變化。";
+    } else {
+      riskCopy +=
+        `目前另有 ${confirmedEventCount} 項重要公司事件需要持續追蹤。`;
+    }
+
+    if (eventVolatility20d !== null) {
+      riskFacts.push(
+        `近 20 日波動 ${eventVolatility20d.toFixed(1)}%`
+      );
+    }
+
+    if (eventPriceChange !== null) {
+      riskFacts.push(
+        `${eventPriceWindow.replace("個交易日", "日")}漲跌 ` +
+        `${eventPriceChange >= 0 ? "+" : ""}` +
+        `${eventPriceChange.toFixed(1)}%`
+      );
+    }
+  }
+  if (profileId === "financial_income") {
+    const financialIncomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const financialCurrentRoe =
+      available(historicalFinancial.roe_pct)
+        ? Number(historicalFinancial.roe_pct)
+        : null;
+
+    const financialUsualRoe =
+      available(historicalFinancial.historical_roe_median_pct)
+        ? Number(historicalFinancial.historical_roe_median_pct)
+        : null;
+
+    const financialRiskPrice90d =
+      available(historicalPrice.changes?.["90d_pct"])
+        ? Number(historicalPrice.changes["90d_pct"])
+        : null;
+
+    const dividendYield =
+      available(metrics.dividend_yield_pct)
+        ? Number(metrics.dividend_yield_pct)
+        : null;
+
+    const dividendRank =
+      available(metrics.dividend_yield_rank)
+        ? Number(metrics.dividend_yield_rank)
+        : null;
+
+    const dividendPeerCount =
+      available(metrics.peer_count)
+        ? Number(metrics.peer_count)
+        : null;
+
+    const lowDividendPosition =
+      dividendRank !== null &&
+      dividendPeerCount !== null &&
+      dividendPeerCount > 0 &&
+      dividendRank > Math.ceil(dividendPeerCount * 0.65);
+
+    const guidedDividendIsCurrent =
+      guidedDividendFreshness === "current";
+
+    riskFacts.length = 0;
+
+    if (
+      financialIncomeChange !== null &&
+      financialIncomeChange < -5
+    ) {
+      riskTitle =
+        "最近四季獲利正在減少";
+
+      riskCopy =
+        `最近四季獲利比一年前少 ${Math.abs(financialIncomeChange).toFixed(1)}%。` +
+        "這是目前最需要留意的變化。";
+
+      if (lowDividendPosition) {
+        riskTitle =
+          "獲利正在減少，目前股息比例也偏低";
+
+        riskCopy +=
+          dividendYield !== null
+            ? ` 目前殖利率約 ${dividendYield.toFixed(2)}%，` +
+              `在 ${dividendPeerCount} 家同組公司中排名第 ${dividendRank}。`
+            : ` 目前殖利率在 ${dividendPeerCount} 家同組公司中排名第 ${dividendRank}。`;
+      }
+    } else if (
+      margin20d !== null &&
+      margin20d >= 50
+    ) {
+      riskTitle =
+        "融資部位快速增加，需要留意追價壓力";
+
+      riskCopy =
+        `借錢買股票的部位近一個月增加 ${margin20d.toFixed(1)}%。`;
+
+      if (financialIncomeChange !== null) {
+        riskCopy +=
+          ` 同期間可比較的最近四季獲利變化為 ` +
+          `${financialIncomeChange >= 0 ? "+" : ""}` +
+          `${financialIncomeChange.toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "融資增加不代表公司獲利同步改善，短期價格反轉時也可能放大賣壓。";
+    } else if (lowDividendPosition) {
+      riskTitle =
+        "目前股息比例低於多數同組公司";
+
+      riskCopy =
+        dividendYield !== null
+          ? `目前殖利率約 ${dividendYield.toFixed(2)}%，` +
+            `在 ${dividendPeerCount} 家同組公司中排名第 ${dividendRank}。`
+          : `目前殖利率在 ${dividendPeerCount} 家同組公司中排名第 ${dividendRank}。`;
+
+      if (financialIncomeChange !== null) {
+        riskCopy +=
+          ` 最近四季獲利變化為 ` +
+          `${financialIncomeChange >= 0 ? "+" : ""}` +
+          `${financialIncomeChange.toFixed(1)}%。`;
+      }
+    } else if (
+      financialRiskPrice90d !== null &&
+      financialRiskPrice90d >= 30
+    ) {
+      riskTitle =
+        "獲利沒有明顯轉弱，但股價中期漲幅已大";
+
+      riskCopy =
+        `近 90 個交易日股價上漲 ${financialRiskPrice90d.toFixed(1)}%。`;
+
+      if (financialIncomeChange !== null) {
+        riskCopy +=
+          ` 最近四季獲利比一年前` +
+          `${financialIncomeChange >= 0 ? "增加" : "減少"} ` +
+          `${Math.abs(financialIncomeChange).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "金融股仍要一起比較獲利、股利與價格，不能只看近期漲幅。";
+    } else if (
+      financialCurrentRoe !== null &&
+      financialUsualRoe !== null &&
+      financialCurrentRoe < financialUsualRoe - 0.5
+    ) {
+      riskTitle =
+        "目前賺錢效率低於公司過去常見水準";
+
+      riskCopy =
+        `目前每 100 元股東資金約賺回 ${financialCurrentRoe.toFixed(1)} 元，` +
+        `低於過去常見的 ${financialUsualRoe.toFixed(1)} 元。` +
+        "後續要確認獲利效率是否恢復。";
+    } else if (financialIncomeChange !== null) {
+      riskTitle =
+        financialIncomeChange > 0
+          ? "獲利正在改善，仍要確認能否延續"
+          : "獲利大致持平，仍要觀察後續變化";
+
+      riskCopy =
+        `最近四季獲利比一年前` +
+        `${financialIncomeChange >= 0 ? "增加" : "減少"} ` +
+        `${Math.abs(financialIncomeChange).toFixed(1)}%。`;
+
+      if (
+        financialCurrentRoe !== null &&
+        financialUsualRoe !== null
+      ) {
+        riskCopy +=
+          ` 目前每 100 元股東資金約賺回 ${financialCurrentRoe.toFixed(1)} 元，` +
+          `過去常見約 ${financialUsualRoe.toFixed(1)} 元。`;
+      }
+
+      riskCopy +=
+        "金融股的獲利與股利可能隨景氣和利率環境改變，仍要確認下一期表現。";
+    } else {
+      riskTitle =
+        "金融獲利比較尚未形成完整結果";
+
+      riskCopy =
+        "最近四季獲利比較尚未形成，因此目前不直接判定獲利方向。";
+    }
+
+    if (
+      guidedDividendIsCurrent &&
+      guidedDividendYears !== null
+    ) {
+      if (
+        financialIncomeChange !== null &&
+        financialIncomeChange < -5
+      ) {
+        riskTitle =
+          `獲利正在減少，但已連續 ${guidedDividendYears} 個年度發放股利`;
+
+        riskCopy +=
+          ` 公司已連續 ${guidedDividendYears} 個年度發放股利，` +
+          "過去股利紀錄提供一些支撐，但不能抵銷目前獲利轉弱。";
+      }
+
+      riskFacts.push(
+        `${guidedDividendYears} 個連續股利年度`
+      );
+
+      if (
+        guidedLatestCashDividend !== null &&
+        (
+          guidedDividendType === "cash" ||
+          guidedDividendType === "cash_and_stock"
+        )
+      ) {
+        riskFacts.push(
+          `最新現金股利 ${guidedLatestCashDividend.toFixed(2)} 元`
+        );
+      }
+
+      if (
+        guidedLatestStockDividend !== null &&
+        (
+          guidedDividendType === "stock" ||
+          guidedDividendType === "cash_and_stock"
+        )
+      ) {
+        riskFacts.push(
+          `最新股票股利 ${guidedLatestStockDividend.toFixed(2)} 股`
+        );
+      }
+
+      if (
+        guidedLatestCashDividend !== null &&
+        guidedFiveYearDividendAverage !== null &&
+        guidedDividendType !== "stock"
+      ) {
+        riskFacts.push(
+          `近 5 年平均現金股利 ${guidedFiveYearDividendAverage.toFixed(2)} 元`
+        );
+      }
+    } else if (guidedLatestDividendYear !== null) {
+      riskFacts.push(
+        `股利資料可驗證至 ${guidedLatestDividendYear} 年`
+      );
+
+      riskCopy +=
+        " 股利歷史已有資料，但最新年度尚未接續，" +
+        "因此不把過去紀錄直接視為目前配息仍穩定。";
+    }
+
+    if (financialIncomeChange !== null) {
+      riskFacts.unshift(
+        `最近四季獲利 ` +
+        `${financialIncomeChange >= 0 ? "+" : ""}` +
+        `${financialIncomeChange.toFixed(1)}%`
+      );
+    }
+
+    if (
+      dividendRank !== null &&
+      dividendPeerCount !== null
+    ) {
+      riskFacts.push(
+        `殖利率同組第 ${dividendRank}/${dividendPeerCount}`
+      );
+    }
+
+    if (financialRiskPrice90d !== null) {
+      riskFacts.push(
+        `近 90 日股價 ` +
+        `${financialRiskPrice90d >= 0 ? "+" : ""}` +
+        `${financialRiskPrice90d.toFixed(1)}%`
+      );
+    }
+
+    riskFacts.push(
+      `風險程度 ${Math.round(risk)}/100`
+    );
+  }
+  if (profileId === "cyclical") {
+    const cyclicalRiskRevenueGrowth =
+      available(historicalRevenue.year_over_year_pct)
+        ? Number(historicalRevenue.year_over_year_pct)
+        : null;
+
+    const cyclicalRiskIncomeChange =
+      available(historicalFinancial.income_change_yoy_pct)
+        ? Number(historicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const cyclicalPrice30d =
+      available(historicalPrice.changes?.["30d_pct"])
+        ? Number(historicalPrice.changes["30d_pct"])
+        : null;
+
+    const cyclicalOperatingAvailable =
+      cyclicalRiskRevenueGrowth !== null &&
+      cyclicalRiskIncomeChange !== null;
+
+    if (!cyclicalOperatingAvailable) {
+      riskTitle =
+        "營運比較尚未形成完整結果";
+
+      riskCopy =
+        "收入年度比較或最近四季獲利仍有一項尚未形成，" +
+        "因此目前不直接判定景氣方向。";
+
+      if (cyclicalPrice30d !== null) {
+        riskCopy +=
+          ` 近 30 個交易日股價` +
+          `${cyclicalPrice30d >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(cyclicalPrice30d).toFixed(1)}%，` +
+          "但價格變化不能取代營運比較。";
+      }
+    } else if (
+      cyclicalRiskRevenueGrowth > 0 &&
+      cyclicalRiskIncomeChange > 0
+    ) {
+      if (
+        cyclicalPrice30d !== null &&
+        cyclicalPrice30d >= 10
+      ) {
+        riskTitle =
+          "營運正在改善，但要留意股價漲得太快";
+
+        riskCopy =
+          `收入比去年同期增加 ${cyclicalRiskRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利增加 ${cyclicalRiskIncomeChange.toFixed(1)}%，` +
+          `近 30 個交易日股價也上漲 ${cyclicalPrice30d.toFixed(1)}%。` +
+          "市場與營運方向一致，但短期漲幅可能已反映部分改善。";
+      } else if (
+        cyclicalPrice30d !== null &&
+        cyclicalPrice30d <= -10
+      ) {
+        riskTitle =
+          "營運正在改善，但市場價格仍在走弱";
+
+        riskCopy =
+          `收入比去年同期增加 ${cyclicalRiskRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利增加 ${cyclicalRiskIncomeChange.toFixed(1)}%，` +
+          `但近 30 個交易日股價下跌 ${Math.abs(cyclicalPrice30d).toFixed(1)}%。` +
+          "營運與市場方向不同，仍要確認是否有其他風險尚未反映在財報中。";
+      } else {
+        riskTitle =
+          "營運正在改善，仍要確認改善能否延續";
+
+        riskCopy =
+          `收入比去年同期增加 ${cyclicalRiskRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利增加 ${cyclicalRiskIncomeChange.toFixed(1)}%。`;
+
+        if (cyclicalPrice30d !== null) {
+          riskCopy +=
+            ` 近 30 個交易日股價` +
+            `${cyclicalPrice30d >= 0 ? "上漲" : "下跌"} ` +
+            `${Math.abs(cyclicalPrice30d).toFixed(1)}%。`;
+        }
+
+        riskCopy +=
+          "景氣型公司的獲利變化可能較大，後續仍要確認下一期收入與獲利是否延續。";
+      }
+    } else if (
+      cyclicalRiskRevenueGrowth > 0 &&
+      cyclicalRiskIncomeChange <= 0
+    ) {
+      riskTitle =
+        cyclicalPrice30d !== null &&
+        cyclicalPrice30d >= 10
+          ? "股價已經先漲，但獲利尚未跟上"
+          : "收入增加，但獲利仍在減少";
+
+      riskCopy =
+        `收入比去年同期增加 ${cyclicalRiskRevenueGrowth.toFixed(1)}%，` +
+        `但最近四季獲利減少 ${Math.abs(cyclicalRiskIncomeChange).toFixed(1)}%。`;
+
+      if (cyclicalPrice30d !== null) {
+        riskCopy +=
+          ` 近 30 個交易日股價` +
+          `${cyclicalPrice30d >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(cyclicalPrice30d).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "營收規模雖然增加，但目前還不能確認獲利循環已經回升。";
+    } else if (
+      cyclicalRiskRevenueGrowth <= 0 &&
+      cyclicalRiskIncomeChange > 0
+    ) {
+      riskTitle =
+        "獲利增加，但收入尚未明顯回升";
+
+      riskCopy =
+        `最近四季獲利增加 ${cyclicalRiskIncomeChange.toFixed(1)}%，` +
+        `但收入比去年同期減少 ${Math.abs(cyclicalRiskRevenueGrowth).toFixed(1)}%。`;
+
+      if (cyclicalPrice30d !== null) {
+        riskCopy +=
+          ` 近 30 個交易日股價` +
+          `${cyclicalPrice30d >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(cyclicalPrice30d).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "獲利改善可能受到成本、業外或比較基期影響，仍要等待收入同步回升。";
+    } else {
+      riskTitle =
+        "收入與獲利都還沒有回升";
+
+      riskCopy =
+        `收入比去年同期減少 ${Math.abs(cyclicalRiskRevenueGrowth).toFixed(1)}%，` +
+        `最近四季獲利減少 ${Math.abs(cyclicalRiskIncomeChange).toFixed(1)}%。`;
+
+      if (cyclicalPrice30d !== null) {
+        riskCopy +=
+          ` 近 30 個交易日股價` +
+          `${cyclicalPrice30d >= 0 ? "上漲" : "下跌"} ` +
+          `${Math.abs(cyclicalPrice30d).toFixed(1)}%。`;
+      }
+
+      riskCopy +=
+        "目前營運資料尚未支持景氣循環回升。";
+    }
+
+    if (
+      institutional20d !== null &&
+      institutional20d > 0
+    ) {
+      riskCopy +=
+        " 法人近一個月買進多於賣出，但市場買盤不能取代營運改善。";
+    } else if (
+      institutional20d !== null &&
+      institutional20d < 0
+    ) {
+      riskCopy +=
+        " 法人近一個月賣出多於買進，市場資金方向也偏弱。";
+    }
+
+    if (
+      margin20d !== null &&
+      margin20d >= 20
+    ) {
+      riskCopy +=
+        ` 借錢買股票的部位增加 ${margin20d.toFixed(1)}%，` +
+        "需要留意短期追價壓力。";
+    }
+
+    if (cyclicalPrice30d !== null) {
+      riskFacts.push(
+        `近 30 日股價 ` +
+        `${cyclicalPrice30d >= 0 ? "+" : ""}` +
+        `${cyclicalPrice30d.toFixed(1)}%`
+      );
+    }
+
+    if (cyclicalRiskRevenueGrowth !== null) {
+      riskFacts.push(
+        `收入年變化 ` +
+        `${cyclicalRiskRevenueGrowth >= 0 ? "+" : ""}` +
+        `${cyclicalRiskRevenueGrowth.toFixed(1)}%`
+      );
+    }
+
+    if (cyclicalRiskIncomeChange !== null) {
+      riskFacts.push(
+        `最近四季獲利 ` +
+        `${cyclicalRiskIncomeChange >= 0 ? "+" : ""}` +
+        `${cyclicalRiskIncomeChange.toFixed(1)}%`
+      );
+    }
+  }
+  $("riskTone").textContent = "現在要小心什麼";
+  $("risk").textContent = riskTitle;
+  $("guidedRiskCopy").textContent = riskCopy;
+  $("guidedRiskScore").textContent =
+    `比較資料：${riskFacts.join("｜")}`;
+
+  const valuation =
+    report.investment_research?.valuation || {};
+
+  const valuationText =
+    `${valuation.headline_zh || ""} ${valuation.interpretation_zh || ""}`;
+
+  const valuationPeRatio =
+    available(metrics.pe_ratio)
+      ? Number(metrics.pe_ratio)
+      : null;
+
+  const pbRatio =
+    available(metrics.pb_ratio)
+      ? Number(metrics.pb_ratio)
+      : null;
+
+  const peerCount =
+    available(metrics.peer_count)
+      ? Number(metrics.peer_count)
+      : null;
+
+  const valuationRanks = [
+    metrics.pe_rank,
+    metrics.pb_rank,
+  ]
+    .filter(available)
+    .map(Number);
+
+  const averageValuationRank =
+    valuationRanks.length
+      ? valuationRanks.reduce((sum, value) => sum + value, 0) /
+        valuationRanks.length
+      : null;
+
+  const relativeValuationPosition =
+    averageValuationRank !== null &&
+    peerCount &&
+    peerCount > 0
+      ? averageValuationRank / peerCount
+      : null;
+
+  let valuationTitle = "";
+  let valuationCopy = "";
+  let valuationBasis = "";
+
+  if (
+    profileId === "growth_quality" &&
+    valuationPeRatio !== null &&
+    peerCount
+  ) {
+    if (relativeValuationPosition >= 0.65) {
+      valuationTitle =
+        "同組公司中，目前價格偏高";
+
+      valuationCopy =
+        "用公司賺到的錢與擁有的資產比較，目前價格高於多數同組公司。這代表市場期待較高，不代表股價一定會下跌。";
+    } else if (relativeValuationPosition <= 0.35) {
+      valuationTitle =
+        "同組公司中，目前價格偏低";
+
+      valuationCopy =
+        "用公司賺到的錢與擁有的資產比較，目前價格低於多數同組公司，但仍要一起看公司的經營狀況。";
+    } else {
+      valuationTitle =
+        "同組公司中，目前價格接近中間";
+
+      valuationCopy =
+        "用公司賺到的錢與擁有的資產比較，目前價格接近多數同組公司的中間位置。";
+    }
+
+    const valuationFacts = [];
+
+    valuationFacts.push(
+      `股價約為每股獲利的 ${valuationPeRatio.toFixed(2)} 倍`
+    );
+
+    if (available(metrics.pe_rank)) {
+      valuationFacts.push(
+        `這項比較同組第 ${Number(metrics.pe_rank)}/${peerCount} 名`
+      );
+    }
+
+    if (pbRatio !== null) {
+      valuationFacts.push(
+        `股價約為每股公司資產的 ${pbRatio.toFixed(2)} 倍`
+      );
+    }
+
+    if (available(metrics.pb_rank)) {
+      valuationFacts.push(
+        `這項比較同組第 ${Number(metrics.pb_rank)}/${peerCount} 名`
+      );
+    }
+
+    valuationBasis =
+      `比較資料：${valuationFacts.join("｜")}`;
+  } else if (
+    profileId === "financial_income" &&
+    valuation.status === "available"
+  ) {
+    const financialPeRank =
+      available(metrics.pe_rank)
+        ? Number(metrics.pe_rank)
+        : null;
+
+    const financialPbRank =
+      available(metrics.pb_rank)
+        ? Number(metrics.pb_rank)
+        : null;
+
+    if (valuation.position === "high") {
+      valuationTitle =
+        "目前價格高於多數同組公司";
+
+      valuationCopy =
+        "用公司賺到的錢和公司擁有的資產一起比較，目前價格高於多數同組金融公司。這代表市場給的期待較高，不代表股價一定會下跌。";
+    } else if (valuation.position === "low") {
+      valuationTitle =
+        "目前價格低於多數同組公司";
+
+      valuationCopy =
+        "用公司賺到的錢和公司擁有的資產一起比較，目前價格低於多數同組金融公司，但仍要一起看公司的獲利是否穩定。";
+    } else {
+      valuationTitle =
+        "目前價格大約在同組公司的中間";
+
+      valuationCopy =
+        "用公司賺到的錢和公司擁有的資產一起比較，目前價格沒有明顯高於或低於多數同組金融公司。";
+    }
+
+    const financialValuationFacts = [];
+
+    if (valuationPeRatio !== null) {
+      financialValuationFacts.push(
+        `本益比 ${valuationPeRatio.toFixed(2)} 倍`
+      );
+    }
+
+    if (pbRatio !== null) {
+      financialValuationFacts.push(
+        `股價淨值比 ${pbRatio.toFixed(2)} 倍`
+      );
+    }
+
+    if (
+      financialPeRank !== null &&
+      peerCount !== null
+    ) {
+      financialValuationFacts.push(
+        `本益比同組第 ${financialPeRank}/${peerCount}`
+      );
+    }
+
+    if (
+      financialPbRank !== null &&
+      peerCount !== null
+    ) {
+      financialValuationFacts.push(
+        `股價淨值比同組第 ${financialPbRank}/${peerCount}`
+      );
+    }
+
+    valuationBasis =
+      financialValuationFacts.length
+        ? `比較資料：${financialValuationFacts.join("｜")}`
+        : "比較資料：交易所正式估值與同類金融公司";
+  } else if (
+    valuation.status === "available" &&
+    valuation.comparison_scope === "historical_price_position"
+  ) {
+    const historicalPriceMetrics =
+      Array.isArray(valuation.metrics)
+        ? valuation.metrics
+        : [];
+
+    const historicalMetricValue = (label) => {
+      const metric = historicalPriceMetrics.find(
+        (item) => item?.label_zh === label
+      );
+
+      return available(metric?.value)
+        ? Number(metric.value)
+        : null;
+    };
+
+    const historicalPricePercentile =
+      available(valuation.historical_price_percentile)
+        ? Number(valuation.historical_price_percentile)
+        : historicalMetricValue("歷史價格百分位");
+
+    const historicalPriceSampleCount =
+      available(valuation.historical_price_sample_count)
+        ? Number(valuation.historical_price_sample_count)
+        : null;
+
+    const historicalPrice30d =
+      historicalMetricValue("近 30 日價格變化");
+
+    const historicalPrice90d =
+      historicalMetricValue("近 90 日價格變化");
+
+    valuationTitle =
+      valuation.headline_zh ||
+      (
+        valuation.position === "high"
+          ? "目前價格位於自身歷史較高區域"
+          : valuation.position === "low"
+            ? "目前價格位於自身歷史較低區域"
+            : "目前價格位於自身歷史中間區域"
+      );
+
+    const historicalPriceCopy = [];
+
+    if (
+      historicalPricePercentile !== null &&
+      historicalPriceSampleCount !== null
+    ) {
+      historicalPriceCopy.push(
+        `目前收盤價位於 ${historicalPriceSampleCount} 個交易日收盤價的第 ${historicalPricePercentile.toFixed(2)} 百分位`
+      );
+    }
+
+    if (historicalPrice30d !== null) {
+      historicalPriceCopy.push(
+        `近 30 日價格${historicalPrice30d >= 0 ? "上漲" : "下跌"} ${Math.abs(historicalPrice30d).toFixed(1)}%`
+      );
+    }
+
+    if (historicalPrice90d !== null) {
+      historicalPriceCopy.push(
+        `近 90 日價格${historicalPrice90d >= 0 ? "上漲" : "下跌"} ${Math.abs(historicalPrice90d).toFixed(1)}%`
+      );
+    }
+
+    valuationCopy =
+      (
+        historicalPriceCopy.length
+          ? `${historicalPriceCopy.join("；")}。`
+          : valuation.interpretation_zh
+      ) +
+      "這只代表公司自身的歷史價格位置，不代表估值便宜、昂貴或適合買進。";
+
+    const historicalPriceFacts = [];
+
+    if (historicalPriceSampleCount !== null) {
+      historicalPriceFacts.push(
+        `${historicalPriceSampleCount} 個交易日收盤價`
+      );
+    }
+
+    if (historicalPricePercentile !== null) {
+      historicalPriceFacts.push(
+        `歷史價格第 ${historicalPricePercentile.toFixed(2)} 百分位`
+      );
+    }
+
+    valuationBasis =
+      historicalPriceFacts.length
+        ? `比較資料：${historicalPriceFacts.join("｜")}｜公司自身歷史價格`
+        : "比較資料：公司自身歷史收盤價";
+  } else if (
+    valuation.status === "available" &&
+    /偏高|昂貴|高估|較高/.test(valuationText)
+  ) {
+    valuationTitle = "目前股價位置偏高一些";
+    valuationCopy =
+      "和公司自己過去或其他相似公司相比，目前市場給的價格比較高。";
+    valuationBasis =
+      "比較資料：公司過去的價格、賺錢能力與相似公司比較";
+  } else if (
+    valuation.status === "available" &&
+    /偏低|便宜|低估|較低/.test(valuationText)
+  ) {
+    valuationTitle = "目前股價位置偏低一些";
+    valuationCopy =
+      "和公司自己過去或其他相似公司相比，目前市場給的價格比較低。";
+    valuationBasis =
+      "比較資料：公司過去的價格、賺錢能力與相似公司比較";
+  } else if (
+    valuation.status === "available" &&
+    /合理|中位|中間|適中/.test(valuationText)
+  ) {
+    valuationTitle = "目前股價位置大約在中間";
+    valuationCopy =
+      "和公司自己過去或其他相似公司相比，目前沒有明顯偏高或偏低。";
+    valuationBasis =
+      "比較資料：公司過去的價格、賺錢能力與相似公司比較";
+  } else {
+    const partialValuationMetrics =
+      Array.isArray(valuation.metrics)
+        ? valuation.metrics
+        : [];
+
+    const latestCloseMetric =
+      partialValuationMetrics.find(
+        (item) => item?.label_zh === "最新收盤價"
+      );
+
+    const valuationMissingItems =
+      Array.isArray(valuation.missing_items_zh)
+        ? valuation.missing_items_zh
+        : [];
+
+    valuationTitle =
+      valuation.status === "partial"
+        ? "目前缺少可驗證的估值比較基準"
+        : "目前沒有可發布的估值比較";
+
+    valuationCopy =
+      valuation.interpretation_zh ||
+      "目前沒有足夠的歷史或同組估值基準，因此不會只靠單一價格判斷股價高低。";
+
+    const partialValuationFacts = [];
+
+    if (available(latestCloseMetric?.value)) {
+      partialValuationFacts.push(
+        `最新收盤價 ${Number(latestCloseMetric.value).toFixed(2)} 元`
+      );
+    }
+
+    if (valuationMissingItems.length) {
+      partialValuationFacts.push(
+        `尚缺 ${valuationMissingItems.join("、")}`
+      );
+    }
+
+    valuationBasis =
+      partialValuationFacts.length
+        ? `資料狀態：${partialValuationFacts.join("｜")}`
+        : "資料狀態：目前沒有可驗證的歷史或同組估值基準";
+  }
+
+  if (
+    profileId === "cyclical" &&
+    valuation.status === "available" &&
+    valuation.comparison_scope === "official_metrics_only"
+  ) {
+    const officialValuationMetrics =
+      Array.isArray(valuation.metrics)
+        ? valuation.metrics
+        : [];
+
+    const officialMetricValue = (label) => {
+      const metric = officialValuationMetrics.find(
+        (item) => item?.label_zh === label
+      );
+
+      return available(metric?.value)
+        ? Number(metric.value)
+        : null;
+    };
+
+    const officialPe = officialMetricValue("本益比");
+    const officialPb = officialMetricValue("股價淨值比");
+    const officialYield = officialMetricValue("殖利率");
+    const officialFacts = [];
+
+    if (officialPe !== null) {
+      officialFacts.push(`本益比 ${officialPe.toFixed(2)} 倍`);
+    }
+
+    if (officialPb !== null) {
+      officialFacts.push(`股價淨值比 ${officialPb.toFixed(2)} 倍`);
+    }
+
+    if (officialYield !== null) {
+      officialFacts.push(`殖利率 ${officialYield.toFixed(2)}%`);
+    }
+
+    valuationTitle = "已有正式估值數字，但還不能判定高低";
+    valuationCopy =
+      "交易所正式估值資料已接入，但目前缺少同組排名與公司自身的歷史估值區間。" +
+      "因此 GC 只顯示可驗證的數字，不把單一倍數直接解讀成便宜或昂貴。";
+    valuationBasis =
+      officialFacts.length
+        ? `比較資料：${officialFacts.join("｜")}｜來源 TWSE BWIBBU_ALL`
+        : "資料狀態：交易所正式估值數字已接入，歷史與同組基準待補";
+  }
+  $("guidedValuationTone").textContent = "現在算貴還是便宜";
+  $("guidedValuation").textContent = valuationTitle;
+  $("guidedValuationCopy").textContent = valuationCopy;
+  $("guidedValuationEvidence").textContent = valuationBasis;
+
+  let confidenceTitle = "";
+  let confidenceCopy = "";
+
+  const confidenceRevenueChange =
+    available(historicalRevenue.year_over_year_pct)
+      ? Number(historicalRevenue.year_over_year_pct)
+      : null;
+
+  const confidenceIncomeChange =
+    available(historicalFinancial.income_change_yoy_pct)
+      ? Number(historicalFinancial.income_change_yoy_pct)
+      : null;
+
+  const confidencePrice30d =
+    available(historicalPrice.changes?.["30d_pct"])
+      ? Number(historicalPrice.changes["30d_pct"])
+      : null;
+
+  const confidenceRevenueComparisons =
+    available(historicalRevenue.yoy_sample_count)
+      ? Number(historicalRevenue.yoy_sample_count)
+      : 0;
+
+  const confidenceFinancialQuarters =
+    available(historicalFinancial.quarter_sample_count)
+      ? Number(historicalFinancial.quarter_sample_count)
+      : 0;
+
+  const confidencePriceSamples =
+    available(historicalPrice.sample_count)
+      ? Number(historicalPrice.sample_count)
+      : 0;
+
+  const confidenceInstitutionalSamples =
+    available(historicalInstitutional.sample_count)
+      ? Number(historicalInstitutional.sample_count)
+      : 0;
+
+  const confidenceMarginSamples =
+    available(historicalMargin.sample_count)
+      ? Number(historicalMargin.sample_count)
+      : 0;
+
+  const confidenceDividendYears =
+    available(historicalDividend.dividend_year_sample_count)
+      ? Number(historicalDividend.dividend_year_sample_count)
+      : 0;
+
+  const confidenceFinancialTier =
+    String(historicalFinancial.evidence_tier || "");
+
+  const confidenceDividendFreshness =
+    String(historicalDividend.dividend_freshness || "");
+
+  const confidenceEventCount =
+    Number(metrics.confirmed_company_event_count || 0);
+
+  const operatingSignalsAvailable =
+    confidenceRevenueChange !== null &&
+    confidenceIncomeChange !== null;
+
+  const operatingSignalsAgree =
+    operatingSignalsAvailable &&
+    (
+      (
+        confidenceRevenueChange > 0 &&
+        confidenceIncomeChange > 0
+      ) ||
+      (
+        confidenceRevenueChange <= 0 &&
+        confidenceIncomeChange <= 0
+      )
+    );
+
+  const operatingDirection =
+    operatingSignalsAvailable
+      ? (
+          confidenceRevenueChange > 0 &&
+          confidenceIncomeChange > 0
+            ? 1
+            : (
+                confidenceRevenueChange <= 0 &&
+                confidenceIncomeChange <= 0
+                  ? -1
+                  : 0
+              )
+        )
+      : 0;
+
+  const marketDirection =
+    confidencePrice30d !== null
+      ? (
+          confidencePrice30d >= 3
+            ? 1
+            : confidencePrice30d <= -3
+              ? -1
+              : 0
+        )
+      : 0;
+
+  const marketAndOperatingDisagree =
+    operatingDirection !== 0 &&
+    marketDirection !== 0 &&
+    operatingDirection !== marketDirection;
+
+  if (profileId === "financial_income") {
+    const confidenceCurrentRoe =
+      available(historicalFinancial.roe_pct)
+        ? Number(historicalFinancial.roe_pct)
+        : null;
+
+    const confidenceUsualRoe =
+      available(historicalFinancial.historical_roe_median_pct)
+        ? Number(historicalFinancial.historical_roe_median_pct)
+        : null;
+
+    if (
+      confidenceFinancialQuarters > 0 &&
+      confidenceDividendFreshness === "current"
+    ) {
+      confidenceTitle =
+        "財務與股利歷史都很完整";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceFinancialQuarters} 季財報` +
+        (
+          confidenceDividendYears > 0
+            ? `、${confidenceDividendYears} 個股利年度`
+            : ""
+        ) +
+        "和多年市場資料。";
+
+      if (
+        confidenceCurrentRoe !== null &&
+        confidenceUsualRoe !== null
+      ) {
+        confidenceCopy +=
+          ` 目前每 100 元股東資金約賺回 ${confidenceCurrentRoe.toFixed(1)} 元，` +
+          `過去常見約 ${confidenceUsualRoe.toFixed(1)} 元。`;
+      }
+
+      confidenceCopy +=
+        "目前判斷有足夠歷史依據，但新的財報與股利公告仍可能改變結論。";
+    } else if (confidenceFinancialQuarters > 0) {
+      confidenceTitle =
+        "財務歷史充足，但最新股利年度尚未接續";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceFinancialQuarters} 季財報和多年市場資料，` +
+        "但最新一個股利年度尚未取得可驗證紀錄，因此不直接判定目前配息仍延續。";
+    } else {
+      confidenceTitle =
+        "市場歷史充足，但財務比較尚未形成";
+
+      confidenceCopy =
+        "GC 有多年價格與市場資料，但季度財務比較尚未形成，因此目前不發布高把握度的財務結論。";
+    }
+  } else if (profileId === "growth_quality") {
+    if (operatingSignalsAgree) {
+      confidenceTitle =
+        operatingDirection > 0
+          ? "歷史資料充足，收入與獲利方向一致"
+          : "歷史資料充足，營運轉弱訊號一致";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceRevenueComparisons} 次收入年度變化` +
+        `、${confidenceFinancialQuarters} 季財報和多年市場資料。`;
+
+      if (marketAndOperatingDisagree) {
+        confidenceCopy +=
+          " 目前短期股價與營運方向不同，因此對營運方向的把握高於對短期價格方向的把握。";
+      } else {
+        confidenceCopy +=
+          " 收入與獲利指向相同方向，因此目前營運結論有多項資料支持。";
+      }
+    } else if (operatingSignalsAvailable) {
+      confidenceTitle =
+        "歷史資料充足，但收入與獲利方向不同";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceRevenueComparisons} 次收入年度變化` +
+        `、${confidenceFinancialQuarters} 季財報和多年市場資料。` +
+        "目前收入與獲利沒有指向相同方向，所以資料不是不足，而是公司成長訊號仍有分歧。";
+    } else {
+      confidenceTitle =
+        "市場歷史充足，但成長比較尚未完整";
+
+      confidenceCopy =
+        "收入年度比較或最近四季獲利仍有一項尚未形成，因此目前只對已取得的資料發布結論。";
+    }
+  } else if (profileId === "cyclical") {
+    if (operatingSignalsAgree) {
+      confidenceTitle =
+        operatingDirection > 0
+          ? "市場與營運歷史充足，回溫訊號較一致"
+          : "市場與營運歷史充足，轉弱訊號較一致";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceRevenueComparisons} 次收入年度變化` +
+        `、${confidenceFinancialQuarters} 季財報和多年市場資料。`;
+
+      if (marketAndOperatingDisagree) {
+        confidenceCopy +=
+          " 但目前股價與營運方向不同，因此不能只看市場價格判定景氣方向。";
+      } else {
+        confidenceCopy +=
+          " 收入與獲利方向一致，景氣循環判斷有多項營運資料支持。";
+      }
+    } else if (operatingSignalsAvailable) {
+      confidenceTitle =
+        "歷史資料充足，但景氣訊號尚未一致";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceRevenueComparisons} 次收入年度變化` +
+        `、${confidenceFinancialQuarters} 季財報和多年市場資料。` +
+        "目前收入與獲利方向不同，因此資料充足，但還不能確認景氣循環已經完全轉向。";
+    } else {
+      confidenceTitle =
+        "市場資料充足，但營運循環仍不能確認";
+
+      confidenceCopy =
+        "GC 有多年股價、法人與融資歷史，但收入年度比較或最近四季獲利仍有一項尚未形成。";
+    }
+  } else if (profileId === "high_volatility_event") {
+    if (operatingSignalsAgree) {
+      confidenceTitle =
+        confidenceEventCount > 0
+          ? "營運歷史充足，另有公司事件需要追蹤"
+          : "營運歷史充足，目前沒有新的重大事件";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceRevenueComparisons} 次收入年度變化` +
+        `、${confidenceFinancialQuarters} 季財報和多年市場資料。`;
+
+      confidenceCopy +=
+        confidenceEventCount > 0
+          ? ` 目前另有 ${confidenceEventCount} 項確認公司事件，但事件仍要用後續營運資料驗證。`
+          : " 目前沒有新的重大公司事件改變營運判斷，這不代表事件資料不足。";
+    } else if (operatingSignalsAvailable) {
+      confidenceTitle =
+        "歷史資料充足，但營運訊號方向不同";
+
+      confidenceCopy =
+        `GC 已比較 ${confidenceRevenueComparisons} 次收入年度變化` +
+        `、${confidenceFinancialQuarters} 季財報和多年市場資料。` +
+        "目前收入與獲利方向不同，因此不把單一消息或股價變化直接當成營運改善。";
+    } else {
+      confidenceTitle =
+        "市場歷史充足，但事件影響尚未形成完整比較";
+
+      confidenceCopy =
+        "GC 只呈現已確認的公司事件；收入或獲利比較尚未形成時，不推測事件已經改變營運。";
+    }
+  } else {
+    confidenceTitle =
+      confidence >= 75
+        ? "這次判斷有多項歷史資料支持"
+        : "這次判斷已有足夠資料提供參考";
+
+    confidenceCopy =
+      "GC 已比較公司的營運、市場與歷史資料。新的財報或公司公告仍可能改變目前結論。";
+  }
+
+  if (
+    confidenceFinancialTier === "current_research_only"
+  ) {
+    confidenceCopy +=
+      " 部分財務歷史可供目前研究使用，但尚未完成嚴格歷史回測所需的正式公布日驗證。";
+  }
+
+  const historySampleFacts = [];
+
+  if (profileId === "financial_income") {
+    if (confidenceFinancialQuarters > 0) {
+      historySampleFacts.push(
+        `${confidenceFinancialQuarters} 季財報`
+      );
+    }
+
+    if (confidenceDividendYears > 0) {
+      historySampleFacts.push(
+        `${confidenceDividendYears} 個股利年度`
+      );
+    }
+
+    if (confidencePriceSamples > 0) {
+      historySampleFacts.push(
+        `${confidencePriceSamples} 個交易日股價`
+      );
+    }
+  } else {
+    if (confidenceRevenueComparisons > 0) {
+      historySampleFacts.push(
+        `${confidenceRevenueComparisons} 次收入年度比較`
+      );
+    }
+
+    if (confidenceFinancialQuarters > 0) {
+      historySampleFacts.push(
+        `${confidenceFinancialQuarters} 季財報`
+      );
+    }
+
+    if (confidencePriceSamples > 0) {
+      historySampleFacts.push(
+        `${confidencePriceSamples} 個交易日股價`
+      );
+    }
+
+    if (
+      profileId === "high_volatility_event" &&
+      confidenceEventCount >= 0
+    ) {
+      historySampleFacts.push(
+        `${confidenceEventCount} 項確認公司事件`
+      );
+    }
+  }
+
+  $("confidenceTone").textContent =
+    `判斷把握度 ${Math.round(confidence)}/100`;
+
+  $("confidence").textContent =
+    confidenceTitle;
+
+  $("guidedConfidenceCopy").textContent =
+    confidenceCopy;
+
+  $("confidenceBar").style.width =
+    `${Math.round(confidence)}%`;
+
+  $("confidenceBar").parentElement.setAttribute(
+    "aria-valuemin",
+    "0"
+  );
+
+  $("confidenceBar").parentElement.setAttribute(
+    "aria-valuemax",
+    "100"
+  );
+
+  $("confidenceBar").parentElement.setAttribute(
+    "aria-valuenow",
+    String(Math.round(confidence))
+  );
+
+  $("confidenceBar").parentElement.setAttribute(
+    "aria-label",
+    "GC 判斷把握度"
+  );
+
+  $("guidedConfidenceScore").textContent =
+    historySampleFacts.length
+      ? `比較資料：${historySampleFacts.slice(0, 3).join("｜")}` +
+        `｜判斷把握度 ${Math.round(confidence)}/100`
+      : `比較資料：資料是否最新、歷史樣本與訊號一致性` +
+        `｜判斷把握度 ${Math.round(confidence)}/100`;}
 function renderIntegratedDecision(report) {
-  const profileId = report.stock_profile?.profile_id || "default";
+  const profileId =
+    report.stock_profile?.profile_id || "default";
+
   const profile = stockDecisionProfile(report);
   const metrics = profile.metrics || {};
-  const decision = profile.decision || {};
-  const available = (value) => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
-  const number = (value, digits = 2, suffix = "") => available(value) ? `${Number(value).toFixed(digits)}${suffix}` : "資料待補";
-  const rank = (position, count) => available(position) && available(count) ? `第 ${Number(position)} / ${Number(count)} 名` : "排名待補";
-  const reason = (tone, title, primary, secondary, copy, source) => ({tone, title, primary, secondary, copy, source});
+
+
+  const available = (value) =>
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    Number.isFinite(Number(value));
+
+  const integratedHistoricalRevenue =
+      report.historical_context?.categories?.revenue || {};
+
+    const integratedMonthlyRevenueGrowth =
+      available(
+        integratedHistoricalRevenue.year_over_year_pct
+      )
+        ? Number(
+            integratedHistoricalRevenue.year_over_year_pct
+          )
+        : null;
+
+    const integratedTypicalRevenueGrowth =
+      available(
+        integratedHistoricalRevenue.historical_yoy_median_pct
+      )
+        ? Number(
+            integratedHistoricalRevenue.historical_yoy_median_pct
+          )
+        : null;
+const number = (value, digits = 2, suffix = "") =>
+    available(value)
+      ? `${Number(value).toFixed(digits)}${suffix}`
+      : "目前沒有可發布的數據";
+
+  const rank = (position, count) =>
+    available(position) && available(count)
+      ? `第 ${Number(position)}/${Number(count)} 名`
+      : "目前沒有可發布的排名";
+
+  const item = (
+    tone,
+    title,
+    copy,
+    basis,
+    primary,
+    secondary,
+    source
+  ) => ({
+    tone,
+    title,
+    copy,
+    basis,
+    primary,
+    secondary,
+    source,
+  });
 
   let reasons = [];
   let followUp = [];
+  let typeDescription = "GC 已依公司的實際資料選擇判斷方式";
 
   if (profileId === "financial_income") {
+    typeDescription = "這家公司主要看獲利、目前股息、歷年配息和同類金融公司的價格";
+
+    const financialHistory =
+      report.historical_context?.categories?.financial || {};
+
+    const integratedDividendHistory =
+      report.historical_context?.categories?.dividend || {};
+
+    const integratedDividendYears =
+      available(integratedDividendHistory.consecutive_dividend_years)
+        ? Number(integratedDividendHistory.consecutive_dividend_years)
+        : null;
+
+    const integratedLatestCashDividend =
+      available(integratedDividendHistory.latest_cash_dividend)
+        ? Number(integratedDividendHistory.latest_cash_dividend)
+        : null;
+
+    const integratedFiveYearDividendAverage =
+      available(integratedDividendHistory.average_cash_dividend_5y)
+        ? Number(integratedDividendHistory.average_cash_dividend_5y)
+        : null;
+
+    const integratedDividendFreshness =
+      String(
+        integratedDividendHistory.dividend_freshness || ""
+      );
+
+    const integratedDividendType =
+      String(
+        integratedDividendHistory.latest_dividend_type || ""
+      );
+
+    const integratedLatestDividendYear =
+      available(integratedDividendHistory.latest_dividend_year)
+        ? Number(integratedDividendHistory.latest_dividend_year)
+        : null;
+
+    const integratedLatestStockDividend =
+      available(integratedDividendHistory.latest_stock_dividend)
+        ? Number(integratedDividendHistory.latest_stock_dividend)
+        : null;
+
+    const incomeChange =
+      available(financialHistory.income_change_yoy_pct)
+        ? Number(financialHistory.income_change_yoy_pct)
+        : null;
+
+    const currentRoe =
+      available(financialHistory.roe_pct)
+        ? Number(financialHistory.roe_pct)
+        : null;
+
+    const usualRoe =
+      available(financialHistory.historical_roe_median_pct)
+        ? Number(financialHistory.historical_roe_median_pct)
+        : null;
+
+    const yieldRank =
+      available(metrics.dividend_yield_rank)
+        ? Number(metrics.dividend_yield_rank)
+        : null;
+
+    const peerCount =
+      available(metrics.peer_count)
+        ? Number(metrics.peer_count)
+        : null;
+
+    const yieldIsLow =
+      yieldRank !== null &&
+      peerCount !== null &&
+      yieldRank > Math.ceil(peerCount * 0.65);
+
+    const integratedDividendIsCurrent =
+      integratedDividendFreshness === "current";
+
+    const integratedDividendTitle =
+      String(
+        integratedDividendHistory.headline_zh ||
+        "GC 會持續整理公司的股利紀錄"
+      );
+
+    const integratedDividendCopy =
+      String(
+        integratedDividendHistory.interpretation_zh ||
+        "GC 會用公司實際公告的歷年股利，判斷股利是否持續。"
+      );
+
+    let integratedDividendBasis =
+      "比較資料：公司歷年股利公告";
+
+    let integratedDividendPrimary =
+      "最新股利";
+
+    let integratedDividendSecondary =
+      "歷史比較";
+
+    if (!integratedDividendIsCurrent) {
+      integratedDividendBasis =
+        integratedLatestDividendYear !== null
+          ? `最近可驗證股利年度 ${integratedLatestDividendYear}`
+          : "比較資料：公司歷年股利公告";
+    } else if (
+      integratedDividendType === "stock" &&
+      integratedLatestStockDividend !== null
+    ) {
+      integratedDividendBasis =
+        `最新股票股利 ${integratedLatestStockDividend.toFixed(2)} 股`;
+
+      integratedDividendPrimary =
+        `${integratedLatestStockDividend.toFixed(2)} 股`;
+    } else if (
+      integratedLatestCashDividend !== null
+    ) {
+      integratedDividendBasis =
+        `最新現金股利 ${integratedLatestCashDividend.toFixed(2)} 元`;
+
+      integratedDividendPrimary =
+        `${integratedLatestCashDividend.toFixed(2)} 元`;
+
+      if (
+        integratedDividendType === "cash_and_stock" &&
+        integratedLatestStockDividend !== null
+      ) {
+        integratedDividendBasis +=
+          `｜股票股利 ${integratedLatestStockDividend.toFixed(2)} 股`;
+      }
+
+      if (
+        integratedFiveYearDividendAverage !== null
+      ) {
+        integratedDividendBasis +=
+          `｜近 5 年平均現金股利 ${integratedFiveYearDividendAverage.toFixed(2)} 元`;
+
+        integratedDividendSecondary =
+          `5 年平均 ${integratedFiveYearDividendAverage.toFixed(2)} 元`;
+      }
+    }
+
     reasons = [
-      reason("positive", "股息吸引力", number(metrics.dividend_yield_pct, 2, "%"), rank(metrics.dividend_yield_rank, metrics.peer_count), "和其他金融收益型股票比較目前殖利率位置。", "TWSE 殖利率與同組比較"),
-      reason("neutral", "估值位置", number(metrics.pb_ratio, 2, " 倍"), rank(metrics.pb_rank, metrics.peer_count), "股價淨值比用來輔助判斷收益型股票是否昂貴。", "TWSE 股價淨值比"),
-      reason("caution", "目前判斷", decision.unheld || "等待更多證據", decision.held || "續抱觀察", decision.reason_zh || "仍需確認配息品質與估值。", "收益型研究模型"),
+      item(
+        incomeChange !== null && incomeChange < -5
+          ? "caution"
+          : "positive",
+        incomeChange !== null && incomeChange < -5
+          ? "最近四季獲利比一年前少"
+          : "最近四季獲利沒有明顯轉弱",
+        incomeChange !== null && incomeChange < -5
+          ? `最近四季合計獲利比一年前減少 ${Math.abs(incomeChange).toFixed(1)}%。`
+          : "最近四季合計獲利和一年前相比，沒有明顯減少。",
+        currentRoe !== null && usualRoe !== null
+          ? `目前每 100 元股東資金約賺回 ${currentRoe.toFixed(1)} 元｜過去常見約 ${usualRoe.toFixed(1)} 元`
+          : "比較資料：最近四季獲利與公司季度財報",
+        currentRoe !== null
+          ? `${currentRoe.toFixed(1)} 元`
+          : "目前未納入 ROE 比較",
+        usualRoe !== null
+          ? `過去 ${usualRoe.toFixed(1)} 元`
+          : "歷史比較",
+        "公司季度財務報告"
+      ),
+      item(
+        yieldIsLow ? "caution" : "neutral",
+        yieldIsLow
+          ? "目前股息低於多數同組公司"
+          : "目前股息大約在同組中間",
+        yieldIsLow
+          ? `目前殖利率為 ${number(metrics.dividend_yield_pct, 2, "%")}，在 ${peerCount} 家同組公司中排名第 ${yieldRank}。`
+          : "目前殖利率需要和其他金融公司一起比較，不能只看單一數字。",
+        `目前殖利率 ${number(metrics.dividend_yield_pct, 2, "%")}｜同組 ${rank(metrics.dividend_yield_rank, metrics.peer_count)}`,
+        number(metrics.dividend_yield_pct, 2, "%"),
+        rank(metrics.dividend_yield_rank, metrics.peer_count),
+        "交易所正式殖利率與同類公司比較"
+      ),
+      item(
+        integratedDividendIsCurrent &&
+        integratedDividendYears !== null &&
+        integratedDividendYears >= 5
+          ? "positive"
+          : "neutral",
+        integratedDividendTitle,
+        integratedDividendCopy,
+        integratedDividendBasis,
+        integratedDividendPrimary,
+        integratedDividendSecondary,
+        "公司歷年股利公告資料"
+      ),
     ];
-    followUp = ["歷年配息是否穩定", "最新 ROE 是否支持股息品質", "估值是否回到同組合理區間"];
+
+    followUp = [
+      usualRoe !== null
+        ? (
+            currentRoe !== null && currentRoe < usualRoe
+              ? `GC 會確認下一季用股東資金賺錢的效率，能不能回到過去常見的 ${usualRoe.toFixed(1)} 元`
+              : `GC 會確認下一季用股東資金賺錢的效率，能否維持目前水準`
+          )
+        : "GC 會確認下一季獲利方向是否改變",
+      incomeChange !== null && incomeChange < -5
+        ? "GC 會追蹤最近四季獲利是否停止減少"
+        : incomeChange !== null && incomeChange > 5
+          ? "GC 會追蹤最近四季獲利改善能否延續"
+          : "GC 會追蹤最近四季獲利是否出現明顯變化",
+      !integratedDividendIsCurrent
+        ? "取得新的股利公告後，GC 會重新評估目前股利是否延續"
+        : (
+            integratedDividendType !== "stock" &&
+            integratedFiveYearDividendAverage !== null
+              ? `如果下一次現金股利低於近 5 年平均的 ${integratedFiveYearDividendAverage.toFixed(2)} 元，GC 會重新評估配息穩定度`
+              : "GC 會持續比較最新股利與公司過去的股利水準"
+          ),
+    ];
   } else if (profileId === "growth_quality") {
+    typeDescription = "這家公司主要看收入、獲利和成長速度";
+
+    const growthHistory =
+      report.historical_context?.categories || {};
+
+    const growthRevenueHistory =
+      growthHistory.revenue || {};
+
+    const growthFinancialHistory =
+      growthHistory.financial || {};
+
+    const growthPriceHistory =
+      growthHistory.price || {};
+
+    const growthInstitutionalHistory =
+      growthHistory.institutional || {};
+
+    const latestMonthlyRevenueGrowth =
+      available(growthRevenueHistory.year_over_year_pct)
+        ? Number(growthRevenueHistory.year_over_year_pct)
+        : null;
+
+    const usualMonthlyRevenueGrowth =
+      available(growthRevenueHistory.historical_yoy_median_pct)
+        ? Number(growthRevenueHistory.historical_yoy_median_pct)
+        : null;
+
+    const latestFourQuarterIncomeChange =
+      available(growthFinancialHistory.income_change_yoy_pct)
+        ? Number(growthFinancialHistory.income_change_yoy_pct)
+        : null;
+
+    const financialQuarterSampleCount =
+      available(growthFinancialHistory.quarter_sample_count)
+        ? Number(growthFinancialHistory.quarter_sample_count)
+        : null;
+
+    const revenueHistorySampleCount =
+      available(growthRevenueHistory.sample_count)
+        ? Number(growthRevenueHistory.sample_count)
+        : null;
+
+    const revenueYoySampleCount =
+      available(growthRevenueHistory.yoy_sample_count)
+        ? Number(growthRevenueHistory.yoy_sample_count)
+        : null;
+
+    const price90dChange =
+      available(growthPriceHistory.changes?.["90d_pct"])
+        ? Number(growthPriceHistory.changes["90d_pct"])
+        : null;
+
+    const institutional20d =
+      available(growthInstitutionalHistory.windows?.["20d_net_buy"])
+        ? Number(growthInstitutionalHistory.windows["20d_net_buy"])
+        : null;
+
+    const institutionalSampleCount =
+      available(growthInstitutionalHistory.sample_count)
+        ? Number(growthInstitutionalHistory.sample_count)
+        : null;
+
+    const institutionalHistoricalPercentile =
+      available(growthInstitutionalHistory.percentile_20d)
+        ? Number(growthInstitutionalHistory.percentile_20d)
+        : null;
+
+    let growthOperatingTone = "caution";
+    let growthOperatingTitle =
+      "成長歷史尚未形成完整比較";
+    let growthOperatingCopy =
+      "收入年度比較或最近四季獲利仍有一項尚未形成，因此目前不直接判定公司的成長方向。";
+
+    if (
+      latestMonthlyRevenueGrowth !== null &&
+      latestFourQuarterIncomeChange !== null
+    ) {
+      if (
+        latestMonthlyRevenueGrowth > 0 &&
+        latestFourQuarterIncomeChange > 0
+      ) {
+        growthOperatingTone = "positive";
+        growthOperatingTitle =
+          "收入與獲利都在成長";
+        growthOperatingCopy =
+          `最新一個月收入比去年同期增加 ${latestMonthlyRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利也增加 ${latestFourQuarterIncomeChange.toFixed(1)}%。`;
+
+        if (
+          usualMonthlyRevenueGrowth !== null &&
+          latestMonthlyRevenueGrowth > usualMonthlyRevenueGrowth
+        ) {
+          growthOperatingCopy +=
+            `目前收入成長也高於過去常見的 ${usualMonthlyRevenueGrowth.toFixed(1)}%。`;
+        }
+      } else if (
+        latestMonthlyRevenueGrowth > 0 &&
+        latestFourQuarterIncomeChange <= 0
+      ) {
+        growthOperatingTitle =
+          "收入增加，但獲利尚未跟上";
+        growthOperatingCopy =
+          `最新一個月收入比去年同期增加 ${latestMonthlyRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${latestFourQuarterIncomeChange >= 0 ? "+" : ""}${latestFourQuarterIncomeChange.toFixed(1)}%。`;
+      } else if (
+        latestMonthlyRevenueGrowth <= 0 &&
+        latestFourQuarterIncomeChange > 0
+      ) {
+        growthOperatingTone = "neutral";
+        growthOperatingTitle =
+          "獲利增加，但收入正在放慢";
+        growthOperatingCopy =
+          `最近四季獲利比一年前增加 ${latestFourQuarterIncomeChange.toFixed(1)}%，` +
+          `最新一個月收入變化 ${latestMonthlyRevenueGrowth >= 0 ? "+" : ""}${latestMonthlyRevenueGrowth.toFixed(1)}%。`;
+      } else {
+        growthOperatingTitle =
+          "收入與獲利都在減少";
+        growthOperatingCopy =
+          `最新一個月收入變化 ${latestMonthlyRevenueGrowth >= 0 ? "+" : ""}${latestMonthlyRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${latestFourQuarterIncomeChange >= 0 ? "+" : ""}${latestFourQuarterIncomeChange.toFixed(1)}%。`;
+      }
+    }
+
+    const growthBasisParts = [];
+
+    if (revenueHistorySampleCount !== null) {
+      growthBasisParts.push(
+        `${revenueHistorySampleCount} 個月收入`
+      );
+    }
+
+    if (revenueYoySampleCount !== null) {
+      growthBasisParts.push(
+        `${revenueYoySampleCount} 次年度比較`
+      );
+    }
+
+    if (financialQuarterSampleCount !== null) {
+      growthBasisParts.push(
+        `${financialQuarterSampleCount} 季財報`
+      );
+    }
+
+    const valuationCopyParts = [];
+
+    if (available(metrics.pe_ratio)) {
+      valuationCopyParts.push(
+        `目前股價約為每股獲利的 ${Number(metrics.pe_ratio).toFixed(2)} 倍`
+      );
+    }
+
+    if (
+      available(metrics.pe_rank) &&
+      available(metrics.peer_count)
+    ) {
+      valuationCopyParts.push(
+        `在 ${Number(metrics.peer_count)} 家同組公司中排第 ${Number(metrics.pe_rank)}`
+      );
+    }
+
+    if (
+      available(metrics.pb_rank) &&
+      available(metrics.peer_count)
+    ) {
+      valuationCopyParts.push(
+        `股價和公司資產的比例則排第 ${Number(metrics.pb_rank)}/${Number(metrics.peer_count)}`
+      );
+    }
+
+    const momentumCopyParts = [];
+
+    if (price90dChange !== null) {
+      momentumCopyParts.push(
+        `近 90 個交易日股價` +
+        `${price90dChange >= 0 ? "上漲" : "下跌"} ` +
+        `${Math.abs(price90dChange).toFixed(1)}%`
+      );
+    }
+
+    if (
+      available(metrics.sector_rank) &&
+      available(metrics.sector_peer_count)
+    ) {
+      momentumCopyParts.push(
+        `近 20 日表現為同組第 ` +
+        `${Number(metrics.sector_rank)}/` +
+        `${Number(metrics.sector_peer_count)} 名`
+      );
+    }
+
+    if (institutional20d !== null) {
+      const nearHistoricalNorm =
+        institutionalHistoricalPercentile !== null &&
+        institutionalHistoricalPercentile >= 35 &&
+        institutionalHistoricalPercentile <= 65;
+
+      momentumCopyParts.push(
+        institutional20d < 0
+          ? nearHistoricalNorm
+            ? "法人近一個月賣出多於買進，但賣出程度接近過去常態"
+            : "法人近一個月賣出多於買進"
+          : nearHistoricalNorm
+            ? "法人近一個月買進多於賣出，但買進程度接近過去常態"
+            : "法人近一個月買進多於賣出"
+      );
+    }
+
     reasons = [
-      reason("positive", "成長仍強", number(metrics.revenue_yoy_pct, 2, "%"), number(metrics.eps_growth_yoy_pct, 2, "%"), "營收與 EPS 年增率用來確認成長是否仍在延續。", "公開財報與營收資料"),
-      reason("neutral", "價格位置", number(metrics.pe_ratio, 2, " 倍"), rank(metrics.pe_rank, metrics.peer_count), "成長良好不代表任何價格都適合追進。", "TWSE 估值與同組比較"),
-      reason("caution", "短期動能", rank(metrics.sector_rank, metrics.sector_peer_count), number(metrics.relative_market_pct_point, 2, " 個百分點"), decision.reason_zh || "目前仍需等待價格確認。", "近 20 日市場與同組比較"),
+      item(
+        growthOperatingTone,
+        growthOperatingTitle,
+        growthOperatingCopy,
+        growthBasisParts.length
+          ? `比較資料：${growthBasisParts.join("｜")}`
+          : "比較資料：公司月收入與季度財報歷史",
+        latestMonthlyRevenueGrowth !== null
+          ? `收入 ${latestMonthlyRevenueGrowth >= 0 ? "+" : ""}${latestMonthlyRevenueGrowth.toFixed(1)}%`
+          : "收入待比較",
+        latestFourQuarterIncomeChange !== null
+          ? `獲利 ${latestFourQuarterIncomeChange >= 0 ? "+" : ""}${latestFourQuarterIncomeChange.toFixed(1)}%`
+          : "獲利待比較",
+        "公司月收入與季度財報歷史"
+      ),
+      item(
+        "neutral",
+        "公司成長不錯，但目前價格不算低",
+        valuationCopyParts.length
+          ? `${valuationCopyParts.join("；")}。這只能說明目前在同組中的價格位置，不能直接當成買進或賣出結論。`
+          : "公司仍在成長，但目前價格需要和同組公司及公司賺錢速度一起比較。",
+        "比較資料：交易所正式本益比、股價淨值比與同組公司排名",
+        number(metrics.pe_ratio, 2, " 倍"),
+        rank(metrics.pe_rank, metrics.peer_count),
+        "交易所正式估值資料與同組公司比較"
+      ),
+      item(
+        "caution",
+        institutional20d !== null && institutional20d < 0
+          ? "股價表現較強，但法人沒有一起增加買盤"
+          : "股價與法人買盤都在變化",
+        momentumCopyParts.length
+          ? `${momentumCopyParts.join("；")}。`
+          : "近期股價表現較強，GC 會同時比較法人買賣與公司營運變化。",
+        `比較資料：近 20 日同組 ` +
+          `${rank(metrics.sector_rank, metrics.sector_peer_count)}` +
+          `｜比大盤多 ${number(metrics.relative_market_pct_point, 2, " 個百分點")}` +
+          (institutionalSampleCount !== null
+            ? `｜${institutionalSampleCount} 個交易日法人資料`
+            : ""),
+        rank(metrics.sector_rank, metrics.sector_peer_count),
+        number(metrics.relative_market_pct_point, 2, " 個百分點"),
+        "歷史股價、三大法人每日買賣與市場比較"
+      ),
     ];
-    followUp = ["營收與 EPS 成長是否延續", "價格是否回到合理區間", "ROE、自由現金流與負債資料是否補齊"];
+
+    followUp = [
+      usualMonthlyRevenueGrowth !== null
+        ? `下一次月收入公布後，GC 會比較成長速度是否仍高於過去常見的 ${usualMonthlyRevenueGrowth.toFixed(1)}%`
+        : "下一次月收入公布後，GC 會比較成長速度是否延續目前方向",
+      latestFourQuarterIncomeChange !== null &&
+      latestFourQuarterIncomeChange < 0
+        ? "GC 會追蹤下一季財報，確認最近四季獲利是否停止減少"
+        : price90dChange !== null && price90dChange > 10
+          ? "GC 會檢查獲利成長能否追上近期股價漲幅"
+          : "GC 會追蹤下一季財報，確認獲利方向是否延續",
+      institutional20d !== null && institutional20d < 0
+        ? "GC 會追蹤法人近一個月是否由賣出多於買進，轉為買進多於賣出"
+        : institutional20d !== null && institutional20d > 0
+          ? "GC 會追蹤法人近一個月買進多於賣出的狀況能否延續"
+          : "GC 會追蹤法人近一個月的買賣方向是否出現明顯變化",
+    ];
   } else if (profileId === "cyclical") {
+    typeDescription = "這家公司容易受到景氣影響，GC 會分開檢查營運、價格與市場資金";
+
+    const cyclicalHistory =
+      report.historical_context?.categories || {};
+
+    const cyclicalRevenue =
+      cyclicalHistory.revenue || {};
+
+    const cyclicalFinancial =
+      cyclicalHistory.financial || {};
+
+    const cyclicalPrice =
+      cyclicalHistory.price || {};
+
+    const cyclicalInstitutional =
+      cyclicalHistory.institutional || {};
+
+    const cyclicalMargin =
+      cyclicalHistory.margin || {};
+
+    const cyclicalRevenueGrowth =
+      available(cyclicalRevenue.year_over_year_pct)
+        ? Number(cyclicalRevenue.year_over_year_pct)
+        : null;
+
+    const cyclicalIncomeChange =
+      available(cyclicalFinancial.income_change_yoy_pct)
+        ? Number(cyclicalFinancial.income_change_yoy_pct)
+        : null;
+
+    const cyclicalPrice30d =
+      available(cyclicalPrice.changes?.["30d_pct"])
+        ? Number(cyclicalPrice.changes["30d_pct"])
+        : null;
+
+    const cyclicalInstitutional20d =
+      available(cyclicalInstitutional.windows?.["20d_net_buy"])
+        ? Number(cyclicalInstitutional.windows["20d_net_buy"])
+        : null;
+
+    const cyclicalInstitutionalPercentile =
+      available(cyclicalInstitutional.percentile_20d)
+        ? Number(cyclicalInstitutional.percentile_20d)
+        : null;
+
+    const cyclicalMargin20d =
+      available(cyclicalMargin.changes?.["20d_pct"])
+        ? Number(cyclicalMargin.changes["20d_pct"])
+        : null;
+
+    let cyclicalOperatingTone = "caution";
+    let cyclicalOperatingTitle =
+      "營運歷史尚未形成完整比較";
+    let cyclicalOperatingCopy =
+      "收入年度比較或最近四季獲利仍有一項尚未形成，因此目前不直接判定景氣回溫。";
+
+    if (
+      cyclicalRevenueGrowth !== null &&
+      cyclicalIncomeChange !== null
+    ) {
+      if (
+        cyclicalRevenueGrowth > 0 &&
+        cyclicalIncomeChange > 0
+      ) {
+        cyclicalOperatingTone = "positive";
+        cyclicalOperatingTitle =
+          "收入與獲利一起改善";
+        cyclicalOperatingCopy =
+          `最新收入比去年同期增加 ${cyclicalRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利增加 ${cyclicalIncomeChange.toFixed(1)}%。` +
+          "兩項營運資料同時改善，支持營運循環正在回溫。";
+      } else if (
+        cyclicalRevenueGrowth > 0 &&
+        cyclicalIncomeChange <= 0
+      ) {
+        cyclicalOperatingTitle =
+          "收入增加，但獲利尚未跟上";
+        cyclicalOperatingCopy =
+          `最新收入比去年同期增加 ${cyclicalRevenueGrowth.toFixed(1)}%，` +
+          `但最近四季獲利比一年前減少 ${Math.abs(cyclicalIncomeChange).toFixed(1)}%。` +
+          "營收規模增加，但獲利尚未同步改善。";
+      } else if (
+        cyclicalRevenueGrowth <= 0 &&
+        cyclicalIncomeChange > 0
+      ) {
+        cyclicalOperatingTone = "neutral";
+        cyclicalOperatingTitle =
+          "獲利改善，但收入尚未回升";
+        cyclicalOperatingCopy =
+          `最近四季獲利比一年前增加 ${cyclicalIncomeChange.toFixed(1)}%，` +
+          `但最新收入比去年同期減少 ${Math.abs(cyclicalRevenueGrowth).toFixed(1)}%。`;
+      } else {
+        cyclicalOperatingTitle =
+          "收入與獲利都還沒有回升";
+        cyclicalOperatingCopy =
+          `最新收入比去年同期減少 ${Math.abs(cyclicalRevenueGrowth).toFixed(1)}%，` +
+          `最近四季獲利比一年前減少 ${Math.abs(cyclicalIncomeChange).toFixed(1)}%。`;
+      }
+    }
+
+    const cyclicalOperatingBasis = [
+      `${Number(cyclicalRevenue.sample_count || 0)} 個月收入歷史`,
+      `${Number(cyclicalRevenue.yoy_sample_count || 0)} 次年度比較`,
+      `${Number(cyclicalFinancial.quarter_sample_count || 0)} 季財報`,
+    ].join("｜");
+
     reasons = [
-      reason("positive", "景氣與營運", number(metrics.revenue_yoy_pct, 2, "%"), number(metrics.revenue_mom_pct, 2, "%"), "營收年增與月增用來觀察循環是否正在轉強。", "公開營收資料"),
-      reason("neutral", "價格趨勢", number(metrics.return_20d_pct, 2, "%"), number(metrics.rsi_14, 2), "漲幅與 RSI 一起判斷趨勢強度及是否過熱。", "交易所價格資料"),
-      reason("caution", "籌碼風險", number(metrics.margin_change_5d_pct, 2, "%"), decision.unheld || "等待循環確認", decision.reason_zh || "仍需留意追價與籌碼反轉。", "法人與融資資料"),
+      item(
+        cyclicalOperatingTone,
+        cyclicalOperatingTitle,
+        cyclicalOperatingCopy,
+        cyclicalOperatingBasis,
+        cyclicalRevenueGrowth !== null
+          ? `${cyclicalRevenueGrowth >= 0 ? "+" : ""}${cyclicalRevenueGrowth.toFixed(1)}%`
+          : "收入待比較",
+        cyclicalIncomeChange !== null
+          ? `${cyclicalIncomeChange >= 0 ? "+" : ""}${cyclicalIncomeChange.toFixed(1)}%`
+          : "獲利待比較",
+        "公司月收入與季度財報歷史"
+      ),
+      item(
+        cyclicalPrice30d !== null && cyclicalPrice30d > 10
+          ? "positive"
+          : "neutral",
+        "股價與法人買盤已經轉強",
+        cyclicalPrice30d !== null && cyclicalInstitutional20d !== null
+          ? `近 30 個交易日股價上漲 ${cyclicalPrice30d.toFixed(1)}%，法人近 20 日買進多於賣出。這代表市場反應偏強，但不能取代營運證據。`
+          : "近期市場訊號有所變化，但仍要等待營運資料確認。",
+        cyclicalInstitutionalPercentile !== null
+          ? `近 30 日股價變化 ${cyclicalPrice30d?.toFixed(1) || "—"}%｜法人買賣位於自身歷史第 ${cyclicalInstitutionalPercentile.toFixed(1)} 百分位`
+          : `近 30 日股價變化 ${cyclicalPrice30d?.toFixed(1) || "—"}%`,
+        cyclicalPrice30d !== null
+          ? `${cyclicalPrice30d.toFixed(1)}%`
+          : "近 30 日股價變化未提供",
+        cyclicalInstitutionalPercentile !== null
+          ? `第 ${cyclicalInstitutionalPercentile.toFixed(1)} 百分位`
+          : "法人歷史百分位未提供",
+        "歷史股價與三大法人每日買賣資料"
+      ),
+      item(
+        cyclicalMargin20d !== null && cyclicalMargin20d < 0
+          ? "positive"
+          : "neutral",
+        cyclicalMargin20d !== null && cyclicalMargin20d < 0
+          ? "股價上漲期間，融資部位反而減少"
+          : "GC 會持續檢查融資是否快速增加",
+        cyclicalMargin20d !== null
+          ? `近 20 個交易日融資部位${cyclicalMargin20d >= 0 ? "增加" : "減少"} ${Math.abs(cyclicalMargin20d).toFixed(1)}%。目前${cyclicalMargin20d < 0 ? "不是融資追價主導" : "需要留意借錢追價壓力"}。`
+          : "目前沒有可用的近 20 日融資變化。",
+        cyclicalMargin20d !== null
+          ? `近 20 日融資變化 ${cyclicalMargin20d.toFixed(1)}%`
+          : "近 20 日融資變化未提供",
+        cyclicalMargin20d !== null
+          ? `${cyclicalMargin20d.toFixed(1)}%`
+          : "20 日變化未提供",
+        `${Number(cyclicalMargin.sample_count || 0)} 個交易日`,
+        "交易所融資融券歷史資料"
+      ),
     ];
-    followUp = ["營收循環是否持續改善", "RSI 過熱是否降溫", "融資與法人籌碼是否反轉"];
+
+    followUp = [
+      cyclicalRevenueGrowth !== null && cyclicalRevenueGrowth > 0
+        ? "GC 會追蹤下一次月收入是否延續目前的成長"
+        : cyclicalRevenueGrowth !== null
+          ? "GC 會追蹤下一次月收入是否停止減少"
+          : "GC 會在下一次月收入公布後重新判斷收入方向",
+      cyclicalIncomeChange !== null && cyclicalIncomeChange > 0
+        ? "GC 會追蹤下一季財報，確認獲利改善能否延續"
+        : cyclicalIncomeChange !== null
+          ? "GC 會追蹤下一季財報，確認獲利是否停止減少"
+          : "GC 會在下一季財報公布後重新判斷獲利方向",
+      cyclicalPrice30d !== null &&
+      cyclicalPrice30d > 10 &&
+      !(
+        cyclicalRevenueGrowth !== null &&
+        cyclicalRevenueGrowth > 0 &&
+        cyclicalIncomeChange !== null &&
+        cyclicalIncomeChange > 0
+      )
+        ? "如果股價持續上漲但收入與獲利沒有一起改善，GC 會提高價格先行的風險提醒"
+        : "GC 會持續比較市場價格與營運方向是否一致",
+    ];
   } else if (profileId === "high_volatility_event") {
+    typeDescription =
+      "這家公司容易受到消息影響，GC 會分開檢查營運、事件與市場反應";
+
+    const eventHistory =
+      report.historical_context?.categories || {};
+
+    const eventRevenueHistory =
+      eventHistory.revenue || {};
+
+    const eventFinancialHistory =
+      eventHistory.financial || {};
+
+    const eventRevenueGrowth =
+      available(eventRevenueHistory.year_over_year_pct)
+        ? Number(eventRevenueHistory.year_over_year_pct)
+        : null;
+
+    const eventIncomeChange =
+      available(eventFinancialHistory.income_change_yoy_pct)
+        ? Number(eventFinancialHistory.income_change_yoy_pct)
+        : null;
+
+    const eventRevenueMonths =
+      Number(eventRevenueHistory.sample_count || 0);
+
+    const eventRevenueComparisons =
+      Number(eventRevenueHistory.yoy_sample_count || 0);
+
+    const eventFinancialQuarters =
+      Number(eventFinancialHistory.quarter_sample_count || 0);
+
+    const confirmedEventCount =
+      Number(metrics.confirmed_company_event_count || 0);
+
+    const integratedEventPriceHistory =
+      report.historical_context?.categories?.price || {};
+
+    const integratedEventVolatility20d =
+      available(integratedEventPriceHistory.volatility_20d_pct)
+        ? Number(integratedEventPriceHistory.volatility_20d_pct)
+        : null;
+
+    const integratedEventPrice30d =
+      available(integratedEventPriceHistory.changes?.["30d_pct"])
+        ? Number(integratedEventPriceHistory.changes["30d_pct"])
+        : null;
+
+    const integratedEventPrice90d =
+      available(integratedEventPriceHistory.changes?.["90d_pct"])
+        ? Number(integratedEventPriceHistory.changes["90d_pct"])
+        : null;
+
+    const integratedEventPriceFacts = [];
+
+    if (integratedEventVolatility20d !== null) {
+      integratedEventPriceFacts.push(
+        `近 20 日波動 ${integratedEventVolatility20d.toFixed(1)}%`
+      );
+    }
+
+    if (integratedEventPrice30d !== null) {
+      integratedEventPriceFacts.push(
+        `近 30 日漲跌 ${integratedEventPrice30d >= 0 ? "+" : ""}` +
+        `${integratedEventPrice30d.toFixed(1)}%`
+      );
+    }
+
+    if (integratedEventPrice90d !== null) {
+      integratedEventPriceFacts.push(
+        `近 90 日漲跌 ${integratedEventPrice90d >= 0 ? "+" : ""}` +
+        `${integratedEventPrice90d.toFixed(1)}%`
+      );
+    }
+
+    const integratedEventPriceIsHighlyVolatile =
+      integratedEventVolatility20d !== null &&
+      integratedEventVolatility20d >= 40;
+
+    const integratedEventPriceMovedQuickly =
+      (
+        integratedEventPrice30d !== null &&
+        Math.abs(integratedEventPrice30d) >= 10
+      ) ||
+      (
+        integratedEventPrice90d !== null &&
+        Math.abs(integratedEventPrice90d) >= 20
+      );
+
+    let integratedEventPriceTone = "neutral";
+    let integratedEventPriceTitle =
+      "近期價格沒有出現極端變化";
+    let integratedEventPriceCopy =
+      "近期價格仍可能受到新消息影響，但目前歷史價格沒有顯示極端單向變化。";
+
+    if (integratedEventPriceIsHighlyVolatile) {
+      integratedEventPriceTone = "caution";
+      integratedEventPriceTitle =
+        "股價起伏很大，短期可能快速反轉";
+      integratedEventPriceCopy =
+        `依最近 20 個交易日價格換算，股價波動程度約 ` +
+        `${integratedEventVolatility20d.toFixed(1)}%。` +
+        "即使營運方向判斷正確，短期價格仍可能出現明顯反向變化。";
+    } else if (integratedEventPriceMovedQuickly) {
+      integratedEventPriceTone = "caution";
+      integratedEventPriceTitle =
+        "近期價格變動較大，仍要留意快速反轉";
+      integratedEventPriceCopy =
+        "近期股價已出現較大的方向變化，但價格反應不能取代收入與獲利證據。";
+    } else if (!integratedEventPriceFacts.length) {
+      integratedEventPriceTitle =
+        "目前沒有可用的近期價格變化";
+      integratedEventPriceCopy =
+        "目前沒有可用的近 20 日波動或近 30、90 日價格變化，因此不判定近期價格風險方向。";
+    }
+
+    let eventOperatingTone = "caution";
+    let eventOperatingTitle =
+      "營運歷史尚未形成完整比較";
+    let eventOperatingCopy =
+      "收入年度比較或最近四季獲利仍有一項尚未形成，因此不直接判定事件已經改變營運。";
+
+    if (
+      eventRevenueGrowth !== null &&
+      eventIncomeChange !== null
+    ) {
+      if (
+        eventRevenueGrowth > 0 &&
+        eventIncomeChange > 0
+      ) {
+        eventOperatingTone = "positive";
+        eventOperatingTitle =
+          "收入與獲利都在改善";
+        eventOperatingCopy =
+          `最新一個月收入增加 ${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利也增加 ${eventIncomeChange.toFixed(1)}%。` +
+          "目前營運改善有實際資料支持，不只來自股價或消息。";
+      } else if (
+        eventRevenueGrowth > 0 &&
+        eventIncomeChange <= 0
+      ) {
+        eventOperatingTitle =
+          "收入增加，但獲利尚未跟上";
+        eventOperatingCopy =
+          `最新一個月收入增加 ${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%。`;
+      } else if (
+        eventRevenueGrowth <= 0 &&
+        eventIncomeChange > 0
+      ) {
+        eventOperatingTone = "neutral";
+        eventOperatingTitle =
+          "獲利增加，但收入尚未回升";
+        eventOperatingCopy =
+          `最近四季獲利增加 ${eventIncomeChange.toFixed(1)}%，` +
+          `最新一個月收入變化 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%。`;
+      } else {
+        eventOperatingTitle =
+          "收入與獲利都尚未改善";
+        eventOperatingCopy =
+          `最新一個月收入變化 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%，` +
+          `最近四季獲利變化 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%。`;
+      }
+    }
+
     reasons = [
-      reason("positive", "同組表現", number(metrics.return_20d_pct, 2, "%"), rank(metrics.sector_rank, metrics.sector_peer_count), "近期漲幅僅代表相對表現，不代表事件已被證實。", "近 20 日同組比較"),
-      reason("caution", "波動風險", number(metrics.volatility_20d_pct, 2, "%"), number(metrics.atr_14_pct, 2, "%"), "高波動股票需要同時確認可能回撤的幅度。", "交易所價格資料"),
-      reason("neutral", "公司事件", `${Number(metrics.confirmed_company_event_count || 0)} 項`, decision.unheld || "等待事件確認", decision.reason_zh || "目前仍需等待公司專屬事件證據。", "已確認官方事件"),
+      item(
+        eventOperatingTone,
+        eventOperatingTitle,
+        eventOperatingCopy,
+        `比較資料：${eventRevenueMonths} 個月收入歷史｜` +
+          `${eventRevenueComparisons} 次年度比較｜` +
+          `${eventFinancialQuarters} 季財報`,
+        eventRevenueGrowth !== null
+          ? `收入 ${eventRevenueGrowth >= 0 ? "+" : ""}${eventRevenueGrowth.toFixed(1)}%`
+          : "收入待比較",
+        eventIncomeChange !== null
+          ? `獲利 ${eventIncomeChange >= 0 ? "+" : ""}${eventIncomeChange.toFixed(1)}%`
+          : "獲利待比較",
+        "公司月收入與季度財報歷史"
+      ),
+      item(
+        integratedEventPriceTone,
+        integratedEventPriceTitle,
+        integratedEventPriceCopy,
+        integratedEventPriceFacts.length
+          ? `比較資料：${integratedEventPriceFacts.join("｜")}`
+          : "比較資料：近期歷史價格變化未提供",
+        integratedEventVolatility20d !== null
+          ? `${integratedEventVolatility20d.toFixed(1)}%`
+          : "20 日波動未提供",
+        integratedEventPrice30d !== null
+          ? `${integratedEventPrice30d >= 0 ? "+" : ""}${integratedEventPrice30d.toFixed(1)}%`
+          : (
+              integratedEventPrice90d !== null
+                ? `${integratedEventPrice90d >= 0 ? "+" : ""}${integratedEventPrice90d.toFixed(1)}%`
+                : "近期漲跌未提供"
+            ),
+        "交易所歷史股價資料"
+      ),
+      item(
+        confirmedEventCount > 0
+          ? "caution"
+          : "neutral",
+        confirmedEventCount > 0
+          ? `目前有 ${confirmedEventCount} 項重要公司事件`
+          : "目前沒有新的重大公司事件",
+        confirmedEventCount > 0
+          ? "GC 已找到需要追蹤的重要公司事件，但會等待收入或獲利資料確認事件是否真的改變營運。"
+          : "目前確認事件數為 0；這代表沒有新的重大公司事件，不代表事件資料不足。",
+        `已確認的重要公司事件 ${confirmedEventCount} 項`,
+        `${confirmedEventCount} 項`,
+        confirmedEventCount > 0
+          ? "等待營運確認"
+          : "目前無新事件",
+        "公司公告與公開新聞來源"
+      ),
     ];
-    followUp = ["是否出現已確認的公司專屬事件", "成交量是否支持價格突破", "高波動是否出現反轉"];
+
+    followUp = [
+      confirmedEventCount > 0
+        ? "GC 會追蹤已確認事件是否開始影響公司的收入或獲利"
+        : "GC 會持續監測是否出現新的重大公司公告",
+      eventRevenueGrowth !== null
+        ? "GC 會追蹤下一次月收入是否延續目前方向"
+        : "GC 會等待收入形成年度比較後再判斷營運方向",
+      eventIncomeChange !== null
+        ? "GC 會追蹤下一季財報，確認獲利方向是否改變"
+        : "GC 會等待季度獲利形成比較後再判斷事件影響",
+    ];
   } else {
-    const indicators = Array.isArray(report.indicators) ? report.indicators.slice(0, 3) : [];
-    reasons = indicators.map((item) => reason("neutral", item.label || "研究證據", number(item.score, 1, " 分"), item.level || "待確認", item.description || "等待更多研究資料。", item.source_label_zh || "公開資料"));
-    followUp = ["補齊股票類型資料", "確認主要風險來源", "等待更多同組比較證據"];
+    const indicators =
+      Array.isArray(report.indicators)
+        ? report.indicators.slice(0, 3)
+        : [];
+
+    reasons = indicators.map((indicator) =>
+      item(
+        "neutral",
+        indicator.label || "目前最重要的公司變化",
+        indicator.description || "GC 已整理目前可用的公司與市場資料。",
+        `判斷依據：${indicator.source_label_zh || "公司與市場公開資料"}`,
+        number(indicator.score, 1, " 分"),
+        indicator.level || "目前狀態",
+        indicator.source_label_zh || "公開資料"
+      )
+    );
+
+    followUp = [
+      "GC 會追蹤公司的收入和獲利是否出現明顯變化",
+      "GC 會檢查目前股價和公司表現是否一致",
+      "GC 會在出現重要公司消息時重新整理判斷",
+    ];
   }
 
-  $("integratedDecisionType").textContent = report.stock_profile?.label_zh || "依股票類型整理";
-  $("integratedReasonGrid").innerHTML = reasons.slice(0, 3).map((item, index) => `
-    <article class="integrated-reason ${item.tone}">
-      <span>理由 ${index + 1}</span>
-      <h3>${escapeHtml(item.title)}</h3>
-      <div class="integrated-reason-values"><b>${escapeHtml(item.primary)}</b><em>${escapeHtml(item.secondary)}</em></div>
-      <p>${escapeHtml(item.copy)}</p>
-      <small>資料來源：${escapeHtml(item.source)}</small>
-    </article>
-  `).join("");
+  $("integratedDecisionType").textContent = typeDescription;
 
-  const missing = Array.isArray(profile.missing_evidence_zh) ? profile.missing_evidence_zh : [];
-  const tracking = [...new Set([...followUp, ...missing])].slice(0, 3);
-  $("integratedFollowUpList").innerHTML = tracking.map((item, index) => `<li><b>${index + 1}</b><span>${escapeHtml(item)}</span></li>`).join("");
+  $("integratedReasonGrid").innerHTML = reasons
+    .slice(0, 3)
+    .map((reason, index) => `
+      <article class="integrated-reason ${reason.tone}">
+        <span>重點 ${index + 1}</span>
+        <h3>${escapeHtml(reason.title)}</h3>
+
+        <section class="guided-copy-block">
+          <p>${escapeHtml(reason.copy)}</p>
+        </section>
+
+        <small class="guided-copy-basis">
+          ${escapeHtml(reason.basis)}
+        </small>
+
+        <details class="guided-evidence-detail">
+          <summary>
+            查看 GC 的判斷依據
+            <span>＋</span>
+          </summary>
+          <dl>
+            <div>
+              <dt>主要資料</dt>
+              <dd>${escapeHtml(reason.primary)}</dd>
+            </div>
+            <div>
+              <dt>比較結果</dt>
+              <dd>${escapeHtml(reason.secondary)}</dd>
+            </div>
+            <div>
+              <dt>資料來源</dt>
+              <dd>${escapeHtml(reason.source)}</dd>
+            </div>
+          </dl>
+        </details>
+      </article>
+    `)
+    .join("");
+
+  $("integratedReasonGrid")
+    .querySelectorAll(".guided-evidence-detail")
+    .forEach((detail) => {
+      if (detail.dataset.guidedAccordionBound === "true") return;
+
+      detail.dataset.guidedAccordionBound = "true";
+
+      detail.addEventListener("toggle", () => {
+        if (!detail.open) return;
+
+        $("integratedReasonGrid")
+          .querySelectorAll(".guided-evidence-detail")
+          .forEach((other) => {
+            if (other !== detail) {
+              other.open = false;
+            }
+          });
+      });
+    });
+
+  $("integratedFollowUpList").innerHTML = followUp
+    .slice(0, 3)
+    .map(
+      (trackingItem, index) => `
+        <li>
+          <b>${index + 1}</b>
+          <span>${escapeHtml(trackingItem)}</span>
+        </li>
+      `
+    )
+    .join("");
 
   const history = (Array.isArray(report.score_history) ? report.score_history : [])
     .slice(-10)
     .map((item) => ({
       date: String(item.date || ""),
       score: Number(item.score),
+      risk: Number(item.risk),
+      confidence: Number(item.confidence),
     }))
     .filter((item) => Number.isFinite(item.score));
 
@@ -518,11 +4107,398 @@ function renderIntegratedDecision(report) {
       <div class="integrated-trend-values">${valueItems}</div>
     </div>
   `;
+  const firstHistoryItem = history[0];
+  const latestHistoryItem = history[history.length - 1];
 
-  const change = history[history.length - 1].score - history[0].score;
-  $("integratedTrendSummary").textContent =
-    `最新 ${history[history.length - 1].score.toFixed(1)} 分，較區間起點` +
-    `${change >= 0 ? "增加" : "減少"} ${Math.abs(change).toFixed(1)} 分。`;
+  const lowestHistoryItem = history.reduce(
+    (lowest, item) =>
+      item.score < lowest.score
+        ? item
+        : lowest
+  );
+
+  const highestHistoryItem = history.reduce(
+    (highest, item) =>
+      item.score > highest.score
+        ? item
+        : highest
+  );
+
+  const change =
+    latestHistoryItem.score -
+    firstHistoryItem.score;
+
+  const absoluteChange =
+    Math.abs(change);
+
+  const riskChange =
+    Number.isFinite(firstHistoryItem.risk) &&
+    Number.isFinite(latestHistoryItem.risk)
+      ? latestHistoryItem.risk - firstHistoryItem.risk
+      : null;
+
+  const confidenceChange =
+    Number.isFinite(firstHistoryItem.confidence) &&
+    Number.isFinite(latestHistoryItem.confidence)
+      ? latestHistoryItem.confidence - firstHistoryItem.confidence
+      : null;
+
+  const trendDimensions = [];
+
+  if (
+    riskChange !== null &&
+    Math.abs(riskChange) >= 1
+  ) {
+    trendDimensions.push(
+      `同期風險壓力${riskChange > 0 ? "增加" : "減少"} ` +
+      `${Math.abs(riskChange).toFixed(1)} 分`
+    );
+  }
+
+  if (
+    confidenceChange !== null &&
+    Math.abs(confidenceChange) >= 1
+  ) {
+    trendDimensions.push(
+      `同期判斷把握度${confidenceChange > 0 ? "提高" : "降低"} ` +
+      `${Math.abs(confidenceChange).toFixed(1)} 分`
+    );
+  }
+
+  const trendCategories =
+    report.historical_context?.categories || {};
+
+  const trendRevenue =
+    trendCategories.revenue || {};
+
+  const trendFinancial =
+    trendCategories.financial || {};
+
+  const currentRevenueChange =
+    available(trendRevenue.year_over_year_pct)
+      ? Number(trendRevenue.year_over_year_pct)
+      : null;
+
+  const currentIncomeChange =
+    available(trendFinancial.income_change_yoy_pct)
+      ? Number(trendFinancial.income_change_yoy_pct)
+      : null;
+
+  let currentOperatingSummary = "";
+
+  if (
+    currentRevenueChange !== null &&
+    currentIncomeChange !== null
+  ) {
+    if (
+      currentRevenueChange > 0 &&
+      currentIncomeChange > 0
+    ) {
+      currentOperatingSummary =
+        "目前收入與獲利都比一年前增加。";
+    } else if (
+      currentRevenueChange > 0 &&
+      currentIncomeChange <= 0
+    ) {
+      currentOperatingSummary =
+        "目前收入增加，但獲利尚未同步改善。";
+    } else if (
+      currentRevenueChange <= 0 &&
+      currentIncomeChange > 0
+    ) {
+      currentOperatingSummary =
+        "目前獲利增加，但收入尚未回升。";
+    } else {
+      currentOperatingSummary =
+        "目前收入與獲利都尚未回升。";
+    }
+  }
+
+  let trendConclusion;
+
+  if (absoluteChange < 3) {
+    trendConclusion =
+      "最近幾次更新，研究分數大致持平";
+  } else if (change >= 8) {
+    trendConclusion =
+      "最近幾次更新，研究分數明顯上升";
+  } else if (change >= 3) {
+    trendConclusion =
+      "最近幾次更新，研究分數有所上升";
+  } else if (change <= -8) {
+    trendConclusion =
+      "最近幾次更新，研究分數明顯下降";
+  } else {
+    trendConclusion =
+      "最近幾次更新，研究分數有所下降";
+  }
+
+  const rebound =
+    latestHistoryItem.score -
+    lowestHistoryItem.score;
+
+  let trendMovement = "";
+
+  if (
+    lowestHistoryItem !== latestHistoryItem &&
+    rebound >= 3
+  ) {
+    trendMovement =
+      `期間曾降到 ${lowestHistoryItem.score.toFixed(1)} 分，` +
+      `目前已回升到 ${latestHistoryItem.score.toFixed(1)} 分。`;
+  } else if (
+    highestHistoryItem !== latestHistoryItem &&
+    highestHistoryItem.score - latestHistoryItem.score >= 3
+  ) {
+    trendMovement =
+      `期間最高為 ${highestHistoryItem.score.toFixed(1)} 分，` +
+      `目前為 ${latestHistoryItem.score.toFixed(1)} 分。`;
+  }
+
+  const formatHistoryDate = (value) =>
+    String(value || "")
+      .slice(5)
+      .replace("-", "/");
+
+  $("integratedTrendSummary").innerHTML = `
+    <strong>${escapeHtml(trendConclusion)}</strong>
+    ${
+      trendMovement
+        ? `<span>${escapeHtml(trendMovement)}</span>`
+        : ""
+    }
+    ${
+      currentOperatingSummary
+        ? `<span>${escapeHtml(currentOperatingSummary)}</span>`
+        : ""
+    }
+    ${
+      trendDimensions.length
+        ? `<span>${escapeHtml(trendDimensions.join("｜"))}</span>`
+        : ""
+    }
+    <small>
+      比較期間：
+      ${escapeHtml(formatHistoryDate(firstHistoryItem.date))}
+      ～
+      ${escapeHtml(formatHistoryDate(latestHistoryItem.date))}
+      ｜${firstHistoryItem.score.toFixed(1)}
+      →
+      ${latestHistoryItem.score.toFixed(1)}
+      （${change >= 0 ? "+" : ""}${change.toFixed(1)}）
+    </small>
+  `;
+}
+function cleanProHtml(html) {
+  return String(html || "")
+    .replace(/\s+id="[^"]*"/g, "")
+    .replace(/\s+aria-labelledby="[^"]*"/g, "");
+}
+
+function setProResearchTab(tab) {
+  const value = ["overview", "valuation", "evidence", "history"].includes(tab)
+    ? tab
+    : "overview";
+
+  document.querySelectorAll("[data-pro-tab]").forEach((button) => {
+    const active = button.dataset.proTab === value;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+
+  document.querySelectorAll("[data-pro-panel]").forEach((panel) => {
+    const active = panel.dataset.proPanel === value;
+    panel.classList.toggle("active", active);
+    panel.hidden = !active;
+  });
+}
+
+function renderProResearch(report) {
+  if (!$("proResearchWorkspace")) return;
+
+  const score = Number(report.score);
+  const risk = Number(report.risk);
+  const confidence = Number(report.confidence);
+  const investment = report.investment_research || {};
+  const valuation = investment.valuation || {};
+  const valuationMetrics = Array.isArray(valuation.metrics)
+    ? valuation.metrics
+    : [];
+
+  const history = (Array.isArray(report.score_history) ? report.score_history : [])
+    .map((item) => Number(item.score))
+    .filter(Number.isFinite);
+
+  const scoreChange = history.length > 1
+    ? history[history.length - 1] - history[0]
+    : null;
+
+  const coreItems = [
+    {
+      key: "Health",
+      label: "健康狀態",
+      value: Number.isFinite(score) ? score.toFixed(1) : "—",
+      meta: report.assessment || "健康狀態尚未分類",
+      tone: score >= 75 ? "positive" : score >= 55 ? "neutral" : "caution",
+    },
+    {
+      key: "Risk",
+      label: "風險壓力",
+      value: Number.isFinite(risk) ? `${Math.round(risk)} / 100` : "—",
+      meta: report.risk_level || "風險程度尚未分類",
+      tone: risk >= 65 ? "caution" : risk >= 40 ? "neutral" : "positive",
+    },
+    {
+      key: "Valuation",
+      label:
+        valuation.comparison_scope === "current_peer_group"
+          ? "同組估值比較"
+          : valuation.comparison_scope === "official_metrics_only"
+            ? "正式估值數字"
+            : valuation.comparison_scope === "historical_price_position"
+              ? "自身歷史價格位置"
+              : "價格比較狀態",
+      value:
+        valuation.comparison_scope === "current_peer_group"
+          ? "同組比較可用"
+          : valuation.comparison_scope === "official_metrics_only"
+            ? "正式數字可用"
+            : valuation.comparison_scope === "historical_price_position"
+              ? "歷史位置可用"
+              : researchStatus(valuation.status),
+      meta:
+        valuation.headline_zh ||
+        "價格比較範圍尚未分類",
+      tone: "neutral",
+    },
+    {
+      key: "Confidence",
+      label: "判斷把握度",
+      value: Number.isFinite(confidence) ? `${Math.round(confidence)} / 100` : "—",
+      meta: report.confidence_level || "判斷把握度尚未分類",
+      tone: confidence >= 75 ? "positive" : confidence >= 50 ? "neutral" : "caution",
+    },
+  ];
+
+  $("proCoreGrid").innerHTML = coreItems.map((item) => `
+    <article class="pro-core-item ${item.tone}">
+      <span>${escapeHtml(item.key)}</span>
+      <small>${escapeHtml(item.label)}</small>
+      <strong>${escapeHtml(item.value)}</strong>
+      <p>${escapeHtml(item.meta)}</p>
+    </article>
+  `).join("");
+
+  const indicators = Array.isArray(report.indicators)
+    ? report.indicators
+    : [];
+
+  $("proIndicatorList").innerHTML = indicators.length
+    ? indicators.slice(0, 5).map((item) => {
+        const value = Number(item.score);
+        return `
+          <article>
+            <div>
+              <b>${escapeHtml(item.label || "研究指標")}</b>
+              <small>${escapeHtml(item.level || "指標狀態未分類")}</small>
+            </div>
+            <strong>${Number.isFinite(value) ? value.toFixed(1) : "—"}</strong>
+            <span>${escapeHtml(item.description || "")}</span>
+          </article>
+        `;
+      }).join("")
+    : '<p class="pro-empty">本次報告未列出個別研究指標。</p>';
+
+  $("proResearchDate").textContent =
+    report.updated && report.updated !== "—"
+      ? `資料日期 ${report.updated}`
+      : "資料日期未提供";
+
+  $("proValuationTitle").textContent =
+    valuation.headline_zh || "估值比較狀態未提供";
+
+  $("proValuationSummary").innerHTML = `
+    <span class="pro-data-status">${escapeHtml(researchStatus(valuation.status))}</span>
+    <div class="pro-valuation-metrics">
+      ${
+        valuationMetrics.length
+          ? valuationMetrics.slice(0, 5).map((item) => `
+              <div>
+                <span>${escapeHtml(item.label_zh || "估值指標")}</span>
+                <b>${
+                  item.value == null
+                    ? "—"
+                    : `${Number(item.value).toLocaleString("zh-TW", {maximumFractionDigits: 2})}${escapeHtml(item.unit || "")}`
+                }</b>
+                <small>${escapeHtml(item.basis_zh || "")}</small>
+              </div>
+            `).join("")
+          : '<p class="pro-empty">本次報告未提供可顯示的估值指標。</p>'
+      }
+    </div>
+    ${
+      valuation.interpretation_zh
+        ? `<p class="pro-interpretation">${escapeHtml(valuation.interpretation_zh)}</p>`
+        : ""
+    }
+    ${
+      valuation.missing_items_zh?.length
+        ? `<small class="pro-missing">未納入比較：${valuation.missing_items_zh.map(escapeHtml).join("、")}</small>`
+        : ""
+    }
+  `;
+
+  $("proComparisonSummary").innerHTML = cleanProHtml(
+    $("comparisonResearch")?.innerHTML
+  );
+
+  const scoreBridge = cleanProHtml($("scoreBridge")?.innerHTML);
+  const positive = cleanProHtml($("positiveFactors")?.innerHTML);
+  const negative = cleanProHtml($("negativeFactors")?.innerHTML);
+  const breakdown = cleanProHtml($("factorBreakdown")?.innerHTML);
+
+  $("proEvidenceSummary").innerHTML = `
+    <div class="pro-evidence-headline">
+      <div>
+        <span>目前研究區間</span>
+        <b>${escapeHtml($("scoreInterval")?.textContent || "研究區間未提供")}</b>
+      </div>
+      <div>
+        <span>區間變化</span>
+        <b>${
+          scoreChange == null
+            ? "累積中"
+            : `${scoreChange >= 0 ? "+" : ""}${scoreChange.toFixed(1)} 分`
+        }</b>
+      </div>
+    </div>
+    <div class="pro-score-bridge">${scoreBridge || '<p class="pro-empty">本次未產生分數變化說明。</p>'}</div>
+  `;
+
+  $("proEvidenceDetail").innerHTML = `
+    <div class="pro-factor-columns">
+      <article><h4>主要加分因素</h4>${positive || "<p>本次未列出加分因素</p>"}</article>
+      <article><h4>主要扣分因素</h4>${negative || "<p>本次未列出扣分因素</p>"}</article>
+    </div>
+    <div class="pro-breakdown">
+      <h4>五大面向完整拆解</h4>
+      ${breakdown || "<p>本次未產生面向拆解</p>"}
+    </div>
+  `;
+
+  $("proHistorySummary").innerHTML = cleanProHtml(
+    $("historySummary")?.innerHTML
+  );
+
+  $("proHistoryChart").innerHTML = cleanProHtml(
+    $("historyChart")?.innerHTML
+  );
+
+  $("proSourceDetail").innerHTML = cleanProHtml(
+    $("sourceGrid")?.innerHTML
+  );
+
+  setProResearchTab("overview");
 }
 function renderInvestmentResearch(block) {
   const company = block.company_profile || {};
@@ -731,7 +4707,7 @@ function renderHistory(history) {
     chart.innerHTML = "";
     chart.classList.add("hidden");
     empty.classList.remove("hidden");
-    summary.textContent = points.length ? `目前已累積 1 筆：${Number(points[0].score).toFixed(1)} 分。` : "歷史資料正在累積。";
+    summary.textContent = points.length ? `目前已累積 1 筆：${Number(points[0].score).toFixed(1)} 分。` : "目前有 0 筆可比較的研究分數紀錄。";
     return;
   }
   chart.classList.remove("hidden");
@@ -757,7 +4733,7 @@ function renderHistory(history) {
 }
 
 function renderSources(sources) {
-  $("sourceGrid").innerHTML = (sources || []).map((item) => `<article><b>${escapeHtml(item.label)}</b><span>${escapeHtml(item.source)}</span></article>`).join("") || "<p class=\"factor-empty\">資料來源正在整理。</p>";
+  $("sourceGrid").innerHTML = (sources || []).map((item) => `<article><b>${escapeHtml(item.label)}</b><span>${escapeHtml(item.source)}</span></article>`).join("") || "<p class=\"factor-empty\">本次報告未列出個別資料來源。</p>";
 }
 
 function renderIndicators(indicators) {
@@ -1543,6 +5519,7 @@ function renderProfilePage() {
   $("profileReportCount").textContent = `${stockCatalog.length} 份`;
   const updates = stockCatalog.map((report) => report.updated).filter((value) => value && value !== "—").sort();
   $("profileUpdatedAt").textContent = updates.length ? `最新資料 ${updates.at(-1)}` : "等待報告更新";
+  applyResearchMode(preferredResearchMode());
 }
 
 function showToast(message) {
@@ -1611,6 +5588,24 @@ $("notificationBackdrop").addEventListener("click", () => setNotificationPanel(f
 $("notificationReadAll").addEventListener("click", () => { const read = notificationReadIds(); researchNotifications().forEach((item) => read.add(item.notification_id)); saveNotificationReadIds(read); renderNotificationCenter(); });
 $("notificationList").addEventListener("click", (event) => { const item = event.target.closest("[data-notification-id]"); if (item) openNotification(item); });
 document.querySelectorAll("[data-notification-filter]").forEach((button) => button.addEventListener("click", () => { notificationFilter = button.dataset.notificationFilter; document.querySelectorAll("[data-notification-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderNotificationCenter(); }));
+document
+  .querySelectorAll("[data-research-mode-option]")
+  .forEach((button) => {
+    button.addEventListener("click", () => {
+      setResearchMode(button.dataset.researchModeOption);
+    });
+  });
+
+$("researchModeShortcut").addEventListener("click", () => {
+  showHomeView({restoreScroll: false});
+  switchPage("about");
+});
+$("proResearchTabs").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-pro-tab]");
+  if (button) {
+    setProResearchTab(button.dataset.proTab);
+  }
+});
 $("profileFeedback").addEventListener("click", () => showToast("Beta 回饋表單將在下一階段接入"));
 $("profileDataSources").addEventListener("click", () => showToast("請進入個股報告查看各項原始資料來源"));
 $("profileLogout").addEventListener("click", () => betaSession?.invite_required ? logoutBeta() : showToast("本機擁有者模式不需要登出"));
@@ -1632,6 +5627,7 @@ document.querySelectorAll(".mobile-nav button").forEach((button) => button.addEv
 
 $("homeDate").textContent = formatHomeDate();
 applyTheme(preferredTheme());
+applyResearchMode(preferredResearchMode());
 
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
   if (!localStorage.getItem(THEME_STORAGE_KEY)) applyTheme(event.matches ? "dark" : "light");
