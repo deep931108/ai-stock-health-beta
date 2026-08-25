@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.5.0.2">
-  <link rel="stylesheet" href="/assets/home.css?v=3.5.0.2">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.5.0.7">
+  <link rel="stylesheet" href="/assets/home.css?v=3.5.0.7">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -216,6 +216,9 @@
         <p id="researchModeStatus" class="research-mode-status">
           目前使用 Guided，引導你完成每天真正重要的研究。
         </p>
+        <button id="restartOnboarding" class="restart-onboarding" type="button">
+          重新觀看新手導覽
+        </button>
       </section>
       <div class="profile-grid">
         <article class="warm-card profile-card"><span>測試身分</span><b id="profileTesterCode">本機擁有者</b><small>邀請碼只用於 Beta 權限驗證</small></article>
@@ -521,6 +524,24 @@
     </nav>
     <div id="toast" class="toast" aria-live="polite"></div>
   </main>
+  <div id="onboardingBackdrop" class="onboarding-backdrop hidden"></div>
+  <div id="onboardingSpotlight" class="onboarding-spotlight hidden" aria-hidden="true"></div>
+  <section id="onboardingDialog" class="onboarding-dialog hidden"
+    role="dialog" aria-modal="true" aria-labelledby="onboardingTitle"
+    aria-describedby="onboardingCopy">
+    <div class="onboarding-progress">
+      <span id="onboardingStepLabel">第 1 步，共 6 步</span>
+      <button id="onboardingSkip" type="button">略過導覽</button>
+    </div>
+    <span id="onboardingKicker" class="onboarding-kicker">歡迎使用 GC</span>
+    <h2 id="onboardingTitle">先認識今天的研究首頁</h2>
+    <p id="onboardingCopy">GC 幫你整理研究順序，但不替你下買賣決定。</p>
+    <div class="onboarding-actions">
+      <button id="onboardingPrevious" type="button">上一步</button>
+      <button id="onboardingNext" type="button">下一步</button>
+    </div>
+  </section>
+
   <div id="notificationBackdrop" class="notification-backdrop hidden"></div>
   <aside id="notificationPanel" class="notification-panel hidden" aria-labelledby="notificationTitle" aria-hidden="true">
     <header><div><span>研究提醒</span><h2 id="notificationTitle">通知中心</h2></div><button id="notificationClose" type="button" aria-label="關閉通知中心">×</button></header>
@@ -529,6 +550,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.5.0.2" defer></script>
+  <script src="/assets/app.js?v=3.5.0.7" defer></script>
 </body>
 </html>

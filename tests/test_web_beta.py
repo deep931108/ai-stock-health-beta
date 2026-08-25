@@ -303,3 +303,21 @@ def test_home_upcoming_events_enforces_lifecycle() -> None:
     assert '["scheduled", "updated"].includes(lifecycleStatus)' in js
     assert 'if (eventDate < todayKey) return' in js
     assert 'const unique = new Map()' in js
+
+def test_beginner_onboarding_is_versioned_and_restartable() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    assert 'id="onboardingDialog"' in html
+    assert 'id="onboardingSpotlight"' in html
+    assert 'id="restartOnboarding"' in html
+    assert 'const ONBOARDING_VERSION = "1"' in js
+    assert 'const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion"' in js
+    assert "function startOnboarding" in js
+    assert "function finishOnboarding" in js
+    assert "價格位置不是合理價" in js
+    assert "不是預測報酬，也不是買賣分數" in js
+    assert "不提供明牌、目標價或買賣指令" in js
+    assert "/* Beginner onboarding v1 */" in css

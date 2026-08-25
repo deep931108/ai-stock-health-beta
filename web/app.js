@@ -3,6 +3,11 @@ const icons = ["✦", "⌁", "◎", "◫", "◌"];
 const THEME_STORAGE_KEY = "aiStockTheme";
 const RESEARCH_MODE_STORAGE_KEY = "aiStockResearchMode";
 const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
+const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion";
+const ONBOARDING_VERSION = "1";
+let onboardingStepIndex = 0;
+let onboardingActive = false;
+let onboardingTarget = null;
 let currentReport = null;
 let available = [];
 let stockCatalog = [];
@@ -101,6 +106,249 @@ function setResearchMode(mode) {
   applyResearchMode(mode, {persist: true, announce: true});
   renderProfilePage();
 }
+const onboardingSteps = [
+  {
+    anchor: "#top",
+    kicker: "歡迎使用 GC",
+    title: "先認識今天的研究首頁",
+    copy: "GC 是投資研究工具，幫你整理發生什麼、哪裡改變與後續要追蹤什麼；不提供明牌、目標價或買賣指令。",
+    prepare: async () => {
+      showHomeView({restoreScroll: false});
+      switchPage("home", {scroll: false});
+    },
+  },
+  {
+    anchor: "#dailyResearchSection",
+    kicker: "每天先看這裡",
+    title: "今日研究幫你安排閱讀順序",
+    copy: "新事件、重要變化、持續追蹤與判斷依據會分開呈現，不需要一次翻完所有資料。",
+    prepare: async () => {
+      showHomeView({restoreScroll: false});
+      switchPage("home", {scroll: false});
+    },
+  },
+  {
+    anchor: "#futureEvents",
+    kicker: "未來 7 天",
+    title: "只顯示仍有效的正式日程",
+    copy: "已過期事件不會留在這裡；沒有新事件時也會明確說明。事件存在本身不會改變健康分數。",
+    prepare: async () => {
+      showHomeView({restoreScroll: false});
+      switchPage("home", {scroll: false});
+    },
+  },
+  {
+    anchor: "#stockCenter",
+    scrollBlock: "start",
+    kicker: "選擇研究標的",
+    title: "從探索頁進入個股報告",
+    copy: "你可以搜尋股票、依產業瀏覽或加入自選。不同股票類型會使用不同的研究框架。",
+    prepare: async () => {
+      showHomeView({restoreScroll: false});
+      switchPage("explore", {scroll: false});
+    },
+  },
+  {
+    anchor: ".hero-card",
+    scrollBlock: "start",
+    kicker: "Guided 個股報告",
+    title: "先看健康分數與四個重要判斷",
+    copy: "圓形數字是健康分數，用來整理公司目前的營運、市場與風險狀態，不是預測報酬，也不是買賣分數。下面再分別說明健康狀態、風險、價格位置與判斷把握度；價格位置不是合理價，也不代表適合買進或賣出。",
+    prepare: async () => {
+      const stockId =
+        stockCatalog.find((report) => report?.id === "2330")?.id ||
+        stockCatalog[0]?.id ||
+        "2330";
+
+      if (!currentReport || String(currentReport.id) !== String(stockId)) {
+        await loadStock(stockId);
+      }
+
+      applyResearchMode("guided");
+    },
+  },
+  {
+    anchor: "#researchModeShortcut",
+    kicker: "選擇資訊深度",
+    title: "需要完整資料時再切換 Pro",
+    copy: "Guided 與 Pro 使用同一套研究結果。Guided 用白話帶你閱讀；Pro 顯示完整指標、基準、權重與歷史證據。",
+    prepare: async () => {},
+  },
+];
+
+function onboardingCompleted() {
+  return localStorage.getItem(ONBOARDING_STORAGE_KEY) === ONBOARDING_VERSION;
+}
+
+function waitForOnboardingTarget(selector, timeout = 5000) {
+  return new Promise((resolve) => {
+    const startedAt = Date.now();
+
+    const find = () => {
+      const target = document.querySelector(selector);
+
+      if (
+        target &&
+        target.getClientRects().length &&
+        getComputedStyle(target).visibility !== "hidden"
+      ) {
+        resolve(target);
+        return;
+      }
+
+      if (Date.now() - startedAt >= timeout) {
+        resolve(null);
+        return;
+      }
+
+      window.requestAnimationFrame(find);
+    };
+
+    find();
+  });
+}
+
+function positionOnboarding(target) {
+  if (!onboardingActive || !target) return;
+
+  const spotlight = $("onboardingSpotlight");
+  const dialog = $("onboardingDialog");
+  const rect = target.getBoundingClientRect();
+  const padding = 12;
+  const spotlightLeft = Math.max(8, rect.left - padding);
+  const spotlightTop = Math.max(8, rect.top - padding);
+  const spotlightRight = Math.min(
+    window.innerWidth - 8,
+    rect.right + padding
+  );
+  const spotlightBottom = Math.min(
+    window.innerHeight - 8,
+    rect.bottom + padding
+  );
+
+  spotlight.style.left = `${spotlightLeft}px`;
+  spotlight.style.top = `${spotlightTop}px`;
+  spotlight.style.width =
+    `${Math.max(24, spotlightRight - spotlightLeft)}px`;
+  spotlight.style.height =
+    `${Math.max(24, spotlightBottom - spotlightTop)}px`;
+
+  dialog.classList.remove("above", "below");
+
+  const dialogRect = dialog.getBoundingClientRect();
+  const roomBelow = window.innerHeight - rect.bottom;
+  const placeBelow =
+    roomBelow >= dialogRect.height + 30 ||
+    rect.top < dialogRect.height + 30;
+
+  const top = placeBelow
+    ? Math.min(
+        window.innerHeight - dialogRect.height - 16,
+        rect.bottom + 18
+      )
+    : Math.max(16, rect.top - dialogRect.height - 18);
+
+  const left = Math.min(
+    window.innerWidth - dialogRect.width - 16,
+    Math.max(16, rect.left)
+  );
+
+  dialog.style.top = `${top}px`;
+  dialog.style.left = `${left}px`;
+  dialog.classList.add(placeBelow ? "below" : "above");
+}
+
+async function showOnboardingStep(index) {
+  if (!onboardingActive) return;
+
+  onboardingStepIndex = Math.max(
+    0,
+    Math.min(index, onboardingSteps.length - 1)
+  );
+
+  const step = onboardingSteps[onboardingStepIndex];
+
+  await step.prepare();
+
+  onboardingTarget = await waitForOnboardingTarget(step.anchor);
+
+  if (!onboardingTarget) {
+    if (onboardingStepIndex < onboardingSteps.length - 1) {
+      await showOnboardingStep(onboardingStepIndex + 1);
+    } else {
+      finishOnboarding();
+    }
+    return;
+  }
+
+  const documentRoot = document.documentElement;
+  const previousScrollBehavior =
+    documentRoot.style.scrollBehavior;
+
+  documentRoot.style.scrollBehavior = "auto";
+
+  onboardingTarget.scrollIntoView({
+    block: step.scrollBlock || "center",
+    inline: "nearest",
+  });
+
+  await new Promise((resolve) => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(resolve);
+    });
+  });
+
+  documentRoot.style.scrollBehavior =
+    previousScrollBehavior;
+
+  $("onboardingStepLabel").textContent =
+    `第 ${onboardingStepIndex + 1} 步，共 ${onboardingSteps.length} 步`;
+  $("onboardingKicker").textContent = step.kicker;
+  $("onboardingTitle").textContent = step.title;
+  $("onboardingCopy").textContent = step.copy;
+  $("onboardingPrevious").disabled = onboardingStepIndex === 0;
+  $("onboardingNext").textContent =
+    onboardingStepIndex === onboardingSteps.length - 1
+      ? "完成導覽"
+      : "下一步";
+
+  positionOnboarding(onboardingTarget);
+  $("onboardingDialog").focus({preventScroll: true});
+}
+
+async function startOnboarding({force = false} = {}) {
+  if (!force && onboardingCompleted()) return;
+
+  onboardingActive = true;
+  onboardingStepIndex = 0;
+
+  $("onboardingBackdrop").classList.remove("hidden");
+  $("onboardingSpotlight").classList.remove("hidden");
+  $("onboardingDialog").classList.remove("hidden");
+  document.body.classList.add("onboarding-open");
+
+  await showOnboardingStep(0);
+}
+
+function finishOnboarding({skipped = false} = {}) {
+  if (!onboardingActive) return;
+
+  onboardingActive = false;
+  onboardingTarget = null;
+
+  localStorage.setItem(
+    ONBOARDING_STORAGE_KEY,
+    ONBOARDING_VERSION
+  );
+
+  $("onboardingBackdrop").classList.add("hidden");
+  $("onboardingSpotlight").classList.add("hidden");
+  $("onboardingDialog").classList.add("hidden");
+  document.body.classList.remove("onboarding-open");
+
+  showToast(skipped ? "已略過新手導覽" : "新手導覽完成");
+}
+
 function notificationReadIds() {
   try { return new Set(JSON.parse(localStorage.getItem(NOTIFICATION_READ_KEY) || "[]")); }
   catch { return new Set(); }
@@ -5571,6 +5819,12 @@ async function loadAvailable() {
     renderEventsPage();
     renderProfilePage();
     renderNotificationCenter();
+
+    if (!onboardingCompleted()) {
+      window.setTimeout(() => {
+        startOnboarding();
+      }, 450);
+    }
   } catch {
     $("formHint").textContent = "可先試用 2330、2891";
     $("stockCenterLoading").textContent = "股票中心目前無法讀取，請稍後重新整理。";
@@ -5614,6 +5868,88 @@ document
 $("researchModeShortcut").addEventListener("click", () => {
   showHomeView({restoreScroll: false});
   switchPage("about");
+});
+
+$("restartOnboarding").addEventListener("click", () => {
+  startOnboarding({force: true});
+});
+
+$("onboardingPrevious").addEventListener("click", () => {
+  showOnboardingStep(onboardingStepIndex - 1);
+});
+
+$("onboardingNext").addEventListener("click", () => {
+  if (onboardingStepIndex >= onboardingSteps.length - 1) {
+    finishOnboarding();
+    return;
+  }
+
+  showOnboardingStep(onboardingStepIndex + 1);
+});
+
+$("onboardingSkip").addEventListener("click", () => {
+  finishOnboarding({skipped: true});
+});
+
+$("onboardingBackdrop").addEventListener("click", () => {
+  finishOnboarding({skipped: true});
+});
+
+window.addEventListener("resize", () => {
+  positionOnboarding(onboardingTarget);
+});
+
+function preventOnboardingPointerScroll(event) {
+  if (!onboardingActive) return;
+  event.preventDefault();
+}
+
+window.addEventListener(
+  "wheel",
+  preventOnboardingPointerScroll,
+  {passive: false}
+);
+
+window.addEventListener(
+  "touchmove",
+  preventOnboardingPointerScroll,
+  {passive: false}
+);
+
+window.addEventListener("keydown", (event) => {
+  if (!onboardingActive) return;
+
+  const blockedScrollKeys = new Set([
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "PageUp",
+    "PageDown",
+    "Home",
+    "End",
+    " ",
+  ]);
+
+  if (blockedScrollKeys.has(event.key)) {
+    event.preventDefault();
+  }
+
+  if (event.key === "Escape") {
+    finishOnboarding({skipped: true});
+  }
+
+  if (event.key === "ArrowLeft" && onboardingStepIndex > 0) {
+    showOnboardingStep(onboardingStepIndex - 1);
+  }
+
+  if (event.key === "ArrowRight") {
+    if (onboardingStepIndex >= onboardingSteps.length - 1) {
+      finishOnboarding();
+    } else {
+      showOnboardingStep(onboardingStepIndex + 1);
+    }
+  }
 });
 $("proResearchTabs").addEventListener("click", (event) => {
   const button = event.target.closest("[data-pro-tab]");
