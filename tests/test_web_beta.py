@@ -126,7 +126,7 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert "function renderDailyResearch" in js
     assert 'localStorage.getItem(dailyResearchStorageKey(dataDate))' in js
     assert "function startDailyResearchStep" in js
-    assert "Web v3.4.7 Preview" in html
+    assert "Web v3.5.0 Beta" in html
     assert 'id="integratedDecision"' in html
     assert 'id="integratedReasonGrid"' in html
     assert 'id="integratedFollowUpList"' in html
