@@ -5000,11 +5000,26 @@ function renderMarketHomeSummary() {
 
 function allUpcomingEvents() {
   const unique = new Map();
+
+  const now = new Date();
+  const todayKey = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("-");
   stockCatalog.forEach((report) => {
     const block = report?.upcoming_events;
     if (!block || block.version !== "UpcomingEvents-v1.0") return;
     (Array.isArray(block.events) ? block.events : []).forEach((event) => {
       if (!event?.verified || event.affects_health_score !== false) return;
+
+      const lifecycleStatus = String(event.status || "");
+      const eventDate = String(event.event_date || "");
+
+      if (!["scheduled", "updated"].includes(lifecycleStatus)) return;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) return;
+      if (eventDate < todayKey) return;
+
       const key = event.event_id || `${event.stock_id}:${event.event_type}:${event.event_date}`;
       unique.set(key, {...event, stock_id:event.stock_id || report.id, stock_name:event.stock_name || report.name});
     });

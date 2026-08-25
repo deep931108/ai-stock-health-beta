@@ -292,3 +292,14 @@ def test_upcoming_event_adapter_only_keeps_verified_non_scoring_events(tmp_path:
     assert report is not None
     assert [item["event_id"] for item in report["upcoming_events"]["events"]] == ["safe"]
     assert report["upcoming_events"]["event_count"] == 1
+
+def test_home_upcoming_events_enforces_lifecycle() -> None:
+    root = Path(__file__).parents[1]
+    js = (
+        root / "web" / "app.js"
+    ).read_text(encoding="utf-8")
+
+    assert 'const lifecycleStatus = String(event.status || "")' in js
+    assert '["scheduled", "updated"].includes(lifecycleStatus)' in js
+    assert 'if (eventDate < todayKey) return' in js
+    assert 'const unique = new Map()' in js

@@ -3295,28 +3295,10 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2881",
-    "window_start": "2026-08-24",
-    "window_end": "2026-08-30",
+    "window_start": "2026-08-25",
+    "window_end": "2026-08-31",
     "window_days": 7,
     "events": [
-      {
-        "event_id": "TW:MARKET:employment_release:2026-08-24",
-        "event_date": "2026-08-24",
-        "stock_id": "MARKET",
-        "stock_name": "台灣市場",
-        "event_type": "employment_release",
-        "title_zh": "就業與失業率資料發布",
-        "beginner_explanation_zh": "就業資料反映景氣與家庭所得狀況，市場通常會觀察趨勢而不是只看單月數字。",
-        "importance": "high",
-        "source_name_zh": "行政院主計總處",
-        "source_url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717",
-        "verified": true,
-        "affects_health_score": false,
-        "event_time_zh": "16:00",
-        "statistical_item_zh": "勞動力、就業人數、失業人數、非勞動力、失業率、勞動力參與率",
-        "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=149&year=2026&n=3717"
-      },
       {
         "event_id": "TW:MARKET:industrial_production_release:2026-08-25",
         "event_date": "2026-08-25",
@@ -3333,23 +3315,24 @@
         "event_time_zh": "16:00",
         "statistical_item_zh": "工業生產統計",
         "reference_period_zh": "(11507)",
-        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717"
+        "detail_url": "https://www.stat.gov.tw/News_NoticeCalendar_Content_temp.aspx?MetaI_D=1110&year=2026&n=3717",
+        "status": "scheduled"
       }
     ],
-    "event_count": 2,
+    "event_count": 1,
     "score_policy": {
       "affects_health_score": false,
       "mode": "context_only"
     },
     "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
-    "data_as_of": "2026-08-24",
-    "generated_at": "2026-08-24T22:30:52+08:00",
+    "data_as_of": "2026-08-25",
+    "generated_at": "2026-08-25T18:32:07+08:00",
     "sources": [
       {
         "source_id": "ex_right_dividend",
         "status": "success",
-        "rows": 122,
-        "normalized_events": 115,
+        "rows": 118,
+        "normalized_events": 111,
         "url": "https://openapi.twse.com.tw/v1/exchangeReport/TWT48U_ALL"
       },
       {
@@ -3362,8 +3345,8 @@
       {
         "source_id": "investor_conference",
         "status": "success",
-        "rows": 4,
-        "normalized_events": 0,
+        "rows": 114,
+        "normalized_events": 18,
         "url": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L"
       },
       {
@@ -3379,7 +3362,7 @@
         "url": "https://www.stat.gov.tw/News_NoticeCalendar.aspx?n=3717&Dept=all&IsControl=1&PageSize=1000&_Hide=1"
       }
     ],
-    "message_zh": "未來 7 天共有 2 項已確認的官方事件。"
+    "message_zh": "未來 7 天共有 1 項已確認的官方事件。"
   },
   "investment_research": {
     "version": "InvestmentResearchContext-v1.0",
@@ -6684,10 +6667,10 @@
         "title_zh": "查看已確認的新日程",
         "description_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
         "why_it_matters_zh": "先知道接下來可能影響公司的正式事件，避免錯過重要日期。",
-        "item_count": 2,
+        "item_count": 1,
         "unit_zh": "個",
         "available": true,
-        "destination": "events"
+        "destination": "home"
       },
       {
         "key": "change",
@@ -6728,7 +6711,7 @@
     ],
     "available_step_count": 4,
     "estimated_minutes": 8,
-    "headline_zh": "今天有 40 項內容可以確認",
+    "headline_zh": "??? 39 ???????",
     "summary_zh": "依序看新事件、重要變化、後續問題與支持證據，不必自己翻找全部資料。",
     "score_policy": {
       "affects_health_score": false,
