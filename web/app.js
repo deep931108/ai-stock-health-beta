@@ -5718,8 +5718,202 @@ function setProResearchTab(tab) {
   });
 }
 
+
+function proResearchText(value, fallback = "") {
+  if (typeof value === "string") return value.trim() || fallback;
+  if (!value || typeof value !== "object") return fallback;
+  return String(
+    value.label_zh || value.title_zh || value.label || value.title ||
+    value.name_zh || value.name || value.feature_zh || value.feature || fallback
+  ).trim();
+}
+
+function proResearchDetail(value, fallback = "") {
+  if (!value || typeof value !== "object") return fallback;
+  return String(
+    value.explanation_zh || value.description_zh || value.reason_zh ||
+    value.description || value.reason || value.evidence_zh || fallback
+  ).trim();
+}
+
+function proResearchProfileThesis(report) {
+  const profileId = report?.stock_profile?.profile_id || "default";
+  const profile = stockDecisionProfile(report);
+  const decision = profile?.decision || {};
+  const definitions = {
+    financial_income: {
+      label: "INCOME & CAPITAL QUALITY",
+      question: "配息能否由獲利、資本品質與合理估值共同支撐？",
+      method: "以股利延續、ROE、資產品質、資本強度與股價淨值比交叉驗證。",
+    },
+    growth_quality: {
+      label: "GROWTH QUALITY",
+      question: "收入成長能否轉化為獲利與現金流，並支撐目前估值？",
+      method: "以收入、EPS、自由現金流、同組動能與估值位置交叉驗證。",
+    },
+    cyclical: {
+      label: "CYCLE POSITIONING",
+      question: "營運是否正處於可延續的循環轉折，而非短期價格反彈？",
+      method: "以收入、獲利、報價／運價、庫存、資金與估值循環交叉驗證。",
+    },
+    high_volatility: {
+      label: "EVENT & VOLATILITY",
+      question: "事件影響是否已落地為營運證據，市場反應是否超前？",
+      method: "以正式事件、營運落地、波動與事件前後估值變化交叉驗證。",
+    },
+    event_driven: {
+      label: "EVENT VALIDATION",
+      question: "重大事件是否正在改變公司的收入、獲利或風險結構？",
+      method: "以官方來源、事件進度、營運結果與市場反應交叉驗證。",
+    },
+  };
+  const definition = definitions[profileId] || {
+    label: "MULTI-FACTOR RESEARCH",
+    question: "公司的營運、風險、價格位置與市場證據是否一致？",
+    method: "以目前可用的公司、財務、市場與事件證據建立研究輪廓。",
+  };
+
+  return {
+    ...definition,
+    stance: decision.unheld || report?.overview?.summary_zh || report?.summary || "等待更多證據",
+    rationale: decision.reason_zh || definition.method,
+  };
+}
+
+function proResearchMonitoring(report) {
+  const profileId = report?.stock_profile?.profile_id || "default";
+  const profile = stockDecisionProfile(report);
+  const metrics = profile?.metrics || {};
+  const company = report?.investment_research?.company_profile || {};
+  const fit = report?.investment_research?.research_fit || {};
+  const risks = Array.isArray(company.key_risks_zh) ? company.key_risks_zh : [];
+  const followUps = Array.isArray(fit.follow_up_items_zh) ? fit.follow_up_items_zh : [];
+  const number = (value, digits = 1, suffix = "%") => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed)
+      ? `${parsed > 0 ? "+" : ""}${parsed.toFixed(digits)}${suffix}`
+      : "—";
+  };
+
+  let driver = {
+    title: "多因子研究狀態",
+    copy: "目前以營運、風險、價格位置與市場證據建立研究輪廓。",
+  };
+  let risk = {
+    title: proResearchText(risks[0], "主要風險仍在確認"),
+    copy: proResearchText(risks[1], "下一次資料更新後，確認風險是否擴大或解除。"),
+  };
+  let validation = {
+    title: proResearchText(followUps[0], "等待下一個可驗證資料點"),
+    copy: proResearchText(followUps[1], "重新核對研究命題、估值與風險是否改變。"),
+  };
+
+  if (profileId === "growth_quality") {
+    driver = {
+      title: "收入與獲利成長品質",
+      copy: `收入年增 ${number(metrics.revenue_yoy_pct)}，EPS 年增 ${number(metrics.eps_growth_yoy_pct)}；下一步核對現金流與成長是否同向。`,
+    };
+    risk = {
+      title: proResearchText(risks[0], "成長與估值預期落差"),
+      copy: proResearchText(risks[1], `同組動能排名 ${metrics.sector_rank || "—"}/${metrics.sector_peer_count || "—"}；若獲利未追上價格，估值壓力可能提高。`),
+    };
+  } else if (profileId === "financial_income") {
+    driver = {
+      title: "股利收益與資本品質",
+      copy: `目前殖利率 ${number(metrics.dividend_yield_pct, 2)}，同組排名 ${metrics.dividend_yield_rank || "—"}/${metrics.peer_count || "—"}；需由盈餘與資本強度共同支撐。`,
+    };
+    risk = {
+      title: proResearchText(risks[0], "股利延續與資產品質"),
+      copy: proResearchText(risks[1], `股價淨值比 ${number(metrics.pb_ratio, 2, " 倍")}；高殖利率不能取代 ROE、資產品質與資本風險檢查。`),
+    };
+  } else if (profileId === "cyclical") {
+    driver = {
+      title: "景氣循環與營運轉折",
+      copy: `收入年增 ${number(metrics.revenue_yoy_pct)}、月增 ${number(metrics.revenue_mom_pct)}；需確認需求、報價或運價是否共同改善。`,
+    };
+    risk = {
+      title: proResearchText(risks[0], "循環反轉與籌碼壓力"),
+      copy: proResearchText(risks[1], `近 20 日報酬 ${number(metrics.return_20d_pct)}；價格領先營運時，需防範循環尚未落地。`),
+    };
+  } else if (
+    profileId === "high_volatility" ||
+    profileId === "event_driven" ||
+    profileId === "high_volatility_event"
+  ) {
+    driver = {
+      title: "事件進度與營運落地",
+      copy: `目前已確認公司事件 ${Number(metrics.confirmed_company_event_count || 0)} 項；事件必須由後續收入、獲利或風險變化驗證。`,
+    };
+    risk = {
+      title: proResearchText(risks[0], "高波動與事件落空風險"),
+      copy: proResearchText(risks[1], `近 20 日波動 ${number(metrics.volatility_20d_pct)}；單日價格反應不能替代正式證據。`),
+    };
+  }
+
+  return [
+    {key: "01", label: "PRIMARY DRIVER", ...driver, tone: "positive"},
+    {key: "02", label: "CORE RISK", ...risk, tone: "caution"},
+    {key: "03", label: "NEXT VALIDATION", ...validation, tone: "neutral"},
+  ];
+}
+
+function renderProExecutiveOverview(report) {
+  if (!$("proExecutiveOverview")) return;
+
+  const thesis = proResearchProfileThesis(report);
+  const profileLabel = report?.stock_profile?.label_zh || "綜合研究型";
+  const profileGroup = report?.stock_profile?.comparison_group_zh || "多因子比較框架";
+  const overall = report?.score_delta?.overall || {};
+  const change = Number(overall.change);
+  const changeAvailable = overall.available && Number.isFinite(change);
+  const risk = Number(report.risk);
+  const confidence = Number(report.confidence);
+  const valuation = report?.investment_research?.valuation || {};
+
+  $("proProfileLabel").textContent = thesis.label;
+  $("proProfileGroup").textContent = `${profileLabel} · ${profileGroup}`;
+  $("proThesisTitle").textContent = thesis.question;
+  $("proThesisSummary").textContent = thesis.rationale;
+
+  $("proThesisState").innerHTML = `
+    <span>CURRENT STANCE</span>
+    <b>${escapeHtml(thesis.stance)}</b>
+    <small>${changeAvailable
+      ? `較前期 ${change > 0 ? "+" : ""}${change.toFixed(1)} 分`
+      : "等待可比較的前期資料"}</small>
+  `;
+
+  $("proMonitoringGrid").innerHTML = proResearchMonitoring(report)
+    .map((item) => `
+      <article class="pro-monitor-item ${item.tone}">
+        <div><span>${item.key}</span><small>${escapeHtml(item.label)}</small></div>
+        <h4>${escapeHtml(item.title)}</h4>
+        <p>${escapeHtml(item.copy)}</p>
+      </article>
+    `).join("");
+
+  $("proExecutiveOverview").dataset.riskState = Number.isFinite(risk)
+    ? (risk >= 65 ? "high" : risk >= 40 ? "medium" : "controlled")
+    : "unknown";
+  $("proExecutiveOverview").dataset.confidenceState = Number.isFinite(confidence)
+    ? (confidence >= 75 ? "supported" : confidence >= 50 ? "developing" : "limited")
+    : "unknown";
+  $("proExecutiveOverview").dataset.valuationState = valuation.status || "unavailable";
+}
+
+
+function positionProResearchWorkspace() {
+  const workspace = $("proResearchWorkspace");
+  const guidedAnalysis = $("integratedDecision");
+  if (!workspace || !guidedAnalysis || !guidedAnalysis.parentNode) return;
+  if (workspace.nextElementSibling === guidedAnalysis) return;
+  guidedAnalysis.parentNode.insertBefore(workspace, guidedAnalysis);
+}
+
 function renderProResearch(report) {
   if (!$("proResearchWorkspace")) return;
+
+  positionProResearchWorkspace();
 
   const score = Number(report.score);
   const risk = Number(report.risk);
@@ -5729,6 +5923,8 @@ function renderProResearch(report) {
   const valuationMetrics = Array.isArray(valuation.metrics)
     ? valuation.metrics
     : [];
+
+  renderProExecutiveOverview(report);
 
   const history = (Array.isArray(report.score_history) ? report.score_history : [])
     .map((item) => Number(item.score))

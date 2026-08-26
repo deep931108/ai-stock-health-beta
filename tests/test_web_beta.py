@@ -675,4 +675,55 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.6.0.8") == 3
+    assert html.count("3.7.0.2") == 3
+
+def test_pro_research_has_professional_executive_overview() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for item in [
+        'id="proExecutiveOverview"',
+        'id="proProfileLabel"',
+        'id="proThesisTitle"',
+        'id="proThesisState"',
+        'id="proMonitoringGrid"',
+    ]:
+        assert item in html
+
+    for function_name in [
+        "function proResearchProfileThesis",
+        "function proResearchMonitoring",
+        "function renderProExecutiveOverview",
+    ]:
+        assert function_name in js
+
+    assert "INVESTMENT THESIS" in html
+    assert "PRIMARY DRIVER" in js
+    assert "CORE RISK" in js
+    assert "NEXT VALIDATION" in js
+    assert "renderProExecutiveOverview(report)" in js
+    assert "收入成長能否轉化為獲利與現金流" in js
+    assert "配息能否由獲利、資本品質與合理估值" in js
+    assert "營運是否正處於可延續的循環轉折" in js
+    assert ".pro-thesis-hero" in css
+    assert ".pro-monitoring-grid" in css
+    assert html.count("3.7.0.2") == 3
+
+def test_pro_overview_is_positioned_and_profile_specific() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    assert "function positionProResearchWorkspace" in js
+    assert "positionProResearchWorkspace();" in js
+    assert "收入與獲利成長品質" in js
+    assert "股利收益與資本品質" in js
+    assert "景氣循環與營運轉折" in js
+    assert "事件進度與營運落地" in js
+    assert 'html[data-research-mode="pro"] .integrated-decision' in css
+    assert "overflow-x:clip" in css
+    assert "overflow-wrap:anywhere" in css
+    assert html.count("3.7.0.2") == 3

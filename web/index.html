@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.6.0.8">
-  <link rel="stylesheet" href="/assets/home.css?v=3.6.0.8">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.7.0.2">
+  <link rel="stylesheet" href="/assets/home.css?v=3.7.0.2">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -634,6 +634,27 @@
 
         <div class="pro-research-panels">
           <section class="pro-research-panel active" data-pro-panel="overview">
+            <section id="proExecutiveOverview" class="pro-executive-overview" aria-labelledby="proThesisTitle">
+              <div class="pro-thesis-hero">
+                <div class="pro-thesis-identity">
+                  <span id="proProfileLabel">RESEARCH PROFILE</span>
+                  <small id="proProfileGroup">研究框架</small>
+                </div>
+                <div class="pro-thesis-copy">
+                  <span>INVESTMENT THESIS</span>
+                  <h3 id="proThesisTitle">正在建立研究命題</h3>
+                  <p id="proThesisSummary">依股票類型、目前狀態與可驗證證據整理。</p>
+                </div>
+                <div id="proThesisState" class="pro-thesis-state"></div>
+              </div>
+
+              <div id="proMonitoringGrid" class="pro-monitoring-grid"></div>
+
+              <div class="pro-state-heading">
+                <div><span>RESEARCH STATE</span><h3>量化研究狀態</h3></div>
+                <small>分數用來整理證據，不是預測報酬或買賣訊號</small>
+              </div>
+            </section>
             <div id="proCoreGrid" class="pro-core-grid"></div>
             <div class="pro-panel-section">
               <div class="pro-panel-heading">
@@ -798,6 +819,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.6.0.8" defer></script>
+  <script src="/assets/app.js?v=3.7.0.2" defer></script>
 </body>
 </html>
