@@ -5771,3 +5771,1119 @@ html[data-research-mode="pro"] .pro-core-grid{
     grid-column:auto;
   }
 }
+
+/* Pro valuation report v1 */
+.pro-valuation-report{display:grid;gap:22px;min-width:0}
+.pro-valuation-report-head,.pro-valuation-framework,.pro-valuation-case-grid,.pro-valuation-metric-grid{display:grid;gap:18px}
+.pro-valuation-report-head{grid-template-columns:minmax(0,1fr) auto;align-items:start;padding:4px 2px}
+.pro-valuation-report-head>div>span,.pro-valuation-framework span,.pro-valuation-case-grid article>span{color:#6fd6a6;font:700 11px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em}
+.pro-valuation-report-head h3{margin:6px 0 4px;font-size:clamp(25px,3vw,38px)}
+.pro-valuation-report-head p{margin:0;color:var(--muted);line-height:1.8}
+.pro-valuation-framework{grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr);align-items:center;padding:25px 28px;border:1px solid rgba(111,214,166,.3);border-top:3px solid #e59a54;border-radius:22px;background:rgba(7,20,15,.72)}
+.pro-valuation-framework h3{margin:8px 0 0;font-size:clamp(21px,2.2vw,30px);line-height:1.45}
+.pro-valuation-framework p{margin:0;color:var(--muted);line-height:1.9}
+.pro-valuation-section{display:grid;gap:16px;padding:24px;border:1px solid rgba(111,214,166,.2);border-radius:22px;background:rgba(13,29,22,.48)}
+.pro-valuation-metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pro-valuation-metric-grid article,.pro-valuation-case-grid article,.pro-valuation-benchmark>*,.pro-valuation-empty{min-width:0;padding:20px;border:1px solid rgba(111,214,166,.22);border-radius:17px;background:rgba(16,35,27,.7)}
+.pro-valuation-metric-grid article>span{color:#67c99b;font:700 11px ui-monospace,SFMono-Regular,Consolas,monospace}
+.pro-valuation-metric-grid small{display:block;margin-top:18px;color:var(--muted)}
+.pro-valuation-metric-grid strong{display:block;margin-top:8px;font-size:25px}
+.pro-valuation-metric-grid p,.pro-valuation-case-grid li,.pro-valuation-benchmark,.pro-valuation-validation{color:var(--muted);line-height:1.75}
+.pro-valuation-case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pro-valuation-case-grid article{border-top:3px solid #72d3a4}
+.pro-valuation-case-grid article.challenge{border-top-color:#e27772}
+.pro-valuation-case-grid h4{margin:10px 0 13px;font-size:19px}
+.pro-valuation-case-grid ul{margin:0;padding-left:20px}
+.pro-valuation-case-grid li+li{margin-top:9px}
+.pro-valuation-validation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:valuation-step;list-style:none;margin:0;padding:0}
+.pro-valuation-validation li{counter-increment:valuation-step;padding:18px;border:1px solid rgba(111,214,166,.22);border-radius:15px;background:rgba(16,35,27,.7)}
+.pro-valuation-validation li:before{content:"0" counter(valuation-step);display:block;margin-bottom:10px;color:#e59a54;font:700 11px ui-monospace,SFMono-Regular,Consolas,monospace}
+.pro-valuation-policy{padding:18px 20px;border-left:3px solid #e59a54;border-radius:0 15px 15px 0;background:rgba(229,154,84,.08)}
+.pro-valuation-policy p{margin:6px 0 0;color:var(--muted);line-height:1.7}
+.pro-valuation-benchmark .pro-missing{display:block;margin-top:14px;color:#e7b575}
+@media(max-width:900px){.pro-valuation-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pro-valuation-validation{grid-template-columns:1fr}.pro-valuation-framework{grid-template-columns:1fr}}
+@media(max-width:620px){.pro-valuation-report-head,.pro-valuation-case-grid,.pro-valuation-metric-grid{grid-template-columns:1fr}.pro-valuation-section,.pro-valuation-framework{padding:18px}}
+.pro-valuation-benchmark-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.pro-valuation-benchmark-grid article{
+  padding:18px;
+  border:1px solid rgba(111,214,166,.22);
+  border-radius:15px;
+  background:rgba(16,35,27,.7);
+}
+
+.pro-valuation-benchmark-grid span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.pro-valuation-benchmark-grid strong{
+  display:block;
+  margin-top:8px;
+  font-size:22px;
+}
+
+.pro-valuation-benchmark-grid p{
+  margin:10px 0 0;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.pro-valuation-benchmark-notice{
+  margin-top:14px;
+  padding:16px 18px;
+  border-left:3px solid #e59a54;
+  background:rgba(229,154,84,.07);
+}
+
+.pro-valuation-benchmark-notice p{
+  margin:5px 0 0;
+  color:var(--muted);
+}
+
+@media(max-width:760px){
+  .pro-valuation-benchmark-grid{
+    grid-template-columns:1fr;
+  }
+}
+/* Pro research unified theme v2 */
+.pro-research-workspace{
+  padding:28px 30px!important;
+  color:#f4f0e8;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+
+.pro-research-heading,
+.pro-research-panel,
+.pro-research-panels,
+.pro-executive-overview,
+.pro-valuation-report{
+  color:inherit;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+
+.pro-research-tabs{
+  padding:4px 0!important;
+  background:transparent!important;
+  border:0!important;
+  border-bottom:1px solid rgba(255,255,255,.13)!important;
+  border-radius:0!important;
+}
+
+.pro-research-tabs button{
+  color:#b8c2bb!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+}
+
+.pro-research-tabs button.active{
+  color:#e9a25d!important;
+  background:transparent!important;
+  box-shadow:inset 0 -2px #e9a25d!important;
+}
+
+.pro-thesis-hero{
+  overflow:hidden;
+  color:#f5f1e9;
+  background:#0b1d16!important;
+  border:none!important;
+  border-radius:22px!important;
+  box-shadow:none!important;
+}
+
+.pro-monitoring-grid,
+.pro-core-grid,
+.pro-valuation-metric-grid,
+.pro-valuation-benchmark-grid,
+.pro-valuation-case-grid,
+.pro-valuation-validation{
+  gap:14px!important;
+}
+
+.pro-monitor-item,
+.pro-core-item,
+.pro-valuation-metric-grid article,
+.pro-valuation-benchmark-grid article,
+.pro-valuation-case-grid article,
+.pro-valuation-validation li,
+.pro-valuation-empty{
+  color:#f3efe8;
+  background:rgba(255,255,255,.035)!important;
+  border:none!important;
+  border-radius:16px!important;
+  box-shadow:none!important;
+}
+
+.pro-valuation-framework{
+  padding:24px 8px!important;
+  color:#f4f0e8;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+.pro-valuation-section{
+  padding:26px 8px!important;
+  color:#f4f0e8;
+  background:transparent!important;
+  border:none!important;
+  border-top:1px solid rgba(255,255,255,.12)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+.pro-valuation-report-head{
+  padding:8px!important;
+}
+
+.pro-valuation-report-head>div>span,
+.pro-valuation-framework span,
+.pro-panel-heading span{
+  color:#e8a15d!important;
+  font-family:inherit!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  letter-spacing:.02em!important;
+}
+
+.pro-valuation-case-grid article>span{
+  font-family:inherit!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  letter-spacing:.02em!important;
+}
+
+.pro-valuation-case-grid article.support>span{
+  color:#79cda5!important;
+}
+
+.pro-valuation-case-grid article.challenge>span{
+  color:#e58a84!important;
+}
+
+.pro-valuation-report-head h3{
+  font-size:clamp(28px,3vw,38px)!important;
+  line-height:1.3!important;
+}
+
+.pro-valuation-framework h3{
+  font-size:clamp(24px,2.5vw,32px)!important;
+  line-height:1.45!important;
+}
+
+.pro-panel-heading h3,
+.pro-valuation-case-grid h4{
+  font-size:20px!important;
+  line-height:1.45!important;
+}
+
+.pro-valuation-metric-grid small,
+.pro-valuation-benchmark-grid span{
+  font-size:14px!important;
+}
+
+.pro-valuation-metric-grid strong,
+.pro-valuation-benchmark-grid strong{
+  font-size:27px!important;
+  line-height:1.25!important;
+}
+
+.pro-valuation-report p,
+.pro-valuation-report li,
+.pro-valuation-validation li{
+  font-size:15px!important;
+  line-height:1.8!important;
+}
+
+.pro-valuation-report-head p,
+.pro-valuation-framework p,
+.pro-valuation-metric-grid p,
+.pro-valuation-benchmark-grid p,
+.pro-valuation-case-grid li,
+.pro-valuation-validation li,
+.pro-panel-heading small{
+  color:#aebdb4!important;
+}
+
+.pro-valuation-metric-grid small,
+.pro-valuation-benchmark-grid span{
+  color:#9fb2a7!important;
+}
+
+.pro-valuation-benchmark-notice,
+.pro-valuation-policy{
+  color:#ece7df!important;
+  background:rgba(229,154,84,.07)!important;
+  border:none!important;
+  border-left:2px solid #dc914c!important;
+  border-radius:0 14px 14px 0!important;
+  box-shadow:none!important;
+}
+
+.pro-valuation-benchmark-notice p,
+.pro-valuation-policy p{
+  color:#aeb9b1!important;
+}
+
+/* Light mode — follow the same warm theme as the rest of the site */
+html[data-theme="light"] .pro-research-workspace{
+  color:#25312a!important;
+  background:transparent!important;
+}
+
+html[data-theme="light"] .pro-research-heading,
+html[data-theme="light"] .pro-research-panel,
+html[data-theme="light"] .pro-executive-overview,
+html[data-theme="light"] .pro-valuation-report{
+  color:#25312a!important;
+  background:transparent!important;
+}
+
+html[data-theme="light"] .pro-research-tabs{
+  border-bottom-color:rgba(45,61,52,.15)!important;
+}
+
+html[data-theme="light"] .pro-research-tabs button{
+  color:#617067!important;
+}
+
+html[data-theme="light"] .pro-research-tabs button.active{
+  color:#9a5b25!important;
+  box-shadow:inset 0 -2px #c77d38!important;
+}
+
+html[data-theme="light"] .pro-thesis-hero{
+  color:#263129!important;
+  background:#f7f3eb!important;
+}
+
+html[data-theme="light"] .pro-monitor-item,
+html[data-theme="light"] .pro-core-item,
+html[data-theme="light"] .pro-valuation-metric-grid article,
+html[data-theme="light"] .pro-valuation-benchmark-grid article,
+html[data-theme="light"] .pro-valuation-case-grid article,
+html[data-theme="light"] .pro-valuation-validation li,
+html[data-theme="light"] .pro-valuation-empty{
+  color:#263129!important;
+  background:#f7f3eb!important;
+}
+
+html[data-theme="light"] .pro-valuation-framework,
+html[data-theme="light"] .pro-valuation-section{
+  color:#263129!important;
+  background:transparent!important;
+}
+
+html[data-theme="light"] .pro-valuation-section{
+  border-top-color:rgba(54,72,62,.14)!important;
+}
+
+html[data-theme="light"] .pro-valuation-report-head>div>span,
+html[data-theme="light"] .pro-valuation-framework span,
+html[data-theme="light"] .pro-panel-heading span{
+  color:#965921!important;
+}
+
+html[data-theme="light"] .pro-valuation-case-grid article.support>span{
+  color:#287451!important;
+}
+
+html[data-theme="light"] .pro-valuation-case-grid article.challenge>span{
+  color:#a14b47!important;
+}
+
+html[data-theme="light"] .pro-valuation-report-head p,
+html[data-theme="light"] .pro-valuation-framework p,
+html[data-theme="light"] .pro-valuation-metric-grid p,
+html[data-theme="light"] .pro-valuation-benchmark-grid p,
+html[data-theme="light"] .pro-valuation-case-grid li,
+html[data-theme="light"] .pro-valuation-validation li,
+html[data-theme="light"] .pro-panel-heading small{
+  color:#59675f!important;
+}
+
+html[data-theme="light"] .pro-valuation-metric-grid small,
+html[data-theme="light"] .pro-valuation-benchmark-grid span{
+  color:#627168!important;
+}
+
+html[data-theme="light"] .pro-valuation-metric-grid strong,
+html[data-theme="light"] .pro-valuation-benchmark-grid strong,
+html[data-theme="light"] .pro-valuation-case-grid h4,
+html[data-theme="light"] .pro-valuation-framework h3,
+html[data-theme="light"] .pro-panel-heading h3{
+  color:#202b25!important;
+}
+
+html[data-theme="light"] .pro-valuation-benchmark-notice,
+html[data-theme="light"] .pro-valuation-policy{
+  color:#303a34!important;
+  background:#f7efe2!important;
+  border-left-color:#c77d38!important;
+}
+
+html[data-theme="light"] .pro-valuation-benchmark-notice p,
+html[data-theme="light"] .pro-valuation-policy p{
+  color:#5d685f!important;
+}
+
+@media(max-width:760px){
+  .pro-research-workspace{
+    padding:20px 16px!important;
+  }
+
+  .pro-valuation-report-head h3{
+    font-size:28px!important;
+  }
+
+  .pro-valuation-framework h3{
+    font-size:24px!important;
+  }
+
+  .pro-panel-heading h3{
+    font-size:19px!important;
+  }
+
+  .pro-valuation-section{
+    padding:22px 0!important;
+  }
+}
+/* Pro compact card borders v3 */
+
+/*
+Large sections have no enclosing box.
+Only compact information cards receive a subtle border.
+*/
+
+[data-research-mode="pro"] :is(
+  .pro-overview-signal,
+  .pro-overview-state-card,
+  .pro-overview-indicator,
+  .pro-valuation-metric,
+  .pro-valuation-metric-card,
+  .pro-valuation-benchmark-card,
+  .pro-valuation-benchmark-item,
+  .pro-valuation-evidence-card,
+  .pro-valuation-next-item,
+  .pro-valuation-validation-item
+) {
+  background: rgba(255, 255, 255, 0.025) !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-overview-thesis,
+  .pro-valuation-thesis,
+  .pro-valuation-framework
+) {
+  background: rgba(2, 16, 11, 0.42) !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] .pro-valuation-evidence-card.support {
+  border-top: 2px solid #72cfa7 !important;
+}
+
+[data-research-mode="pro"] .pro-valuation-evidence-card.challenge {
+  border-top: 2px solid #e47171 !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-research-workspace,
+  .pro-research-panel,
+  .pro-overview-section,
+  .pro-valuation-section,
+  .pro-valuation-core,
+  .pro-valuation-benchmark,
+  .pro-valuation-expectation,
+  .pro-valuation-validation
+) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] .pro-overview-section,
+[data-research-mode="pro"] .pro-valuation-section,
+[data-research-mode="pro"] .pro-valuation-core,
+[data-research-mode="pro"] .pro-valuation-benchmark,
+[data-research-mode="pro"] .pro-valuation-expectation,
+[data-research-mode="pro"] .pro-valuation-validation {
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+}
+
+[data-research-mode="pro"] .pro-overview-section + .pro-overview-section,
+[data-research-mode="pro"] .pro-valuation-section + .pro-valuation-section,
+[data-research-mode="pro"] .pro-valuation-core,
+[data-research-mode="pro"] .pro-valuation-benchmark,
+[data-research-mode="pro"] .pro-valuation-expectation,
+[data-research-mode="pro"] .pro-valuation-validation {
+  border-top: 1px solid rgba(244, 240, 230, 0.16) !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-overview-signal,
+  .pro-overview-state-card,
+  .pro-overview-indicator,
+  .pro-valuation-metric,
+  .pro-valuation-metric-card,
+  .pro-valuation-benchmark-card,
+  .pro-valuation-benchmark-item,
+  .pro-valuation-evidence-card,
+  .pro-valuation-next-item,
+  .pro-valuation-validation-item
+):hover {
+  border-color: rgba(227, 154, 82, 0.62) !important;
+}
+
+/* Light theme */
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-overview-signal,
+  .pro-overview-state-card,
+  .pro-overview-indicator,
+  .pro-valuation-metric,
+  .pro-valuation-metric-card,
+  .pro-valuation-benchmark-card,
+  .pro-valuation-benchmark-item,
+  .pro-valuation-evidence-card,
+  .pro-valuation-next-item,
+  .pro-valuation-validation-item
+) {
+  background: rgba(255, 253, 248, 0.78) !important;
+  border-color: rgba(44, 57, 52, 0.28) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-overview-thesis,
+  .pro-valuation-thesis,
+  .pro-valuation-framework
+) {
+  background: rgba(239, 235, 225, 0.7) !important;
+  border-color: rgba(44, 57, 52, 0.28) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-overview-section + .pro-overview-section,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-section + .pro-valuation-section,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-core,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-benchmark,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-expectation,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-validation {
+  border-top-color: rgba(44, 57, 52, 0.16) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-overview-signal,
+  .pro-overview-state-card,
+  .pro-overview-indicator,
+  .pro-valuation-metric,
+  .pro-valuation-metric-card,
+  .pro-valuation-benchmark-card,
+  .pro-valuation-benchmark-item,
+  .pro-valuation-evidence-card,
+  .pro-valuation-next-item,
+  .pro-valuation-validation-item,
+  .pro-overview-thesis,
+  .pro-valuation-thesis,
+  .pro-valuation-framework
+) :is(h2, h3, strong, b) {
+  color: #13231f !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-overview-signal,
+  .pro-overview-state-card,
+  .pro-overview-indicator,
+  .pro-valuation-metric,
+  .pro-valuation-metric-card,
+  .pro-valuation-benchmark-card,
+  .pro-valuation-benchmark-item,
+  .pro-valuation-evidence-card,
+  .pro-valuation-next-item,
+  .pro-valuation-validation-item,
+  .pro-overview-thesis,
+  .pro-valuation-thesis,
+  .pro-valuation-framework
+) :is(p, small, li, span) {
+  color: #50615d !important;
+}
+
+@media (max-width: 760px) {
+  [data-research-mode="pro"] :is(
+    .pro-overview-signal,
+    .pro-overview-state-card,
+    .pro-overview-indicator,
+    .pro-valuation-metric,
+    .pro-valuation-metric-card,
+    .pro-valuation-benchmark-card,
+    .pro-valuation-benchmark-item,
+    .pro-valuation-evidence-card,
+    .pro-valuation-next-item,
+    .pro-valuation-validation-item
+  ) {
+    border-radius: 12px !important;
+  }
+}
+
+/* Pro exact theme correction v4 */
+
+/* Remove large-section boxes and unwanted horizontal lines. */
+
+[data-research-mode="pro"] :is(
+  .pro-research-workspace,
+  .pro-research-panels,
+  .pro-research-panel,
+  .pro-panel-section,
+  .pro-executive-overview,
+  .pro-valuation-report,
+  .pro-valuation-section,
+  .pro-valuation-benchmark,
+  .pro-valuation-case-grid,
+  .pro-valuation-validation
+) {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-panel-section,
+  .pro-valuation-section,
+  .pro-valuation-benchmark
+)::before,
+[data-research-mode="pro"] :is(
+  .pro-panel-section,
+  .pro-valuation-section,
+  .pro-valuation-benchmark
+)::after {
+  display: none !important;
+  border: 0 !important;
+  content: none !important;
+}
+
+/* Keep only the tab underline. */
+
+[data-research-mode="pro"] .pro-research-tabs {
+  border: 0 !important;
+  border-bottom: 1px solid rgba(244, 240, 230, 0.16) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+[data-research-mode="pro"] .pro-research-tabs button {
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+[data-research-mode="pro"] .pro-research-tabs button.active {
+  border-bottom-color: #e39a52 !important;
+}
+
+/* Dark theme surfaces. */
+
+[data-research-mode="pro"] .pro-thesis-hero {
+  overflow: hidden;
+  background: #071c15 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 22px !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] .pro-thesis-identity,
+[data-research-mode="pro"] .pro-thesis-copy,
+[data-research-mode="pro"] .pro-thesis-state {
+  background: transparent !important;
+}
+
+[data-research-mode="pro"] .pro-thesis-identity,
+[data-research-mode="pro"] .pro-thesis-copy {
+  border-right: 1px solid rgba(244, 240, 230, 0.16) !important;
+}
+
+[data-research-mode="pro"] .pro-thesis-state {
+  border: 0 !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+) {
+  background: #111d18 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+):hover {
+  border-color: rgba(227, 154, 82, 0.62) !important;
+}
+
+[data-research-mode="pro"] .pro-valuation-case-grid article.support {
+  border-top: 2px solid #72cfa7 !important;
+}
+
+[data-research-mode="pro"] .pro-valuation-case-grid article.challenge {
+  border-top: 2px solid #e47171 !important;
+}
+
+[data-research-mode="pro"] .pro-valuation-framework {
+  background: #071c15 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-valuation-benchmark-notice,
+  .pro-valuation-policy,
+  .pro-disclosure
+) {
+  background: rgba(227, 154, 82, 0.075) !important;
+  border: 0 !important;
+  border-left: 2px solid #e39a52 !important;
+  border-radius: 0 14px 14px 0 !important;
+}
+
+/* Dark text hierarchy. */
+
+[data-research-mode="pro"] :is(
+  .pro-thesis-hero,
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-framework,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+) :is(h2, h3, h4, strong, b) {
+  color: #f4f0e6 !important;
+}
+
+[data-research-mode="pro"] :is(
+  .pro-thesis-hero,
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-framework,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+) :is(p, small, li) {
+  color: #b8ccc8 !important;
+}
+
+/* Light theme: warm white page with clearly separated cards. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-research-workspace,
+html[data-theme="light"][data-research-mode="pro"] .pro-research-panels,
+html[data-theme="light"][data-research-mode="pro"] .pro-research-panel,
+html[data-theme="light"][data-research-mode="pro"] .pro-panel-section,
+html[data-theme="light"][data-research-mode="pro"] .pro-executive-overview,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-report,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-section,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-benchmark {
+  background: transparent !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-research-tabs {
+  border-bottom-color: rgba(33, 45, 42, 0.16) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-hero {
+  background: #f1ede4 !important;
+  border-color: rgba(45, 57, 53, 0.3) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-identity,
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-copy {
+  border-right-color: rgba(45, 57, 53, 0.18) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-state {
+  background: #e6e0d5 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+) {
+  background: #fffdf8 !important;
+  border-color: rgba(45, 57, 53, 0.3) !important;
+  box-shadow: 0 8px 24px rgba(50, 43, 34, 0.035) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-framework {
+  background: #f1ede4 !important;
+  border-color: rgba(45, 57, 53, 0.3) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-valuation-benchmark-notice,
+  .pro-valuation-policy,
+  .pro-disclosure
+) {
+  background: #fbf2e5 !important;
+  border-left-color: #d98135 !important;
+}
+
+/* Force readable light-theme text. */
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-thesis-hero,
+  .pro-thesis-identity,
+  .pro-thesis-copy,
+  .pro-thesis-state,
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-framework,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+) :is(h1, h2, h3, h4, strong, b) {
+  color: #13231f !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-thesis-hero,
+  .pro-thesis-identity,
+  .pro-thesis-copy,
+  .pro-thesis-state,
+  .pro-core-item,
+  .pro-monitor-item,
+  .state-card,
+  .pro-valuation-framework,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li
+) :is(p, small, li) {
+  color: #4e605b !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-thesis-identity,
+  .pro-thesis-copy,
+  .pro-thesis-state
+) > span {
+  opacity: 1 !important;
+}
+
+@media (max-width: 760px) {
+  [data-research-mode="pro"] .pro-thesis-identity,
+  [data-research-mode="pro"] .pro-thesis-copy {
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(244, 240, 230, 0.16) !important;
+  }
+
+  html[data-theme="light"][data-research-mode="pro"] .pro-thesis-identity,
+  html[data-theme="light"][data-research-mode="pro"] .pro-thesis-copy {
+    border-bottom-color: rgba(45, 57, 53, 0.18) !important;
+  }
+}
+
+/* Pro light final surfaces v5 */
+
+/* Keep the entire thesis report on one warm-white surface. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-hero {
+  background: #fffdf8 !important;
+  border: 1px solid #c9c4b9 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-identity,
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-copy,
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-state {
+  background: #fffdf8 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-identity,
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-copy {
+  border-right: 1px solid #d8d2c7 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-thesis-state {
+  border: 0 !important;
+}
+
+/* Valuation framework uses the same card surface. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-framework {
+  background: #fffdf8 !important;
+  border: 1px solid #c9c4b9 !important;
+  box-shadow: none !important;
+}
+
+/* Remove the remaining gray-green benchmark container. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-benchmark-grid {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-benchmark-grid article {
+  background: #fffdf8 !important;
+  border: 1px solid #c9c4b9 !important;
+  box-shadow: none !important;
+}
+
+/* Make valuation metric cards clearly visible. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-metric-grid article {
+  background: #fffdf8 !important;
+  border: 1px solid #c9c4b9 !important;
+  box-shadow: none !important;
+}
+
+/* Make overview research-state cards consistent. */
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-core-grid > *,
+  .pro-core-item,
+  .state-card,
+  .pro-monitor-item
+) {
+  background: #fffdf8 !important;
+  border: 1px solid #c9c4b9 !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+/* Make the five score indicator cards readable and consistent. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-indicator-list > *,
+html[data-theme="light"][data-research-mode="pro"] .pro-indicator-list article {
+  background: #fffdf8 !important;
+  border: 1px solid #c9c4b9 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* Evidence and validation cards use the same surface. */
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-case-grid article,
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-validation li {
+  background: #fffdf8 !important;
+  border-color: #c9c4b9 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-case-grid article.support {
+  border-top-color: #54ad84 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] .pro-valuation-case-grid article.challenge {
+  border-top-color: #d65e5e !important;
+}
+
+/* Final light-theme typography. */
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-thesis-hero,
+  .pro-valuation-framework,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li,
+  .pro-core-grid > *,
+  .pro-core-item,
+  .state-card,
+  .pro-monitor-item,
+  .pro-indicator-list > *
+) :is(h1, h2, h3, h4, strong, b) {
+  color: #12231f !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"] :is(
+  .pro-thesis-hero,
+  .pro-valuation-framework,
+  .pro-valuation-metric-grid article,
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li,
+  .pro-core-grid > *,
+  .pro-core-item,
+  .state-card,
+  .pro-monitor-item,
+  .pro-indicator-list > *
+) :is(p, small, li) {
+  color: #52625e !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 760px) {
+  html[data-theme="light"][data-research-mode="pro"] .pro-thesis-identity,
+  html[data-theme="light"][data-research-mode="pro"] .pro-thesis-copy {
+    border-right: 0 !important;
+    border-bottom: 1px solid #d8d2c7 !important;
+  }
+}
+
+/* Pro dark final surfaces v6 */
+
+/* Remove remaining large benchmark background. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-benchmark,
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-benchmark-grid {
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Remove residual horizontal section lines. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-section,
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-section + .pro-valuation-section,
+html[data-theme="dark"][data-research-mode="pro"] .pro-panel-section,
+html[data-theme="dark"][data-research-mode="pro"] .pro-panel-section + .pro-panel-section {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+/* Benchmark cards use the standard dark card surface. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-benchmark-grid article {
+  background: #111d18 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+/* Support and challenge cards use the same dark surface. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-case-grid article {
+  background: #111d18 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-case-grid article.support {
+  border-top: 2px solid #72cfa7 !important;
+}
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-case-grid article.challenge {
+  border-top: 2px solid #e47171 !important;
+}
+
+/* Core indicator cards receive a visible dark surface. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-indicator-list > *,
+html[data-theme="dark"][data-research-mode="pro"] .pro-indicator-list article {
+  background: #111d18 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* Validation cards match the same visual system. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-validation li {
+  background: #111d18 !important;
+  border: 1px solid rgba(244, 240, 230, 0.24) !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+/* Keep benchmark gap notice separate without a full enclosing box. */
+
+html[data-theme="dark"][data-research-mode="pro"] .pro-valuation-benchmark-notice {
+  background: rgba(227, 154, 82, 0.075) !important;
+  border: 0 !important;
+  border-left: 2px solid #e39a52 !important;
+  border-radius: 0 14px 14px 0 !important;
+}
+
+/* Consistent dark typography. */
+
+html[data-theme="dark"][data-research-mode="pro"] :is(
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li,
+  .pro-indicator-list > *
+) :is(h2, h3, h4, strong, b) {
+  color: #f4f0e6 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"][data-research-mode="pro"] :is(
+  .pro-valuation-benchmark-grid article,
+  .pro-valuation-case-grid article,
+  .pro-valuation-validation li,
+  .pro-indicator-list > *
+) :is(p, small, li, span) {
+  color: #b8ccc8;
+  opacity: 1 !important;
+}
+/* Pro evidence neutral border v7 */
+html[data-research-mode="pro"] .pro-valuation-case-grid article,
+html[data-research-mode="pro"] .pro-valuation-case-grid article:first-child,
+html[data-research-mode="pro"] .pro-valuation-case-grid article:last-child {
+  border: 1px solid var(--pro-card-border) !important;
+  border-top: 1px solid var(--pro-card-border) !important;
+}
+/* Pro evidence forced neutral borders v8 */
+html[data-theme="dark"][data-research-mode="pro"]
+.pro-valuation-case-grid > article,
+html[data-theme="dark"][data-research-mode="pro"]
+.pro-valuation-case-grid > article:first-child,
+html[data-theme="dark"][data-research-mode="pro"]
+.pro-valuation-case-grid > article:last-child {
+  border: 1px solid rgba(244, 239, 229, 0.22) !important;
+  border-top-color: rgba(244, 239, 229, 0.22) !important;
+}
+
+html[data-theme="light"][data-research-mode="pro"]
+.pro-valuation-case-grid > article,
+html[data-theme="light"][data-research-mode="pro"]
+.pro-valuation-case-grid > article:first-child,
+html[data-theme="light"][data-research-mode="pro"]
+.pro-valuation-case-grid > article:last-child {
+  border: 1px solid rgba(48, 64, 58, 0.20) !important;
+  border-top-color: rgba(48, 64, 58, 0.20) !important;
+}

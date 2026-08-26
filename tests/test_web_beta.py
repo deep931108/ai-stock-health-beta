@@ -675,7 +675,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.7.0.2") == 3
+    assert html.count("3.7.0.12") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -699,17 +699,17 @@ def test_pro_research_has_professional_executive_overview() -> None:
     ]:
         assert function_name in js
 
-    assert "INVESTMENT THESIS" in html
-    assert "PRIMARY DRIVER" in js
-    assert "CORE RISK" in js
-    assert "NEXT VALIDATION" in js
+    assert "核心研究命題" in html
+    assert "主要驅動" in js
+    assert "核心風險" in js
+    assert "後續驗證" in js
     assert "renderProExecutiveOverview(report)" in js
     assert "收入成長能否轉化為獲利與現金流" in js
     assert "配息能否由獲利、資本品質與合理估值" in js
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.7.0.2") == 3
+    assert html.count("3.7.0.12") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,4 +726,63 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.7.0.2") == 3
+    assert html.count("3.7.0.12") == 3
+
+def test_pro_valuation_uses_profile_specific_frameworks() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for item in [
+        'id="proValuationFramework"',
+        'id="proValuationMetrics"',
+        'id="proValuationBenchmark"',
+        'id="proValuationSupport"',
+        'id="proValuationChallenge"',
+        'id="proValuationValidation"',
+    ]:
+        assert item in html
+    assert "function proValuationProfile" in js
+    assert "function renderProValuation" in js
+    assert "成長調整估值" in js
+    assert "收益與資本估值" in js
+    assert "循環正常化估值" in js
+    assert "情境估值" in js
+    assert "價格位置不是合理價" in html
+    assert "不提供目標價、預期報酬或買賣指令" in html
+    assert ".pro-valuation-case-grid" in css
+    assert html.count("3.7.0.12") == 3
+
+def test_pro_research_ui_is_localized_and_theme_safe() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for label in [
+        "專業研究",
+        "價格位置",
+        "核心估值指標",
+        "比較基準",
+        "預期驗證",
+        "支持證據",
+        "反對證據",
+        "後續驗證",
+    ]:
+        assert label in html or label in js
+
+    for old_label in [
+        "VALUATION POSITION",
+        "CORE METRICS",
+        "EXPECTATION TEST",
+        "GROWTH-ADJUSTED VALUATION",
+        "CYCLE-NORMALIZED VALUATION",
+    ]:
+        assert old_label not in html
+        assert old_label not in js
+
+    assert "Pro research unified theme v2" in css
+    assert 'html[data-theme="light"] .pro-research-workspace' in css
+    assert "border:none!important" in css
+    assert html.count("3.7.0.12") == 3

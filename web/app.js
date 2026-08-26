@@ -5742,17 +5742,17 @@ function proResearchProfileThesis(report) {
   const decision = profile?.decision || {};
   const definitions = {
     financial_income: {
-      label: "INCOME & CAPITAL QUALITY",
+      label: "收益與資本品質",
       question: "配息能否由獲利、資本品質與合理估值共同支撐？",
       method: "以股利延續、ROE、資產品質、資本強度與股價淨值比交叉驗證。",
     },
     growth_quality: {
-      label: "GROWTH QUALITY",
+      label: "成長品質",
       question: "收入成長能否轉化為獲利與現金流，並支撐目前估值？",
       method: "以收入、EPS、自由現金流、同組動能與估值位置交叉驗證。",
     },
     cyclical: {
-      label: "CYCLE POSITIONING",
+      label: "循環定位",
       question: "營運是否正處於可延續的循環轉折，而非短期價格反彈？",
       method: "以收入、獲利、報價／運價、庫存、資金與估值循環交叉驗證。",
     },
@@ -5851,9 +5851,9 @@ function proResearchMonitoring(report) {
   }
 
   return [
-    {key: "01", label: "PRIMARY DRIVER", ...driver, tone: "positive"},
-    {key: "02", label: "CORE RISK", ...risk, tone: "caution"},
-    {key: "03", label: "NEXT VALIDATION", ...validation, tone: "neutral"},
+    {key: "01", label: "主要驅動", ...driver, tone: "positive"},
+    {key: "02", label: "核心風險", ...risk, tone: "caution"},
+    {key: "03", label: "後續驗證", ...validation, tone: "neutral"},
   ];
 }
 
@@ -5876,7 +5876,7 @@ function renderProExecutiveOverview(report) {
   $("proThesisSummary").textContent = thesis.rationale;
 
   $("proThesisState").innerHTML = `
-    <span>CURRENT STANCE</span>
+    <span>目前研究狀態</span>
     <b>${escapeHtml(thesis.stance)}</b>
     <small>${changeAvailable
       ? `較前期 ${change > 0 ? "+" : ""}${change.toFixed(1)} 分`
@@ -5910,6 +5910,188 @@ function positionProResearchWorkspace() {
   guidedAnalysis.parentNode.insertBefore(workspace, guidedAnalysis);
 }
 
+
+function proValuationProfile(report) {
+  const profileId = report?.stock_profile?.profile_id || "default";
+  const profiles = {
+    growth_quality: {
+      eyebrow: "成長調整估值",
+      title: "成長是否足以支撐目前溢價？",
+      copy: "以獲利成長、收入延續性、同業估值與現金流品質共同判斷，不把高成長直接視為合理價。",
+      preferred: ["pe", "peg", "pb", "fcf", "dividend"],
+      support: ["收入與獲利是否維持同向成長", "成長速度是否高於同組公司", "自由現金流是否跟上會計獲利"],
+      challenge: ["價格漲幅是否明顯快於獲利改善", "成長放緩時估值溢價是否仍可維持", "單月高成長是否來自低基期"],
+      validation: ["下一期收入與 EPS 是否延續", "核對自由現金流與毛利率", "重算同業估值排名與成長溢價"],
+    },
+    financial_income: {
+      eyebrow: "收益與資本估值",
+      title: "收益是否由獲利與資本品質支持？",
+      copy: "金融與收益型公司優先檢查殖利率、股價淨值比、ROE 與股利延續性，不用單一 P/E 判斷高低。",
+      preferred: ["dividend", "pb", "roe", "pe", "payout"],
+      support: ["殖利率是否高於自身與同業常態", "ROE 與盈餘是否足以支撐配息", "資本與資產品質是否維持穩定"],
+      challenge: ["高殖利率是否只是股價下跌造成", "配息是否依賴一次性收益", "景氣或信用成本是否侵蝕獲利"],
+      validation: ["核對最新股利政策與盈餘覆蓋", "追蹤 ROE、淨值與資產品質", "更新同業殖利率與 P/B 排名"],
+    },
+    cyclical: {
+      eyebrow: "循環正常化估值",
+      title: "目前估值反映循環轉折，還是短期價格反彈？",
+      copy: "景氣循環型公司要把獲利正常化，並搭配歷史區間、需求、報價與資產價值判斷。",
+      preferred: ["pb", "ev", "pe", "dividend", "fcf"],
+      support: ["需求、報價或運價是否同步改善", "目前位置是否仍低於自身循環常態", "現金流與資產負債表是否能穿越循環"],
+      challenge: ["低 P/E 是否只是高峰獲利造成", "價格是否領先營運證據太多", "供給增加是否壓低下一階段報酬"],
+      validation: ["確認營收、報價與產能利用率", "使用正常化獲利重算估值", "比較歷史循環相同階段的位置"],
+    },
+    event_driven: {
+      eyebrow: "事件調整估值",
+      title: "事件影響能否轉成可驗證的營運價值？",
+      copy: "事件型公司降低單一倍數權重，先區分已確認事實、情境假設與尚未落地的市場期待。",
+      preferred: ["pb", "pe", "fcf", "ev", "dividend"],
+      support: ["事件已有正式來源與明確時程", "影響可連結至收入、獲利或現金流", "目前價格尚未反映全部樂觀情境"],
+      challenge: ["事件延後、失敗或影響小於預期", "價格先反映但財務數字尚未出現", "估值高度依賴單一假設"],
+      validation: ["追蹤正式公告與里程碑", "建立事件前後財務情境", "事件落地後重新計算價格位置"],
+    },
+    high_volatility: {
+      eyebrow: "情境估值",
+      title: "在高不確定性下，哪些估值結論仍然成立？",
+      copy: "高波動公司以情境範圍、現金消耗與里程碑為主，避免把單一倍數包裝成精確合理價。",
+      preferred: ["pb", "fcf", "ev", "pe", "dividend"],
+      support: ["現金與資本可支撐下一個里程碑", "關鍵事件已有正式證據", "樂觀情境並非唯一可能結果"],
+      challenge: ["現金消耗速度或增資風險上升", "短期價格由情緒而非基本面推動", "關鍵事件結果具有二元風險"],
+      validation: ["更新現金跑道與資本需求", "確認下一個正式里程碑", "分別檢查保守、基準與樂觀情境"],
+    },
+  };
+  return profiles[profileId] || (profileId === "high_volatility_event" ? profiles.high_volatility : null) || {
+    eyebrow: "多因子估值",
+    title: "目前價格位置有多少基本面支持？",
+    copy: "結合可用估值指標、歷史位置與同業比較；資料不足時保留不確定性。",
+    preferred: ["pe", "pb", "dividend", "fcf", "ev"],
+    support: ["營運與獲利是否持續改善", "估值是否位於可比較區間", "現金流是否支持目前判斷"],
+    challenge: ["價格是否跑在基本面之前", "比較公司與基準是否適用", "目前資料是否足以形成結論"],
+    validation: ["更新下一期財務資料", "補齊歷史與同業基準", "重新檢查估值與營運方向"],
+  };
+}
+
+function proValuationMetricKind(item) {
+  const text = `${item?.key || ""} ${item?.label || ""} ${item?.label_zh || ""}`.toLowerCase();
+  if (/peg/.test(text)) return "peg";
+  if (/股價淨值|p\/?b|pb ratio|淨值比/.test(text)) return "pb";
+  if (/本益|p\/?e|pe ratio/.test(text)) return "pe";
+  if (/殖利|dividend yield/.test(text)) return "dividend";
+  if (/股利支付|payout/.test(text)) return "payout";
+  if (/roe|權益報酬/.test(text)) return "roe";
+  if (/自由現金流|fcf/.test(text)) return "fcf";
+  if (/ev|ebitda|企業價值/.test(text)) return "ev";
+  return "other";
+}
+
+function proValuationFormatMetric(item) {
+  if (item?.value == null || item.value === "") return "—";
+  const value = Number(item.value);
+  if (!Number.isFinite(value)) return String(item.value);
+  return `${value.toLocaleString("zh-TW", {maximumFractionDigits: 2})}${item.unit || ""}`;
+}
+
+function renderProValuation(report) {
+  if (!$(`proValuationFramework`)) return;
+  const investment = report?.investment_research || {};
+  const valuation = investment.valuation || {};
+  const profile = proValuationProfile(report);
+  const metrics = Array.isArray(valuation.metrics) ? valuation.metrics : [];
+  const ordered = metrics
+    .filter((item) =>
+      profile.preferred.includes(
+        proValuationMetricKind(item)
+      )
+    )
+    .sort((a, b) => {
+      const ai = profile.preferred.indexOf(
+        proValuationMetricKind(a)
+      );
+      const bi = profile.preferred.indexOf(
+        proValuationMetricKind(b)
+      );
+      return ai - bi;
+    });
+  const status = researchStatus(valuation.status);
+
+  $("proValuationTitle").textContent = valuation.headline_zh || "估值與價格位置";
+  $("proValuationLead").textContent = valuation.interpretation_zh || profile.copy;
+  $("proValuationStatus").textContent = status;
+  $("proValuationFramework").innerHTML = `
+    <div><span>${escapeHtml(profile.eyebrow)}</span><h3>${escapeHtml(profile.title)}</h3></div>
+    <p>${escapeHtml(profile.copy)}</p>
+  `;
+
+  $("proValuationMetrics").innerHTML = ordered.length
+    ? ordered.slice(0, 6).map((item, index) => `
+        <article>
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <small>${escapeHtml(item.label_zh || item.label || "估值指標")}</small>
+          <strong>${escapeHtml(proValuationFormatMetric(item))}</strong>
+          <p>${escapeHtml(item.basis_zh || "目前資料未提供額外比較說明。")}</p>
+        </article>
+      `).join("")
+    : `<article class="pro-valuation-empty"><span>資料缺口</span><strong>目前沒有足夠估值指標</strong><p>系統不會使用缺少的數字推算合理價；完成正式資料更新後再建立比較。</p></article>`;
+
+  const benchmarkMetrics = ordered
+    .filter((item) =>
+      item.basis_zh ||
+      item.benchmark_zh ||
+      item.percentile != null ||
+      item.rank != null
+    )
+    .slice(0, 6);
+
+  $("proValuationBenchmark").innerHTML =
+    benchmarkMetrics.length
+      ? `
+        <div class="pro-valuation-benchmark-grid">
+          ${benchmarkMetrics.map((item) => `
+            <article>
+              <span>${escapeHtml(
+                item.label_zh ||
+                item.label ||
+                "估值依據"
+              )}</span>
+              <strong>${escapeHtml(
+                proValuationFormatMetric(item)
+              )}</strong>
+              <p>${escapeHtml(
+                item.benchmark_zh ||
+                item.basis_zh ||
+                "目前只有正式估值數字，尚無完整歷史或同業區間。"
+              )}</p>
+            </article>
+          `).join("")}
+        </div>
+        <aside class="pro-valuation-benchmark-notice">
+          <b>基準完整度仍需確認</b>
+          <p>只有正式數字不等於已有歷史百分位或同業估值基準；缺少比較資料時不建立高低排名。</p>
+        </aside>
+      `
+      : `
+        <div class="pro-valuation-empty">
+          <span>基準資料缺口</span>
+          <strong>歷史與同業估值基準仍待補齊</strong>
+          <p>目前不使用短期股價報酬代替估值比較，也不以單一倍數推算合理價。</p>
+        </div>
+      `;
+
+  const list = (id, items) => {
+    $(id).innerHTML = items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  };
+  list("proValuationSupport", profile.support);
+  list("proValuationChallenge", profile.challenge);
+  list("proValuationValidation", profile.validation);
+
+  if (Array.isArray(valuation.missing_items_zh) && valuation.missing_items_zh.length) {
+    $("proValuationBenchmark").insertAdjacentHTML(
+      "beforeend",
+      `<small class="pro-missing">尚缺：${valuation.missing_items_zh.map(escapeHtml).join("、")}</small>`,
+    );
+  }
+}
+
 function renderProResearch(report) {
   if (!$("proResearchWorkspace")) return;
 
@@ -5936,21 +6118,21 @@ function renderProResearch(report) {
 
   const coreItems = [
     {
-      key: "Health",
+      key: "健康",
       label: "健康狀態",
       value: Number.isFinite(score) ? score.toFixed(1) : "—",
       meta: report.assessment || "健康狀態尚未分類",
       tone: score >= 75 ? "positive" : score >= 55 ? "neutral" : "caution",
     },
     {
-      key: "Risk",
+      key: "風險",
       label: "風險壓力",
       value: Number.isFinite(risk) ? `${Math.round(risk)} / 100` : "—",
       meta: report.risk_level || "風險程度尚未分類",
       tone: risk >= 65 ? "caution" : risk >= 40 ? "neutral" : "positive",
     },
     {
-      key: "Valuation",
+      key: "估值",
       label:
         valuation.comparison_scope === "current_peer_group"
           ? "同組估值比較"
@@ -5973,7 +6155,7 @@ function renderProResearch(report) {
       tone: "neutral",
     },
     {
-      key: "Confidence",
+      key: "判斷把握度",
       label: "判斷把握度",
       value: Number.isFinite(confidence) ? `${Math.round(confidence)} / 100` : "—",
       meta: report.confidence_level || "判斷把握度尚未分類",
@@ -6015,43 +6197,8 @@ function renderProResearch(report) {
       ? `資料日期 ${report.updated}`
       : "資料日期未提供";
 
-  $("proValuationTitle").textContent =
-    valuation.headline_zh || "估值比較狀態未提供";
+  renderProValuation(report);
 
-  $("proValuationSummary").innerHTML = `
-    <span class="pro-data-status">${escapeHtml(researchStatus(valuation.status))}</span>
-    <div class="pro-valuation-metrics">
-      ${
-        valuationMetrics.length
-          ? valuationMetrics.slice(0, 5).map((item) => `
-              <div>
-                <span>${escapeHtml(item.label_zh || "估值指標")}</span>
-                <b>${
-                  item.value == null
-                    ? "—"
-                    : `${Number(item.value).toLocaleString("zh-TW", {maximumFractionDigits: 2})}${escapeHtml(item.unit || "")}`
-                }</b>
-                <small>${escapeHtml(item.basis_zh || "")}</small>
-              </div>
-            `).join("")
-          : '<p class="pro-empty">本次報告未提供可顯示的估值指標。</p>'
-      }
-    </div>
-    ${
-      valuation.interpretation_zh
-        ? `<p class="pro-interpretation">${escapeHtml(valuation.interpretation_zh)}</p>`
-        : ""
-    }
-    ${
-      valuation.missing_items_zh?.length
-        ? `<small class="pro-missing">未納入比較：${valuation.missing_items_zh.map(escapeHtml).join("、")}</small>`
-        : ""
-    }
-  `;
-
-  $("proComparisonSummary").innerHTML = cleanProHtml(
-    $("comparisonResearch")?.innerHTML
-  );
 
   const scoreBridge = cleanProHtml($("scoreBridge")?.innerHTML);
   const positive = cleanProHtml($("positiveFactors")?.innerHTML);

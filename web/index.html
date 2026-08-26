@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.7.0.2">
-  <link rel="stylesheet" href="/assets/home.css?v=3.7.0.2">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.7.0.12">
+  <link rel="stylesheet" href="/assets/home.css?v=3.7.0.12">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -618,7 +618,7 @@
       <section id="proResearchWorkspace" class="pro-research-workspace" data-pro-only aria-labelledby="proResearchTitle">
         <div class="pro-research-heading">
           <div>
-            <span>PRO RESEARCH</span>
+            <span>專業研究</span>
             <h2 id="proResearchTitle">完整研究工作區</h2>
             <p>使用同一份研究判斷，集中查看完整指標、比較基準與證據。</p>
           </div>
@@ -641,7 +641,7 @@
                   <small id="proProfileGroup">研究框架</small>
                 </div>
                 <div class="pro-thesis-copy">
-                  <span>INVESTMENT THESIS</span>
+                  <span>核心研究命題</span>
                   <h3 id="proThesisTitle">正在建立研究命題</h3>
                   <p id="proThesisSummary">依股票類型、目前狀態與可驗證證據整理。</p>
                 </div>
@@ -651,7 +651,7 @@
               <div id="proMonitoringGrid" class="pro-monitoring-grid"></div>
 
               <div class="pro-state-heading">
-                <div><span>RESEARCH STATE</span><h3>量化研究狀態</h3></div>
+                <div><span>研究狀態</span><h3>量化研究狀態</h3></div>
                 <small>分數用來整理證據，不是預測報酬或買賣訊號</small>
               </div>
             </section>
@@ -666,17 +666,56 @@
           </section>
 
           <section class="pro-research-panel" data-pro-panel="valuation" hidden>
-            <div class="pro-split-grid">
-              <article>
-                <span>VALUATION</span>
-                <h3 id="proValuationTitle">估值資料</h3>
-                <div id="proValuationSummary"></div>
-              </article>
-              <article>
-                <span>BENCHMARK</span>
-                <h3>市場、產業與同業比較</h3>
-                <div id="proComparisonSummary"></div>
-              </article>
+            <div class="pro-valuation-report">
+              <header class="pro-valuation-report-head">
+                <div>
+                  <span>價格位置</span>
+                  <h3 id="proValuationTitle">估值與價格位置</h3>
+                  <p id="proValuationLead">用適合公司類型的基準，確認市場目前給了多少期待。</p>
+                </div>
+                <span id="proValuationStatus" class="pro-data-status">資料檢查中</span>
+              </header>
+
+              <section id="proValuationFramework" class="pro-valuation-framework"></section>
+
+              <section class="pro-valuation-section" aria-labelledby="proValuationMetricTitle">
+                <div class="pro-panel-heading">
+                  <div><span>01 · 核心估值指標</span><h3 id="proValuationMetricTitle">核心估值指標</h3></div>
+                  <small>不同公司類型不使用同一套估值尺</small>
+                </div>
+                <div id="proValuationMetrics" class="pro-valuation-metric-grid"></div>
+              </section>
+
+              <section class="pro-valuation-section" aria-labelledby="proValuationBenchmarkTitle">
+                <div class="pro-panel-heading">
+                  <div><span>02 · 比較基準</span><h3 id="proValuationBenchmarkTitle">歷史、產業與同業基準</h3></div>
+                  <small>比較位置，不換算目標價</small>
+                </div>
+                <div id="proValuationBenchmark" class="pro-valuation-benchmark"></div>
+              </section>
+
+              <section class="pro-valuation-section" aria-labelledby="proValuationSupportTitle">
+                <div class="pro-panel-heading">
+                  <div><span>03 · 預期驗證</span><h3 id="proValuationSupportTitle">目前估值由什麼支持？</h3></div>
+                  <small>同時保留支持與反對證據</small>
+                </div>
+                <div class="pro-valuation-case-grid">
+                  <article class="support"><span>支持證據</span><h4>支持目前位置的證據</h4><ul id="proValuationSupport"></ul></article>
+                  <article class="challenge"><span>反對證據</span><h4>可能推翻判斷的證據</h4><ul id="proValuationChallenge"></ul></article>
+                </div>
+              </section>
+
+              <section class="pro-valuation-section" aria-labelledby="proValuationValidationTitle">
+                <div class="pro-panel-heading">
+                  <div><span>04 · 後續驗證</span><h3 id="proValuationValidationTitle">下一步要驗證什麼？</h3></div>
+                </div>
+                <ol id="proValuationValidation" class="pro-valuation-validation"></ol>
+              </section>
+
+              <aside class="pro-valuation-policy">
+                <b>價格位置不是合理價</b>
+                <p>本頁描述市場目前給予的估值水準與基本面支持程度，不提供目標價、預期報酬或買賣指令。</p>
+              </aside>
             </div>
           </section>
 
@@ -819,6 +858,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.7.0.2" defer></script>
+  <script src="/assets/app.js?v=3.7.0.12" defer></script>
 </body>
 </html>
