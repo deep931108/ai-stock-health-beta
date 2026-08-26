@@ -15,6 +15,8 @@ let onboardingTarget = null;
 let currentReport = null;
 let available = [];
 let stockCatalog = [];
+const COMPARE_STORAGE_KEY = "aiStockComparison";
+let comparisonSelection = [];
 let activeSector = "全部";
 let activeIndustry = "全部產業";
 let watchlistOnly = false;
@@ -6258,6 +6260,666 @@ function renderSectorFilters() {
   }));
 }
 
+
+function savedComparisonSelection() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(COMPARE_STORAGE_KEY) || "[]"
+    );
+    return Array.isArray(saved)
+      ? [...new Set(saved.map(String))].slice(0, 2)
+      : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function comparisonReport(stockId) {
+  return stockCatalog.find(
+    (item) => String(item.id) === String(stockId)
+  ) || null;
+}
+
+function saveComparisonSelection(items) {
+  comparisonSelection = [...new Set(
+    (Array.isArray(items) ? items : [])
+      .map(String)
+      .filter((id) => comparisonReport(id))
+  )].slice(0, 2);
+
+  localStorage.setItem(
+    COMPARE_STORAGE_KEY,
+    JSON.stringify(comparisonSelection)
+  );
+
+  renderComparisonSelectionBar();
+}
+
+function comparisonScore(report) {
+  const value = Number(
+    report?.score ??
+    report?.overview?.health_score
+  );
+  return Number.isFinite(value) ? value : null;
+}
+
+function comparisonRiskScore(report) {
+  const value = Number(
+    report?.risk ??
+    report?.risk_score ??
+    report?.overview?.risk_score
+  );
+  return Number.isFinite(value) ? value : null;
+}
+
+function comparisonConfidenceScore(report) {
+  const value = Number(
+    report?.confidence ??
+    report?.confidence_score ??
+    report?.overview?.confidence_score
+  );
+  return Number.isFinite(value) ? value : null;
+}
+
+function comparisonProfileLabel(report) {
+  return report?.stock_profile?.label_zh ||
+    report?.profile_label ||
+    "研究類型待確認";
+}
+
+function toggleComparisonStock(stockId) {
+  const id = String(stockId);
+  const current = [...comparisonSelection];
+  const existingIndex = current.indexOf(id);
+
+  if (existingIndex >= 0) {
+    current.splice(existingIndex, 1);
+    saveComparisonSelection(current);
+    showToast(`${comparisonReport(id)?.name || id} 已移出比較`);
+    renderStockCenter();
+    return;
+  }
+
+  if (current.length >= 2) {
+    const removed = comparisonReport(current[1]);
+    current[1] = id;
+    saveComparisonSelection(current);
+    showToast(
+      `已用 ${comparisonReport(id)?.name || id} ` +
+      `替換 ${removed?.name || "第二檔股票"}`
+    );
+    renderStockCenter();
+    return;
+  }
+
+  current.push(id);
+  saveComparisonSelection(current);
+  showToast(`${comparisonReport(id)?.name || id} 已加入比較`);
+  renderStockCenter();
+}
+
+function renderComparisonSelectionBar() {
+  const slots = $("compareSelectionSlots");
+  const openButton = $("openComparisonButton");
+  const clearButton = $("clearComparisonButton");
+
+  if (!slots || !openButton || !clearButton) return;
+
+  const selected = comparisonSelection
+    .map(comparisonReport)
+    .filter(Boolean);
+
+  slots.innerHTML = [0, 1].map((index) => {
+    const report = selected[index];
+
+    if (!report) {
+      return `
+        <article class="compare-selection-slot empty">
+          <span>${index + 1}</span>
+          <div><b>選擇第 ${index + 1} 檔</b><small>從下方股票卡加入</small></div>
+        </article>
+      `;
+    }
+
+    return `
+      <article class="compare-selection-slot">
+        <span>${index + 1}</span>
+        <div>
+          <b>${escapeHtml(report.name)}</b>
+          <small>${escapeHtml(report.id)} · ${escapeHtml(report.industry || report.sector || "產業待確認")}</small>
+        </div>
+        <button type="button" data-remove-comparison="${escapeHtml(report.id)}"
+          aria-label="將 ${escapeHtml(report.name)} 移出比較">×</button>
+      </article>
+    `;
+  }).join("");
+
+  openButton.disabled = selected.length !== 2;
+  openButton.textContent = selected.length === 2
+    ? `比較 ${selected[0].name} 與 ${selected[1].name}`
+    : `已選 ${selected.length}/2 檔`;
+  clearButton.disabled = selected.length === 0;
+
+  document.querySelectorAll("[data-remove-comparison]")
+    .forEach((button) => button.addEventListener("click", () => {
+      toggleComparisonStock(button.dataset.removeComparison);
+    }));
+}
+
+function comparisonSummaryCard(report, index) {
+  const score = comparisonScore(report);
+  const risk = comparisonRiskScore(report);
+  const confidence = comparisonConfidenceScore(report);
+  const valuation = report?.investment_research?.valuation;
+  const decision = stockDecisionProfile(report).decision;
+
+  return `
+    <article class="comparison-stock-summary">
+      <div class="comparison-stock-number">0${index + 1}</div>
+      <header>
+        <div>
+          <span>${escapeHtml(comparisonProfileLabel(report))}</span>
+          <h2>${escapeHtml(report.name)}</h2>
+          <p>${escapeHtml(report.id)} · ${escapeHtml(report.industry || report.sector || "產業待確認")}</p>
+        </div>
+        <strong class="${score == null ? "neutral" : levelTone(score)}">
+          ${score == null ? "—" : score.toFixed(1)}
+          <small>健康分數</small>
+        </strong>
+      </header>
+
+      <div class="comparison-summary-metrics">
+        <article><span>公司狀態</span><b>${escapeHtml(report.assessment || report.overview?.assessment || "尚未分類")}</b></article>
+        <article><span>目前風險</span><b>${risk == null ? "—" : `${risk.toFixed(0)} / 100`}</b><small>${escapeHtml(report.risk_level || report.overview?.risk_level || "風險未分類")}</small></article>
+        <article><span>價格位置</span><b>${escapeHtml(valuation?.headline_zh || "比較資料未提供")}</b></article>
+        <article><span>判斷把握度</span><b>${confidence == null ? "—" : `${confidence.toFixed(0)} / 100`}</b><small>${escapeHtml(report.confidence_level || report.overview?.confidence_level || "把握度未分類")}</small></article>
+      </div>
+
+      <div class="comparison-summary-decision">
+        <span>目前研究結論</span>
+        <b>${escapeHtml(decision?.unheld || report.overview?.summary_zh || "等待更多證據")}</b>
+        <p>${escapeHtml(decision?.reason_zh || "完整差異將在下一階段展開。")}</p>
+      </div>
+
+      <div class="comparison-summary-actions">
+        <button type="button" data-comparison-remove="${escapeHtml(report.id)}">移出比較</button>
+        <button type="button" data-comparison-open="${escapeHtml(report.id)}">查看完整報告</button>
+      </div>
+    </article>
+  `;
+}
+
+
+function comparisonFinite(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function comparisonSigned(value, digits = 1, unit = "%") {
+  const number = comparisonFinite(value);
+  if (number == null) return "—";
+  return `${number > 0 ? "+" : ""}${number.toFixed(digits)}${unit}`;
+}
+
+function comparisonAvailableProfile(report) {
+  return [
+    report?.income_profile,
+    report?.growth_profile,
+    report?.cyclical_profile,
+    report?.event_profile,
+  ].find((profile) => profile?.status === "available") || null;
+}
+
+function comparisonProfileEvidence(report) {
+  const profileId = report?.stock_profile?.profile_id;
+  const profile = comparisonAvailableProfile(report);
+  const metrics = profile?.metrics || {};
+
+  if (profileId === "financial_income") {
+    return {
+      headline: metrics.dividend_yield_pct == null
+        ? "收益資料仍需補充"
+        : `殖利率 ${Number(metrics.dividend_yield_pct).toFixed(2)}%`,
+      detail: metrics.peer_count
+        ? `同組排名 ${metrics.dividend_yield_rank || "—"}/${metrics.peer_count}；股價淨值比 ${metrics.pb_ratio == null ? "—" : Number(metrics.pb_ratio).toFixed(2)} 倍。`
+        : "重點是配息延續、獲利支撐與金融風險。",
+    };
+  }
+
+  if (profileId === "growth_quality") {
+    return {
+      headline: metrics.revenue_yoy_pct == null
+        ? "成長資料仍需補充"
+        : `收入年增 ${comparisonSigned(metrics.revenue_yoy_pct)}`,
+      detail: `EPS 年增 ${comparisonSigned(metrics.eps_growth_yoy_pct)}；同組動能 ${metrics.sector_rank || "—"}/${metrics.sector_peer_count || "—"}。`,
+    };
+  }
+
+  if (profileId === "cyclical") {
+    const revenue = metrics.revenue_yoy_pct ?? metrics.revenue_growth_yoy_pct;
+    const income = metrics.income_change_pct ?? metrics.trailing_income_change_pct;
+    return {
+      headline: revenue == null
+        ? "景氣循環位置仍需確認"
+        : `收入年增 ${comparisonSigned(revenue)}`,
+      detail: income == null
+        ? "重點是收入、獲利、價格與資金是否同向。"
+        : `近四季獲利變化 ${comparisonSigned(income)}；需分辨循環回升或短期反彈。`,
+    };
+  }
+
+  if (profileId === "high_volatility" || profileId === "event_driven") {
+    const events = report?.upcoming_events?.events?.length || 0;
+    return {
+      headline: events
+        ? `${events} 項已確認日程`
+        : "目前沒有新的已確認日程",
+      detail: "重點是事件來源、營運落地與市場反應能否互相驗證。",
+    };
+  }
+
+  return {
+    headline: profile?.decision?.unheld || "使用一般研究框架",
+    detail: profile?.decision?.reason_zh || "依公司狀態、風險、價格位置與證據完整度持續追蹤。",
+  };
+}
+
+function comparisonValuation(report) {
+  const valuation = report?.investment_research?.valuation || {};
+  return {
+    value: valuation.headline_zh || "價格比較資料未提供",
+    note: valuation.interpretation_zh || "價格位置不是合理價，也不是買賣訊號。",
+    status: valuation.status || "unavailable",
+  };
+}
+
+function comparisonChange(report) {
+  const overall = report?.score_delta?.overall || {};
+  const change = comparisonFinite(overall.change);
+
+  if (!overall.available || change == null) {
+    return {
+      value: "近期變化仍在累積",
+      note: "需要更多可比較日期，才能判斷研究方向是否改變。",
+    };
+  }
+
+  const direction = change > 0
+    ? "上升"
+    : change < 0
+      ? "下降"
+      : "持平";
+
+  return {
+    value: `較前期${direction} ${Math.abs(change).toFixed(1)} 分`,
+    note: report?.score_delta?.summary_zh || "這是研究分數變化，不是價格預測。",
+  };
+}
+
+function comparisonPurposeFor(report) {
+  const profileId = report?.stock_profile?.profile_id;
+
+  const purposes = {
+    financial_income: {
+      label: "收益與配息研究",
+      question: "配息是否有獲利支撐，收益條件能否延續？",
+      fit: "適合想比較股利、獲利穩定度與金融風險的人。",
+      caution: "殖利率較高不等於總報酬較高，也不能忽略資本與市場風險。",
+    },
+    growth_quality: {
+      label: "成長品質研究",
+      question: "收入與獲利能否持續成長，並追上市場期待？",
+      fit: "適合想追蹤營運成長、獲利品質與估值支撐的人。",
+      caution: "成長較快不代表目前價格合理，也不代表成長一定延續。",
+    },
+    cyclical: {
+      label: "景氣循環研究",
+      question: "營運是否進入回升階段，價格與資金是否已先反映？",
+      fit: "適合想分辨循環位置、營運轉折與市場領先反應的人。",
+      caution: "單月改善可能只是波動，需要多期收入與獲利共同確認。",
+    },
+    high_volatility: {
+      label: "高波動事件研究",
+      question: "事件是否真實、影響是否落地，市場是否過度反應？",
+      fit: "適合願意持續核對公告、營運結果與價格反應的人。",
+      caution: "事件題材不等於基本面改善，單日漲跌也不能替代正式證據。",
+    },
+    event_driven: {
+      label: "事件驗證研究",
+      question: "重大事件是否開始改變公司的收入、獲利或風險？",
+      fit: "適合關注正式事件與後續數字能否互相驗證的人。",
+      caution: "消息受到關注不代表影響已發生，仍要等待營運證據。",
+    },
+  };
+
+  return purposes[profileId] || {
+    label: "綜合研究",
+    question: "公司的營運、風險與市場方向是否一致？",
+    fit: "適合先建立完整研究輪廓，再決定主要追蹤問題的人。",
+    caution: "資料尚未形成專屬框架時，不應硬套單一類型結論。",
+  };
+}
+
+function comparisonFollowUpItems(report) {
+  const profileId = report?.stock_profile?.profile_id;
+  const profile = comparisonAvailableProfile(report);
+  const metrics = profile?.metrics || {};
+  const valuation = comparisonValuation(report);
+
+  const valueOrDash = (value, digits = 1, suffix = "%") => {
+    const number = comparisonFinite(value);
+    return number == null ? null : `${number.toFixed(digits)}${suffix}`;
+  };
+
+  if (profileId === "financial_income") {
+    const yieldText = valueOrDash(metrics.dividend_yield_pct, 2);
+    const pbText = valueOrDash(metrics.pb_ratio, 2, " 倍");
+    const rank = metrics.dividend_yield_rank && metrics.peer_count
+      ? `${metrics.dividend_yield_rank}/${metrics.peer_count}`
+      : null;
+
+    return [
+      yieldText
+        ? `確認下一次盈餘與股利政策，是否足以延續目前 ${yieldText} 的殖利率條件。`
+        : "補齊最新盈餘、股利政策與殖利率資料，確認配息是否有獲利支撐。",
+      "追蹤 ROE、資產品質與資本強度，避免只用單次股利判斷長期收益。",
+      rank
+        ? `觀察同組殖利率排名 ${rank}${pbText ? ` 與股價淨值比 ${pbText}` : ""} 是否出現明顯變化。`
+        : `${valuation.value}；持續核對價格位置與同類金融公司的相對差異。`,
+    ];
+  }
+
+  if (profileId === "growth_quality") {
+    const revenue = comparisonFinite(metrics.revenue_yoy_pct);
+    const eps = comparisonFinite(metrics.eps_growth_yoy_pct);
+    const rank = metrics.sector_rank && metrics.sector_peer_count
+      ? `${metrics.sector_rank}/${metrics.sector_peer_count}`
+      : null;
+
+    return [
+      revenue == null
+        ? "補齊最新收入年增資料，確認成長方向是否延續。"
+        : revenue >= 0
+          ? `確認收入年增 ${comparisonSigned(revenue)} 是否能連續維持，而非只由單月高基期造成。`
+          : `追蹤收入年增 ${comparisonSigned(revenue)} 是否止穩，並確認轉弱原因。`,
+      eps == null
+        ? "補齊 EPS 與自由現金流資料，確認收入能否轉成實際獲利。"
+        : eps >= 0
+          ? `核對 EPS 年增 ${comparisonSigned(eps)} 與現金流是否同向，確認成長品質。`
+          : `確認 EPS 年增 ${comparisonSigned(eps)} 的壓力是否持續，以及毛利率能否回穩。`,
+      rank
+        ? `觀察同組動能排名 ${rank} 與目前價格位置，避免把成長速度直接當成合理價。`
+        : `比較同業動能與${valuation.value}，確認市場期待是否已先反映。`,
+    ];
+  }
+
+  if (profileId === "cyclical") {
+    const revenue = comparisonFinite(
+      metrics.revenue_yoy_pct ?? metrics.revenue_growth_yoy_pct
+    );
+    const income = comparisonFinite(
+      metrics.income_change_pct ?? metrics.trailing_income_change_pct
+    );
+
+    return [
+      revenue == null
+        ? "補齊收入、報價或運價資料，定位目前所處的景氣循環階段。"
+        : `確認收入年增 ${comparisonSigned(revenue)} 是否由需求、報價或運價共同支撐。`,
+      income == null
+        ? "追蹤近四季獲利與自由現金流，分辨營運回升或短期波動。"
+        : `核對近四季獲利變化 ${comparisonSigned(income)} 是否與收入方向一致。`,
+      `觀察庫存、資金方向與${valuation.value}，確認市場是否已提前反映循環轉折。`,
+    ];
+  }
+
+  if (profileId === "high_volatility" || profileId === "event_driven") {
+    const events = Array.isArray(report?.upcoming_events?.events)
+      ? report.upcoming_events.events.filter((event) =>
+          ["scheduled", "updated"].includes(String(event?.status || "scheduled"))
+        )
+      : [];
+    const nextEvent = events[0];
+
+    return [
+      nextEvent
+        ? `核對 ${nextEvent.event_date || "近期"}「${nextEvent.title_zh || "正式事件"}」的官方內容與後續結果。`
+        : "等待新的正式公告或已確認日程，不用市場傳聞代替事件證據。",
+      "事件發生後，確認收入、獲利或風險是否真的改變，而不是只看單日價格反應。",
+      `重新比較${valuation.value}與事件前後的營運證據，判斷市場是否過度反應。`,
+    ];
+  }
+
+  const supplied = report?.investment_research
+    ?.research_fit?.follow_up_items_zh;
+
+  if (Array.isArray(supplied) && supplied.length) {
+    return supplied.slice(0, 3);
+  }
+
+  return [
+    "追蹤下一次收入或財報是否延續目前方向。",
+    "確認價格變化是否得到營運證據支持。",
+    "出現重大公告時重新整理研究判斷。",
+  ];
+}
+
+function comparisonDimensionRows(left, right) {
+  const leftScore = comparisonScore(left);
+  const rightScore = comparisonScore(right);
+  const leftRisk = comparisonRiskScore(left);
+  const rightRisk = comparisonRiskScore(right);
+  const leftConfidence = comparisonConfidenceScore(left);
+  const rightConfidence = comparisonConfidenceScore(right);
+  const leftValuation = comparisonValuation(left);
+  const rightValuation = comparisonValuation(right);
+  const leftProfile = comparisonProfileEvidence(left);
+  const rightProfile = comparisonProfileEvidence(right);
+  const leftChange = comparisonChange(left);
+  const rightChange = comparisonChange(right);
+
+  return [
+    {
+      key: "health",
+      title: "公司目前狀態",
+      explanation: "健康分數整理目前營運、市場與風險證據；適合比較研究狀態，不是預測報酬。",
+      left: {
+        value: leftScore == null ? "—" : `${leftScore.toFixed(1)} 分`,
+        note: left.assessment || left.overview?.assessment || "健康狀態未分類",
+      },
+      right: {
+        value: rightScore == null ? "—" : `${rightScore.toFixed(1)} 分`,
+        note: right.assessment || right.overview?.assessment || "健康狀態未分類",
+      },
+    },
+    {
+      key: "risk",
+      title: "目前風險壓力",
+      explanation: "風險分數越高代表需要注意的壓力越多；低風險不代表未來不會下跌。",
+      left: {
+        value: leftRisk == null ? "—" : `${leftRisk.toFixed(0)} / 100`,
+        note: left.risk_level || left.overview?.risk_level || "風險未分類",
+      },
+      right: {
+        value: rightRisk == null ? "—" : `${rightRisk.toFixed(0)} / 100`,
+        note: right.risk_level || right.overview?.risk_level || "風險未分類",
+      },
+    },
+    {
+      key: "valuation",
+      title: "目前價格位置",
+      explanation: "不同類型公司使用不同估值框架；價格位置不是合理價、目標價或買賣建議。",
+      left: leftValuation,
+      right: rightValuation,
+    },
+    {
+      key: "confidence",
+      title: "判斷把握度",
+      explanation: "把握度反映資料是否足以支持目前判斷，不表示研究一定正確。",
+      left: {
+        value: leftConfidence == null ? "—" : `${leftConfidence.toFixed(0)} / 100`,
+        note: left.confidence_level || left.overview?.confidence_level || "把握度未分類",
+      },
+      right: {
+        value: rightConfidence == null ? "—" : `${rightConfidence.toFixed(0)} / 100`,
+        note: right.confidence_level || right.overview?.confidence_level || "把握度未分類",
+      },
+    },
+    {
+      key: "profile",
+      title: "各自最重要的營運證據",
+      explanation: "跨類型比較不能強迫兩家公司使用相同指標，應先看各自的研究重點。",
+      left: {
+        value: leftProfile.headline,
+        note: leftProfile.detail,
+      },
+      right: {
+        value: rightProfile.headline,
+        note: rightProfile.detail,
+      },
+    },
+    {
+      key: "change",
+      title: "最近研究方向",
+      explanation: "比較最近判斷是改善、轉弱或持平，避免只看某一天的分數高低。",
+      left: leftChange,
+      right: rightChange,
+    },
+  ];
+}
+
+function renderComparisonContext(left, right) {
+  const container = $("comparisonContext");
+  if (!container) return;
+
+  const sameProfile = left?.stock_profile?.profile_id &&
+    left.stock_profile.profile_id === right?.stock_profile?.profile_id;
+
+  container.innerHTML = `
+    <div>
+      <span>${sameProfile ? "同類型比較" : "跨類型比較"}</span>
+      <h2>${sameProfile
+        ? "可以直接比較共同框架，但仍要保留公司差異"
+        : "先理解研究目的，再看分數與指標差異"}</h2>
+    </div>
+    <p>${sameProfile
+      ? `${escapeHtml(left.name)}與${escapeHtml(right.name)}都屬於${escapeHtml(comparisonProfileLabel(left))}；可比較相同指標，但不能只看單一排名。`
+      : `${escapeHtml(left.name)}屬於${escapeHtml(comparisonProfileLabel(left))}，${escapeHtml(right.name)}屬於${escapeHtml(comparisonProfileLabel(right))}。兩者研究問題不同，不應用同一項數字直接判定高下。`}</p>
+  `;
+}
+
+function renderComparisonDimensions(left, right) {
+  const container = $("comparisonDimensions");
+  if (!container) return;
+
+  container.innerHTML = comparisonDimensionRows(left, right)
+    .map((row, index) => `
+      <article class="comparison-dimension-card" data-comparison-dimension="${escapeHtml(row.key)}">
+        <header>
+          <span>0${index + 1}</span>
+          <div><h3>${escapeHtml(row.title)}</h3><p>${escapeHtml(row.explanation)}</p></div>
+        </header>
+        <div class="comparison-dimension-values">
+          <section>
+            <span>${escapeHtml(left.name)}</span>
+            <b>${escapeHtml(row.left.value || "—")}</b>
+            <p>${escapeHtml(row.left.note || "資料未提供")}</p>
+          </section>
+          <i>VS</i>
+          <section>
+            <span>${escapeHtml(right.name)}</span>
+            <b>${escapeHtml(row.right.value || "—")}</b>
+            <p>${escapeHtml(row.right.note || "資料未提供")}</p>
+          </section>
+        </div>
+      </article>
+    `).join("");
+}
+
+function renderComparisonPurpose(left, right) {
+  const container = $("comparisonPurpose");
+  if (!container) return;
+
+  container.innerHTML = [left, right].map((report, index) => {
+    const purpose = comparisonPurposeFor(report);
+    return `
+      <article class="comparison-purpose-card">
+        <span>0${index + 1} · ${escapeHtml(report.name)}</span>
+        <em>${escapeHtml(purpose.label)}</em>
+        <h3>${escapeHtml(purpose.question)}</h3>
+        <p>${escapeHtml(purpose.fit)}</p>
+        <small>${escapeHtml(purpose.caution)}</small>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderComparisonFollowUp(left, right) {
+  const container = $("comparisonFollowUp");
+  if (!container) return;
+
+  container.innerHTML = [left, right].map((report, index) => `
+    <article class="comparison-follow-up-card">
+      <span>0${index + 1}</span>
+      <div>
+        <h3>${escapeHtml(report.name)}接下來要確認什麼？</h3>
+        <ul>${comparisonFollowUpItems(report)
+          .map((item) => `<li>${escapeHtml(item)}</li>`)
+          .join("")}</ul>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderFullComparison(left, right) {
+  renderComparisonContext(left, right);
+  renderComparisonDimensions(left, right);
+  renderComparisonPurpose(left, right);
+  renderComparisonFollowUp(left, right);
+}
+
+function renderComparisonPage() {
+  const workspace = $("comparisonWorkspace");
+  const empty = $("comparisonEmpty");
+  const cards = $("comparisonStockCards");
+
+  if (!workspace || !empty || !cards) return;
+
+  const selected = comparisonSelection
+    .map(comparisonReport)
+    .filter(Boolean);
+  const ready = selected.length === 2;
+
+  workspace.classList.toggle("hidden", !ready);
+  empty.classList.toggle("hidden", ready);
+
+  if (!ready) {
+    cards.innerHTML = "";
+    return;
+  }
+
+  cards.innerHTML = selected
+    .map(comparisonSummaryCard)
+    .join("");
+
+  renderFullComparison(selected[0], selected[1]);
+
+  document.querySelectorAll("[data-comparison-remove]")
+    .forEach((button) => button.addEventListener("click", () => {
+      toggleComparisonStock(button.dataset.comparisonRemove);
+      renderComparisonPage();
+    }));
+
+  document.querySelectorAll("[data-comparison-open]")
+    .forEach((button) => button.addEventListener("click", async () => {
+      await loadStock(button.dataset.comparisonOpen);
+    }));
+}
+
+function openComparisonPage() {
+  renderComparisonPage();
+  switchPage("compare");
+}
+
 function renderStockCenter() {
   const saved = new Set(watchlist());
   const query = exploreQuery.trim().toLowerCase();
@@ -6276,7 +6938,7 @@ function renderStockCenter() {
   $("stockCenterGrid").innerHTML = rows.map((item) => `<article class="stock-center-card ${currentReport?.id === item.id ? "current" : ""}" data-stock-card="${item.id}" role="link" tabindex="0" aria-label="查看 ${escapeHtml(item.name)}（${item.id}）研究報告">
     <div class="stock-card-title"><div><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.id)} · ${escapeHtml(item.industry)}</small><em class="stock-card-profile">${escapeHtml(item.stock_profile?.label_zh || "待確認")}</em></div><strong class="stock-card-score ${levelTone(item.score)}">${Number(item.score).toFixed(1)}</strong></div>
     <p class="stock-card-decision">${escapeHtml(stockDecisionProfile(item).decision?.unheld || "等待更多證據")}</p><div class="stock-card-meta"><span>研究等級<b>${escapeHtml(item.grade)}</b></span><span>風險<b>${escapeHtml(item.risk_level)}</b></span></div>
-    <div class="stock-card-actions"><span class="stock-card-assessment">${escapeHtml(item.assessment)}</span><button type="button" data-save-stock="${item.id}" aria-label="${saved.has(item.id) ? "移出" : "加入"}${escapeHtml(item.name)}自選">${saved.has(item.id) ? "★ 已自選" : "☆ 加入自選"}</button><button type="button" data-open-stock="${item.id}">查看報告 →</button></div>
+    <div class="stock-card-actions"><span class="stock-card-assessment">${escapeHtml(item.assessment)}</span><button type="button" data-save-stock="${item.id}" aria-label="${saved.has(item.id) ? "移出" : "加入"}${escapeHtml(item.name)}自選">${saved.has(item.id) ? "★ 已自選" : "☆ 加入自選"}</button><button type="button" class="${comparisonSelection.includes(String(item.id)) ? "active" : ""}" data-compare-stock="${item.id}">${comparisonSelection.includes(String(item.id)) ? "✓ 已加入比較" : "＋ 加入比較"}</button><button type="button" data-open-stock="${item.id}">查看報告 →</button></div>
   </article>`).join("");
   $("stockCenterEmpty").classList.toggle("hidden", rows.length > 0);
   const openCard = async (card) => {
@@ -6287,11 +6949,11 @@ function renderStockCenter() {
   };
   document.querySelectorAll("[data-stock-card]").forEach((card) => {
     card.addEventListener("click", (event) => {
-      if (event.target.closest("[data-save-stock]")) return;
+      if (event.target.closest("[data-save-stock], [data-compare-stock], [data-open-stock]")) return;
       openCard(card);
     });
     card.addEventListener("keydown", (event) => {
-      if ((event.key === "Enter" || event.key === " ") && !event.target.closest("[data-save-stock]")) {
+      if ((event.key === "Enter" || event.key === " ") && !event.target.closest("[data-save-stock], [data-compare-stock], [data-open-stock]")) {
         event.preventDefault();
         openCard(card);
       }
@@ -6306,6 +6968,18 @@ function renderStockCenter() {
     const stock = stockCatalog.find((item) => item.id === id);
     showToast(`${stock?.name || id}${adding ? " 已加入自選" : " 已移出自選"}`);
   }));
+
+  document.querySelectorAll("[data-compare-stock]")
+    .forEach((button) => button.addEventListener("click", () => {
+      toggleComparisonStock(button.dataset.compareStock);
+    }));
+
+  document.querySelectorAll("[data-open-stock]")
+    .forEach((button) => button.addEventListener("click", async () => {
+      await loadStock(button.dataset.openStock);
+    }));
+
+  renderComparisonSelectionBar();
 }
 
 function refreshWatchlistUI() {
@@ -6967,6 +7641,8 @@ async function loadAvailable() {
       } catch { return null; }
     }));
     stockCatalog = reports.filter(Boolean).map((report) => ({...report, sector:sectorName(report.industry)}));
+    comparisonSelection = savedComparisonSelection()
+      .filter((id) => comparisonReport(id));
     $("stockCenterLoading").classList.add("hidden");
     renderSectorFilters();
     renderStockCenter();
@@ -7121,6 +7797,24 @@ $("profilePersonality").addEventListener(
 $("personalityBack").addEventListener("click", () => {
   showHomeView({restoreScroll: false});
   switchPage("about");
+});
+
+$("openComparisonButton").addEventListener(
+  "click",
+  openComparisonPage
+);
+
+$("clearComparisonButton").addEventListener("click", () => {
+  saveComparisonSelection([]);
+  renderStockCenter();
+});
+
+$("comparisonBack").addEventListener("click", () => {
+  switchPage("explore");
+});
+
+$("comparisonChooseStocks").addEventListener("click", () => {
+  switchPage("explore");
 });
 
 $("personalityStart").addEventListener(

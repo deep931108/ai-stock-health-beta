@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.6.0.5">
-  <link rel="stylesheet" href="/assets/home.css?v=3.6.0.5">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.6.0.8">
+  <link rel="stylesheet" href="/assets/home.css?v=3.6.0.8">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -181,9 +181,85 @@
         <select id="industryFilter" class="industry-filter" aria-label="產業篩選"><option value="全部產業">全部產業</option></select>
         <button id="watchlistOnlyButton" class="watchlist-only" type="button" aria-pressed="false">☆ 只看自選 <span id="watchlistCount">0</span></button>
       </div>
+
+      <section id="compareSelectionBar" class="compare-selection-bar warm-card"
+        aria-labelledby="compareSelectionTitle">
+        <div>
+          <span>股票比較</span>
+          <h3 id="compareSelectionTitle">選擇兩檔股票，查看真正差異</h3>
+          <p>比較研究狀態、風險、價格位置與適合的研究目的，不產生買賣排名。</p>
+        </div>
+        <div id="compareSelectionSlots" class="compare-selection-slots"></div>
+        <div class="compare-selection-actions">
+          <button id="clearComparisonButton" type="button">清除</button>
+          <button id="openComparisonButton" class="compare-primary-action"
+            type="button" disabled>開始比較</button>
+        </div>
+      </section>
       <div id="stockCenterLoading" class="stock-center-empty">正在整理股票中心…</div>
       <div id="stockCenterGrid" class="stock-center-grid" aria-live="polite"></div>
       <div id="stockCenterEmpty" class="stock-center-empty hidden">目前沒有符合條件的股票。</div>
+    </section>
+
+
+    <section id="comparisonPage" class="app-page shell-page comparison-page"
+      data-page="compare" aria-labelledby="comparisonPageTitle">
+      <div class="shell-page-heading comparison-page-heading">
+        <div>
+          <span>股票比較</span>
+          <h1 id="comparisonPageTitle">兩檔股票，差別不只在分數</h1>
+          <p>使用同一批研究資料，分開比較公司狀態、風險、價格位置與研究目的。</p>
+        </div>
+        <button id="comparisonBack" type="button">返回探索</button>
+      </div>
+
+      <article class="comparison-safety-note warm-card">
+        <b>比較用來理解差異，不是選出一定值得買的股票</b>
+        <p>不同類型的公司使用不同研究框架；健康分數較高，也不代表報酬一定較高或適合所有人。</p>
+      </article>
+
+      <section id="comparisonEmpty" class="comparison-empty warm-card hidden">
+        <span>尚未完成選擇</span>
+        <h2>請先從探索頁選擇兩檔股票</h2>
+        <p>每張股票卡都有「加入比較」，選滿兩檔後即可開始。</p>
+        <button id="comparisonChooseStocks" class="compare-primary-action" type="button">前往探索</button>
+      </section>
+
+      <section id="comparisonWorkspace" class="comparison-workspace hidden">
+        <div id="comparisonStockCards" class="comparison-stock-cards"></div>
+        <section id="comparisonContext" class="comparison-context warm-card"></section>
+
+        <section class="comparison-section" aria-labelledby="comparisonDimensionsTitle">
+          <div class="comparison-section-heading">
+            <div>
+              <span>六大研究面向</span>
+              <h2 id="comparisonDimensionsTitle">把相同數字放回各自的研究框架</h2>
+            </div>
+            <small>數字較高不等於未來報酬較高</small>
+          </div>
+          <div id="comparisonDimensions" class="comparison-dimensions"></div>
+        </section>
+
+        <section class="comparison-section" aria-labelledby="comparisonPurposeTitle">
+          <div class="comparison-section-heading">
+            <div>
+              <span>研究目的</span>
+              <h2 id="comparisonPurposeTitle">各自更適合回答什麼問題？</h2>
+            </div>
+          </div>
+          <div id="comparisonPurpose" class="comparison-purpose-grid"></div>
+        </section>
+
+        <section class="comparison-section" aria-labelledby="comparisonFollowUpTitle">
+          <div class="comparison-section-heading">
+            <div>
+              <span>後續追蹤</span>
+              <h2 id="comparisonFollowUpTitle">比較後，不要把兩家公司追成同一套</h2>
+            </div>
+          </div>
+          <div id="comparisonFollowUp" class="comparison-follow-up-grid"></div>
+        </section>
+      </section>
     </section>
 
     <section id="personalityPage" class="app-page shell-page personality-page"
@@ -722,6 +798,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.6.0.5" defer></script>
+  <script src="/assets/app.js?v=3.6.0.8" defer></script>
 </body>
 </html>

@@ -86,7 +86,9 @@ def test_evidence_frontend_contains_chart_and_source_sections() -> None:
     assert 'loadStock("2330");' not in js
     assert 'data-stock-card=' in js
     assert 'role="link"' in js
-    assert 'event.target.closest("[data-save-stock]")' in js
+    assert 'event.target.closest("[data-save-stock], [data-compare-stock], [data-open-stock]")' in js
+    assert 'data-compare-stock="${item.id}"' in js
+    assert 'data-open-stock="${item.id}"' in js
     assert 'id="inviteGate"' in html
     assert 'id="inviteForm"' in html
     assert 'id="inviteCode"' in html
@@ -578,3 +580,99 @@ def test_gc16_visible_question_count_matches_twelve_question_contract() -> None:
     assert 'id="personalityProgressText">8%</b>' in html
     assert "<b>8</b><span>個情境問題</span>" not in html
     assert "第 1 題，共 8 題" not in html
+
+
+
+def test_stock_comparison_phase_one_selection_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for element_id in [
+        'id="compareSelectionBar"',
+        'id="compareSelectionSlots"',
+        'id="openComparisonButton"',
+        'id="clearComparisonButton"',
+        'id="comparisonPage"',
+        'id="comparisonWorkspace"',
+        'id="comparisonStockCards"',
+        'id="comparisonEmpty"',
+    ]:
+        assert element_id in html
+
+    for function_name in [
+        "function savedComparisonSelection",
+        "function saveComparisonSelection",
+        "function toggleComparisonStock",
+        "function renderComparisonSelectionBar",
+        "function renderComparisonPage",
+        "function openComparisonPage",
+    ]:
+        assert function_name in js
+
+    assert 'const COMPARE_STORAGE_KEY = "aiStockComparison"' in js
+    assert 'data-compare-stock="${item.id}"' in js
+    assert "比較用來理解差異，不是選出一定值得買的股票" in html
+    assert "Stock comparison selection v1" in css
+    assert "grid-template-columns:repeat(2,minmax(0,1fr))" in css
+
+
+
+def test_stock_comparison_phase_two_research_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    for element_id in [
+        'id="comparisonContext"',
+        'id="comparisonDimensions"',
+        'id="comparisonPurpose"',
+        'id="comparisonFollowUp"',
+    ]:
+        assert element_id in html
+
+    for function_name in [
+        "function comparisonProfileEvidence",
+        "function comparisonPurposeFor",
+        "function comparisonDimensionRows",
+        "function renderComparisonContext",
+        "function renderComparisonDimensions",
+        "function renderComparisonPurpose",
+        "function renderComparisonFollowUp",
+        "function renderFullComparison",
+    ]:
+        assert function_name in js
+
+    for dimension in [
+        "公司目前狀態",
+        "目前風險壓力",
+        "目前價格位置",
+        "判斷把握度",
+        "各自最重要的營運證據",
+        "最近研究方向",
+    ]:
+        assert dimension in js
+
+    assert "價格位置不是合理價、目標價或買賣建議" in js
+    assert "健康分數較高，也不代表報酬一定較高" in html
+    assert "Full stock comparison research v1" in css
+
+def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+
+    assert "function comparisonFollowUpItems" in js
+    assert 'profileId === "financial_income"' in js
+    assert 'profileId === "growth_quality"' in js
+    assert 'profileId === "cyclical"' in js
+    assert 'profileId === "high_volatility" || profileId === "event_driven"' in js
+    assert "股利政策" in js
+    assert "資產品質與資本強度" in js
+    assert "自由現金流" in js
+    assert "景氣循環階段" in js
+    assert "正式公告或已確認日程" in js
+    assert "return supplied.slice(0, 3)" in js
+    assert html.count("3.6.0.8") == 3
