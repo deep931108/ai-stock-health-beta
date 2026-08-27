@@ -6,7 +6,7 @@ const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
 const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion";
 const ONBOARDING_VERSION = "1";
 const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality";
-const PERSONALITY_VERSION = "2";
+const PERSONALITY_VERSION = "3";
 let personalityQuestionIndex = 0;
 let personalityAnswers = Array(12).fill(null);
 let onboardingStepIndex = 0;
@@ -148,30 +148,22 @@ const researchPersonalityAxisDefinitions = [
 ];
 
 const researchPersonalityProfileRows = [
-  ["vbac", "地基守衡者", "用長期營運證據與價格基準，建立穩固而可反覆檢查的研究地基。", "能讓判斷建立在營運與價格基準上", "你會等待數字形成一致方向，也會確認目前價格是否仍有支撐。", "可能較晚注意正在形成的新變化", "當證據尚未完整時，你可能暫時忽略值得提前追蹤的早期訊號。"],
-  ["vbar", "價值校準師", "當公司營運出現變化時，你會快速重新校準目前的價格位置。", "能把營運改變轉成清楚的價格檢查", "你不會只看股價漲跌，而會先確認公司數字是否足以改變估值基準。", "可能過度等待正式數字才採取研究行動", "部分市場轉折會早於財報出現，需要保留追蹤早期訊號的空間。"],
-  ["vbgc", "長曜培育者", "你尋找能經過多期驗證、持續累積的品質成長。", "能分辨短期成長與長期品質", "你會要求收入與獲利反覆證明成長，而不是只看單期亮眼表現。", "可能錯過成長剛開始加速的階段", "等待多期確認能降低誤判，也可能讓新趨勢較晚進入你的研究範圍。"],
-  ["vbgr", "曙光驗證者", "你會在新成長獲得營運數字證實時，迅速辨認公司的轉折。", "能抓住剛被財報確認的營運改善", "你重視正式證據，也願意在證據出現後快速調整原有看法。", "可能把單次改善看成完整轉折", "第一道曙光仍需後續數字延續，避免只靠一季表現建立長期結論。"],
-  ["vmac", "星盤定衡者", "你用市場相對表現與長期價格基準，判斷公司目前的位置。", "能把市場方向放進可比較的座標", "你會比較大盤、同業與歷史位置，不容易被單一漲跌帶走。", "可能低估公司內部正在發生的改變", "相對表現是市場結果，仍需要回頭確認營運原因與正式來源。"],
-  ["vmar", "逆勢校準者", "當市場錯價或相對位置快速改變時，你會重新評估研究基準。", "能辨識價格與市場共識的落差", "你會先確認比較基準，再判斷反轉是否值得進一步研究。", "可能過早假設價格終將回到原有基準", "產業結構與公司品質可能已經改變，歷史價格不一定仍是有效錨點。"],
-  ["vmgc", "長軌觀測者", "你追蹤市場與基本面共同確認、能夠長期延續的成長軌跡。", "能觀察趨勢是否具有持續性", "你不只看價格強勢，也會確認營運是否支撐長期方向。", "可能等到趨勢成熟後才開始重視", "高度確認能提升理解，但也會降低對早期轉折的敏感度。"],
-  ["vmgr", "星軌驗證者", "確認市場趨勢獲得證據支撐後，你會快速調整研究方向。", "能交叉驗證市場訊號與公司證據", "你擅長辨認價格先行、法人變化與營運改善是否逐漸會合。", "可能把市場共識看得過於重要", "市場與法人方向仍可能反轉，不能取代收入、獲利與正式公告。"],
-  ["sbac", "地訊守值者", "你會提早注意公司變化，同時用價格紀律限制過度期待。", "能提早追蹤又不失去價格基準", "你願意研究早期公司訊號，但不會因一則消息忽略目前價格。", "可能長時間追蹤尚未落實的線索", "早期訊號需要設定明確的後續驗證條件，避免研究議題無限延伸。"],
-  ["sbar", "事件定價師", "你關心公司事件是否足以改變營運，並造成市場重新定價。", "能快速連結事件、營運與價格", "你會追查正式來源，並思考事件是否真的改變公司的獲利基礎。", "可能高估單一事件的重新定價效果", "市場關注不等於長期價值改變，仍需等待後續營運數字證實。"],
-  ["sbgc", "萌星培育者", "你會提早發現成長萌芽，再觀察它能否逐期形成穩定軌跡。", "能看到尚未被廣泛注意的成長線索", "你願意長期追蹤收入、產品或產業中的早期改善。", "可能對尚未獲利的成長保有太多耐心", "早期成長需要明確里程碑，避免只因故事仍在就持續等待。"],
-  ["sbgr", "躍遷尋星者", "你尋找事件與營運同步轉強、可能快速改變公司的成長躍遷。", "能迅速辨認營運加速與新催化劑", "你對收入、獲利與重大事件同時轉強的情境特別敏感。", "可能把短期加速外推成長期成長", "快速躍遷仍可能回落，需要確認成長品質與後續延續性。"],
-  ["smac", "雷達定錨者", "你會掃描市場新訊號，但仍以價格與比較基準限制判斷。", "能兼顧早期市場訊號與價格紀律", "你會注意法人、同業與大盤的異常，同時避免在價格失去支撐時追逐熱度。", "可能把太多市場波動列入研究", "不是每個異常都是有效訊號，需要設定重要性與持續時間門檻。"],
-  ["smar", "轉折測繪者", "你擅長測繪錯價、反轉與市場方向正在改變的位置。", "能快速發現相對強弱與市場轉折", "你會比較價格、法人與同業，找出市場共識開始移動的地方。", "容易把短期反彈誤認為完整反轉", "轉折需要營運或更長時間的市場證據，不能只靠一段價格變化。"],
-  ["smgc", "新軌領航者", "你會提早識別新趨勢，並觀察它能否逐步形成長期軌道。", "能在市場早期辨認值得追蹤的新方向", "你願意先建立觀察，再等待市場與營運共同形成趨勢。", "可能長期追蹤最後沒有形成的題材", "新軌道需要退出條件，當營運沒有跟上時應降低研究優先度。"],
-  ["smgr", "星訊先鋒者", "你最快捕捉市場、事件與成長訊號交會所形成的研究轉折。", "能快速整合多種正在變化的訊號", "你對市場方向、事件催化與成長加速的同時出現非常敏感。", "容易受到快速變化與市場情緒干擾", "反應速度不能取代證據品質，需要持續核對正式來源與營運結果。"],
+  ["vba", "基石驗證者", "你用正式證據、企業營運與價格基準，建立穩固而可反覆檢查的研究地基。", "能讓判斷建立在可驗證的企業基礎上", "你會確認營運品質與價格位置，不容易被單一消息或短期波動帶走。", "可能較晚注意正在形成的新變化", "等待證據完整能降低誤判，也可能讓早期轉折較晚進入研究範圍。"],
+  ["vbg", "曙光驗證者", "你尋找獲得營運數字支持、正在形成的品質成長與企業轉折。", "能辨認受到基本面支持的成長", "你不只看成長故事，也要求收入、獲利或正式里程碑逐步證明方向。", "可能把首次改善看成完整趨勢", "第一道曙光仍需要後續數字延續，避免用單期表現推演長期成長。"],
+  ["vma", "價格校準者", "你用可信資料、相對表現與估值基準，校準市場目前給出的價格位置。", "能辨識價格與研究基準的落差", "你會比較歷史、同業與市場狀態，再判斷目前定價是否仍有證據支撐。", "可能過度依賴既有比較基準", "產業結構與公司品質可能已改變，歷史位置不一定仍是有效錨點。"],
+  ["vmg", "趨勢驗證者", "你在市場趨勢、資金方向與企業證據逐漸會合時，確認成長軌跡。", "能交叉驗證市場訊號與公司證據", "你擅長觀察價格、法人與營運是否逐步形成同一方向。", "可能把市場共識看得過於重要", "市場方向仍可能反轉，不能取代收入、獲利與正式公告。"],
+  ["sba", "企業巡航者", "你快速掃描企業變化，同時用營運品質與價格紀律建立觀察範圍。", "能提早發現企業線索又保留基準", "你願意先建立觀察，再用公司數字與價格位置決定研究優先度。", "可能追蹤太多尚未落實的線索", "早期訊號需要明確驗證條件，避免研究議題無限延伸。"],
+  ["sbg", "成長探勘者", "你從產品、產業與企業變化中，提早探勘可能形成的新成長曲線。", "能看見尚未被廣泛注意的成長線索", "你對收入加速、新產品與重大事件同時出現的情境特別敏感。", "可能把短期加速外推為長期成長", "每個成長故事都需要里程碑與退出條件，確認營運是否真的跟上。"],
+  ["sma", "市場導航者", "你掃描價格、法人、同業與市場情緒，再用比較基準判斷目前位置。", "能快速辨認相對強弱與市場轉折", "你會從多種市場訊號定位變化，同時保留價格紀律。", "可能把太多市場波動列入研究", "不是每個異常都是有效訊號，需要設定重要性與持續時間門檻。"],
+  ["smg", "動能偵察者", "你最快捕捉市場、事件、資金與成長訊號交會形成的研究轉折。", "能快速整合多種正在變化的訊號", "你對新趨勢、事件催化與成長加速的同時出現非常敏感。", "容易受到快速變化與市場情緒干擾", "反應速度不能取代證據品質，需要持續核對正式來源與營運結果。"],
 ];
 
-function personalityReadingOrder(code) {
+function personalityReadingOrder(code, rhythm = "c") {
   const order = [];
   order.push(code[1] === "b" ? "健康狀態" : "近期變化");
   order.push(code[2] === "a" ? "價格位置" : "成長與獲利");
   order.push(code[0] === "v" ? "判斷把握度" : "重要事件");
-  order.push(code[3] === "c" ? "歷史與持續追蹤" : "目前風險");
+  order.push(rhythm === "c" ? "歷史與持續追蹤" : "目前風險");
   return [...new Set(order)].slice(0, 4);
 }
 
@@ -187,30 +179,20 @@ const researchPersonalityProfiles = Object.fromEntries(
       blindSpotCopy,
     ] = row;
 
-    const preferPro = key[1] === "m" || key[3] === "r";
-
     return [key, {
-      id: `GC16-${String(index + 1).padStart(2, "0")}`,
+      id: `GC8-${String(index + 1).padStart(2, "0")}`,
       name,
       symbol: "GC",
       axes: {
         evidence: key[0] === "v" ? "verify" : "scan",
         focus: key[1] === "b" ? "business" : "market",
         opportunity: key[2] === "a" ? "anchor" : "growth",
-        cadence: key[3] === "c" ? "compound" : "react",
       },
       summary,
       strengthTitle,
       strengthCopy,
       blindSpotTitle,
       blindSpotCopy,
-      readingOrder: personalityReadingOrder(key),
-      modeTitle: preferPro
-        ? "先用 Guided 掌握方向，再用 Pro 核對完整證據"
-        : "先用 Guided 建立固定研究順序",
-      modeCopy: preferPro
-        ? "市場、事件與快速轉折需要比較基準；先讀白話摘要，再到 Pro 核對數字、歷史與來源。"
-        : "依照建議順序完成每日研究；需要核對完整數字時，再切換 Pro 查看證據。",
     }];
   })
 );
@@ -880,42 +862,42 @@ function completePersonalityQuiz() {
   });
 
   const dimensions = personalityDimensionRows(scores);
+  const coreDimensions = dimensions.slice(0, 3);
 
   const primary = [
     scores.verify >= scores.scan ? "v" : "s",
     scores.business >= scores.market ? "b" : "m",
     scores.anchor >= scores.growth ? "a" : "g",
-    scores.compound >= scores.react ? "c" : "r",
   ].join("");
 
-  const weakestDimension = [...dimensions]
-    .sort((left, right) =>
-      left.margin - right.margin
-    )[0];
+  const rhythm = scores.compound >= scores.react ? "c" : "r";
+  const rhythmName = rhythm === "c"
+    ? "長期累積型"
+    : "變化應對型";
 
+  const weakestDimension = [...coreDimensions]
+    .sort((left, right) => left.margin - right.margin)[0];
   const secondaryCharacters = primary.split("");
 
   if (weakestDimension) {
-    const index = weakestDimension.index;
     const alternatives = [
       ["v", "s"],
       ["b", "m"],
       ["a", "g"],
-      ["c", "r"],
     ];
-    const pair = alternatives[index];
-    secondaryCharacters[index] =
-      secondaryCharacters[index] === pair[0]
+    const pair = alternatives[weakestDimension.index];
+    secondaryCharacters[weakestDimension.index] =
+      secondaryCharacters[weakestDimension.index] === pair[0]
         ? pair[1]
         : pair[0];
   }
 
   const secondary = secondaryCharacters.join("");
-  const averageMargin = dimensions.length
-    ? dimensions.reduce(
+  const averageMargin = coreDimensions.length
+    ? coreDimensions.reduce(
         (total, row) => total + row.margin,
         0
-      ) / dimensions.length
+      ) / coreDimensions.length
     : 0;
 
   const clarity = averageMargin >= 50
@@ -928,9 +910,11 @@ function completePersonalityQuiz() {
 
   const result = {
     version: PERSONALITY_VERSION,
-    system: "GC-16",
+    system: "GC-8",
     primary,
     secondary,
+    rhythm,
+    rhythmName,
     scores,
     dimensions,
     clarity,
@@ -1096,10 +1080,10 @@ function renderPersonalityResult(result) {
 
   renderPersonalityDimensions(result);
 
-  const resultCode = `${primary.id} · ${String(result.primary).toUpperCase()}`;
+  const resultCode = `${primary.id} · ${String(result.primary).toUpperCase()}-${String(result.rhythm || "c").toUpperCase()}`;
 
   $("personalityResultSymbol").innerHTML =
-    personalityTotemSvg(result.primary);
+    personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`);
   $("personalityResultCode").textContent = resultCode;
   $("personalityResultClarity").textContent =
     result.clarity || "研究方式較為平衡";
@@ -1109,7 +1093,7 @@ function renderPersonalityResult(result) {
     primary.summary;
   $("personalitySecondaryType").textContent =
     secondary
-      ? `次要傾向：${secondary.name}`
+      ? `研究節奏：${result.rhythmName || "長期累積型"}｜鄰近人格：${secondary.name}`
       : "研究風格已完成";
 
   $("personalityStrengthTitle").textContent =
@@ -1121,13 +1105,17 @@ function renderPersonalityResult(result) {
   $("personalityBlindSpotCopy").textContent =
     primary.blindSpotCopy;
   $("personalityReadingOrder").innerHTML =
-    primary.readingOrder
+    personalityReadingOrder(result.primary, result.rhythm)
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
   $("personalityModeTitle").textContent =
-    primary.modeTitle;
+    result.rhythm === "r"
+      ? "先用 Guided 掌握方向，再用 Pro 核對完整證據"
+      : "先用 Guided 建立固定研究順序";
   $("personalityModeCopy").textContent =
-    primary.modeCopy;
+    result.rhythm === "r"
+      ? "變化應對型會更常遇到市場、事件與快速轉折；先讀白話摘要，再到 Pro 核對數字、歷史與來源。"
+      : "長期累積型適合依建議順序完成每日研究；需要核對完整數字時，再切換 Pro 查看證據。";
 
   document.documentElement.dataset.researchPersonality =
     result.primary;
@@ -1149,7 +1137,7 @@ function currentPersonalityShareData() {
     result,
     profile,
     dimensions,
-    code: `${profile.id} · ${String(result.primary).toUpperCase()}`,
+    code: `${profile.id} · ${String(result.primary).toUpperCase()}-${String(result.rhythm || "c").toUpperCase()}`,
   };
 }
 
@@ -1169,6 +1157,7 @@ function personalityShareText(data = currentPersonalityShareData()) {
     `我的研究人格是「${data.profile.name}」`,
     data.profile.summary,
     `研究座標：${axes}`,
+    `研究節奏：${data.result.rhythmName || "長期累積型"}`,
     `結果清晰度：${data.result.clarity || "研究方式較為平衡"}`,
     "人格只改變閱讀方式，不改變任何股票的研究結果。",
     "#GC研究人格 #投資研究",
@@ -1398,7 +1387,7 @@ function personalityShareCanvas(data) {
   context.fillText(data.code, 1008, 82);
   context.textAlign = "left";
 
-  drawPersonalityTotem(context, data.result.primary, 540, 235, 190);
+  drawPersonalityTotem(context, `${data.result.primary}${data.result.rhythm || "c"}`, 540, 235, 190);
 
   context.textAlign = "center";
   context.fillStyle = "#e39a58";
@@ -1477,7 +1466,7 @@ function downloadPersonalityReport() {
 
   const canvas = personalityShareCanvas(data);
   const link = document.createElement("a");
-  link.download = `GC-16-${String(data.result.primary).toUpperCase()}-${data.profile.name}.png`;
+  link.download = `GC-8-${String(data.result.primary).toUpperCase()}-${String(data.result.rhythm || "c").toUpperCase()}-${data.profile.name}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
   setPersonalityShareStatus("1080 × 1350 人格報告圖已下載");

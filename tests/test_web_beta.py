@@ -349,28 +349,28 @@ def test_research_personality_quiz_contract() -> None:
         assert item in html
 
     assert "12 個連續情境" in html
-    assert re.search(r"<b>16</b>\s*<span>種研究人格</span>", html)
+    assert re.search(r"<b>8</b>\s*<span>種研究人格</span>", html)
     assert "不評估金融風險承受度" in html
     assert "不會改變任何股票的健康分數" in html
     assert "人格只改變閱讀方式，不改變研究結果" in html
 
     required_profiles = [
-        "地基守衡者",
-        "價值校準師",
-        "長曜培育者",
+        "基石驗證者",
+        "基石驗證者",
         "曙光驗證者",
-        "星盤定衡者",
-        "逆勢校準者",
-        "長軌觀測者",
-        "星軌驗證者",
-        "地訊守值者",
-        "事件定價師",
-        "萌星培育者",
-        "躍遷尋星者",
-        "雷達定錨者",
-        "轉折測繪者",
-        "新軌領航者",
-        "星訊先鋒者",
+        "曙光驗證者",
+        "價格校準者",
+        "價格校準者",
+        "趨勢驗證者",
+        "趨勢驗證者",
+        "企業巡航者",
+        "企業巡航者",
+        "成長探勘者",
+        "成長探勘者",
+        "市場導航者",
+        "市場導航者",
+        "動能偵察者",
+        "動能偵察者",
     ]
 
     for profile in required_profiles:
@@ -390,7 +390,7 @@ def test_research_personality_quiz_contract() -> None:
     for function_name in required_functions:
         assert function_name in js
 
-    assert 'const PERSONALITY_VERSION = "2"' in js
+    assert 'const PERSONALITY_VERSION = "3"' in js
     assert 'const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality"' in js
     assert "researchPersonalityQuestions" in js
     assert "researchPersonalityProfiles" in js
@@ -443,32 +443,32 @@ def test_personality_result_has_dimension_report() -> None:
     assert ".personality-dimension-track" in css
 
 
-def test_gc16_personality_axis_contract() -> None:
+def test_gc8_personality_axis_contract() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
 
     assert "12 個連續情境" in html
-    assert '<b>16</b><span>種研究人格</span>' in html
-    assert 'const PERSONALITY_VERSION = "2"' in js
+    assert '<b>8</b><span>種研究人格</span>' in html
+    assert 'const PERSONALITY_VERSION = "3"' in js
     assert "researchPersonalityAxisDefinitions" in js
     assert "researchPersonalityProfileRows" in js
-    assert 'system: "GC-16"' in js
+    assert 'system: "GC-8"' in js
     assert "axisScores" in js
     assert "personalityDimensionRows(scores)" in js
     assert "averageMargin" in js
     assert "affectsHealthScore: false" in js
     for name in (
-        "地基守衡者", "價值校準師", "長曜培育者", "曙光驗證者",
-        "星盤定衡者", "逆勢校準者", "長軌觀測者", "星軌驗證者",
-        "地訊守值者", "事件定價師", "萌星培育者", "躍遷尋星者",
-        "雷達定錨者", "轉折測繪者", "新軌領航者", "星訊先鋒者",
+        "基石驗證者", "基石驗證者", "曙光驗證者", "曙光驗證者",
+        "價格校準者", "價格校準者", "趨勢驗證者", "趨勢驗證者",
+        "企業巡航者", "企業巡航者", "成長探勘者", "成長探勘者",
+        "市場導航者", "市場導航者", "動能偵察者", "動能偵察者",
     ):
         assert name in js
 
 
 
-def test_gc16_result_uses_branded_inspection_report() -> None:
+def test_gc8_result_uses_branded_inspection_report() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -483,15 +483,15 @@ def test_gc16_result_uses_branded_inspection_report() -> None:
         assert element_id in html
 
     assert "function personalityTotemSvg" in js
-    assert "personalityTotemSvg(result.primary)" in js
+    assert 'personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`)' in js
     assert 'result.clarity || "研究方式較為平衡"' in js
-    assert "GC-16 personality inspection report v2" in css
+    assert "GC-8 personality inspection report v2" in css
     assert "personality-report-meta" in css
     assert "border-top:3px solid #e39a58" in css
 
 
 
-def test_gc16_questions_form_one_continuous_everyday_story() -> None:
+def test_gc8_questions_form_one_continuous_everyday_story() -> None:
     root = Path(__file__).parents[1]
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
 
@@ -526,7 +526,7 @@ def test_gc16_questions_form_one_continuous_everyday_story() -> None:
 
 
 
-def test_gc16_result_supports_private_safe_social_sharing() -> None:
+def test_gc8_result_supports_private_safe_social_sharing() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -552,8 +552,8 @@ def test_gc16_result_supports_private_safe_social_sharing() -> None:
     assert "navigator.share" in js
     assert 'canvas.width = 1080' in js
     assert 'canvas.height = 1350' in js
-    assert 'link.download = `GC-16-' in js
-    assert "GC-16 result sharing v1" in css
+    assert 'link.download = `GC-8-' in js
+    assert "GC-8 result sharing v1" in css
     assert "safe-area-inset-bottom" in css
 
     share_function = js.split(
@@ -571,7 +571,7 @@ def test_gc16_result_supports_private_safe_social_sharing() -> None:
 
 
 
-def test_gc16_visible_question_count_matches_twelve_question_contract() -> None:
+def test_gc8_visible_question_count_matches_twelve_question_contract() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
 
@@ -675,7 +675,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.8.0.10") == 3
+    assert html.count("3.9.0.9") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -709,7 +709,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.8.0.10") == 3
+    assert html.count("3.9.0.9") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,7 +726,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.8.0.10") == 3
+    assert html.count("3.9.0.9") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -752,7 +752,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.8.0.10") == 3
+    assert html.count("3.9.0.9") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -785,7 +785,7 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.8.0.10") == 3
+    assert html.count("3.9.0.9") == 3
 
 
 def test_pro_judgment_evidence_report_contract() -> None:
@@ -808,4 +808,20 @@ def test_pro_judgment_evidence_report_contract() -> None:
     assert ".pro-evidence-score-flow" in css
     assert ".pro-evidence-dimension-grid" in css
     assert ".pro-evidence-quality-grid" in css
-    assert html.count("3.8.0.10") == 3
+    assert html.count("3.9.0.9") == 3
+def test_gc8_uses_three_core_axes_and_separate_rhythm() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+
+    assert '<b>8</b><span>種研究人格</span>' in html
+    assert 'system: "GC-8"' in js
+    assert 'const PERSONALITY_VERSION = "3"' in js
+    assert 'const coreDimensions = dimensions.slice(0, 3)' in js
+    assert 'const rhythm = scores.compound >= scores.react ? "c" : "r"' in js
+    assert 'rhythmName' in js
+    assert 'GC8-${String(index + 1).padStart(2, "0")}' in js
+    assert 'GC-16' not in html
+    assert 'GC16-' not in js
+    for code in ("vba", "vbg", "vma", "vmg", "sba", "sbg", "sma", "smg"):
+        assert f'["{code}",' in js

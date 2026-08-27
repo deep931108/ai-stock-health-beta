@@ -4584,7 +4584,7 @@ html[data-theme="light"]{
 }
 
 
-/* GC-16 personality inspection report v2 */
+/* GC-8 personality inspection report v2 */
 .personality-report-hero,
 .personality-report-panel,
 .personality-report-grid>article,
@@ -4805,7 +4805,7 @@ html[data-theme="light"]{
 }
 
 
-/* GC-16 result sharing v1 */
+/* GC-8 result sharing v1 */
 .personality-share-panel{
   align-items:center;
   background:#101914 !important;
@@ -7240,4 +7240,278 @@ footer :is(b, strong, span, p, small) {
 html[data-theme="light"][data-research-mode="pro"]
 footer :is(b, strong) {
   color: #243831 !important;
+}
+
+/* GC-8 final theme v1 */
+
+/* Global dark mobile navigation surface. */
+
+html[data-theme="dark"] .mobile-nav {
+  background: rgba(17, 29, 24, 0.97) !important;
+  border-color: rgba(244, 240, 230, 0.18) !important;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.22) !important;
+}
+
+html[data-theme="dark"] .mobile-nav button {
+  background: transparent !important;
+  color: #9db5ae !important;
+}
+
+html[data-theme="dark"] .mobile-nav button.active {
+  background: rgba(201, 130, 71, 0.14) !important;
+  color: #f4f0e6 !important;
+}
+
+/* Shared personality report spacing. */
+
+.personality-share-panel {
+  margin-top: 24px !important;
+}
+
+/* Standard light report surfaces. */
+
+html[data-theme="light"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+) {
+  background: #fffdf8 !important;
+  background-color: #fffdf8 !important;
+  background-image: none !important;
+  border-color: rgba(49, 63, 57, 0.18) !important;
+  border-top: 0 !important;
+  color: #12241f !important;
+  box-shadow: none !important;
+}
+
+/* Ensure the second report card cannot retain the old warning surface. */
+
+html[data-theme="light"]
+.personality-report-grid > :nth-child(2) {
+  background: #fffdf8 !important;
+  background-color: #fffdf8 !important;
+  background-image: none !important;
+  border-right: 1px solid rgba(49, 63, 57, 0.18) !important;
+  border-bottom: 1px solid rgba(49, 63, 57, 0.18) !important;
+  border-left: 1px solid rgba(49, 63, 57, 0.18) !important;
+  border-top: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Remove colored decorative top lines while retaining status dots. */
+
+html[data-theme="light"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  border: 0 !important;
+}
+
+/* Light report typography. */
+
+html[data-theme="light"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+) :is(h1, h2, h3, h4, b, strong) {
+  color: #17352d !important;
+}
+
+html[data-theme="light"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+) :is(p, small) {
+  color: #65716c !important;
+}
+
+/* Light labels and overlines use the brand warm tone. */
+
+html[data-theme="light"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-share-panel
+) > div:first-child > span,
+html[data-theme="light"] .personality-report-grid > * > span {
+  color: #9b5f30 !important;
+}
+
+/* Light result code and report metadata. */
+
+html[data-theme="light"] :is(
+  .personality-result-code,
+  .personality-result-rhythm,
+  .personality-report-meta > *,
+  .personality-dimension-report,
+  .personality-reading-order > *
+) {
+  background: #f8f4ed !important;
+  border-color: #d9d2c8 !important;
+  color: #213a33 !important;
+}
+
+/* Standard dark report surfaces. */
+
+html[data-theme="dark"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+) {
+  background: #111d18 !important;
+  background-color: #111d18 !important;
+  background-image: none !important;
+  border: 1px solid rgba(244, 240, 230, 0.22) !important;
+  color: #f4f0e6 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+) :is(h1, h2, h3, h4, b, strong) {
+  color: #f4f0e6 !important;
+}
+
+html[data-theme="dark"] :is(
+  .personality-report-hero,
+  .personality-report-panel,
+  .personality-report-grid > *,
+  .personality-result-notice,
+  .personality-share-panel,
+  .personality-dimension-report
+) :is(p, small) {
+  color: #b8ccc8 !important;
+}
+
+/* Final result actions remain balanced on normal mobile widths. */
+
+.personality-result-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+.personality-result-actions > button,
+.personality-result-actions .personality-primary-action {
+  grid-column: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 50px !important;
+  margin: 0 !important;
+}
+
+/* Unified primary button color. */
+
+#personalityShare,
+.personality-share-actions .personality-primary-action,
+.personality-result-actions .personality-primary-action {
+  background: #c98247 !important;
+  background-color: #c98247 !important;
+  background-image: none !important;
+  border: 1px solid #c98247 !important;
+  color: #fffdf8 !important;
+  box-shadow: none !important;
+}
+
+#personalityShare:hover,
+.personality-share-actions .personality-primary-action:hover,
+.personality-result-actions .personality-primary-action:hover {
+  background: #b8733c !important;
+  background-color: #b8733c !important;
+  border-color: #b8733c !important;
+  color: #fffdf8 !important;
+}
+
+/* Unified light secondary buttons. */
+
+html[data-theme="light"] :is(
+  #personalityCopy,
+  #personalityDownload,
+  .personality-share-actions button:not(.personality-primary-action),
+  .personality-result-actions button:not(.personality-primary-action)
+) {
+  background: #f8f4ed !important;
+  border: 1px solid #d9d2c8 !important;
+  color: #213a33 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] :is(
+  #personalityCopy,
+  #personalityDownload,
+  .personality-share-actions button:not(.personality-primary-action),
+  .personality-result-actions button:not(.personality-primary-action)
+):hover {
+  background: #f0e9df !important;
+  border-color: #c98247 !important;
+  color: #17352d !important;
+}
+
+/* Unified dark secondary buttons. */
+
+html[data-theme="dark"] :is(
+  #personalityCopy,
+  #personalityDownload,
+  .personality-share-actions button:not(.personality-primary-action),
+  .personality-result-actions button:not(.personality-primary-action)
+) {
+  background: #16251f !important;
+  border: 1px solid rgba(244, 240, 230, 0.22) !important;
+  color: #f4f0e6 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] :is(
+  #personalityCopy,
+  #personalityDownload,
+  .personality-share-actions button:not(.personality-primary-action),
+  .personality-result-actions button:not(.personality-primary-action)
+):hover {
+  background: #1c3028 !important;
+  border-color: #c98247 !important;
+  color: #fffdf8 !important;
+}
+
+@media (max-width: 600px) {
+  .personality-result-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .personality-result-actions > button,
+  .personality-result-actions .personality-primary-action {
+    padding-inline: 12px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .personality-result-actions {
+    grid-template-columns: 1fr !important;
+  }
 }
