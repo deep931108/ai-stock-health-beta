@@ -675,7 +675,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.7.0.12") == 3
+    assert html.count("3.8.0.10") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -709,7 +709,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.7.0.12") == 3
+    assert html.count("3.8.0.10") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,7 +726,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.7.0.12") == 3
+    assert html.count("3.8.0.10") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -752,7 +752,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.7.0.12") == 3
+    assert html.count("3.8.0.10") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -785,4 +785,27 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.7.0.12") == 3
+    assert html.count("3.8.0.10") == 3
+
+
+def test_pro_judgment_evidence_report_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+
+    assert 'id="proEvidenceReport"' in html
+    assert "function renderProEvidenceReport" in js
+    assert "function proEvidenceFactors" in js
+    assert "function proEvidenceDimensions" in js
+    assert "function proEvidenceAuditRows" in js
+    assert "renderProEvidenceReport(report, scoreChange);" in js
+    assert "這個分數是怎麼形成的？" in js
+    assert "哪些資料正在加分或扣分？" in js
+    assert "五大研究面向的權重與貢獻" in js
+    assert "目前判斷有哪些限制？" in js
+    assert "逐項查看計算依據" in js
+    assert ".pro-evidence-score-flow" in css
+    assert ".pro-evidence-dimension-grid" in css
+    assert ".pro-evidence-quality-grid" in css
+    assert html.count("3.8.0.10") == 3

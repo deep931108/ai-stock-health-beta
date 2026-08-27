@@ -6092,6 +6092,219 @@ function renderProValuation(report) {
   }
 }
 
+
+function proEvidenceNumber(value, digits = 1) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number.toFixed(digits) : "—";
+}
+
+function proEvidenceFactors(items, tone, emptyText) {
+  const rows = Array.isArray(items) ? items.slice(0, 4) : [];
+
+  if (!rows.length) {
+    return `<p class="pro-evidence-empty">${escapeHtml(emptyText)}</p>`;
+  }
+
+  return rows.map((item, index) => {
+    const impact = Number(item.impact);
+    const impactText = Number.isFinite(impact)
+      ? `${impact >= 0 ? "+" : ""}${impact.toFixed(2)} 分`
+      : "影響值待確認";
+
+    return `
+      <article class="pro-evidence-factor ${tone}">
+        <div class="pro-evidence-factor-head">
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <em>${escapeHtml(impactText)}</em>
+        </div>
+        <h4>${escapeHtml(item.label || item.label_zh || "研究證據")}</h4>
+        <p>${escapeHtml(item.reason || item.reason_zh || "本項原因尚未提供。")}</p>
+        <small>${escapeHtml(item.source || item.source_label_zh || "資料來源待確認")}</small>
+      </article>
+    `;
+  }).join("");
+}
+
+function proEvidenceDimensions(indicators) {
+  const rows = Array.isArray(indicators) ? indicators : [];
+
+  if (!rows.length) {
+    return '<p class="pro-evidence-empty">本次報告尚未產生五大面向拆解。</p>';
+  }
+
+  return rows.map((item, index) => {
+    const score = Number(item.score);
+    const weight = Number(item.weight_pct);
+    const coverage = Number(item.coverage_pct);
+    const contribution = Number(item.weighted_contribution);
+    const width = Number.isFinite(score)
+      ? Math.max(0, Math.min(100, score))
+      : 0;
+
+    return `
+      <article class="pro-evidence-dimension">
+        <div class="pro-evidence-dimension-heading">
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <div>
+            <h4>${escapeHtml(item.label || "研究面向")}</h4>
+            <p>${escapeHtml(item.description || item.level || "面向狀態待確認")}</p>
+          </div>
+          <strong>${proEvidenceNumber(score)} 分</strong>
+        </div>
+        <div class="pro-evidence-meter" aria-hidden="true">
+          <i style="width:${width}%"></i>
+        </div>
+        <dl>
+          <div><dt>面向權重</dt><dd>${proEvidenceNumber(weight)}%</dd></div>
+          <div><dt>原始分貢獻</dt><dd>${proEvidenceNumber(contribution, 2)}</dd></div>
+          <div><dt>資料覆蓋</dt><dd>${proEvidenceNumber(coverage)}%</dd></div>
+        </dl>
+        ${item.missing_features?.length
+          ? `<p class="pro-evidence-missing">尚缺：${item.missing_features.map(escapeHtml).join("、")}</p>`
+          : '<p class="pro-evidence-complete">此面向沒有已知資料缺口</p>'}
+      </article>
+    `;
+  }).join("");
+}
+
+function proEvidenceAuditRows(indicators) {
+  const rows = Array.isArray(indicators) ? indicators : [];
+
+  return rows.map((item) => `
+    <details class="pro-evidence-audit-item">
+      <summary>
+        <span>${escapeHtml(item.label || "研究面向")}</span>
+        <b>${proEvidenceNumber(item.score)} 分</b>
+      </summary>
+      <div>
+        ${factorRows(item.contributions, "這個面向尚無子指標明細。")}
+      </div>
+    </details>
+  `).join("") || '<p class="pro-evidence-empty">本次沒有可展開的原始證據。</p>';
+}
+
+function renderProEvidenceReport(report, scoreChange) {
+  const target = $("proEvidenceReport");
+  if (!target) return;
+
+  const shown = Number(report.score_v2 ?? report.score);
+  const raw = Number(report.score_v1);
+  const calibration = Number.isFinite(shown) && Number.isFinite(raw)
+    ? shown - raw
+    : null;
+  const confidence = Number(report.confidence);
+  const indicators = Array.isArray(report.indicators)
+    ? report.indicators
+    : [];
+  const positive = Array.isArray(report.detailed_positive)
+    ? report.detailed_positive
+    : [];
+  const negative = Array.isArray(report.detailed_negative)
+    ? report.detailed_negative
+    : [];
+  const coverageValues = indicators
+    .map((item) => Number(item.coverage_pct))
+    .filter(Number.isFinite);
+  const coverage = coverageValues.length
+    ? coverageValues.reduce((sum, value) => sum + value, 0) /
+      coverageValues.length
+    : null;
+  const missingCount = indicators.reduce(
+    (sum, item) => sum + (Array.isArray(item.missing_features)
+      ? item.missing_features.length
+      : 0),
+    0,
+  );
+  const adjustments = Array.isArray(report.weight_adjustments)
+    ? report.weight_adjustments
+    : [];
+
+  target.innerHTML = `
+    <header class="pro-evidence-report-head">
+      <div>
+        <span>判斷依據</span>
+        <h2>這個分數是怎麼形成的？</h2>
+        <p>${escapeHtml(report.score_method || "分數用於一致比較，不代表未來漲跌或報酬。")}</p>
+      </div>
+      <small>${escapeHtml(report.score_interval || "目前研究區間待確認")}</small>
+    </header>
+
+    <section class="pro-evidence-score-section">
+      <div class="pro-evidence-section-heading">
+        <div><span>01 · 分數形成</span><h3>從原始資料到展示分數</h3></div>
+        <small>校準用於維持一致比較，不改變研究證據</small>
+      </div>
+      <div class="pro-evidence-score-flow">
+        <article><span>原始加權分</span><strong>${proEvidenceNumber(raw)}</strong><small>五大面向依權重加總</small></article>
+        <i aria-hidden="true">→</i>
+        <article><span>校準調整</span><strong>${calibration == null ? "—" : `${calibration >= 0 ? "+" : ""}${calibration.toFixed(1)}`}</strong><small>維持跨股票比較一致性</small></article>
+        <i aria-hidden="true">→</i>
+        <article class="result"><span>目前展示分</span><strong>${proEvidenceNumber(shown)}</strong><small>${escapeHtml(report.assessment || "目前狀態待確認")}</small></article>
+      </div>
+      <div class="pro-evidence-summary-grid">
+        <article><span>區間變化</span><b>${scoreChange == null ? "累積中" : `${scoreChange >= 0 ? "+" : ""}${scoreChange.toFixed(1)} 分`}</b></article>
+        <article><span>判斷把握度</span><b>${Number.isFinite(confidence) ? `${Math.round(confidence)} / 100` : "—"}</b></article>
+        <article><span>平均資料覆蓋</span><b>${coverage == null ? "—" : `${coverage.toFixed(1)}%`}</b></article>
+        <article><span>已知資料缺口</span><b>${missingCount} 項</b></article>
+      </div>
+    </section>
+
+    <section class="pro-evidence-score-section">
+      <div class="pro-evidence-section-heading">
+        <div><span>02 · 關鍵證據</span><h3>哪些資料正在加分或扣分？</h3></div>
+        <small>影響值以中性 50 分為比較基準</small>
+      </div>
+      <p class="pro-evidence-definition">${escapeHtml(report.impact_definition || "影響值顯示各子指標對原始健康分的實際影響。")}</p>
+      <div class="pro-evidence-factor-columns">
+        <div>
+          <h4>主要加分證據</h4>
+          ${proEvidenceFactors(positive, "positive", "目前沒有可量化的加分因素。")}
+        </div>
+        <div>
+          <h4>主要扣分證據</h4>
+          ${proEvidenceFactors(negative, "negative", "目前沒有可量化的扣分因素。")}
+        </div>
+      </div>
+    </section>
+
+    <section class="pro-evidence-score-section">
+      <div class="pro-evidence-section-heading">
+        <div><span>03 · 面向拆解</span><h3>五大研究面向的權重與貢獻</h3></div>
+        <small>高分只代表目前狀態，不代表未來報酬</small>
+      </div>
+      <div class="pro-evidence-dimension-grid">
+        ${proEvidenceDimensions(indicators)}
+      </div>
+    </section>
+
+    <section class="pro-evidence-score-section">
+      <div class="pro-evidence-section-heading">
+        <div><span>04 · 資料品質</span><h3>目前判斷有哪些限制？</h3></div>
+      </div>
+      <div class="pro-evidence-quality-grid">
+        <article><span>資料覆蓋</span><strong>${coverage == null ? "待確認" : `${coverage.toFixed(1)}%`}</strong><p>依五大研究面向的可用欄位計算。</p></article>
+        <article><span>缺失欄位</span><strong>${missingCount} 項</strong><p>${missingCount ? "缺口會降低部分判斷的完整度。" : "目前沒有已知的面向資料缺口。"}</p></article>
+        <article><span>權重調整</span><strong>${adjustments.length} 項</strong><p>${adjustments.length ? escapeHtml(adjustments.join("；")) : "本次沒有額外權重調整。"}</p></article>
+      </div>
+    </section>
+
+    <section class="pro-evidence-score-section">
+      <div class="pro-evidence-section-heading">
+        <div><span>05 · 原始證據</span><h3>逐項查看計算依據</h3></div>
+        <small>展開後可查看指標、權重、原因與來源</small>
+      </div>
+      <div class="pro-evidence-audit">
+        ${proEvidenceAuditRows(indicators)}
+      </div>
+    </section>
+
+    <aside class="pro-evidence-policy">
+      <b>分數不是報酬預測或買賣指令</b>
+      <p>本頁只說明目前研究判斷如何形成；請配合估值、風險、事件與後續驗證共同閱讀。</p>
+    </aside>
+  `;
+}
+
 function renderProResearch(report) {
   if (!$("proResearchWorkspace")) return;
 
@@ -6200,39 +6413,7 @@ function renderProResearch(report) {
   renderProValuation(report);
 
 
-  const scoreBridge = cleanProHtml($("scoreBridge")?.innerHTML);
-  const positive = cleanProHtml($("positiveFactors")?.innerHTML);
-  const negative = cleanProHtml($("negativeFactors")?.innerHTML);
-  const breakdown = cleanProHtml($("factorBreakdown")?.innerHTML);
-
-  $("proEvidenceSummary").innerHTML = `
-    <div class="pro-evidence-headline">
-      <div>
-        <span>目前研究區間</span>
-        <b>${escapeHtml($("scoreInterval")?.textContent || "研究區間未提供")}</b>
-      </div>
-      <div>
-        <span>區間變化</span>
-        <b>${
-          scoreChange == null
-            ? "累積中"
-            : `${scoreChange >= 0 ? "+" : ""}${scoreChange.toFixed(1)} 分`
-        }</b>
-      </div>
-    </div>
-    <div class="pro-score-bridge">${scoreBridge || '<p class="pro-empty">本次未產生分數變化說明。</p>'}</div>
-  `;
-
-  $("proEvidenceDetail").innerHTML = `
-    <div class="pro-factor-columns">
-      <article><h4>主要加分因素</h4>${positive || "<p>本次未列出加分因素</p>"}</article>
-      <article><h4>主要扣分因素</h4>${negative || "<p>本次未列出扣分因素</p>"}</article>
-    </div>
-    <div class="pro-breakdown">
-      <h4>五大面向完整拆解</h4>
-      ${breakdown || "<p>本次未產生面向拆解</p>"}
-    </div>
-  `;
+  renderProEvidenceReport(report, scoreChange);
 
   $("proHistorySummary").innerHTML = cleanProHtml(
     $("historySummary")?.innerHTML
