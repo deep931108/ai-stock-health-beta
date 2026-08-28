@@ -4584,7 +4584,7 @@ html[data-theme="light"]{
 }
 
 
-/* GC-8 personality inspection report v2 */
+/* GC-9 personality inspection report v2 */
 .personality-report-hero,
 .personality-report-panel,
 .personality-report-grid>article,
@@ -4805,7 +4805,7 @@ html[data-theme="light"]{
 }
 
 
-/* GC-8 result sharing v1 */
+/* GC-9 result sharing v1 */
 .personality-share-panel{
   align-items:center;
   background:#101914 !important;
@@ -7242,7 +7242,7 @@ footer :is(b, strong) {
   color: #243831 !important;
 }
 
-/* GC-8 final theme v1 */
+/* GC-9 final theme v1 */
 
 /* Global dark mobile navigation surface. */
 
@@ -7516,7 +7516,7 @@ html[data-theme="dark"] :is(
   }
 }
 
-/* GC-8 Phase 2 final theme v1 */
+/* GC-9 Phase 2 final theme v1 */
 
 .daily-research-personality {
   display: grid;

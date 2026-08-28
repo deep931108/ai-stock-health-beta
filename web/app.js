@@ -7,7 +7,7 @@ const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion";
 const ONBOARDING_VERSION = "1";
 const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality";
 const PERSONALITY_ORDER_STORAGE_KEY = "aiStockPersonalityOrder";
-const PERSONALITY_VERSION = "3";
+const PERSONALITY_VERSION = "4";
 let personalityQuestionIndex = 0;
 let personalityAnswers = Array(12).fill(null);
 let onboardingStepIndex = 0;
@@ -152,26 +152,6 @@ const researchPersonalityAxisDefinitions = [
   },
 ];
 
-const researchPersonalityProfileRows = [
-  ["vba", "基石驗證者", "你用正式證據、企業營運與價格基準，建立穩固而可反覆檢查的研究地基。", "能讓判斷建立在可驗證的企業基礎上", "你會確認營運品質與價格位置，不容易被單一消息或短期波動帶走。", "可能較晚注意正在形成的新變化", "等待證據完整能降低誤判，也可能讓早期轉折較晚進入研究範圍。"],
-  ["vbg", "曙光驗證者", "你尋找獲得營運數字支持、正在形成的品質成長與企業轉折。", "能辨認受到基本面支持的成長", "你不只看成長故事，也要求收入、獲利或正式里程碑逐步證明方向。", "可能把首次改善看成完整趨勢", "第一道曙光仍需要後續數字延續，避免用單期表現推演長期成長。"],
-  ["vma", "價格校準者", "你用可信資料、相對表現與估值基準，校準市場目前給出的價格位置。", "能辨識價格與研究基準的落差", "你會比較歷史、同業與市場狀態，再判斷目前定價是否仍有證據支撐。", "可能過度依賴既有比較基準", "產業結構與公司品質可能已改變，歷史位置不一定仍是有效錨點。"],
-  ["vmg", "趨勢驗證者", "你在市場趨勢、資金方向與企業證據逐漸會合時，確認成長軌跡。", "能交叉驗證市場訊號與公司證據", "你擅長觀察價格、法人與營運是否逐步形成同一方向。", "可能把市場共識看得過於重要", "市場方向仍可能反轉，不能取代收入、獲利與正式公告。"],
-  ["sba", "企業巡航者", "你快速掃描企業變化，同時用營運品質與價格紀律建立觀察範圍。", "能提早發現企業線索又保留基準", "你願意先建立觀察，再用公司數字與價格位置決定研究優先度。", "可能追蹤太多尚未落實的線索", "早期訊號需要明確驗證條件，避免研究議題無限延伸。"],
-  ["sbg", "成長探勘者", "你從產品、產業與企業變化中，提早探勘可能形成的新成長曲線。", "能看見尚未被廣泛注意的成長線索", "你對收入加速、新產品與重大事件同時出現的情境特別敏感。", "可能把短期加速外推為長期成長", "每個成長故事都需要里程碑與退出條件，確認營運是否真的跟上。"],
-  ["sma", "市場導航者", "你掃描價格、法人、同業與市場情緒，再用比較基準判斷目前位置。", "能快速辨認相對強弱與市場轉折", "你會從多種市場訊號定位變化，同時保留價格紀律。", "可能把太多市場波動列入研究", "不是每個異常都是有效訊號，需要設定重要性與持續時間門檻。"],
-  ["smg", "動能偵察者", "你最快捕捉市場、事件、資金與成長訊號交會形成的研究轉折。", "能快速整合多種正在變化的訊號", "你對新趨勢、事件催化與成長加速的同時出現非常敏感。", "容易受到快速變化與市場情緒干擾", "反應速度不能取代證據品質，需要持續核對正式來源與營運結果。"],
-];
-
-function personalityReadingOrder(code, rhythm = "c") {
-  const order = [];
-  order.push(code[1] === "b" ? "健康狀態" : "近期變化");
-  order.push(code[2] === "a" ? "價格位置" : "成長與獲利");
-  order.push(code[0] === "v" ? "判斷把握度" : "重要事件");
-  order.push(rhythm === "c" ? "歷史與持續追蹤" : "目前風險");
-  return [...new Set(order)].slice(0, 4);
-}
-
 function personalityResearchOrderEnabled() {
   return localStorage.getItem(
     PERSONALITY_ORDER_STORAGE_KEY
@@ -188,95 +168,10 @@ function setPersonalityResearchOrder(enabled) {
 
   showToast(
     enabled
-      ? "已使用 GC-8 人格排序"
+      ? "已使用 GC-9 人格排序"
       : "已恢復原始研究順序"
   );
 }
-function personalityDailyResearchPlan(
-  result = savedPersonalityResult()
-) {
-  const code = String(result?.primary || "").toLowerCase();
-  const profile = researchPersonalityProfiles[code];
-
-  if (!profile) return null;
-
-  const verify = code[0] === "v";
-  const business = code[1] === "b";
-  const anchored = code[2] === "a";
-  const compound = result.rhythm !== "r";
-
-  let order;
-
-  if (verify && compound) {
-    order = ["evidence", "follow_up", "change", "new"];
-  } else if (verify) {
-    order = ["change", "evidence", "new", "follow_up"];
-  } else if (compound) {
-    order = ["change", "follow_up", "new", "evidence"];
-  } else {
-    order = ["change", "new", "evidence", "follow_up"];
-  }
-
-  const lead =
-    verify
-      ? "先核對證據，再擴大研究範圍"
-      : "先掌握新變化，再回頭確認證據";
-
-  const focus =
-    business
-      ? "個股內優先看營運狀態"
-      : "個股內優先看市場與法人變化";
-
-  const opportunity =
-    anchored
-      ? "接著核對價格位置與比較基準"
-      : "接著檢查成長、獲利與改善速度";
-
-  const cadence =
-    compound
-      ? "最後更新持續追蹤紀錄"
-      : "新的轉折與重要事件優先處理";
-
-  return {
-    code,
-    profile,
-    order,
-    lead,
-    focus,
-    opportunity,
-    cadence,
-  };
-}
-const researchPersonalityProfiles = Object.fromEntries(
-  researchPersonalityProfileRows.map((row, index) => {
-    const [
-      key,
-      name,
-      summary,
-      strengthTitle,
-      strengthCopy,
-      blindSpotTitle,
-      blindSpotCopy,
-    ] = row;
-
-    return [key, {
-      id: `GC8-${String(index + 1).padStart(2, "0")}`,
-      name,
-      symbol: "GC",
-      axes: {
-        evidence: key[0] === "v" ? "verify" : "scan",
-        focus: key[1] === "b" ? "business" : "market",
-        opportunity: key[2] === "a" ? "anchor" : "growth",
-      },
-      summary,
-      strengthTitle,
-      strengthCopy,
-      blindSpotTitle,
-      blindSpotCopy,
-    }];
-  })
-);
-
 const researchPersonalityQuestions = [
   {
     axis: "evidence",
@@ -916,106 +811,6 @@ function selectPersonalityOption(index) {
   renderPersonalityQuestion();
 }
 
-function completePersonalityQuiz() {
-  const scores = {
-    verify: 0,
-    scan: 0,
-    business: 0,
-    market: 0,
-    anchor: 0,
-    growth: 0,
-    compound: 0,
-    react: 0,
-  };
-
-  personalityAnswers.forEach((answer, questionIndex) => {
-    const option =
-      researchPersonalityQuestions[questionIndex]
-        ?.options?.[answer];
-
-    Object.entries(option?.axisScores || {})
-      .forEach(([key, points]) => {
-        if (Object.hasOwn(scores, key)) {
-          scores[key] += Number(points || 0);
-        }
-      });
-  });
-
-  const dimensions = personalityDimensionRows(scores);
-  const coreDimensions = dimensions.slice(0, 3);
-
-  const primary = [
-    scores.verify >= scores.scan ? "v" : "s",
-    scores.business >= scores.market ? "b" : "m",
-    scores.anchor >= scores.growth ? "a" : "g",
-  ].join("");
-
-  const rhythm = scores.compound >= scores.react ? "c" : "r";
-  const rhythmName = rhythm === "c"
-    ? "長期累積型"
-    : "變化應對型";
-
-  const weakestDimension = [...coreDimensions]
-    .sort((left, right) => left.margin - right.margin)[0];
-  const secondaryCharacters = primary.split("");
-
-  if (weakestDimension) {
-    const alternatives = [
-      ["v", "s"],
-      ["b", "m"],
-      ["a", "g"],
-    ];
-    const pair = alternatives[weakestDimension.index];
-    secondaryCharacters[weakestDimension.index] =
-      secondaryCharacters[weakestDimension.index] === pair[0]
-        ? pair[1]
-        : pair[0];
-  }
-
-  const secondary = secondaryCharacters.join("");
-  const averageMargin = coreDimensions.length
-    ? coreDimensions.reduce(
-        (total, row) => total + row.margin,
-        0
-      ) / coreDimensions.length
-    : 0;
-
-  const clarity = averageMargin >= 50
-    ? "輪廓非常清楚"
-    : averageMargin >= 30
-      ? "輪廓清楚"
-      : averageMargin >= 16
-        ? "具有明顯傾向"
-        : "研究方式較為平衡";
-
-  const result = {
-    version: PERSONALITY_VERSION,
-    system: "GC-8",
-    primary,
-    secondary,
-    rhythm,
-    rhythmName,
-    scores,
-    dimensions,
-    clarity,
-    answers: [...personalityAnswers],
-    completedAt: new Date().toISOString(),
-    affectsHealthScore: false,
-  };
-
-  localStorage.setItem(
-    PERSONALITY_STORAGE_KEY,
-    JSON.stringify(result)
-  );
-
-  renderPersonalityResult(result);
-  renderProfilePage();
-
-  if (typeof renderDailyResearch === "function") {
-    renderDailyResearch();
-  }
-}
-
 function personalityDimensionRows(scores = {}) {
   const score = (key) => {
     const value = Number(scores?.[key] || 0);
@@ -1151,90 +946,12 @@ function personalityTotemSvg(typeKey = "vbac") {
   `;
 }
 
-function renderPersonalityResult(result) {
-  const primary =
-    researchPersonalityProfiles[result?.primary];
-  const secondary =
-    researchPersonalityProfiles[result?.secondary];
-
-  if (!primary) {
-    setPersonalityView("intro");
-    return;
-  }
-
-  renderPersonalityDimensions(result);
-
-  const resultCode = `${primary.id} · ${String(result.primary).toUpperCase()}-${String(result.rhythm || "c").toUpperCase()}`;
-
-  $("personalityResultSymbol").innerHTML =
-    personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`);
-  $("personalityResultCode").textContent = resultCode;
-  $("personalityResultClarity").textContent =
-    result.clarity || "研究方式較為平衡";
-  $("personalityResultTitle").textContent =
-    primary.name;
-  $("personalityResultSummary").textContent =
-    primary.summary;
-  $("personalitySecondaryType").textContent =
-    secondary
-      ? `研究節奏：${result.rhythmName || "長期累積型"}｜鄰近人格：${secondary.name}`
-      : "研究風格已完成";
-
-  $("personalityStrengthTitle").textContent =
-    primary.strengthTitle;
-  $("personalityStrengthCopy").textContent =
-    primary.strengthCopy;
-  $("personalityBlindSpotTitle").textContent =
-    primary.blindSpotTitle;
-  $("personalityBlindSpotCopy").textContent =
-    primary.blindSpotCopy;
-  $("personalityReadingOrder").innerHTML =
-    personalityReadingOrder(result.primary, result.rhythm)
-      .map((item) => `<li>${escapeHtml(item)}</li>`)
-      .join("");
-  $("personalityModeTitle").textContent =
-    result.rhythm === "r"
-      ? "先用 Guided 掌握方向，再用 Pro 核對完整證據"
-      : "先用 Guided 建立固定研究順序";
-  $("personalityModeCopy").textContent =
-    result.rhythm === "r"
-      ? "變化應對型會更常遇到市場、事件與快速轉折；先讀白話摘要，再到 Pro 核對數字、歷史與來源。"
-      : "長期累積型適合依建議順序完成每日研究；需要核對完整數字時，再切換 Pro 查看證據。";
-
-  document.documentElement.dataset.researchPersonality =
-    result.primary;
-
-  setPersonalityView("result");
-  window.scrollTo({top: 0, behavior: "smooth"});
-}
-
-
 function closePersonalityQuickView() {
   $("personalityQuickBackdrop")?.classList.add("hidden");
   $("personalityQuickModal")?.classList.add("hidden");
   document.body.classList.remove("personality-quick-open");
 }
 
-function openPersonalityQuickView() {
-  const result = savedPersonalityResult();
-  const profile = researchPersonalityProfiles[result?.primary];
-  if (!result || !profile) {
-    showToast("尚未完成人格測驗");
-    return;
-  }
-
-  const code = `${profile.id} · ${String(result.primary).toUpperCase()}-${String(result.rhythm || "c").toUpperCase()}`;
-  $("personalityQuickSymbol").innerHTML = personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`);
-  $("personalityQuickCode").textContent = code;
-  $("personalityQuickTitle").textContent = profile.name;
-  $("personalityQuickSummary").textContent = profile.summary;
-  $("personalityQuickOrder").innerHTML = personalityReadingOrder(result.primary, result.rhythm)
-    .map((item) => `<li>${escapeHtml(item)}</li>`).join("");
-  $("personalityQuickBackdrop").classList.remove("hidden");
-  $("personalityQuickModal").classList.remove("hidden");
-  document.body.classList.add("personality-quick-open");
-  $("personalityQuickClose").focus();
-}
 function personalityReportTarget(key) {
   const pro =
     document.documentElement.dataset.researchMode === "pro";
@@ -1308,33 +1025,6 @@ function personalityReportTarget(key) {
     ) || null;
 }
 
-function personalityReportGuideItems(result = savedPersonalityResult()) {
-  const code = String(result?.primary || "").toLowerCase();
-  const profile = researchPersonalityProfiles[code];
-  if (!profile) return null;
-
-  const descriptions = {
-    "健康狀態": "先確認公司目前的營運與整體健康狀態",
-    "近期變化": "先掌握今天真正發生改變的訊號",
-    "價格位置": "核對目前價格相對歷史與比較基準的位置",
-    "成長與獲利": "檢查收入、獲利與改善速度是否延續",
-    "判斷把握度": "確認資料品質、證據來源與判斷限制",
-    "重要事件": "查看可能改變研究方向的新事件",
-    "歷史與持續追蹤": "把目前判斷放回歷史並持續驗證",
-    "目前風險": "先確認目前最可能推翻判斷的風險",
-  };
-
-  return {
-    profile,
-    order: personalityReadingOrder(code, result.rhythm || "c")
-      .map((label, index) => ({
-        index: index + 1,
-        label,
-        copy: descriptions[label] || "前往這個研究區塊",
-      })),
-  };
-}
-
 function renderPersonalityReportGuide() {
   const root = $("personalityReportGuide");
   const list = $("personalityReportGuideList");
@@ -1391,22 +1081,6 @@ function renderPersonalityReportGuide() {
   const profileButton = $("personalityReportGuideProfile");
   if (profileButton) profileButton.onclick = openPersonalityQuickView;
 }
-function currentPersonalityShareData() {
-  const result = savedPersonalityResult();
-  const profile = researchPersonalityProfiles[result?.primary];
-
-  if (!result || !profile) return null;
-
-  const dimensions = personalityDimensionRows(result.scores || {});
-
-  return {
-    result,
-    profile,
-    dimensions,
-    code: `${profile.id} · ${String(result.primary).toUpperCase()}-${String(result.rhythm || "c").toUpperCase()}`,
-  };
-}
-
 function personalityShareText(data = currentPersonalityShareData()) {
   if (!data) return "";
 
@@ -1732,7 +1406,7 @@ function downloadPersonalityReport() {
 
   const canvas = personalityShareCanvas(data);
   const link = document.createElement("a");
-  link.download = `GC-8-${String(data.result.primary).toUpperCase()}-${String(data.result.rhythm || "c").toUpperCase()}-${data.profile.name}.png`;
+  link.download = `GC-9-${String(data.result.primary).toUpperCase()}-${String(data.result.rhythm || "c").toUpperCase()}-${data.profile.name}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
   setPersonalityShareStatus("1080 × 1350 人格報告圖已下載");
@@ -1741,15 +1415,14 @@ function downloadPersonalityReport() {
 
 function renderProfilePersonality() {
   const result = savedPersonalityResult();
-  const profile =
-    researchPersonalityProfiles[result?.primary];
+  const profile = gc9Profile(result);
 
   $("profilePersonalityName").textContent =
     profile?.name || "尚未測驗";
   $("profilePersonalityNote").textContent =
     profile
-      ? "已建立個人化閱讀順序，可隨時重新測驗"
-      : "完成 12 題，建立個人化閱讀順序";
+      ? `${profile.id} · ${profile.kind}｜可隨時重新測驗`
+      : "完成 15 題，建立個人化閱讀順序";
   $("profilePersonality").textContent =
     profile
       ? "查看我的研究人格"
@@ -1757,7 +1430,7 @@ function renderProfilePersonality() {
 
   if (profile) {
     document.documentElement.dataset.researchPersonality =
-      result.primary;
+      result.archetype;
   }
 }
 
@@ -8822,4 +8495,337 @@ function placePersonalityReportGuideFirst() {
   }
 }
 placePersonalityReportGuideFirst();
+/* GC-9 nine archetype engine v1 */
+
+const gc9Profiles = {
+  precision_sage: {
+    id: "GC9-01",
+    name: "至準智者",
+    kind: "策略型",
+    summary: "你重視客觀數據、精準與研究紀律，習慣先分析與計算，再形成可反覆核對的判斷。",
+    strengthTitle: "能建立精準而有紀律的研究判斷",
+    strengthCopy: "你願意拆解數據、比較來源並確認推論，不容易被單一情緒或熱門說法帶走。",
+    blindSpotTitle: "可能過度追求唯一正確答案",
+    blindSpotCopy: "資料永遠不會完全齊全；分析過久可能使重要變化較晚進入你的研究範圍。",
+    order: ["判斷把握度", "健康狀態", "價格位置", "歷史與持續追蹤"],
+  },
+  halo_hunter: {
+    id: "GC9-02",
+    name: "光環獵手",
+    kind: "行動型",
+    summary: "你對高潛力、高成長公司與市場新機會十分敏銳，願意快速追蹤正在形成的熱門方向。",
+    strengthTitle: "能快速注意成長與新機會",
+    strengthCopy: "你對題材、產業熱度與成長加速很敏感，通常能比多數人更早建立觀察。",
+    blindSpotTitle: "可能追高或受到熱門話題影響",
+    blindSpotCopy: "市場光環不等於營運成果；研究時需要補上價格基準、正式證據與失敗條件。",
+    order: ["近期變化", "成長與獲利", "重要事件", "目前風險"],
+  },
+  valuation_sage: {
+    id: "GC9-03",
+    name: "估值賢者",
+    kind: "策略型",
+    summary: "你重視公司的內在價值與合理價格，願意等待價格回到有研究基準支持的位置。",
+    strengthTitle: "能用價值與價格基準保持紀律",
+    strengthCopy: "你會比較營運、歷史與同業，避免只因故事動人或市場熱度升高就改變標準。",
+    blindSpotTitle: "可能過度相信自己的估值",
+    blindSpotCopy: "估值模型仍可能高估或低估公司；產業結構改變時，既有錨點也需要重新驗證。",
+    order: ["價格位置", "健康狀態", "判斷把握度", "歷史與持續追蹤"],
+  },
+  shield_guardian: {
+    id: "GC9-04",
+    name: "盾之守護者",
+    kind: "行動型",
+    summary: "你優先控制風險、分散配置並保留安全空間，習慣先確認可能失去什麼，再考慮潛在報酬。",
+    strengthTitle: "能優先控制失敗成本",
+    strengthCopy: "你重視風險上限、部位分散與防守條件，不容易因一次機會破壞整體配置。",
+    blindSpotTitle: "可能因過度保守錯過高報酬機會",
+    blindSpotCopy: "並非所有不確定性都應排除；需要區分可管理的研究風險與無法承受的風險。",
+    order: ["目前風險", "判斷把握度", "價格位置", "歷史與持續追蹤"],
+  },
+  mist_assassin: {
+    id: "GC9-05",
+    name: "迷霧刺客",
+    kind: "行動型",
+    summary: "你善於從短期波動尋找機會，重視進出時機並能在市場方向改變時迅速採取行動。",
+    strengthTitle: "能快速捕捉短期轉折與時機",
+    strengthCopy: "你對價格、量能、法人與事件催化反應敏銳，能快速調整研究優先順序。",
+    blindSpotTitle: "可能受到短期資訊影響而交易過度",
+    blindSpotCopy: "快速反應仍需配合證據門檻與行動冷卻時間，避免把每次波動都視為有效訊號。",
+    order: ["近期變化", "重要事件", "目前風險", "價格位置"],
+  },
+  cultivation_elder: {
+    id: "GC9-06",
+    name: "培育長老",
+    kind: "培育型",
+    summary: "你偏好長期投資與複利累積，願意陪伴看好的企業成長，不輕易被短期資訊改變策略。",
+    strengthTitle: "能用時間與複利累積研究成果",
+    strengthCopy: "你願意持續記錄營運與重要里程碑，不容易因市場雜訊頻繁改變原本策略。",
+    blindSpotTitle: "可能把長期持有變成死抱不放",
+    blindSpotCopy: "長期投資仍需要失敗條件；當商業模式或財務品質改變時，原本信念必須重新檢查。",
+    order: ["健康狀態", "成長與獲利", "歷史與持續追蹤", "目前風險"],
+  },
+  market_observer: {
+    id: "GC9-07",
+    name: "觀市者",
+    kind: "策略型",
+    summary: "你傾向先觀察市場趨勢與訊號，不急著預測或行動，等待方向更清楚後再形成判斷。",
+    strengthTitle: "能耐心等待市場提供更明確訊號",
+    strengthCopy: "你喜歡研究、比較與觀察，通常不會因一時波動或單一消息急著下結論。",
+    blindSpotTitle: "可能觀察過久而錯過時機",
+    blindSpotCopy: "等待確認也需要期限；研究時應先定義什麼訊號足以讓你進入下一步。",
+    order: ["近期變化", "價格位置", "重要事件", "判斷把握度"],
+  },
+  star_child: {
+    id: "GC9-08",
+    name: "追星的孩子",
+    kind: "理想型",
+    summary: "你喜歡具有故事與願景的公司，願意研究新產業、新技術以及尚未被完全證明的未來。",
+    strengthTitle: "能看見長期願景與未來可能性",
+    strengthCopy: "你對新產業、技術革新與公司使命具有想像力，願意提早研究下一段成長曲線。",
+    blindSpotTitle: "可能因相信願景而忽略基本面",
+    blindSpotCopy: "願景需要轉成可驗證的里程碑；收入、獲利、現金流與失敗條件仍不可缺少。",
+    order: ["成長與獲利", "重要事件", "近期變化", "判斷把握度"],
+  },
+  fatal_hunter: {
+    id: "GC9-09",
+    name: "亡命獵手",
+    kind: "隱藏人格／極限型",
+    summary: "你對高不確定性與高潛在報酬具有明顯偏好，行動快速，也願意承擔較集中的風險。",
+    strengthTitle: "敢於面對高度不確定的研究機會",
+    strengthCopy: "你能接受一般人不願承擔的波動與未知，並願意快速研究可能帶來極端報酬的情境。",
+    blindSpotTitle: "可能把投資變成追求刺激",
+    blindSpotCopy: "必須優先建立部位上限、失敗條件與退出規則，避免過度自信、持續加碼或忽略失敗成本。",
+    order: ["目前風險", "重要事件", "近期變化", "判斷把握度"],
+  },
+};
+
+researchPersonalityQuestions.push(
+  {
+    axis: "risk",
+    kicker: "新的機會 · 報酬與風險同時放大",
+    title: "一家公司可能在兩年內大幅成長，但失敗時也可能下跌超過一半。",
+    copy: "資料仍不完整，你會如何把它放進自己的研究範圍？",
+    options: [
+      {label: "先排除或只保留極小觀察部位", copy: "在風險變得可衡量以前，我不願讓它影響整體配置。", axisScores: {}},
+      {label: "有限度研究與配置，並先設定失敗條件", copy: "可以承擔部分不確定性，但必須先控制最壞結果。", axisScores: {}},
+      {label: "高報酬值得承擔大幅波動，我會積極把握", copy: "只要潛在報酬夠高，我願意接受失敗機率與巨大波動。", axisScores: {}},
+    ],
+  },
+  {
+    axis: "risk",
+    kicker: "信心升高 · 部位選擇",
+    title: "你研究很久後非常看好一家公司，但市場對它仍有很大分歧。",
+    copy: "如果真的要納入配置，你比較接近哪一種方式？",
+    options: [
+      {label: "維持分散，不讓單一公司決定整體結果", copy: "再有信心，也要防止未知事件造成無法承受的損失。", axisScores: {}},
+      {label: "適度提高比重，但保留明確部位上限", copy: "信心可以反映在配置上，但不能取消風險控制。", axisScores: {}},
+      {label: "集中下注，真正的機會不應被過度分散", copy: "高度看好時，我願意讓單一判斷對結果產生很大影響。", axisScores: {}},
+    ],
+  },
+  {
+    axis: "risk",
+    kicker: "判斷受挫 · 原本假設遭到挑戰",
+    title: "你高度看好的股票持續下跌，最新資訊也開始不利於原本判斷。",
+    copy: "這時你的下一步通常更接近哪一種？",
+    options: [
+      {label: "停止原本行動，重新檢查假設與風險", copy: "先承認判斷可能有錯，再決定是否仍值得研究。", axisScores: {}},
+      {label: "保留觀察，等待下一份正式資料確認", copy: "不急著加碼或退出，先讓更多證據出現。", axisScores: {}},
+      {label: "如果故事仍成立，我可能繼續加碼降低成本", copy: "波動可能只是市場錯價，我願意用更大部位等待反轉。", axisScores: {}},
+    ],
+  }
+);
+
+function gc9RiskSignals(answers = personalityAnswers) {
+  const selections = [12, 13, 14].map((index) =>
+    Number.isInteger(answers[index]) ? answers[index] : 1
+  );
+  return {
+    selections,
+    conservative: selections.filter((value) => value === 0).length,
+    balanced: selections.filter((value) => value === 1).length,
+    extreme: selections.filter((value) => value === 2).length,
+  };
+}
+
+function gc9ArchetypeScores(scores, answers = personalityAnswers) {
+  const risk = gc9RiskSignals(answers);
+  const result = {
+    precision_sage: scores.verify * 1.45 + scores.business * .8 + scores.anchor * .45 + scores.compound * .55 + risk.conservative * .8,
+    halo_hunter: scores.scan * .8 + scores.market * .7 + scores.growth * 1.35 + scores.react * .8 + risk.extreme * .45,
+    valuation_sage: scores.anchor * 1.65 + scores.verify * .8 + scores.business * .45 + scores.compound * .35 + risk.balanced * .35,
+    shield_guardian: scores.verify * .65 + scores.anchor * .7 + scores.compound * .8 + risk.conservative * 3.2,
+    mist_assassin: scores.market * 1.2 + scores.react * 1.45 + scores.scan * .55 + risk.balanced * .35 + risk.extreme * .45,
+    cultivation_elder: scores.compound * 1.55 + scores.business * .9 + scores.growth * .35 + risk.conservative * .75,
+    market_observer: scores.market * 1.15 + scores.verify * .5 + scores.compound * .75 + scores.anchor * .35 + risk.balanced * .4,
+    star_child: scores.growth * 1.55 + scores.scan * .9 + scores.compound * .45 + scores.business * .25 + risk.balanced * .25,
+    fatal_hunter: scores.scan + scores.market + scores.growth + scores.react + risk.extreme * 4,
+  };
+  return Object.fromEntries(Object.entries(result).map(([key, value]) => [key, Number(value.toFixed(2))]));
+}
+
+function gc9FatalHunterUnlocked(scores, risk) {
+  return risk.extreme >= 2 &&
+    scores.scan > scores.verify &&
+    scores.react > scores.compound &&
+    scores.growth >= scores.anchor;
+}
+
+function gc9RankedProfiles(scores, answers = personalityAnswers) {
+  const archetypeScores = gc9ArchetypeScores(scores, answers);
+  const risk = gc9RiskSignals(answers);
+  const unlocked = gc9FatalHunterUnlocked(scores, risk);
+  return {
+    archetypeScores,
+    risk,
+    unlocked,
+    rows: Object.entries(archetypeScores)
+      .filter(([key]) => key !== "fatal_hunter" || unlocked)
+      .sort((left, right) => right[1] - left[1]),
+  };
+}
+
+function gc9Profile(result) {
+  return gc9Profiles[result?.archetype] || null;
+}
+
+function personalityReadingOrder(code, rhythm = "c") {
+  const profile = gc9Profiles[code];
+  if (profile) return [...profile.order];
+  const result = savedPersonalityResult();
+  return gc9Profile(result)?.order || ["近期變化", "價格位置", "判斷把握度", "目前風險"];
+}
+
+function personalityDailyResearchPlan(result = savedPersonalityResult()) {
+  const profile = gc9Profile(result);
+  if (!profile) return null;
+  const map = {
+    precision_sage: ["evidence", "follow_up", "change", "new"],
+    halo_hunter: ["new", "change", "evidence", "follow_up"],
+    valuation_sage: ["evidence", "change", "follow_up", "new"],
+    shield_guardian: ["evidence", "follow_up", "change", "new"],
+    mist_assassin: ["change", "new", "evidence", "follow_up"],
+    cultivation_elder: ["follow_up", "evidence", "change", "new"],
+    market_observer: ["change", "evidence", "new", "follow_up"],
+    star_child: ["new", "follow_up", "change", "evidence"],
+    fatal_hunter: ["evidence", "change", "new", "follow_up"],
+  };
+  return {
+    code: result.archetype,
+    profile,
+    order: map[result.archetype],
+    lead: profile.order[0] ? `先看${profile.order[0]}` : "先掌握最重要的研究條件",
+    focus: profile.summary,
+    opportunity: `接著查看${profile.order[1] || "判斷依據"}`,
+    cadence: "人格只安排閱讀順序，不隱藏資料或改變健康分數",
+  };
+}
+
+function completePersonalityQuiz() {
+  const scores = {verify: 0, scan: 0, business: 0, market: 0, anchor: 0, growth: 0, compound: 0, react: 0};
+  personalityAnswers.forEach((answer, questionIndex) => {
+    const option = researchPersonalityQuestions[questionIndex]?.options?.[answer];
+    Object.entries(option?.axisScores || {}).forEach(([key, points]) => {
+      if (Object.hasOwn(scores, key)) scores[key] += Number(points || 0);
+    });
+  });
+  const dimensions = personalityDimensionRows(scores);
+  const coreDimensions = dimensions.slice(0, 3);
+  const legacyCode = [scores.verify >= scores.scan ? "v" : "s", scores.business >= scores.market ? "b" : "m", scores.anchor >= scores.growth ? "a" : "g"].join("");
+  const rhythm = scores.compound >= scores.react ? "c" : "r";
+  const ranking = gc9RankedProfiles(scores, personalityAnswers);
+  const averageMargin = coreDimensions.length ? coreDimensions.reduce((total, row) => total + row.margin, 0) / coreDimensions.length : 0;
+  const result = {
+    version: PERSONALITY_VERSION,
+    system: "GC-9",
+    primary: legacyCode,
+    secondary: legacyCode,
+    archetype: ranking.rows[0]?.[0] || "precision_sage",
+    secondaryArchetype: ranking.rows[1]?.[0] || "market_observer",
+    rhythm,
+    rhythmName: rhythm === "c" ? "長期累積型" : "變化應對型",
+    scores,
+    archetypeScores: ranking.archetypeScores,
+    riskSignals: ranking.risk,
+    hiddenArchetypeUnlocked: ranking.unlocked,
+    dimensions,
+    clarity: averageMargin >= 50 ? "輪廓非常清楚" : averageMargin >= 30 ? "輪廓清楚" : averageMargin >= 16 ? "具有明顯傾向" : "研究方式較為平衡",
+    answers: [...personalityAnswers],
+    completedAt: new Date().toISOString(),
+    affectsHealthScore: false,
+  };
+  localStorage.setItem(PERSONALITY_STORAGE_KEY, JSON.stringify(result));
+  renderPersonalityResult(result);
+  renderProfilePage();
+  if (typeof renderDailyResearch === "function") renderDailyResearch();
+}
+
+function renderPersonalityResult(result) {
+  const primary = gc9Profile(result);
+  const secondary = gc9Profiles[result?.secondaryArchetype];
+  if (!primary) { setPersonalityView("intro"); return; }
+  renderPersonalityDimensions(result);
+  $("personalityResultSymbol").innerHTML = personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`);
+  $("personalityResultCode").textContent = `${primary.id} · ${primary.kind}`;
+  $("personalityResultClarity").textContent = result.clarity || "研究方式較為平衡";
+  $("personalityResultTitle").textContent = primary.name;
+  $("personalityResultSummary").textContent = primary.summary;
+  $("personalitySecondaryType").textContent = secondary ? `研究節奏：${result.rhythmName}｜鄰近人格：${secondary.name}` : `研究節奏：${result.rhythmName}`;
+  $("personalityStrengthTitle").textContent = primary.strengthTitle;
+  $("personalityStrengthCopy").textContent = primary.strengthCopy;
+  $("personalityBlindSpotTitle").textContent = primary.blindSpotTitle;
+  $("personalityBlindSpotCopy").textContent = primary.blindSpotCopy;
+  $("personalityReadingOrder").innerHTML = primary.order.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  $("personalityModeTitle").textContent = "先用 Guided 掌握方向，需要時再用 Pro 核對完整證據";
+  $("personalityModeCopy").textContent = "GC-9 只依研究偏好安排閱讀順序；報告內容、原始資料與健康分數都不會改變。";
+  document.documentElement.dataset.researchPersonality = result.archetype;
+  setPersonalityView("result");
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function openPersonalityQuickView() {
+  const result = savedPersonalityResult();
+  const profile = gc9Profile(result);
+  if (!result || !profile) { showToast("請先完成人格測驗"); return; }
+  $("personalityQuickSymbol").innerHTML = personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`);
+  $("personalityQuickCode").textContent = `${profile.id} · ${profile.kind}`;
+  $("personalityQuickTitle").textContent = profile.name;
+  $("personalityQuickSummary").textContent = profile.summary;
+  $("personalityQuickOrder").innerHTML = profile.order.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  $("personalityQuickBackdrop").classList.remove("hidden");
+  $("personalityQuickModal").classList.remove("hidden");
+  document.body.classList.add("personality-quick-open");
+  $("personalityQuickClose")?.focus();
+}
+
+function personalityReportGuideItems(result = savedPersonalityResult()) {
+  const profile = gc9Profile(result);
+  if (!profile) return null;
+  return {
+    code: result.archetype,
+    profile,
+    lead: `${profile.name}會先從「${profile.order[0]}」開始閱讀`,
+    copy: "依你的研究偏好提供四個入口；報告內容、原始排序與健康分數都不會改變。",
+    order: [...profile.order],
+  };
+}
+
+function currentPersonalityShareData() {
+  const result = savedPersonalityResult();
+  const profile = gc9Profile(result);
+
+  if (!result || !profile) return null;
+
+  const dimensions = personalityDimensionRows(
+    result.scores || {}
+  );
+
+  return {
+    result,
+    profile,
+    dimensions,
+    code: `${profile.id} · ${profile.kind}`,
+    order: [...profile.order],
+  };
+}
+
 initializeBetaAccess();

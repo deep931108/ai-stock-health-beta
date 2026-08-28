@@ -348,29 +348,29 @@ def test_research_personality_quiz_contract() -> None:
     for item in required_html:
         assert item in html
 
-    assert "12 個連續情境" in html
-    assert re.search(r"<b>8</b>\s*<span>種研究人格</span>", html)
-    assert "不評估金融風險承受度" in html
+    assert "15 個連續情境" in html
+    assert re.search(r"<b>9</b>\s*<span>種研究人格</span>", html)
+    assert "只整理研究偏好與風險傾向" in html
     assert "不會改變任何股票的健康分數" in html
     assert "人格只改變閱讀方式，不改變研究結果" in html
 
     required_profiles = [
-        "基石驗證者",
-        "基石驗證者",
-        "曙光驗證者",
-        "曙光驗證者",
-        "價格校準者",
-        "價格校準者",
-        "趨勢驗證者",
-        "趨勢驗證者",
-        "企業巡航者",
-        "企業巡航者",
-        "成長探勘者",
-        "成長探勘者",
-        "市場導航者",
-        "市場導航者",
-        "動能偵察者",
-        "動能偵察者",
+        "至準智者",
+        "至準智者",
+        "光環獵手",
+        "光環獵手",
+        "估值賢者",
+        "估值賢者",
+        "盾之守護者",
+        "盾之守護者",
+        "迷霧刺客",
+        "迷霧刺客",
+        "培育長老",
+        "培育長老",
+        "觀市者",
+        "觀市者",
+        "追星的孩子",
+        "追星的孩子",
     ]
 
     for profile in required_profiles:
@@ -390,10 +390,10 @@ def test_research_personality_quiz_contract() -> None:
     for function_name in required_functions:
         assert function_name in js
 
-    assert 'const PERSONALITY_VERSION = "3"' in js
+    assert 'const PERSONALITY_VERSION = "4"' in js
     assert 'const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality"' in js
     assert "researchPersonalityQuestions" in js
-    assert "researchPersonalityProfiles" in js
+    assert "const gc9Profiles" in js
     assert "personalityAnswers = Array(12).fill(null)" in js
     assert "affectsHealthScore: false" in js
 
@@ -443,32 +443,32 @@ def test_personality_result_has_dimension_report() -> None:
     assert ".personality-dimension-track" in css
 
 
-def test_gc8_personality_axis_contract() -> None:
+def test_gc9_personality_axis_contract() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
 
-    assert "12 個連續情境" in html
-    assert '<b>8</b><span>種研究人格</span>' in html
-    assert 'const PERSONALITY_VERSION = "3"' in js
+    assert "15 個連續情境" in html
+    assert '<b>9</b><span>種研究人格</span>' in html
+    assert 'const PERSONALITY_VERSION = "4"' in js
     assert "researchPersonalityAxisDefinitions" in js
-    assert "researchPersonalityProfileRows" in js
-    assert 'system: "GC-8"' in js
+    assert "const gc9Profiles" in js
+    assert 'system: "GC-9"' in js
     assert "axisScores" in js
     assert "personalityDimensionRows(scores)" in js
     assert "averageMargin" in js
     assert "affectsHealthScore: false" in js
     for name in (
-        "基石驗證者", "基石驗證者", "曙光驗證者", "曙光驗證者",
-        "價格校準者", "價格校準者", "趨勢驗證者", "趨勢驗證者",
-        "企業巡航者", "企業巡航者", "成長探勘者", "成長探勘者",
-        "市場導航者", "市場導航者", "動能偵察者", "動能偵察者",
+        "至準智者", "至準智者", "光環獵手", "光環獵手",
+        "估值賢者", "估值賢者", "盾之守護者", "盾之守護者",
+        "迷霧刺客", "迷霧刺客", "培育長老", "培育長老",
+        "觀市者", "觀市者", "追星的孩子", "追星的孩子",
     ):
         assert name in js
 
 
 
-def test_gc8_result_uses_branded_inspection_report() -> None:
+def test_gc9_result_uses_branded_inspection_report() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -485,13 +485,13 @@ def test_gc8_result_uses_branded_inspection_report() -> None:
     assert "function personalityTotemSvg" in js
     assert 'personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`)' in js
     assert 'result.clarity || "研究方式較為平衡"' in js
-    assert "GC-8 personality inspection report v2" in css
+    assert "GC-9 personality inspection report v2" in css
     assert "personality-report-meta" in css
     assert "border-top:3px solid #e39a58" in css
 
 
 
-def test_gc8_questions_form_one_continuous_everyday_story() -> None:
+def test_gc9_questions_form_one_continuous_everyday_story() -> None:
     root = Path(__file__).parents[1]
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
 
@@ -526,7 +526,7 @@ def test_gc8_questions_form_one_continuous_everyday_story() -> None:
 
 
 
-def test_gc8_result_supports_private_safe_social_sharing() -> None:
+def test_gc9_result_supports_private_safe_social_sharing() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -552,8 +552,8 @@ def test_gc8_result_supports_private_safe_social_sharing() -> None:
     assert "navigator.share" in js
     assert 'canvas.width = 1080' in js
     assert 'canvas.height = 1350' in js
-    assert 'link.download = `GC-8-' in js
-    assert "GC-8 result sharing v1" in css
+    assert 'link.download = `GC-9-' in js
+    assert "GC-9 result sharing v1" in css
     assert "safe-area-inset-bottom" in css
 
     share_function = js.split(
@@ -571,11 +571,11 @@ def test_gc8_result_supports_private_safe_social_sharing() -> None:
 
 
 
-def test_gc8_visible_question_count_matches_twelve_question_contract() -> None:
+def test_gc9_visible_question_count_matches_fifteen_question_contract() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
 
-    assert "<b>12</b><span>個連續情境</span>" in html
+    assert "<b>15</b><span>個連續情境</span>" in html
     assert "第 1 題，共 12 題" in html
     assert 'id="personalityProgressText">8%</b>' in html
     assert "<b>8</b><span>個情境問題</span>" not in html
@@ -675,7 +675,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.9.3.3") == 3
+    assert html.count("3.9.4.5") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -709,7 +709,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.9.3.3") == 3
+    assert html.count("3.9.4.5") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,7 +726,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.9.3.3") == 3
+    assert html.count("3.9.4.5") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -752,7 +752,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.9.3.3") == 3
+    assert html.count("3.9.4.5") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -785,7 +785,7 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.9.3.3") == 3
+    assert html.count("3.9.4.5") == 3
 
 
 def test_pro_judgment_evidence_report_contract() -> None:
@@ -808,24 +808,34 @@ def test_pro_judgment_evidence_report_contract() -> None:
     assert ".pro-evidence-score-flow" in css
     assert ".pro-evidence-dimension-grid" in css
     assert ".pro-evidence-quality-grid" in css
-    assert html.count("3.9.3.3") == 3
-def test_gc8_uses_three_core_axes_and_separate_rhythm() -> None:
+    assert html.count("3.9.4.5") == 3
+def test_gc9_uses_three_core_axes_and_separate_rhythm() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
 
-    assert '<b>8</b><span>種研究人格</span>' in html
-    assert 'system: "GC-8"' in js
-    assert 'const PERSONALITY_VERSION = "3"' in js
+    assert '<b>9</b><span>種研究人格</span>' in html
+    assert 'system: "GC-9"' in js
+    assert 'const PERSONALITY_VERSION = "4"' in js
     assert 'const coreDimensions = dimensions.slice(0, 3)' in js
     assert 'const rhythm = scores.compound >= scores.react ? "c" : "r"' in js
     assert 'rhythmName' in js
-    assert 'GC8-${String(index + 1).padStart(2, "0")}' in js
+    assert js.count('id: "GC9-') >= 9
     assert 'GC-16' not in html
     assert 'GC16-' not in js
-    for code in ("vba", "vbg", "vma", "vmg", "sba", "sbg", "sma", "smg"):
-        assert f'["{code}",' in js
-def test_gc8_personalizes_daily_research_order() -> None:
+    for archetype in (
+        "precision_sage",
+        "halo_hunter",
+        "valuation_sage",
+        "shield_guardian",
+        "mist_assassin",
+        "cultivation_elder",
+        "market_observer",
+        "star_child",
+        "fatal_hunter",
+    ):
+        assert f"  {archetype}: {{" in js
+def test_gc9_personalizes_daily_research_order() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(
         encoding="utf-8"
@@ -843,8 +853,8 @@ def test_gc8_personalizes_daily_research_order() -> None:
     assert "orderedSteps.map((step)" in js
     assert "renderDailyResearch();" in js
     assert "affectsHealthScore: false" in js
-    assert "GC-8 Phase 2 final theme v1" in css
-def test_gc8_daily_research_can_restore_default_order() -> None:
+    assert "GC-9 Phase 2 final theme v1" in css
+def test_gc9_daily_research_can_restore_default_order() -> None:
     root = Path(__file__).parents[1]
     js = (root / "web" / "app.js").read_text(
         encoding="utf-8"
@@ -858,8 +868,8 @@ def test_gc8_daily_research_can_restore_default_order() -> None:
     assert "function setPersonalityResearchOrder" in js
     assert 'id="dailyResearchOrderToggle"' in js
     assert '"original"' in js
-    assert "GC-8 Phase 2 final theme v1" in css
-def test_gc8_personalizes_detail_report_navigation() -> None:
+    assert "GC-9 Phase 2 final theme v1" in css
+def test_gc9_personalizes_detail_report_navigation() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -871,8 +881,8 @@ def test_gc8_personalizes_detail_report_navigation() -> None:
     assert "function renderPersonalityReportGuide" in js
     assert "scrollIntoView" in js
     assert "personality-guide-target" in css
-    assert "GC-8 Phase 2 final theme v1" in css
-def test_gc8_report_navigation_switches_pro_tabs_and_goes_back() -> None:
+    assert "GC-9 Phase 2 final theme v1" in css
+def test_gc9_report_navigation_switches_pro_tabs_and_goes_back() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -880,10 +890,10 @@ def test_gc8_report_navigation_switches_pro_tabs_and_goes_back() -> None:
     assert 'id="personalityReportGuideBack"' not in html
     assert "setProResearchTab(destination.tab)" in js
     assert '$("backToCenterButton")' in js
-    assert "GC-8 Phase 2 final theme v1" in css
+    assert "GC-9 Phase 2 final theme v1" in css
     assert 'html[data-theme="light"] .mobile-nav' in css
     assert 'html[data-theme="dark"] .mobile-nav' in css
-def test_gc8_report_navigation_uses_top_level_back_and_delegated_jump() -> None:
+def test_gc9_report_navigation_uses_top_level_back_and_delegated_jump() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -894,8 +904,8 @@ def test_gc8_report_navigation_uses_top_level_back_and_delegated_jump() -> None:
     assert "navigationHeight" in js
     assert "section.getBoundingClientRect().top + window.scrollY" in js
     assert "showHomeView({restoreScroll:true})" in js
-    assert "GC-8 Phase 2 final theme v1" in css
-def test_gc8_report_uses_quick_personality_modal_and_aligned_cards() -> None:
+    assert "GC-9 Phase 2 final theme v1" in css
+def test_gc9_report_uses_quick_personality_modal_and_aligned_cards() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
@@ -907,9 +917,9 @@ def test_gc8_report_uses_quick_personality_modal_and_aligned_cards() -> None:
     assert "navigationHeight" in js
     assert "openPersonalityQuickView" in js
     assert ".guided-core-card>strong" in css
-    assert "GC-8 Phase 2 final theme v1" in css
+    assert "GC-9 Phase 2 final theme v1" in css
 
-def test_gc8_report_navigation_targets_visible_sections() -> None:
+def test_gc9_report_navigation_targets_visible_sections() -> None:
     root = Path(__file__).parents[1]
     js = (root / "web" / "app.js").read_text(encoding="utf-8")
     assert '"近期變化": ["#integratedTrendTitle"' in js
@@ -927,7 +937,7 @@ def test_mobile_navigation_stays_single_row_and_supports_back_to_top() -> None:
     assert 'id="backToTopButton"' in html
     assert "function initializeBackToTop" in js
     assert 'grid-template-columns: repeat(5, minmax(0, 1fr))' in css
-    assert "GC-8 Phase 2 final theme v1" in css
+    assert "GC-9 Phase 2 final theme v1" in css
 def test_personality_report_guide_is_first_report_card() -> None:
     root = Path(__file__).parents[1]
     js = (root / "web" / "app.js").read_text(
@@ -938,3 +948,104 @@ def test_personality_report_guide_is_first_report_card() -> None:
     assert 'guide.previousElementSibling' in js
     assert 'guide.parentElement.insertBefore(guide, overview)' in js
     assert "placePersonalityReportGuideFirst();" in js
+def test_gc9_uses_nine_archetypes_and_hidden_fatal_hunter() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+
+    assert 'const PERSONALITY_VERSION = "4";' in js
+    assert "const gc9Profiles" in js
+    assert js.count('id: "GC9-') >= 9
+    for name in [
+        "至準智者",
+        "光環獵手",
+        "估值賢者",
+        "盾之守護者",
+        "迷霧刺客",
+        "培育長老",
+        "觀市者",
+        "追星的孩子",
+        "亡命獵手",
+    ]:
+        assert name in js
+    assert "function gc9ArchetypeScores" in js
+    assert "function gc9FatalHunterUnlocked" in js
+    assert "risk.extreme >= 2" in js
+    assert 'system: "GC-9"' in js
+    assert "researchPersonalityQuestions.push(" in js
+    assert "hiddenArchetypeUnlocked" in js
+def test_gc9_share_data_contains_dimensions() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert '<b>15</b><span>個連續情境</span>' in html
+
+    gc9_marker = js.rfind(
+        "function currentPersonalityShareData()"
+    )
+    assert gc9_marker >= 0
+
+    gc9_share = js[gc9_marker:]
+    assert "const profile = gc9Profile(result);" in gc9_share
+    assert "const dimensions = personalityDimensionRows(" in gc9_share
+    assert "dimensions," in gc9_share
+    assert "order: [...profile.order]" in gc9_share
+def test_gc9_profile_page_uses_archetype() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+
+    marker = js.index(
+        "function renderProfilePersonality()"
+    )
+    renderer = js[
+        marker:
+        js.index(
+            "\n}",
+            marker
+        ) + 2
+    ]
+
+    assert "const profile = gc9Profile(result);" in renderer
+    assert "完成 15 題" in renderer
+    assert "result.archetype" in renderer
+    assert "researchPersonalityProfiles" not in renderer
+def test_gc9_removes_legacy_gc8_runtime() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+
+    for term in [
+        "researchPersonalityProfileRows",
+        "researchPersonalityProfiles",
+        "基石驗證者",
+        "曙光驗證者",
+        "價格校準者",
+        "趨勢驗證者",
+        "企業巡航者",
+        "成長探勘者",
+        "市場導航者",
+        "動能偵察者",
+    ]:
+        assert term not in js
+
+    for function_name in [
+        "completePersonalityQuiz",
+        "renderPersonalityResult",
+        "openPersonalityQuickView",
+        "personalityReportGuideItems",
+        "currentPersonalityShareData",
+    ]:
+        assert js.count(
+            f"function {function_name}("
+        ) == 1
+
+    assert "const gc9Profiles" in js
+    assert "function gc9ArchetypeScores" in js
+    assert "function gc9FatalHunterUnlocked" in js
