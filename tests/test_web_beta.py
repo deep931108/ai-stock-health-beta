@@ -675,7 +675,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.9.0.9") == 3
+    assert html.count("3.9.3.3") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -709,7 +709,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.9.0.9") == 3
+    assert html.count("3.9.3.3") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,7 +726,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.9.0.9") == 3
+    assert html.count("3.9.3.3") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -752,7 +752,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.9.0.9") == 3
+    assert html.count("3.9.3.3") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -785,7 +785,7 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.9.0.9") == 3
+    assert html.count("3.9.3.3") == 3
 
 
 def test_pro_judgment_evidence_report_contract() -> None:
@@ -808,7 +808,7 @@ def test_pro_judgment_evidence_report_contract() -> None:
     assert ".pro-evidence-score-flow" in css
     assert ".pro-evidence-dimension-grid" in css
     assert ".pro-evidence-quality-grid" in css
-    assert html.count("3.9.0.9") == 3
+    assert html.count("3.9.3.3") == 3
 def test_gc8_uses_three_core_axes_and_separate_rhythm() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
@@ -825,3 +825,116 @@ def test_gc8_uses_three_core_axes_and_separate_rhythm() -> None:
     assert 'GC16-' not in js
     for code in ("vba", "vbg", "vma", "vmg", "sba", "sbg", "sma", "smg"):
         assert f'["{code}",' in js
+def test_gc8_personalizes_daily_research_order() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+    css = (root / "web" / "home.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'id="dailyResearchPersonality"' in html
+    assert "function personalityDailyResearchPlan" in js
+    assert "const orderedSteps = [...contract.steps]" in js
+    assert "orderedSteps.map((step)" in js
+    assert "renderDailyResearch();" in js
+    assert "affectsHealthScore: false" in js
+    assert "GC-8 Phase 2 final theme v1" in css
+def test_gc8_daily_research_can_restore_default_order() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+    css = (root / "web" / "home.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert "PERSONALITY_ORDER_STORAGE_KEY" in js
+    assert "function personalityResearchOrderEnabled" in js
+    assert "function setPersonalityResearchOrder" in js
+    assert 'id="dailyResearchOrderToggle"' in js
+    assert '"original"' in js
+    assert "GC-8 Phase 2 final theme v1" in css
+def test_gc8_personalizes_detail_report_navigation() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    assert 'id="personalityReportGuide"' in html
+    assert 'id="personalityReportGuideList"' in html
+    assert "function personalityReportGuideItems" in js
+    assert "function personalityReportTarget" in js
+    assert "function renderPersonalityReportGuide" in js
+    assert "scrollIntoView" in js
+    assert "personality-guide-target" in css
+    assert "GC-8 Phase 2 final theme v1" in css
+def test_gc8_report_navigation_switches_pro_tabs_and_goes_back() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    assert 'id="personalityReportGuideBack"' not in html
+    assert "setProResearchTab(destination.tab)" in js
+    assert '$("backToCenterButton")' in js
+    assert "GC-8 Phase 2 final theme v1" in css
+    assert 'html[data-theme="light"] .mobile-nav' in css
+    assert 'html[data-theme="dark"] .mobile-nav' in css
+def test_gc8_report_navigation_uses_top_level_back_and_delegated_jump() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    assert 'id="personalityReportGuideBack"' not in html
+    assert 'id="backToCenterButton"' in html
+    assert "list.onclick = (event)" in js
+    assert "navigationHeight" in js
+    assert "section.getBoundingClientRect().top + window.scrollY" in js
+    assert "showHomeView({restoreScroll:true})" in js
+    assert "GC-8 Phase 2 final theme v1" in css
+def test_gc8_report_uses_quick_personality_modal_and_aligned_cards() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    assert 'id="personalityQuickModal"' in html
+    assert 'id="personalityQuickClose"' in html
+    assert "function openPersonalityQuickView" in js
+    assert "function closePersonalityQuickView" in js
+    assert "navigationHeight" in js
+    assert "openPersonalityQuickView" in js
+    assert ".guided-core-card>strong" in css
+    assert "GC-8 Phase 2 final theme v1" in css
+
+def test_gc8_report_navigation_targets_visible_sections() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    assert '"近期變化": ["#integratedTrendTitle"' in js
+    assert '"價格位置": ["#guidedValuation"' in js
+    assert '"判斷把握度": ["#confidence"' in js
+    assert 'selectors: ["#proValuationTitle"' in js
+    assert 'selectors: ["#proEvidenceReport"]' in js
+    assert 'selectors: ["#proHistorySummary"' in js
+
+def test_mobile_navigation_stays_single_row_and_supports_back_to_top() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    assert 'id="backToTopButton"' in html
+    assert "function initializeBackToTop" in js
+    assert 'grid-template-columns: repeat(5, minmax(0, 1fr))' in css
+    assert "GC-8 Phase 2 final theme v1" in css
+def test_personality_report_guide_is_first_report_card() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert "function placePersonalityReportGuideFirst" in js
+    assert 'guide.previousElementSibling' in js
+    assert 'guide.parentElement.insertBefore(guide, overview)' in js
+    assert "placePersonalityReportGuideFirst();" in js

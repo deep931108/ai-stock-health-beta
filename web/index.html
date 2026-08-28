@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.9.0.9">
-  <link rel="stylesheet" href="/assets/home.css?v=3.9.0.9">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.9.3.3">
+  <link rel="stylesheet" href="/assets/home.css?v=3.9.3.3">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -91,6 +91,7 @@
       <div class="home-section-heading"><div><span>今日研究</span><h2 id="dailyResearchTitle">今天先看這幾件事</h2></div><span id="dailyResearchProgress" class="data-status">準備中</span></div>
       <div class="daily-research-card warm-card">
         <p id="dailyResearchSummary" class="daily-research-summary">正在整理今天真正需要看的內容。</p>
+        <div id="dailyResearchPersonality" class="daily-research-personality hidden"></div>
         <div class="daily-research-overview"><div><strong id="dailyResearchCount">0 / 0</strong><span>今日進度</span></div><div class="research-progress-track" aria-hidden="true"><i id="dailyResearchBar"></i></div><small id="dailyResearchEstimate">正在整理今日內容</small></div>
         <div id="dailyResearchSteps" class="daily-research-steps"><p class="home-empty">報告讀取完成後會建立今日研究順序。</p></div>
         <p id="dailyResearchNotice" class="daily-research-notice">只安排閱讀順序，不提供交易指令，也不改變健康分數。</p>
@@ -586,6 +587,19 @@
         </aside>
       </div>
 
+      <section id="personalityReportGuide"
+        class="personality-report-guide hidden"
+        aria-labelledby="personalityReportGuideTitle">
+        <div class="personality-report-guide-heading">
+          <div>
+            <span id="personalityReportGuideKicker">你的 GC-8 閱讀順序</span>
+            <h2 id="personalityReportGuideTitle">依研究人格掌握這份報告</h2>
+            <p id="personalityReportGuideCopy">只提供閱讀導覽，不會隱藏資料或改變健康分數。</p>
+          </div>
+          <button id="personalityReportGuideProfile" type="button">查看人格</button>
+        </div>
+        <div id="personalityReportGuideList" class="personality-report-guide-list"></div>
+      </section>
       <section id="integratedDecision" class="integrated-decision" aria-labelledby="integratedDecisionTitle">
         <div class="section-heading">
           <div>
@@ -823,7 +837,24 @@
       <button data-tab="explore"><span>◇</span>探索</button>
       <button data-tab="about"><span>○</span>我的</button>
     </nav>
-    <div id="toast" class="toast" aria-live="polite"></div>
+    <div id="personalityQuickBackdrop" class="personality-quick-backdrop hidden"></div>
+  <section id="personalityQuickModal" class="personality-quick-modal hidden"
+    role="dialog" aria-modal="true" aria-labelledby="personalityQuickTitle">
+    <button id="personalityQuickClose" class="personality-quick-close"
+      type="button" aria-label="關閉人格摘要">×</button>
+    <div id="personalityQuickSymbol" class="personality-quick-symbol"></div>
+    <span id="personalityQuickCode">GC-8</span>
+    <h2 id="personalityQuickTitle">研究人格</h2>
+    <p id="personalityQuickSummary"></p>
+    <ol id="personalityQuickOrder"></ol>
+    <button id="personalityQuickDone" type="button">關閉</button>
+  </section>
+  <button id="backToTopButton"
+    class="back-to-top hidden"
+    type="button"
+    aria-label="回到頁面頂部"
+    title="回到頂部">↑</button>
+  <div id="toast" class="toast" aria-live="polite"></div>
   </main>
   <div id="onboardingBackdrop" class="onboarding-backdrop hidden"></div>
   <div id="onboardingSpotlight" class="onboarding-spotlight hidden" aria-hidden="true"></div>
@@ -851,6 +882,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.9.0.9" defer></script>
+  <script src="/assets/app.js?v=3.9.3.3" defer></script>
 </body>
 </html>

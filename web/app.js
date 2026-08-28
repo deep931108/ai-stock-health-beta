@@ -6,6 +6,7 @@ const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
 const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion";
 const ONBOARDING_VERSION = "1";
 const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality";
+const PERSONALITY_ORDER_STORAGE_KEY = "aiStockPersonalityOrder";
 const PERSONALITY_VERSION = "3";
 let personalityQuestionIndex = 0;
 let personalityAnswers = Array(12).fill(null);
@@ -111,6 +112,10 @@ function applyResearchMode(mode, {persist = false, announce = false} = {}) {
 function setResearchMode(mode) {
   applyResearchMode(mode, {persist: true, announce: true});
   renderProfilePage();
+
+  if (typeof renderPersonalityReportGuide === "function") {
+    renderPersonalityReportGuide();
+  }
 }
 const researchPersonalityAxisDefinitions = [
   {
@@ -167,6 +172,81 @@ function personalityReadingOrder(code, rhythm = "c") {
   return [...new Set(order)].slice(0, 4);
 }
 
+function personalityResearchOrderEnabled() {
+  return localStorage.getItem(
+    PERSONALITY_ORDER_STORAGE_KEY
+  ) !== "original";
+}
+
+function setPersonalityResearchOrder(enabled) {
+  localStorage.setItem(
+    PERSONALITY_ORDER_STORAGE_KEY,
+    enabled ? "personality" : "original"
+  );
+
+  renderDailyResearch();
+
+  showToast(
+    enabled
+      ? "已使用 GC-8 人格排序"
+      : "已恢復原始研究順序"
+  );
+}
+function personalityDailyResearchPlan(
+  result = savedPersonalityResult()
+) {
+  const code = String(result?.primary || "").toLowerCase();
+  const profile = researchPersonalityProfiles[code];
+
+  if (!profile) return null;
+
+  const verify = code[0] === "v";
+  const business = code[1] === "b";
+  const anchored = code[2] === "a";
+  const compound = result.rhythm !== "r";
+
+  let order;
+
+  if (verify && compound) {
+    order = ["evidence", "follow_up", "change", "new"];
+  } else if (verify) {
+    order = ["change", "evidence", "new", "follow_up"];
+  } else if (compound) {
+    order = ["change", "follow_up", "new", "evidence"];
+  } else {
+    order = ["change", "new", "evidence", "follow_up"];
+  }
+
+  const lead =
+    verify
+      ? "先核對證據，再擴大研究範圍"
+      : "先掌握新變化，再回頭確認證據";
+
+  const focus =
+    business
+      ? "個股內優先看營運狀態"
+      : "個股內優先看市場與法人變化";
+
+  const opportunity =
+    anchored
+      ? "接著核對價格位置與比較基準"
+      : "接著檢查成長、獲利與改善速度";
+
+  const cadence =
+    compound
+      ? "最後更新持續追蹤紀錄"
+      : "新的轉折與重要事件優先處理";
+
+  return {
+    code,
+    profile,
+    order,
+    lead,
+    focus,
+    opportunity,
+    cadence,
+  };
+}
 const researchPersonalityProfiles = Object.fromEntries(
   researchPersonalityProfileRows.map((row, index) => {
     const [
@@ -930,6 +1010,10 @@ function completePersonalityQuiz() {
 
   renderPersonalityResult(result);
   renderProfilePage();
+
+  if (typeof renderDailyResearch === "function") {
+    renderDailyResearch();
+  }
 }
 
 function personalityDimensionRows(scores = {}) {
@@ -1125,6 +1209,188 @@ function renderPersonalityResult(result) {
 }
 
 
+function closePersonalityQuickView() {
+  $("personalityQuickBackdrop")?.classList.add("hidden");
+  $("personalityQuickModal")?.classList.add("hidden");
+  document.body.classList.remove("personality-quick-open");
+}
+
+function openPersonalityQuickView() {
+  const result = savedPersonalityResult();
+  const profile = researchPersonalityProfiles[result?.primary];
+  if (!result || !profile) {
+    showToast("尚未完成人格測驗");
+    return;
+  }
+
+  const code = `${profile.id} · ${String(result.primary).toUpperCase()}-${String(result.rhythm || "c").toUpperCase()}`;
+  $("personalityQuickSymbol").innerHTML = personalityTotemSvg(`${result.primary}${result.rhythm || "c"}`);
+  $("personalityQuickCode").textContent = code;
+  $("personalityQuickTitle").textContent = profile.name;
+  $("personalityQuickSummary").textContent = profile.summary;
+  $("personalityQuickOrder").innerHTML = personalityReadingOrder(result.primary, result.rhythm)
+    .map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  $("personalityQuickBackdrop").classList.remove("hidden");
+  $("personalityQuickModal").classList.remove("hidden");
+  document.body.classList.add("personality-quick-open");
+  $("personalityQuickClose").focus();
+}
+function personalityReportTarget(key) {
+  const pro =
+    document.documentElement.dataset.researchMode === "pro";
+
+  const guidedTargets = {
+    "健康狀態": ["#guidedHealth", "#indicatorGrid"],
+    "近期變化": ["#integratedTrendTitle", "#integratedDecision"],
+    "價格位置": ["#guidedValuation", "#valuationResearchTitle"],
+    "成長與獲利": ["#guidedHealth", "#researchContextTitle"],
+    "判斷把握度": ["#confidence", "#guidedConfidenceCopy"],
+    "重要事件": ["#todayChangesTitle", "#integratedTrendTitle"],
+    "歷史與持續追蹤": ["#integratedTrendTitle", "#historyChart"],
+    "目前風險": ["#risk", "#guidedRiskCopy"],
+  };
+
+  const proTargets = {
+    "健康狀態": {
+      tab: "overview",
+      selectors: ["#proCoreGrid", "#proExecutiveOverview"],
+    },
+    "近期變化": {
+      tab: "overview",
+      selectors: ["#proMonitoringGrid", "#proExecutiveOverview"],
+    },
+    "價格位置": {
+      tab: "valuation",
+      selectors: ["#proValuationTitle", "#proValuationFramework"],
+    },
+    "成長與獲利": {
+      tab: "overview",
+      selectors: ["#proIndicatorList", "#proCoreGrid"],
+    },
+    "判斷把握度": {
+      tab: "evidence",
+      selectors: ["#proEvidenceReport"],
+    },
+    "重要事件": {
+      tab: "overview",
+      selectors: ["#proMonitoringGrid", "#proExecutiveOverview"],
+    },
+    "歷史與持續追蹤": {
+      tab: "history",
+      selectors: ["#proHistorySummary", "#proHistoryChart"],
+    },
+    "目前風險": {
+      tab: "overview",
+      selectors: ["#proCoreGrid", "#proExecutiveOverview"],
+    },
+  };
+
+  let selectors;
+
+  if (pro) {
+    const destination = proTargets[key];
+
+    if (!destination) return null;
+
+    if (typeof setProResearchTab === "function") {
+      setProResearchTab(destination.tab);
+    }
+
+    selectors = destination.selectors;
+  } else {
+    selectors = guidedTargets[key] || [];
+  }
+
+  return selectors
+    .map((selector) => document.querySelector(selector))
+    .find((element) =>
+      element && !element.closest("[hidden]")
+    ) || null;
+}
+
+function personalityReportGuideItems(result = savedPersonalityResult()) {
+  const code = String(result?.primary || "").toLowerCase();
+  const profile = researchPersonalityProfiles[code];
+  if (!profile) return null;
+
+  const descriptions = {
+    "健康狀態": "先確認公司目前的營運與整體健康狀態",
+    "近期變化": "先掌握今天真正發生改變的訊號",
+    "價格位置": "核對目前價格相對歷史與比較基準的位置",
+    "成長與獲利": "檢查收入、獲利與改善速度是否延續",
+    "判斷把握度": "確認資料品質、證據來源與判斷限制",
+    "重要事件": "查看可能改變研究方向的新事件",
+    "歷史與持續追蹤": "把目前判斷放回歷史並持續驗證",
+    "目前風險": "先確認目前最可能推翻判斷的風險",
+  };
+
+  return {
+    profile,
+    order: personalityReadingOrder(code, result.rhythm || "c")
+      .map((label, index) => ({
+        index: index + 1,
+        label,
+        copy: descriptions[label] || "前往這個研究區塊",
+      })),
+  };
+}
+
+function renderPersonalityReportGuide() {
+  const root = $("personalityReportGuide");
+  const list = $("personalityReportGuideList");
+  if (!root || !list) return;
+
+  const guide = personalityReportGuideItems();
+  root.classList.toggle("hidden", !guide);
+  if (!guide) {
+    list.innerHTML = "";
+    return;
+  }
+
+  $("personalityReportGuideKicker").textContent = `${guide.profile.name}的閱讀順序`;
+  $("personalityReportGuideCopy").textContent =
+    "依你的研究偏好提供四個入口；報告內容、原始排版與健康分數都不會改變。";
+
+  list.innerHTML = guide.order.map((item) => `
+    <button type="button" data-personality-report-guide="${escapeHtml(item.label)}">
+      <span>${String(item.index).padStart(2, "0")}</span>
+      <b>${escapeHtml(item.label)}</b>
+      <p>${escapeHtml(item.copy)}</p>
+      <em>前往查看 ›</em>
+    </button>
+  `).join("");
+
+  list.onclick = (event) => {
+    const button = event.target.closest("[data-personality-report-guide]");
+    if (!button || !list.contains(button)) return;
+    const key = button.dataset.personalityReportGuide;
+    const initialTarget = personalityReportTarget(key);
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const target = personalityReportTarget(key) || initialTarget;
+        if (!target) {
+          showToast("這個研究區塊目前尚未建立");
+          return;
+        }
+
+        const section = target.closest(
+          ".pro-research-panel, .today-changes-section, .indicators-section, " +
+          ".research-context-section, .evidence-section, .history-section, " +
+          ".guided-core-card, .integrated-trend, .integrated-decision"
+        ) || target;
+        const navigationHeight = $("detailNavigation")?.getBoundingClientRect().height || 0;
+        const top = Math.max(0, section.getBoundingClientRect().top + window.scrollY - navigationHeight - 18);
+        window.scrollTo({top, behavior: "smooth"});
+        section.classList.add("personality-guide-target");
+        window.setTimeout(() => section.classList.remove("personality-guide-target"), 1400);
+      });
+    });
+  };
+
+  const profileButton = $("personalityReportGuideProfile");
+  if (profileButton) profileButton.onclick = openPersonalityQuickView;
+}
 function currentPersonalityShareData() {
   const result = savedPersonalityResult();
   const profile = researchPersonalityProfiles[result?.primary];
@@ -1702,6 +1968,7 @@ function levelTone(score) {
 function render(report) {
   currentReport = report;
   $("saveButton").classList.remove("hidden");
+  renderPersonalityReportGuide();
   $("detailNavigationTitle").textContent = `${report.name}（${report.id}）研究報告`;
   $("stockMeta").textContent = `${report.id} · ${report.industry}`;
   $("stockProfile").textContent = report.stock_profile?.label_zh || "待確認";
@@ -8036,7 +8303,71 @@ function renderDailyResearch() {
     $("dailyResearchSteps").innerHTML = '<p class="home-empty">今日研究合約尚未建立；更新客戶報告後會自動出現。</p>';
     return;
   }
-  const availableSteps = contract.steps.filter((step) => step.available);
+  const personalityPlan = personalityDailyResearchPlan();
+  const personalityOrderEnabled =
+    Boolean(personalityPlan) &&
+    personalityResearchOrderEnabled();
+
+  const orderIndex = new Map(
+    (personalityOrderEnabled ? personalityPlan.order : []).map(
+      (key, index) => [key, index]
+    )
+  );
+
+  const orderedSteps = [...contract.steps].sort(
+    (left, right) =>
+      (orderIndex.get(left.key) ?? 99) -
+      (orderIndex.get(right.key) ?? 99)
+  );
+
+  const personalityCue = $("dailyResearchPersonality");
+
+  if (personalityCue) {
+    personalityCue.classList.toggle(
+      "hidden",
+      !personalityPlan
+    );
+
+    if (personalityPlan) {
+      personalityCue.innerHTML = `
+        <div class="daily-research-personality-head">
+          <span>${escapeHtml(personalityPlan.profile.name)}的閱讀順序</span>
+          <button id="dailyResearchOrderToggle" type="button">
+            ${personalityOrderEnabled ? "恢復原始順序" : "使用人格排序"}
+          </button>
+        </div>
+        <b>
+          ${escapeHtml(
+            personalityOrderEnabled
+              ? personalityPlan.lead
+              : "目前使用原始閱讀順序"
+          )}
+        </b>
+        <p>
+          ${
+            personalityOrderEnabled
+              ? `${escapeHtml(personalityPlan.focus)}；${escapeHtml(personalityPlan.opportunity)}；${escapeHtml(personalityPlan.cadence)}。`
+              : "四個研究步驟依系統預設順序顯示；你的人格結果與偏好仍會保留。"
+          }
+        </p>
+      `;
+    } else {
+      personalityCue.innerHTML = "";
+    }
+  }
+
+  const orderToggle = $("dailyResearchOrderToggle");
+
+  if (orderToggle) {
+    orderToggle.addEventListener("click", () => {
+      setPersonalityResearchOrder(
+        !personalityResearchOrderEnabled()
+      );
+    });
+  }
+  const availableSteps = orderedSteps.filter(
+    (step) => step.available
+  );
   const completed = completedDailyResearch(contract.data_date);
   const completedCount = availableSteps.filter((step) => completed.has(step.key)).length;
   const total = availableSteps.length;
@@ -8052,7 +8383,7 @@ function renderDailyResearch() {
   $("dailyResearchBar").style.width = `${percentage}%`;
   $("dailyResearchEstimate").textContent = total && completedCount === total ? "今天的重要內容已看完" : `預計剩餘 ${Math.max(1, (total - completedCount) * 2)} 分鐘`;
   $("dailyResearchNotice").textContent = contract.notice_zh || "只安排閱讀順序，不提供交易指令，也不改變健康分數。";
-  $("dailyResearchSteps").innerHTML = contract.steps.map((step) => {
+  $("dailyResearchSteps").innerHTML = orderedSteps.map((step) => {
     const done = completed.has(step.key);
     const countText = step.available ? `${Number(step.item_count || 0)} ${escapeHtml(step.unit_zh || "項")}` : "今天沒有";
     return `<button class="daily-task ${done ? "done" : ""} ${step.available ? "" : "unavailable"}" type="button" data-daily-task="${escapeHtml(step.key)}" ${step.available ? "" : "disabled"}><span class="daily-task-top"><span class="daily-task-label">${escapeHtml(step.label_zh || step.label)}</span><em>${countText}</em></span><b>${escapeHtml(step.title_zh)}</b><p>${escapeHtml(step.why_it_matters_zh || step.description_zh)}</p><span class="daily-task-state">${step.available ? (done ? "✓ 已看完" : "去看看 ›") : "目前不用處理"}</span></button>`;
@@ -8179,7 +8510,15 @@ async function loadAvailable() {
 $("searchForm").addEventListener("submit", (event) => { event.preventDefault(); loadStock($("stockSearch").value.trim()); });
 $("retryButton").addEventListener("click", () => loadStock($("stockSearch").value.trim()));
 $("saveButton").addEventListener("click", toggleSaved);
-$("backToCenterButton").addEventListener("click", () => { activePage = detailOriginPage; showHomeView({restoreScroll:false}); });
+$("personalityQuickClose").addEventListener("click", closePersonalityQuickView);
+$("personalityQuickDone").addEventListener("click", closePersonalityQuickView);
+$("personalityQuickBackdrop").addEventListener("click", closePersonalityQuickView);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !$("personalityQuickModal").classList.contains("hidden")) {
+    closePersonalityQuickView();
+  }
+});
+$("backToCenterButton").addEventListener("click", () => { activePage = detailOriginPage; showHomeView({restoreScroll:true}); });
 $("brandHomeLink").addEventListener("click", (event) => { event.preventDefault(); activePage = "home"; showHomeView({restoreScroll:false}); window.scrollTo({top:0, behavior:"smooth"}); });
 $("watchlistOnlyButton").addEventListener("click", () => { watchlistOnly = !watchlistOnly; renderStockCenter(); });
 $("viewAllChanges").addEventListener("click", () => switchPage("events"));
@@ -8429,5 +8768,58 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (ev
   if (!localStorage.getItem(THEME_STORAGE_KEY)) applyTheme(event.matches ? "dark" : "light");
 });
 
+function initializeBackToTop() {
+  const button = $("backToTopButton");
+
+  if (!button) return;
+
+  const update = () => {
+    button.classList.toggle(
+      "hidden",
+      window.scrollY < 520
+    );
+  };
+
+  button.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+
+  window.addEventListener(
+    "scroll",
+    update,
+    {passive: true}
+  );
+
+  update();
+}
+
+initializeBackToTop();
+
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/assets/sw.js"));
+function placePersonalityReportGuideFirst() {
+  const guide = $("personalityReportGuide");
+
+  if (!guide || !guide.parentElement) {
+    return;
+  }
+
+  const overview =
+    guide.nextElementSibling?.dataset.reportOverview === "true"
+      ? guide.nextElementSibling
+      : guide.previousElementSibling;
+
+  if (!overview) {
+    return;
+  }
+
+  overview.dataset.reportOverview = "true";
+
+  if (guide.nextElementSibling !== overview) {
+    guide.parentElement.insertBefore(guide, overview);
+  }
+}
+placePersonalityReportGuideFirst();
 initializeBetaAccess();
