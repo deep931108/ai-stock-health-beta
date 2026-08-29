@@ -676,7 +676,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.9.7.2") == 3
+    assert html.count("3.9.8.0") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -710,7 +710,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.9.7.2") == 3
+    assert html.count("3.9.8.0") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -727,7 +727,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.9.7.2") == 3
+    assert html.count("3.9.8.0") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -753,7 +753,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.9.7.2") == 3
+    assert html.count("3.9.8.0") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -786,7 +786,7 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.9.7.2") == 3
+    assert html.count("3.9.8.0") == 3
 
 
 def test_pro_judgment_evidence_report_contract() -> None:
@@ -809,7 +809,7 @@ def test_pro_judgment_evidence_report_contract() -> None:
     assert ".pro-evidence-score-flow" in css
     assert ".pro-evidence-dimension-grid" in css
     assert ".pro-evidence-quality-grid" in css
-    assert html.count("3.9.7.2") == 3
+    assert html.count("3.9.8.0") == 3
 def test_gc9_uses_three_core_axes_and_separate_rhythm() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
@@ -1307,3 +1307,36 @@ def test_beta_database_maintenance_cli_resolves_project_root(tmp_path) -> None:
 
     assert result.returncode == 0, result.stderr
     assert "GC Beta SQLite backup utility" in result.stdout
+
+
+
+def test_beta_phase2b_frontend_reliability_contract() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    sw = (root / "web" / "sw.js").read_text(encoding="utf-8")
+
+    assert 'id="networkStatusBar"' in html
+    assert 'id="networkRetryButton"' in html
+    assert 'id="dataFreshnessBar"' in html
+    assert 'id="stockCenterRetry"' in html
+    assert "class BetaRequestError extends Error" in js
+    assert "async function fetchBetaJson" in js
+    assert "new AbortController()" in js
+    assert '"timeout"' in js
+    assert '"offline"' in js
+    assert "function renderDataFreshness" in js
+    assert 'window.addEventListener("offline"' in js
+    assert 'window.addEventListener("online"' in js
+    assert '$("notificationButton").focus();' in js
+    assert "Beta Infrastructure Phase 2B reliability states" in css
+    assert 'const CACHE = "ai-stock-health-beta-v6-reliability"' in sw
+    assert 'url.pathname.startsWith("/api/")' in sw
+    assert 'caches.open(CACHE).then((cache) => cache.put(event.request, copy))' in sw
+    api_guard = sw.index('url.pathname.startsWith("/api/")')
+    cache_write = sw.index('caches.open(CACHE).then((cache) => cache.put(event.request, copy))')
+    assert api_guard < cache_write
+    assert "evidence.css?v=3.9.8.0" in sw
+    assert "home.css?v=3.9.8.0" in sw
+    assert "app.js?v=3.9.8.0" in sw

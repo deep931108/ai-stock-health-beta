@@ -1,4 +1,112 @@
 const $ = (id) => document.getElementById(id);
+
+class BetaRequestError extends Error {
+  constructor(kind, message, status = 0) {
+    super(message);
+    this.name = "BetaRequestError";
+    this.kind = kind;
+    this.status = status;
+  }
+}
+
+async function fetchBetaJson(url, options = {}, timeoutMs = 12000) {
+  if (!navigator.onLine) {
+    throw new BetaRequestError(
+      "offline",
+      "目前沒有網路連線；已保留畫面，連線恢復後可重新嘗試。"
+    );
+  }
+
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    const contentType = response.headers.get("content-type") || "";
+    const payload = contentType.includes("application/json")
+      ? await response.json()
+      : {};
+
+    if (response.status === 401) {
+      throw new BetaRequestError(
+        "auth",
+        "登入已逾期，請重新輸入邀請碼。",
+        response.status
+      );
+    }
+    if (response.status === 404) {
+      throw new BetaRequestError(
+        "not_found",
+        payload.detail || "目前找不到這檔股票的研究報告。",
+        response.status
+      );
+    }
+    if (!response.ok) {
+      throw new BetaRequestError(
+        "server",
+        payload.detail || "服務暫時忙碌，請稍後再試。",
+        response.status
+      );
+    }
+    return payload;
+  } catch (error) {
+    if (error instanceof BetaRequestError) throw error;
+    if (error?.name === "AbortError") {
+      throw new BetaRequestError(
+        "timeout",
+        "讀取時間比預期久，請檢查網路後重新嘗試。"
+      );
+    }
+    throw new BetaRequestError(
+      navigator.onLine ? "network" : "offline",
+      navigator.onLine
+        ? "目前無法連上研究服務，請稍後再試。"
+        : "目前沒有網路連線；連線恢復後可重新嘗試。"
+    );
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+function betaReliabilityMessage(error) {
+  if (error instanceof BetaRequestError) return error.message;
+  return "暫時無法取得研究資料，請稍後再試。";
+}
+
+function setNetworkStatus(online = navigator.onLine) {
+  const bar = $("networkStatusBar");
+  const message = $("networkStatusMessage");
+  if (!bar || !message) return;
+  bar.classList.toggle("hidden", online);
+  message.textContent = online
+    ? "網路連線已恢復"
+    : "目前沒有網路連線；已保留目前畫面。";
+}
+
+function renderDataFreshness(reports = stockCatalog) {
+  const bar = $("dataFreshnessBar");
+  if (!bar) return;
+  const dates = reports
+    .map((report) => String(report.updated || ""))
+    .filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value))
+    .sort();
+  const latest = dates.at(-1);
+  if (!latest) {
+    bar.classList.add("hidden");
+    return;
+  }
+  const latestTime = Date.parse(`${latest}T00:00:00Z`);
+  const ageDays = Math.max(0, Math.floor((Date.now() - latestTime) / 86400000));
+  const stale = ageDays >= 3;
+  bar.classList.toggle("hidden", !stale);
+  bar.textContent = stale
+    ? `研究資料截至 ${latest}，距今 ${ageDays} 天；請先確認資料日期再判讀。`
+    : "";
+}
+
 const icons = ["✦", "⌁", "◎", "◫", "◌"];
 const THEME_STORAGE_KEY = "aiStockTheme";
 const RESEARCH_MODE_STORAGE_KEY = "aiStockResearchMode";
@@ -7085,23 +7193,28 @@ async function loadStock(stockId) {
   setState("loading");
   $("formHint").textContent = "正在取得最新研究報告…";
   try {
-    const response = await fetch(`/api/stocks/${encodeURIComponent(stockId)}`, {headers: {Accept: "application/json"}});
-    const payload = await response.json();
-    if (response.status === 401) {
-      showInviteGate("登入已逾期，請重新輸入邀請碼。 ");
-      return;
-    }
-    if (!response.ok) throw new Error(payload.detail || "暫時無法取得研究報告");
+    const payload = await fetchBetaJson(
+      `/api/stocks/${encodeURIComponent(stockId)}`,
+      {headers: {Accept: "application/json"}},
+      12000
+    );
     render(payload.report);
     trackBetaEvent("stock_opened", {
       page: "detail",
       stockId: payload.report.id,
     });
     setState("ready");
-    $("formHint").textContent = `已顯示 ${payload.report.name}（${payload.report.id}）`;
+    $("formHint").textContent =
+      `已顯示 ${payload.report.name}（${payload.report.id}）`;
   } catch (error) {
-    setState("error", error.message || "暫時無法取得研究報告");
-    $("formHint").textContent = "請確認代號或稍後再試";
+    if (error?.kind === "auth") {
+      showInviteGate(error.message);
+      return;
+    }
+    setState("error", betaReliabilityMessage(error));
+    $("formHint").textContent = error?.kind === "not_found"
+      ? "這個代號目前沒有可用研究報告"
+      : "資料未更新；可保留目前頁面並重新嘗試";
   }
 }
 
@@ -9097,27 +9210,45 @@ function showToast(message) {
 }
 
 async function loadAvailable() {
+  const loading = $("stockCenterLoading");
+  const loadingMessage = $("stockCenterLoadingMessage");
+  const retry = $("stockCenterRetry");
+  if (loading) loading.classList.remove("hidden");
+  if (loadingMessage) loadingMessage.textContent = "正在整理股票中心…";
+  if (retry) retry.classList.add("hidden");
+
   try {
-    const response = await fetch("/api/stocks");
-    const payload = await response.json();
-    if (response.status === 401) {
-      showInviteGate("登入已逾期，請重新輸入邀請碼。 ");
-      return;
-    }
-    if (!response.ok) throw new Error(payload.detail || "股票中心目前無法讀取");
+    const payload = await fetchBetaJson(
+      "/api/stocks",
+      {headers: {Accept: "application/json"}},
+      12000
+    );
     available = payload.stocks || [];
-    $("formHint").textContent = available.length ? `目前有 ${available.length} 檔客戶報告可查詢` : "目前尚無可用報告";
-    const reports = await Promise.all(available.map(async (item) => {
+    $("formHint").textContent = available.length
+      ? `目前有 ${available.length} 檔客戶報告可查詢`
+      : "目前尚無可用報告";
+
+    const results = await Promise.all(available.map(async (item) => {
       try {
-        const result = await fetch(`/api/stocks/${encodeURIComponent(item.id)}`, {headers:{Accept:"application/json"}});
-        if (!result.ok) return null;
-        return (await result.json()).report;
-      } catch { return null; }
+        const itemPayload = await fetchBetaJson(
+          `/api/stocks/${encodeURIComponent(item.id)}`,
+          {headers: {Accept: "application/json"}},
+          12000
+        );
+        return itemPayload.report;
+      } catch (error) {
+        if (error?.kind === "auth") throw error;
+        return null;
+      }
     }));
-    stockCatalog = reports.filter(Boolean).map((report) => ({...report, sector:sectorName(report.industry)}));
+
+    stockCatalog = results
+      .filter(Boolean)
+      .map((report) => ({...report, sector: sectorName(report.industry)}));
     comparisonSelection = savedComparisonSelection()
       .filter((id) => comparisonReport(id));
-    $("stockCenterLoading").classList.add("hidden");
+
+    if (loading) loading.classList.add("hidden");
     renderSectorFilters();
     renderStockCenter();
     renderHomeDashboard();
@@ -9125,20 +9256,49 @@ async function loadAvailable() {
     renderEventsPage();
     renderProfilePage();
     renderNotificationCenter();
+    renderDataFreshness(stockCatalog);
+
+    const missingCount = available.length - stockCatalog.length;
+    if (missingCount > 0) {
+      $("formHint").textContent =
+        `${stockCatalog.length} 檔已載入，${missingCount} 檔暫時無法讀取`;
+    }
 
     if (!onboardingCompleted()) {
-      window.setTimeout(() => {
-        startOnboarding();
-      }, 450);
+      window.setTimeout(() => startOnboarding(), 450);
     }
-  } catch {
-    $("formHint").textContent = "可先試用 2330、2891";
-    $("stockCenterLoading").textContent = "股票中心目前無法讀取，請稍後重新整理。";
+  } catch (error) {
+    if (error?.kind === "auth") {
+      showInviteGate(error.message);
+      return;
+    }
+    $("formHint").textContent = betaReliabilityMessage(error);
+    if (loading) loading.classList.remove("hidden");
+    if (loadingMessage) {
+      loadingMessage.textContent = betaReliabilityMessage(error);
+    }
+    if (retry) retry.classList.remove("hidden");
   }
 }
 
 $("searchForm").addEventListener("submit", (event) => { event.preventDefault(); loadStock($("stockSearch").value.trim()); });
 $("retryButton").addEventListener("click", () => loadStock($("stockSearch").value.trim()));
+$("stockCenterRetry").addEventListener("click", () => loadAvailable());
+$("networkRetryButton").addEventListener("click", () => {
+  if (!navigator.onLine) {
+    showToast("目前仍是離線狀態");
+    return;
+  }
+  loadAvailable();
+});
+window.addEventListener("offline", () => setNetworkStatus(false));
+window.addEventListener("online", () => {
+  setNetworkStatus(true);
+  showToast("網路連線已恢復");
+  if (!stockCatalog.length) loadAvailable();
+});
+setNetworkStatus();
+
 $("saveButton").addEventListener("click", toggleSaved);
 $("personalityQuickClose").addEventListener("click", closePersonalityQuickView);
 $("personalityQuickDone").addEventListener("click", closePersonalityQuickView);
@@ -9166,7 +9326,10 @@ $("industryFilter").addEventListener("change", (event) => { activeIndustry = eve
 document.querySelectorAll("[data-watch-filter]").forEach((button) => button.addEventListener("click", () => { watchlistFilter = button.dataset.watchFilter; document.querySelectorAll("[data-watch-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderWatchlistPage(); }));
 document.querySelectorAll("[data-event-filter]").forEach((button) => button.addEventListener("click", () => { eventFilter = button.dataset.eventFilter; document.querySelectorAll("[data-event-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderEventsPage(); }));
 $("notificationButton").addEventListener("click", () => setNotificationPanel($("notificationPanel").classList.contains("hidden")));
-$("notificationClose").addEventListener("click", () => setNotificationPanel(false));
+$("notificationClose").addEventListener("click", () => {
+  $("notificationButton").focus();
+  setNotificationPanel(false);
+});
 $("notificationBackdrop").addEventListener("click", () => setNotificationPanel(false));
 $("notificationReadAll").addEventListener("click", () => { const read = notificationReadIds(); researchNotifications().forEach((item) => read.add(item.notification_id)); saveNotificationReadIds(read); renderNotificationCenter(); });
 $("notificationList").addEventListener("click", (event) => { const item = event.target.closest("[data-notification-id]"); if (item) openNotification(item); });

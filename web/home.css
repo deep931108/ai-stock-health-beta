@@ -8238,3 +8238,8 @@ html[data-theme="dark"]
   background: #c98247;
   color: #fffdf9;
 }
+
+/* Beta Infrastructure Phase 2B reliability states. */
+.network-status,.data-freshness{position:sticky;top:8px;z-index:35;display:flex;align-items:center;justify-content:center;gap:12px;width:min(760px,calc(100% - 24px));margin:8px auto;padding:10px 14px;border:1px solid #d69a55;border-radius:14px;background:#fff4e6;color:#75431f;box-shadow:0 8px 24px rgba(66,45,28,.12);font-size:14px}.network-status button,.stock-center-empty button{border:1px solid currentColor;border-radius:999px;padding:7px 12px;background:transparent;color:inherit;cursor:pointer}.data-freshness{position:relative;top:auto;border-color:#cf9e65;background:#fff7ec}.stock-center-empty{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.stock-center-empty button{color:var(--warm-brand)}
+html[data-theme="dark"] .network-status,html[data-theme="dark"] .data-freshness{border-color:#8d633b;background:#30271f;color:#efb272;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+@media(max-width:640px){.network-status,.data-freshness{align-items:flex-start;justify-content:space-between;font-size:13px}.network-status button{flex:0 0 auto}}
