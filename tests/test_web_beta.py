@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 import app as app_module
 from app import app
 from beta_access import BetaAccessStore
+from beta_insights import BetaInsightsStore
 from client_report_adapter import ClientReportRepository
 
 
@@ -675,7 +676,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.9.6.1") == 3
+    assert html.count("3.9.7.2") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -709,7 +710,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.9.6.1") == 3
+    assert html.count("3.9.7.2") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,7 +727,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.9.6.1") == 3
+    assert html.count("3.9.7.2") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -752,7 +753,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.9.6.1") == 3
+    assert html.count("3.9.7.2") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -785,7 +786,7 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.9.6.1") == 3
+    assert html.count("3.9.7.2") == 3
 
 
 def test_pro_judgment_evidence_report_contract() -> None:
@@ -808,7 +809,7 @@ def test_pro_judgment_evidence_report_contract() -> None:
     assert ".pro-evidence-score-flow" in css
     assert ".pro-evidence-dimension-grid" in css
     assert ".pro-evidence-quality-grid" in css
-    assert html.count("3.9.6.1") == 3
+    assert html.count("3.9.7.2") == 3
 def test_gc9_uses_three_core_axes_and_separate_rhythm() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
@@ -1130,3 +1131,98 @@ def test_gc9_report_guide_has_defined_items() -> None:
     assert "order," in js
     assert "GC-9 report guide and navigation correction v1" in css
     assert "border: 0 !important;" in css
+def test_beta_insights_store_and_admin_summary(tmp_path: Path, monkeypatch) -> None:
+    store = BetaInsightsStore(tmp_path / "beta-insights.sqlite3")
+    monkeypatch.setattr(app_module, "REQUIRE_INVITE", False)
+    monkeypatch.setattr(app_module, "ADMIN_TOKEN", "test-admin-token")
+    monkeypatch.setattr(app_module, "beta_insights", store)
+    beta_client = TestClient(app_module.app)
+
+    event = beta_client.post(
+        "/api/beta/events",
+        json={"event_name": "page_view", "page": "home", "mode": "guided"},
+    )
+    assert event.status_code == 200
+
+    feedback = beta_client.post(
+        "/api/beta/feedback",
+        json={
+            "category": "usability",
+            "rating": 4,
+            "message": "The home page is clear, but the toggle can be clearer.",
+            "page": "home",
+            "stock_id": "2330",
+        },
+    )
+    assert feedback.status_code == 200
+    assert feedback.json()["feedback_id"] == 1
+
+    invalid_event = beta_client.post(
+        "/api/beta/events",
+        json={"event_name": "arbitrary_private_data", "page": "home"},
+    )
+    assert invalid_event.status_code == 400
+    assert beta_client.get("/api/admin/beta/summary").status_code == 404
+
+    summary = beta_client.get(
+        "/api/admin/beta/summary?days=7",
+        headers={"X-Admin-Token": "test-admin-token"},
+    )
+    assert summary.status_code == 200
+    payload = summary.json()["insights"]
+    assert payload["active_testers"] == 1
+    assert payload["event_counts"]["page_view"] == 1
+    assert payload["feedback_count"] == 1
+    assert payload["average_rating"] == 4.0
+
+
+def test_beta_insights_rejects_sensitive_shapes(tmp_path: Path) -> None:
+    store = BetaInsightsStore(tmp_path / "privacy.sqlite3")
+    for kwargs in (
+        {"event_name": "portfolio_uploaded", "page": "home"},
+        {"event_name": "page_view", "page": "private_portfolio"},
+    ):
+        try:
+            store.record_event(tester_code="BETA-001", **kwargs)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("unsupported telemetry must be rejected")
+def test_beta_feedback_ui_and_telemetry() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(encoding="utf-8")
+    js = (root / "web" / "app.js").read_text(encoding="utf-8")
+    css = (root / "web" / "home.css").read_text(encoding="utf-8")
+    insights = (root / "beta_insights.py").read_text(encoding="utf-8")
+
+    for element_id in (
+        'id="betaFeedbackModal"', 'id="betaFeedbackForm"',
+        'id="betaFeedbackCategory"', 'id="betaFeedbackMessage"',
+        'id="betaFeedbackSubmit"', 'id="betaFeedbackStatus"',
+    ):
+        assert element_id in html
+
+    for function_name in (
+        "function trackBetaEvent", "function openBetaFeedback",
+        "function closeBetaFeedback", "function submitBetaFeedback",
+    ):
+        assert function_name in js
+
+    assert 'fetch("/api/beta/events"' in js
+    assert 'fetch("/api/beta/feedback"' in js
+    assert 'trackBetaEvent("session_started"' in js
+    assert 'trackBetaEvent("page_view"' in js
+    assert 'trackBetaEvent("stock_opened"' in js
+    assert "Beta Infrastructure feedback v1" in css
+    assert '"news"' in insights
+
+
+def test_beta_initialization_remains_async() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert "async function initializeBetaAccess()" in js
+    assert "function betaTelemetryPage()" in js
+    assert "async function betaTelemetryPage()" not in js

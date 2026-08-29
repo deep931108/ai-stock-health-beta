@@ -1797,6 +1797,110 @@ async function logoutBeta() {
   }
 }
 
+function betaTelemetryPage() {
+  if (document.body.classList.contains("detail-mode")) {
+    return "detail";
+  }
+  return activePage || "home";
+}
+
+function betaTelemetryMode() {
+  return document.documentElement.dataset.researchMode === "pro"
+    ? "pro"
+    : "guided";
+}
+
+async function trackBetaEvent(
+  eventName,
+  {page = betaTelemetryPage(), stockId = null} = {}
+) {
+  try {
+    await fetch("/api/beta/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      credentials: "same-origin",
+      keepalive: true,
+      body: JSON.stringify({
+        event_name: eventName,
+        page,
+        stock_id: stockId,
+        mode: betaTelemetryMode(),
+      }),
+    });
+  } catch (_) {
+    // Telemetry must never block the research experience.
+  }
+}
+
+function openBetaFeedback() {
+  $("betaFeedbackBackdrop").classList.remove("hidden");
+  $("betaFeedbackModal").classList.remove("hidden");
+  $("betaFeedbackStatus").textContent = "";
+  document.body.classList.add("modal-open");
+  window.setTimeout(() => $("betaFeedbackMessage").focus(), 0);
+  trackBetaEvent("feedback_opened");
+}
+
+function closeBetaFeedback() {
+  $("betaFeedbackBackdrop").classList.add("hidden");
+  $("betaFeedbackModal").classList.add("hidden");
+  document.body.classList.remove("modal-open");
+}
+
+async function submitBetaFeedback(event) {
+  event.preventDefault();
+  const submit = $("betaFeedbackSubmit");
+  const status = $("betaFeedbackStatus");
+  const rating = document.querySelector(
+    'input[name="betaFeedbackRating"]:checked'
+  );
+  const message = $("betaFeedbackMessage").value.trim();
+
+  if (message.length < 2) {
+    status.textContent = "請至少輸入兩個字。";
+    return;
+  }
+
+  submit.disabled = true;
+  status.textContent = "正在送出回饋…";
+
+  try {
+    const response = await fetch("/api/beta/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        category: $("betaFeedbackCategory").value,
+        rating: rating ? Number(rating.value) : null,
+        message,
+        page: betaTelemetryPage(),
+        stock_id: currentReport?.id || null,
+      }),
+    });
+    const payload = await response.json();
+    if (response.status === 401) {
+      closeBetaFeedback();
+      showInviteGate("登入已逾期，請重新輸入邀請碼。");
+      return;
+    }
+    if (!response.ok) {
+      throw new Error(payload.detail || "目前無法送出回饋");
+    }
+    $("betaFeedbackForm").reset();
+    closeBetaFeedback();
+    showToast("謝謝你的回饋，我們已經收到。 ");
+  } catch (error) {
+    status.textContent = error.message || "目前無法送出回饋，請稍後再試。";
+  } finally {
+    submit.disabled = false;
+  }
+}
 async function initializeBetaAccess() {
   try {
     const response = await fetch("/api/beta/session", {headers: {Accept: "application/json"}});
@@ -1807,6 +1911,7 @@ async function initializeBetaAccess() {
       return;
     }
     enterBeta(session);
+    trackBetaEvent("session_started", {page: "home"});
     await loadAvailable();
   } catch (error) {
     showInviteGate(error.message || "目前無法確認登入狀態，請稍後再試");
@@ -1839,6 +1944,7 @@ function switchPage(page, {scroll = true} = {}) {
   const target = document.querySelector(`[data-page="${page}"]`);
   if (!target) return;
   activePage = page;
+  trackBetaEvent("page_view", {page});
   document.querySelectorAll(".app-page").forEach((section) => section.classList.toggle("active", section === target));
   document.querySelectorAll(".mobile-nav button").forEach((button) => button.classList.toggle("active", button.dataset.tab === page));
   if (page === "watchlist") renderWatchlistPage();
@@ -6987,6 +7093,10 @@ async function loadStock(stockId) {
     }
     if (!response.ok) throw new Error(payload.detail || "暫時無法取得研究報告");
     render(payload.report);
+    trackBetaEvent("stock_opened", {
+      page: "detail",
+      stockId: payload.report.id,
+    });
     setState("ready");
     $("formHint").textContent = `已顯示 ${payload.report.name}（${payload.report.id}）`;
   } catch (error) {
@@ -9261,7 +9371,11 @@ $("personalityFinish").addEventListener("click", () => {
   showToast("已套用你的個人化研究閱讀順序");
 });
 
-$("profileFeedback").addEventListener("click", () => showToast("Beta 回饋表單將在下一階段接入"));
+$("profileFeedback").addEventListener("click", openBetaFeedback);
+$("betaFeedbackClose").addEventListener("click", closeBetaFeedback);
+$("betaFeedbackCancel").addEventListener("click", closeBetaFeedback);
+$("betaFeedbackBackdrop").addEventListener("click", closeBetaFeedback);
+$("betaFeedbackForm").addEventListener("submit", submitBetaFeedback);
 $("profileDataSources").addEventListener("click", () => showToast("請進入個股報告查看各項原始資料來源"));
 $("profileLogout").addEventListener("click", () => betaSession?.invite_required ? logoutBeta() : showToast("本機擁有者模式不需要登出"));
 $("inviteForm").addEventListener("submit", (event) => {

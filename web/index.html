@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.9.6.1">
-  <link rel="stylesheet" href="/assets/home.css?v=3.9.6.1">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.9.7.2">
+  <link rel="stylesheet" href="/assets/home.css?v=3.9.7.2">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -870,6 +870,48 @@
     type="button"
     aria-label="回到頁面頂部"
     title="回到頂部">↑</button>
+  <div id="betaFeedbackBackdrop" class="beta-feedback-backdrop hidden"></div>
+  <section id="betaFeedbackModal" class="beta-feedback-modal hidden"
+    role="dialog" aria-modal="true" aria-labelledby="betaFeedbackTitle">
+    <button id="betaFeedbackClose" class="beta-feedback-close"
+      type="button" aria-label="關閉回饋視窗">×</button>
+    <span class="section-kicker">Founding Beta</span>
+    <h2 id="betaFeedbackTitle">提供 Beta 回饋</h2>
+    <p>告訴我們哪裡好用、哪裡卡住。系統會自動附上測試者代碼與所在頁面，不會收集持股或人格答案。</p>
+    <form id="betaFeedbackForm">
+      <label>
+        <span>回饋類型</span>
+        <select id="betaFeedbackCategory" required>
+          <option value="usability">使用體驗</option>
+          <option value="data">資料或研究內容</option>
+          <option value="bug">功能異常</option>
+          <option value="missing_feature">希望新增功能</option>
+          <option value="other">其他</option>
+        </select>
+      </label>
+      <fieldset>
+        <legend>整體好用程度（選填）</legend>
+        <div class="beta-feedback-rating">
+          <label><input type="radio" name="betaFeedbackRating" value="1"><span>1</span></label>
+          <label><input type="radio" name="betaFeedbackRating" value="2"><span>2</span></label>
+          <label><input type="radio" name="betaFeedbackRating" value="3"><span>3</span></label>
+          <label><input type="radio" name="betaFeedbackRating" value="4"><span>4</span></label>
+          <label><input type="radio" name="betaFeedbackRating" value="5"><span>5</span></label>
+        </div>
+      </fieldset>
+      <label>
+        <span>想告訴我們什麼？</span>
+        <textarea id="betaFeedbackMessage" required minlength="2"
+          maxlength="1200" rows="5"
+          placeholder="例如：我不知道健康分數和買賣訊號的差別。"></textarea>
+      </label>
+      <small id="betaFeedbackStatus" aria-live="polite"></small>
+      <div class="beta-feedback-actions">
+        <button id="betaFeedbackCancel" type="button">取消</button>
+        <button id="betaFeedbackSubmit" type="submit">送出回饋</button>
+      </div>
+    </form>
+  </section>
   <div id="toast" class="toast" aria-live="polite"></div>
   </main>
   <div id="onboardingBackdrop" class="onboarding-backdrop hidden"></div>
@@ -904,6 +946,6 @@
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.9.6.1" defer></script>
+  <script src="/assets/app.js?v=3.9.7.2" defer></script>
 </body>
 </html>

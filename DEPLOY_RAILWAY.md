@@ -96,3 +96,18 @@ database\web_beta\invite-codes-production.json
 ## 更新研究報告
 
 替換 `database/client_reports/` 後提交並推送。不要動 `/data` 或邀請資料庫。
+
+## Beta 使用紀錄與回饋
+
+邀請、Session、Beta 使用事件與站內回饋都會寫入
+/data/beta-access.sqlite3。
+
+Railway Volume 必須持續掛載 /data。系統只接受白名單事件、
+頁面、研究模式與四位數股票代號，不接受任意 metadata、
+持股資料或人格答案。只有使用者主動送出的回饋會保存文字。
+
+管理員可透過 GET /api/admin/beta/summary?days=7
+查詢最近七天摘要，並在 X-Admin-Token Header 傳入
+AI_STOCK_BETA_ADMIN_TOKEN。
+
+days 可設定為 1 至 90。未授權的管理 API 請求會回傳 404。

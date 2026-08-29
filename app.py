@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from beta_access import BetaAccessStore, BetaSession
+from beta_insights import BetaInsightsStore
 from client_report_adapter import ClientReportRepository
 
 
@@ -29,11 +30,12 @@ ADMIN_TOKEN = os.environ.get("AI_STOCK_BETA_ADMIN_TOKEN", "").strip()
 
 app = FastAPI(
     title="AI 股票健康 Beta API",
-    version="1.4.0",
+    version="1.5.0",
     description="將 AI Stock Terminal 客戶版報告安全提供給 PWA。",
 )
 reports = ClientReportRepository(project_root=PROJECT_ROOT, sample_dir=BASE_DIR / "sample_reports")
 beta_access = BetaAccessStore(BETA_DATABASE_PATH)
+beta_insights = BetaInsightsStore(BETA_DATABASE_PATH)
 activation_attempts: dict[str, list[float]] = {}
 
 
@@ -43,6 +45,20 @@ class InviteActivation(BaseModel):
 
 class InviteBootstrap(BaseModel):
     count: int = Field(default=20, ge=1, le=100)
+
+class BetaEventPayload(BaseModel):
+    event_name: str = Field(min_length=3, max_length=64)
+    page: str | None = Field(default=None, max_length=32)
+    stock_id: str | None = Field(default=None, max_length=4)
+    mode: str | None = Field(default=None, max_length=16)
+
+
+class BetaFeedbackPayload(BaseModel):
+    category: str = Field(min_length=2, max_length=32)
+    rating: int | None = Field(default=None, ge=1, le=5)
+    message: str = Field(min_length=2, max_length=1200)
+    page: str | None = Field(default=None, max_length=32)
+    stock_id: str | None = Field(default=None, max_length=4)
 
 
 def current_beta_session(request: Request) -> BetaSession | None:
@@ -126,6 +142,50 @@ def logout_beta(request: Request, response: Response) -> dict:
     response.delete_cookie(BetaAccessStore.COOKIE_NAME, path="/")
     return {"status": "success"}
 
+
+@app.post("/api/beta/events")
+def record_beta_event(payload: BetaEventPayload, request: Request) -> dict:
+    session = require_beta_session(request)
+    try:
+        beta_insights.record_event(
+            tester_code=session.tester_code,
+            event_name=payload.event_name,
+            page=payload.page,
+            stock_id=payload.stock_id,
+            mode=payload.mode,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    return {"status": "success"}
+
+
+@app.post("/api/beta/feedback")
+def record_beta_feedback(payload: BetaFeedbackPayload, request: Request) -> dict:
+    session = require_beta_session(request)
+    try:
+        feedback_id = beta_insights.record_feedback(
+            tester_code=session.tester_code,
+            category=payload.category,
+            rating=payload.rating,
+            message=payload.message,
+            page=payload.page,
+            stock_id=payload.stock_id,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    return {"status": "success", "feedback_id": feedback_id}
+
+
+@app.get("/api/admin/beta/summary")
+def beta_admin_summary(request: Request, days: int = 7) -> dict:
+    supplied = request.headers.get("X-Admin-Token", "")
+    if not ADMIN_TOKEN or not hmac.compare_digest(supplied, ADMIN_TOKEN):
+        raise HTTPException(status_code=404, detail="Not found")
+    return {
+        "status": "success",
+        "access": beta_access.status(),
+        "insights": beta_insights.summary(days),
+    }
 
 @app.get("/api/stocks")
 def available_stocks(request: Request) -> dict:
