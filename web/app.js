@@ -1474,20 +1474,236 @@ function notificationMatches(item) {
   return item.type === notificationFilter;
 }
 
+function personalityNotificationOrderEnabled() {
+  return localStorage.getItem(
+    "aiStockPersonalityNotificationOrder"
+  ) !== "original";
+}
+
+function setPersonalityNotificationOrder(enabled) {
+  localStorage.setItem(
+    "aiStockPersonalityNotificationOrder",
+    enabled ? "personality" : "original"
+  );
+
+  renderNotificationCenter();
+
+  showToast(
+    enabled
+      ? "已使用 GC-9 人格通知排序"
+      : "已恢復通知原始排序"
+  );
+}
+
+function gc9NotificationPriority(
+  item,
+  result = savedPersonalityResult()
+) {
+  const archetype = result?.archetype;
+  const text = [
+    item.type,
+    item.title_zh,
+    item.message_zh,
+    item.reason_zh,
+    item.destination,
+  ].join(" ").toLowerCase();
+
+  let score =
+    item.severity === "high"
+      ? 30
+      : item.severity === "medium"
+        ? 18
+        : 8;
+
+  const contains = (...words) =>
+    words.some((word) => text.includes(word));
+
+  const rules = {
+    precision_sage: () => {
+      if (item.type === "official_event") score += 34;
+      if (item.type === "follow_up") score += 30;
+      if (contains("證據", "資料", "公告", "來源")) score += 20;
+      return "你重視正式證據與精準判斷，先核對來源和待驗證事項";
+    },
+    halo_hunter: () => {
+      if (item.type === "material_change") score += 34;
+      if (contains("成長", "增加", "改善", "突破", "新")) score += 24;
+      return "你對成長與新機會敏感，先掌握正在形成的重要變化";
+    },
+    valuation_sage: () => {
+      if (item.type === "risk_attention") score += 28;
+      if (item.type === "follow_up") score += 22;
+      if (contains("價格", "估值", "獲利", "落差", "基準")) score += 30;
+      return "你重視價值與合理價格，先檢查價格、獲利和比較基準";
+    },
+    shield_guardian: () => {
+      if (item.type === "risk_attention") score += 42;
+      if (item.severity === "high") score += 24;
+      if (contains("風險", "下降", "轉弱", "缺口", "負債")) score += 28;
+      return "你優先控制風險，先確認可能擴大的不利變化";
+    },
+    mist_assassin: () => {
+      if (item.type === "material_change") score += 38;
+      if (contains("股價", "法人", "成交", "突破", "轉弱")) score += 28;
+      return "你重視短期轉折與時機，先查看市場和資金方向的變化";
+    },
+    cultivation_elder: () => {
+      if (item.type === "follow_up") score += 42;
+      if (item.type === "official_event") score += 26;
+      if (contains("持續", "營運", "獲利", "現金流", "長期")) score += 25;
+      return "你重視長期累積與複利，先確認原本條件是否持續";
+    },
+    market_observer: () => {
+      if (item.type === "material_change") score += 28;
+      if (item.type === "official_event") score += 22;
+      if (contains("趨勢", "市場", "法人", "相對", "方向")) score += 28;
+      return "你傾向先觀察市場，這則提醒有助於確認方向是否更明確";
+    },
+    star_child: () => {
+      if (item.type === "official_event") score += 30;
+      if (item.type === "material_change") score += 25;
+      if (contains("成長", "新產品", "新市場", "技術", "計畫")) score += 34;
+      return "你重視願景與未來趨勢，先追蹤成長里程碑和新事件";
+    },
+    fatal_hunter: () => {
+      if (item.type === "risk_attention") score += 48;
+      if (item.severity === "high") score += 28;
+      if (contains("風險", "轉弱", "下降", "不確定", "缺口")) score += 32;
+      return "你偏好高風險機會，因此先確認失敗條件與風險上限";
+    },
+  };
+
+  const reason = rules[archetype]
+    ? rules[archetype]()
+    : "依重要性與資料日期排列";
+
+  return {score, reason};
+}
+
 function renderNotificationCenter() {
   const rows = researchNotifications();
   const read = notificationReadIds();
-  const unread = rows.filter((item) => !read.has(item.notification_id)).length;
+  const unread = rows.filter(
+    (item) => !read.has(item.notification_id)
+  ).length;
   const badge = $("notificationUnread");
-  badge.textContent = unread > 99 ? "99+" : String(unread);
+
+  badge.textContent =
+    unread > 99 ? "99+" : String(unread);
   badge.classList.toggle("hidden", unread === 0);
-  $("notificationSummary").textContent = rows.length ? `${unread} 則未讀，共 ${rows.length} 則研究提醒` : "目前沒有需要提醒的研究事項";
-  const visible = rows.filter(notificationMatches);
-  $("notificationList").innerHTML = visible.length ? visible.map((item) => `
-    <button class="notification-item ${read.has(item.notification_id) ? "read" : "unread"} severity-${escapeHtml(item.severity)}" type="button" data-notification-id="${escapeHtml(item.notification_id)}" data-notification-destination="${escapeHtml(item.destination)}" data-notification-stock="${escapeHtml(item.stock_id)}">
-      <span class="notification-item-top"><em>${escapeHtml(item.type === "official_event" ? "官方日程" : item.type === "follow_up" ? "持續追蹤" : item.type === "risk_attention" ? "風險注意" : "重要變化")}</em><time>${escapeHtml(item.source_date || "")}</time></span>
-      <b>${escapeHtml(item.title_zh)}</b><p>${escapeHtml(item.message_zh)}</p><small>${escapeHtml(item.reason_zh)}</small>
-    </button>`).join("") : '<p class="notification-empty">這個分類目前沒有通知。</p>';
+
+  const result = savedPersonalityResult();
+  const profile = gc9Profile(result);
+  const usePersonality =
+    Boolean(profile) &&
+    personalityNotificationOrderEnabled();
+
+  const filtered = rows.filter(notificationMatches);
+
+  const visible = filtered
+    .map((item, index) => {
+      const priority = gc9NotificationPriority(
+        item,
+        result
+      );
+
+      return {
+        item,
+        index,
+        priority,
+      };
+    })
+    .sort((left, right) => {
+      if (!usePersonality) {
+        return left.index - right.index;
+      }
+
+      return (
+        right.priority.score -
+          left.priority.score ||
+        left.index -
+          right.index
+      );
+    });
+
+  $("notificationSummary").textContent =
+    rows.length
+      ? `${unread} 則未讀，共 ${rows.length} 則研究提醒${
+          usePersonality
+            ? `｜${profile.name}排序`
+            : "｜原始排序"
+        }`
+      : "目前沒有需要提醒的研究事項";
+
+  const toggle = $("notificationOrderToggle");
+
+  if (toggle) {
+    toggle.disabled = !profile;
+    toggle.textContent = !profile
+      ? "完成人格後排序"
+      : usePersonality
+        ? "使用原始排序"
+        : "使用人格排序";
+
+    toggle.onclick = () => {
+      if (!profile) {
+        showToast("請先完成人格測驗");
+        return;
+      }
+
+      setPersonalityNotificationOrder(
+        !usePersonality
+      );
+    };
+  }
+
+  $("notificationList").innerHTML =
+    visible.length
+      ? visible.map(({item, priority}) => `
+        <button class="notification-item ${
+          read.has(item.notification_id)
+            ? "read"
+            : "unread"
+        } severity-${escapeHtml(item.severity)}"
+          type="button"
+          data-notification-id="${
+            escapeHtml(item.notification_id)
+          }"
+          data-notification-destination="${
+            escapeHtml(item.destination)
+          }"
+          data-notification-stock="${
+            escapeHtml(item.stock_id)
+          }">
+          <span class="notification-item-top">
+            <em>${
+              escapeHtml(
+                item.type === "official_event"
+                  ? "官方日程"
+                  : item.type === "follow_up"
+                    ? "持續追蹤"
+                    : item.type === "risk_attention"
+                      ? "風險注意"
+                      : "重要變化"
+              )
+            }</em>
+            <time>${
+              escapeHtml(item.source_date || "")
+            }</time>
+          </span>
+          <b>${escapeHtml(item.title_zh)}</b>
+          <p>${escapeHtml(item.message_zh)}</p>
+          ${
+            usePersonality
+              ? `<span class="notification-personality-reason">
+                  ${escapeHtml(priority.reason)}
+                </span>`
+              : ""
+          }
+          <small>${escapeHtml(item.reason_zh)}</small>
+        </button>
+      `).join("")
+      : '<p class="notification-empty">這個分類目前沒有通知。</p>';
 }
 
 function setNotificationPanel(open) {
@@ -1638,6 +1854,143 @@ function levelTone(score) {
   return "watch";
 }
 
+const PERSONALITY_SUMMARY_STORAGE_KEY =
+  "aiStockPersonalitySummaryMode";
+
+function personalityResearchSummaryEnabled() {
+  return localStorage.getItem(
+    PERSONALITY_SUMMARY_STORAGE_KEY
+  ) !== "original";
+}
+
+function setPersonalityResearchSummary(enabled) {
+  localStorage.setItem(
+    PERSONALITY_SUMMARY_STORAGE_KEY,
+    enabled ? "personality" : "original"
+  );
+
+  if (currentReport) {
+    render(currentReport);
+  }
+
+  showToast(
+    enabled
+      ? "已使用 GC-9 人格摘要"
+      : "已恢復原始研究摘要"
+  );
+}
+
+function gc9ResearchSummaryReason(
+  report,
+  result = savedPersonalityResult()
+) {
+  const profile = gc9Profile(result);
+
+  if (!profile) return "";
+
+  const events = reportEvents(report);
+  const delta = scoreChange(report);
+  const risk = Math.round(
+    Number(report.risk || 0)
+  );
+  const confidence = Math.round(
+    Number(report.confidence || 0)
+  );
+  const name = report.name || report.id;
+  const change = Number(delta);
+  const hasChange = Number.isFinite(change);
+  const changeText = hasChange
+    ? `${Math.abs(change).toFixed(1)} 分`
+    : "";
+
+  switch (result.archetype) {
+    case "precision_sage":
+      return `${name} 的證據充分程度為 ${confidence}%，先核對數據與判斷依據。`;
+
+    case "halo_hunter":
+      if (hasChange && change > 0) {
+        return `${name} 健康分數上升 ${changeText}，先確認改善是否形成成長機會。`;
+      }
+      return `${name} 目前有 ${events.length} 項研究變化，先找新的成長訊號。`;
+
+    case "valuation_sage":
+      return `${name} 先從價格位置、獲利與歷史比較基準開始閱讀。`;
+
+    case "shield_guardian":
+      return `${name} 目前風險分數 ${risk}，先確認主要風險與防守條件。`;
+
+    case "mist_assassin":
+      if (hasChange) {
+        return `${name} 健康分數${change >= 0 ? "上升" : "下降"} ${changeText}，先檢查近期轉折。`;
+      }
+      return `${name} 尚未建立變化基準，先觀察短期市場訊號。`;
+
+    case "cultivation_elder": {
+      const followUps = events.filter(
+        (event) => event.type === "follow_up"
+      ).length;
+
+      return followUps
+        ? `${name} 有 ${followUps} 項持續追蹤條件，先確認營運能否延續。`
+        : `${name} 先從長期營運與累積紀錄開始閱讀。`;
+    }
+
+    case "market_observer":
+      return events.length
+        ? `${name} 今天有 ${events.length} 項變化，先觀察趨勢是否延續。`
+        : `${name} 今天沒有重大變化，先等待更明確的市場訊號。`;
+
+    case "star_child":
+      return `${name} 先確認新產品、技術與成長里程碑是否支持長期願景。`;
+
+    case "fatal_hunter":
+      if (hasChange && change < 0) {
+        return `${name} 健康分數下降 ${changeText}，先確認風險上限與失敗條件。`;
+      }
+      return `${name} 目前風險分數 ${risk}，先確認高風險情境是否可控。`;
+
+    default:
+      return `${name} 先從與你研究偏好最相關的資訊開始閱讀。`;
+  }
+}
+
+function renderPersonalityResearchSummary(report) {
+  const bar = $("summaryPersonalityBar");
+  const label = $("summaryPersonalityLabel");
+  const reason = $("summaryPersonalityReason");
+  const toggle = $("summaryPersonalityToggle");
+  const result = savedPersonalityResult();
+  const profile = gc9Profile(result);
+
+  if (!bar || !label || !reason || !toggle) {
+    return;
+  }
+
+  bar.classList.toggle(
+    "hidden",
+    !profile
+  );
+
+  if (!profile) return;
+
+  const enabled =
+    personalityResearchSummaryEnabled();
+
+  label.textContent = enabled
+    ? `目前摘要：${profile.name}閱讀提示`
+    : "目前摘要：原始研究摘要";
+
+  reason.textContent = enabled
+    ? gc9ResearchSummaryReason(report, result)
+    : "目前保留 GC 的原始摘要順序，不加入人格閱讀提示。";
+
+  toggle.textContent = enabled
+    ? "切換為原始摘要"
+    : "切換為人格摘要";
+
+  toggle.onclick = () =>
+    setPersonalityResearchSummary(!enabled);
+}
 function render(report) {
   currentReport = report;
   $("saveButton").classList.remove("hidden");
@@ -2098,6 +2451,7 @@ function render(report) {
   $("heldDecision").textContent = "";
 
   $("summaryNote").textContent = summaryCopy;
+  renderPersonalityResearchSummary(report);
 
   if ($("summaryBasis")) {
     $("summaryBasis").textContent = summaryBasis;
@@ -7897,13 +8251,20 @@ function renderHomeDashboard() {
   }).join("") : `<p class="home-empty">目前沒有可顯示的今日變化；報告更新後會自動出現在這裡。</p>`;
 
   const saved = new Set(watchlist());
-  const savedReports = stockCatalog.filter((report) => saved.has(report.id)).slice(0, 4);
+  const savedReportRanking = personalizedWatchlistRows(
+    stockCatalog.filter((report) => saved.has(report.id))
+  );
+  const savedReports = savedReportRanking.rows.slice(0, 4);
   $("homeWatchlistNotice").textContent = savedReports.length ? `${savedReports.length} 檔自選` : "尚未加入";
-  $("watchlistPreview").innerHTML = savedReports.length ? savedReports.map((report) => {
+  $("watchlistPreview").innerHTML = savedReports.length ? savedReports.map((entry) => {
+    const report = entry.report;
     const delta = scoreChange(report);
     return `<button class="watch-preview-card warm-card" type="button" data-home-stock="${report.id}">
       <span><b>${escapeHtml(report.name)}</b><small>${report.id}</small></span><strong>${Number(report.score).toFixed(1)}</strong><em>健康分數</em>
       <i class="${delta == null ? "neutral" : delta >= 0 ? "positive" : "negative"}">${delta == null ? "等待第二個日期" : `${delta >= 0 ? "↑" : "↓"} ${Math.abs(delta).toFixed(1)} 分`}</i>
+      ${savedReportRanking.enabled && entry.priority?.reason
+        ? `<small class="watch-preview-personality">${escapeHtml(entry.priority.reason)}</small>`
+        : ""}
     </button>`;
   }).join("") : `<div class="warm-card home-empty">加入自選股後，這裡會顯示健康分數與最新變化。</div>`;
 
@@ -8064,35 +8425,521 @@ function renderDailyResearch() {
   document.querySelectorAll("[data-daily-task]").forEach((button) => button.addEventListener("click", () => startDailyResearchStep(button.dataset.dailyTask, contract.data_date)));
 }
 
-function watchlistCard(report) {
+function personalityWatchlistOrderEnabled() {
+  return localStorage.getItem(
+    "aiStockPersonalityWatchlistOrder"
+  ) !== "original";
+}
+
+function setPersonalityWatchlistOrder(enabled) {
+  localStorage.setItem(
+    "aiStockPersonalityWatchlistOrder",
+    enabled ? "personality" : "original"
+  );
+
+  renderHomeDashboard();
+  renderWatchlistPage();
+
+  showToast(
+    enabled
+      ? "已使用 GC-9 自選股排序"
+      : "已恢復自選股原始排序"
+  );
+}
+
+function gc9WatchlistReason({
+  report,
+  result,
+  events,
+  delta,
+  risk,
+  confidence,
+  direction,
+  fallback,
+}) {
+  const name = report.name || report.id;
+  const change = Number(delta);
+  const hasChange = Number.isFinite(change);
+  const changeText = hasChange
+    ? `${Math.abs(change).toFixed(1)} 分`
+    : "";
+  const firstEvent =
+    events.find((event) =>
+      event.title_zh || event.title
+    );
+  const eventTitle =
+    firstEvent?.title_zh ||
+    firstEvent?.title ||
+    "";
+
+  switch (result?.archetype) {
+    case "precision_sage":
+      return confidence > 0
+        ? `${name} 的證據充分程度為 ${Math.round(confidence)}%，適合先核對資料完整性`
+        : `${name} 的證據仍待補齊，適合先確認資料來源`;
+
+    case "halo_hunter":
+      if (hasChange && change > 0) {
+        return `${name} 健康分數上升 ${changeText}，先確認改善是否能延續`;
+      }
+      return eventTitle
+        ? `${name} 出現「${eventTitle}」，先確認是否形成新機會`
+        : `${name} 尚未出現明確成長訊號，持續觀察`;
+
+    case "valuation_sage":
+      if (hasChange && change < 0) {
+        return `${name} 健康分數下降 ${changeText}，適合重新核對價格與基本面`;
+      }
+      return `${name} 目前需要比較價格位置、獲利與歷史基準`;
+
+    case "shield_guardian":
+      return `${name} 目前風險分數 ${Math.round(risk)}，先確認主要風險與防守條件`;
+
+    case "mist_assassin":
+      if (hasChange) {
+        return `${name} 健康分數${change >= 0 ? "上升" : "下降"} ${changeText}，先檢查短期轉折`;
+      }
+      return `${name} 尚未建立變化基準，先觀察市場與法人訊號`;
+
+    case "cultivation_elder": {
+      const followUps = events.filter(
+        (event) => event.type === "follow_up"
+      ).length;
+
+      return followUps
+        ? `${name} 有 ${followUps} 項後續條件，先確認營運是否持續`
+        : `${name} 目前沒有新增後續條件，維持長期追蹤`;
+    }
+
+    case "market_observer":
+      return events.length
+        ? `${name} 今天有 ${events.length} 項變化，先觀察趨勢是否延續`
+        : `${name} 今天沒有重大變化，等待更明確的市場訊號`;
+
+    case "star_child":
+      return eventTitle
+        ? `${name} 出現「${eventTitle}」，先確認是否支持長期願景`
+        : `${name} 尚未出現新的成長里程碑，持續觀察`;
+
+    case "fatal_hunter":
+      if (
+        direction.tone === "negative" &&
+        hasChange
+      ) {
+        return `${name} 健康分數下降 ${changeText}，先確認風險上限與失敗條件`;
+      }
+      return `${name} 目前風險分數 ${Math.round(risk)}，先確認高風險情境是否可控`;
+
+    default:
+      return events.length
+        ? `${name} 今天有 ${events.length} 項研究變化`
+        : fallback;
+  }
+}
+function gc9WatchlistPriority(
+  report,
+  result = savedPersonalityResult()
+) {
+  const archetype = result?.archetype;
+  const events = reportEvents(report);
+  const delta = scoreChange(report);
+  const risk = Number(report.risk || 0);
+  const confidence = Number(report.confidence || 0);
+  const direction = homeDirection(report);
+  const text = [
+    report.name,
+    report.industry,
+    report.summary,
+    report.risk_level,
+    ...events.map((event) => [
+      event.type,
+      event.category,
+      event.title_zh,
+      event.reason_zh,
+    ].join(" ")),
+  ].join(" ").toLowerCase();
+
+  const contains = (...words) =>
+    words.some((word) => text.includes(word));
+
+  let score =
+    events.length * 12 +
+    Math.min(
+      24,
+      Math.abs(Number(delta || 0)) * 5
+    );
+
+  let reason =
+    events.length
+      ? `今天有 ${events.length} 項研究變化`
+      : "持續追蹤原本研究條件";
+
+  const rules = {
+    precision_sage: () => {
+      score += confidence * 0.22;
+      if (contains("公告", "資料", "證據", "財務")) {
+        score += 24;
+      }
+      reason =
+        "你重視數據與精準判斷，先看證據較完整或需要核對的股票";
+    },
+    halo_hunter: () => {
+      if (Number(delta || 0) > 0) score += 30;
+      if (contains("成長", "增加", "改善", "突破", "新")) {
+        score += 28;
+      }
+      reason =
+        "你對成長和新機會敏感，先看出現改善或新變化的股票";
+    },
+    valuation_sage: () => {
+      if (contains("估值", "價格", "獲利", "同業", "基準")) {
+        score += 34;
+      }
+      if (Number(delta || 0) < 0) score += 10;
+      reason =
+        "你重視價值與價格基準，先看價格、獲利或估值需要重估的股票";
+    },
+    shield_guardian: () => {
+      score += risk * 0.55;
+      if (
+        direction.tone === "negative" ||
+        Number(delta || 0) < 0
+      ) {
+        score += 32;
+      }
+      reason =
+        "你優先控制風險，先看風險較高或狀態轉弱的股票";
+    },
+    mist_assassin: () => {
+      score += Math.abs(Number(delta || 0)) * 9;
+      if (contains("法人", "股價", "成交", "突破", "轉弱")) {
+        score += 28;
+      }
+      reason =
+        "你重視短期轉折，先看分數、法人或市場變化較明顯的股票";
+    },
+    cultivation_elder: () => {
+      if (contains("營運", "收入", "獲利", "現金流", "持續")) {
+        score += 32;
+      }
+      if (events.some(
+        (event) => event.type === "follow_up"
+      )) {
+        score += 30;
+      }
+      reason =
+        "你重視長期累積，先看營運延續與待追蹤條件";
+    },
+    market_observer: () => {
+      if (contains("市場", "趨勢", "法人", "相對", "方向")) {
+        score += 30;
+      }
+      score += events.length * 4;
+      reason =
+        "你傾向先觀察市場，先看趨勢與方向逐漸明確的股票";
+    },
+    star_child: () => {
+      if (contains(
+        "成長",
+        "新產品",
+        "新市場",
+        "技術",
+        "計畫"
+      )) {
+        score += 38;
+      }
+      if (Number(delta || 0) > 0) score += 16;
+      reason =
+        "你重視願景與未來趨勢，先看成長里程碑和新機會";
+    },
+    fatal_hunter: () => {
+      score += risk * 0.65;
+      if (
+        direction.tone === "negative" ||
+        Number(delta || 0) < 0
+      ) {
+        score += 38;
+      }
+      reason =
+        "你偏好高風險機會，因此先確認風險上限與失敗條件";
+    },
+  };
+
+  if (rules[archetype]) {
+    rules[archetype]();
+  }
+
+  reason = gc9WatchlistReason({
+    report,
+    result,
+    events,
+    delta,
+    risk,
+    confidence,
+    direction,
+    fallback: reason,
+  });
+
+  return {
+    score: Number(score.toFixed(2)),
+    reason,
+  };
+}
+
+function personalizedWatchlistRows(
+  rows,
+  result = savedPersonalityResult()
+) {
+  const profile = gc9Profile(result);
+  const enabled =
+    Boolean(profile) &&
+    personalityWatchlistOrderEnabled();
+
+  const ranked = rows.map((report, index) => ({
+    report,
+    index,
+    priority: gc9WatchlistPriority(
+      report,
+      result
+    ),
+  }));
+
+  if (enabled) {
+    ranked.sort((left, right) =>
+      right.priority.score -
+        left.priority.score ||
+      left.index -
+        right.index
+    );
+  }
+
+  return {
+    enabled,
+    profile,
+    rows: ranked,
+  };
+}
+
+function watchlistCard(
+  report,
+  personalityReason = ""
+) {
   const delta = scoreChange(report);
   const direction = homeDirection(report);
   const price = latestPrice(report);
+
   return `<article class="watchlist-detail-card warm-card">
-    <button type="button" data-home-stock="${report.id}" aria-label="查看 ${escapeHtml(report.name)}">
-      <div><span class="watch-stock-name"><b>${escapeHtml(report.name)}</b><small>${report.id} · ${escapeHtml(report.industry)}</small></span><strong>${Number(report.score).toFixed(1)}</strong></div>
-      <p>${escapeHtml(report.summary || "持續追蹤最新研究變化。")}</p>
-      <div class="watch-price-row"><span>${price == null ? "最新股價待補" : `最新股價 ${price.toLocaleString("zh-TW")} 元`}</span>${scoreSparkline(report)}</div>
-      <dl><div><dt>健康變化</dt><dd class="${delta == null ? "neutral" : delta >= 0 ? "positive" : "negative"}">${delta == null ? "基準建立中" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} 分`}</dd></div><div><dt>風險</dt><dd>${escapeHtml(report.risk_level || "待確認")}</dd></div><div><dt>今日事件</dt><dd>${reportEvents(report).length} 項</dd></div></dl>
-      <span class="watch-card-state ${direction.tone}">${direction.arrow} ${direction.label}</span>
-    </button><button type="button" class="remove-watch" data-remove-watch="${report.id}">移出自選</button>
+    <button type="button"
+      data-home-stock="${report.id}"
+      aria-label="查看 ${escapeHtml(report.name)}">
+      <div>
+        <span class="watch-stock-name">
+          <b>${escapeHtml(report.name)}</b>
+          <small>${report.id} · ${
+            escapeHtml(report.industry)
+          }</small>
+        </span>
+        <strong>${
+          Number(report.score).toFixed(1)
+        }</strong>
+      </div>
+      <p>${
+        escapeHtml(
+          report.summary ||
+          "持續追蹤最新研究變化。"
+        )
+      }</p>
+      ${
+        personalityReason
+          ? `<span class="watch-personality-reason">
+              ${escapeHtml(personalityReason)}
+            </span>`
+          : ""
+      }
+      <div class="watch-price-row">
+        <span>${
+          price == null
+            ? "最新股價待補"
+            : `最新股價 ${
+                price.toLocaleString("zh-TW")
+              } 元`
+        }</span>
+        ${scoreSparkline(report)}
+      </div>
+      <dl>
+        <div>
+          <dt>健康變化</dt>
+          <dd class="${
+            delta == null
+              ? "neutral"
+              : delta >= 0
+                ? "positive"
+                : "negative"
+          }">${
+            delta == null
+              ? "基準建立中"
+              : `${
+                  delta >= 0 ? "+" : ""
+                }${delta.toFixed(1)} 分`
+          }</dd>
+        </div>
+        <div>
+          <dt>風險</dt>
+          <dd>${
+            escapeHtml(
+              report.risk_level || "待確認"
+            )
+          }</dd>
+        </div>
+        <div>
+          <dt>今日事件</dt>
+          <dd>${reportEvents(report).length} 項</dd>
+        </div>
+      </dl>
+      <span class="watch-card-state ${direction.tone}">
+        ${direction.arrow} ${direction.label}
+      </span>
+    </button>
+    <button type="button"
+      class="remove-watch"
+      data-remove-watch="${report.id}">
+      移出自選
+    </button>
   </article>`;
 }
 
 function renderWatchlistPage() {
   const saved = new Set(watchlist());
-  let rows = stockCatalog.filter((report) => saved.has(report.id));
-  if (watchlistFilter === "changed") rows = rows.filter((report) => reportEvents(report).length > 0);
-  if (watchlistFilter === "risk") rows = rows.filter((report) => Number(report.risk || 0) >= 50 || /高/.test(report.risk_level || ""));
-  if (watchlistFilter === "down") rows = rows.filter((report) => Number(scoreChange(report)) < 0);
-  $("watchlistPageSummary").innerHTML = `<div><span>自選總數</span><b>${saved.size} 檔</b></div><div><span>今日有變化</span><b>${stockCatalog.filter((report) => saved.has(report.id) && reportEvents(report).length).length} 檔</b></div><div><span>需要注意</span><b>${stockCatalog.filter((report) => saved.has(report.id) && homeDirection(report).tone === "negative").length} 檔</b></div>`;
-  $("watchlistPageGrid").innerHTML = rows.map(watchlistCard).join("");
-  $("watchlistPageEmpty").classList.toggle("hidden", rows.length > 0);
-  document.querySelectorAll("#watchlistPage [data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
-  document.querySelectorAll("[data-remove-watch]").forEach((button) => button.addEventListener("click", () => {
-    saveWatchlist(watchlist().filter((id) => id !== button.dataset.removeWatch));
-    showToast("已移出自選");
-  }));
+  let rows = stockCatalog.filter(
+    (report) => saved.has(report.id)
+  );
+
+  if (watchlistFilter === "changed") {
+    rows = rows.filter(
+      (report) => reportEvents(report).length > 0
+    );
+  }
+
+  if (watchlistFilter === "risk") {
+    rows = rows.filter(
+      (report) =>
+        Number(report.risk || 0) >= 50 ||
+        /高/.test(report.risk_level || "")
+    );
+  }
+
+  if (watchlistFilter === "down") {
+    rows = rows.filter(
+      (report) => Number(scoreChange(report)) < 0
+    );
+  }
+
+  const personalized =
+    personalizedWatchlistRows(rows);
+
+  $("watchlistPageSummary").innerHTML =
+    `<div>
+      <span>自選總數</span>
+      <b>${saved.size} 檔</b>
+    </div>
+    <div>
+      <span>今日有變化</span>
+      <b>${
+        stockCatalog.filter(
+          (report) =>
+            saved.has(report.id) &&
+            reportEvents(report).length
+        ).length
+      } 檔</b>
+    </div>
+    <div>
+      <span>需要注意</span>
+      <b>${
+        stockCatalog.filter(
+          (report) =>
+            saved.has(report.id) &&
+            homeDirection(report).tone ===
+              "negative"
+        ).length
+      } 檔</b>
+    </div>`;
+
+  $("watchlistPageGrid").innerHTML =
+    personalized.rows.map(
+      ({report, priority}) =>
+        watchlistCard(
+          report,
+          personalized.enabled
+            ? priority.reason
+            : ""
+        )
+    ).join("");
+
+  $("watchlistPageEmpty").classList.toggle(
+    "hidden",
+    rows.length > 0
+  );
+
+  const label = $("watchlistPersonalityLabel");
+  const copy = $("watchlistPersonalityCopy");
+  const toggle = $("watchlistOrderToggle");
+
+  if (label) {
+    label.textContent = personalized.profile
+      ? `${personalized.profile.name}的自選順序`
+      : "GC-9 閱讀順序";
+  }
+
+  if (copy) {
+    copy.textContent = personalized.enabled
+      ? "依你的研究人格安排優先順序，不改變股票分數。"
+      : "目前使用加入自選時的原始順序。";
+  }
+
+  if (toggle) {
+    toggle.disabled = !personalized.profile;
+    toggle.textContent = !personalized.profile
+      ? "完成人格後排序"
+      : personalized.enabled
+        ? "使用原始排序"
+        : "使用人格排序";
+
+    toggle.onclick = () => {
+      if (!personalized.profile) {
+        showToast("請先完成人格測驗");
+        return;
+      }
+
+      setPersonalityWatchlistOrder(
+        !personalized.enabled
+      );
+    };
+  }
+
+  document.querySelectorAll(
+    "#watchlistPage [data-home-stock]"
+  ).forEach((button) =>
+    button.addEventListener(
+      "click",
+      () => loadStock(
+        button.dataset.homeStock
+      )
+    )
+  );
+
+  document.querySelectorAll(
+    "[data-remove-watch]"
+  ).forEach((button) =>
+    button.addEventListener("click", () => {
+      saveWatchlist(
+        watchlist().filter(
+          (id) =>
+            id !== button.dataset.removeWatch
+        )
+      );
+      showToast("已移出自選");
+    })
+  );
 }
 
 function allResearchEvents() {
@@ -8800,12 +9647,42 @@ function openPersonalityQuickView() {
 function personalityReportGuideItems(result = savedPersonalityResult()) {
   const profile = gc9Profile(result);
   if (!profile) return null;
+
+  const guideDescriptions = {
+    "健康狀態":
+      "先確認公司的整體健康狀態與主要分數。",
+    "近期變化":
+      "先掌握今天真正發生改變的研究訊號。",
+    "價格位置":
+      "核對目前價格相對歷史與比較基準的位置。",
+    "成長與獲利":
+      "檢查收入、獲利與改善速度是否一致。",
+    "判斷把握度":
+      "確認資料品質、證據來源與判斷限制。",
+    "重要事件":
+      "確認新事件是否足以改變原本研究判斷。",
+    "歷史與持續追蹤":
+      "比較歷史紀錄並確認追蹤條件是否延續。",
+    "目前風險":
+      "先確認可能推翻判斷的風險與失敗條件。",
+  };
+
+  const order = profile.order.map(
+    (label, index) => ({
+      index: index + 1,
+      label,
+      copy:
+        guideDescriptions[label] ||
+        "前往對應研究區塊查看完整資料。",
+    })
+  );
+
   return {
     code: result.archetype,
     profile,
     lead: `${profile.name}會先從「${profile.order[0]}」開始閱讀`,
     copy: "依你的研究偏好提供四個入口；報告內容、原始排序與健康分數都不會改變。",
-    order: [...profile.order],
+    order,
   };
 }
 

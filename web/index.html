@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="/assets/evidence.css?v=3.9.4.5">
-  <link rel="stylesheet" href="/assets/home.css?v=3.9.4.5">
+  <link rel="stylesheet" href="/assets/evidence.css?v=3.9.6.1">
+  <link rel="stylesheet" href="/assets/home.css?v=3.9.6.1">
   <title>AI 股票健康｜研究輔助 Beta</title>
 </head>
 <body class="auth-pending home-mode">
@@ -156,6 +156,13 @@
       <div class="shell-page-heading"><div><span>你的自選</span><h1 id="watchlistPageTitle">每天只看真正關心的股票</h1><p>健康分數、風險與最新變化集中在這裡。</p></div><button id="addWatchlistStock" type="button">＋ 新增股票</button></div>
       <div class="segmented-filter" id="watchlistFilters" aria-label="自選股篩選">
         <button class="active" type="button" data-watch-filter="all">全部</button><button type="button" data-watch-filter="changed">有新變化</button><button type="button" data-watch-filter="risk">風險較高</button><button type="button" data-watch-filter="down">分數下降</button>
+      </div>
+      <div id="watchlistPersonalityBar" class="watchlist-personality-bar warm-card">
+        <div>
+          <span id="watchlistPersonalityLabel">GC-9 閱讀順序</span>
+          <p id="watchlistPersonalityCopy">依研究人格安排自選股優先順序，不改變股票分數。</p>
+        </div>
+        <button id="watchlistOrderToggle" type="button">使用原始排序</button>
       </div>
       <div id="watchlistPageSummary" class="page-summary warm-card"></div>
       <div id="watchlistPageGrid" class="watchlist-page-grid"></div>
@@ -517,6 +524,15 @@
             <div id="scoreRing" class="score-ring"><div><strong id="healthScore">59.7</strong><span>健康分數</span></div></div>
             <div class="score-copy">
               <span id="researchLabel" class="research-label">AI 研究摘要</span>
+              <div id="summaryPersonalityBar"
+                class="summary-personality-bar hidden">
+                <div>
+                  <span id="summaryPersonalityLabel">GC-9 閱讀提示</span>
+                  <p id="summaryPersonalityReason">依你的研究人格整理閱讀起點。</p>
+                </div>
+                <button id="summaryPersonalityToggle"
+                  type="button">使用原始摘要</button>
+              </div>
               <h3 id="summary">目前適合持續追蹤，尚不足以提高研究優先級。</h3>
               <div id="incomeDecision" class="income-decision hidden"><span>已持有</span><strong id="heldDecision">續抱觀察</strong></div>
               <p id="summaryNote">這是研究狀態，不是買進或賣出訊號。</p>
@@ -878,10 +894,16 @@
   <aside id="notificationPanel" class="notification-panel hidden" aria-labelledby="notificationTitle" aria-hidden="true">
     <header><div><span>研究提醒</span><h2 id="notificationTitle">通知中心</h2></div><button id="notificationClose" type="button" aria-label="關閉通知中心">×</button></header>
     <div class="notification-tools"><button class="active" type="button" data-notification-filter="all">全部</button><button type="button" data-notification-filter="important">重要</button><button type="button" data-notification-filter="official_event">日程</button><button type="button" data-notification-filter="follow_up">追蹤</button></div>
-    <div class="notification-meta"><span id="notificationSummary">正在整理研究提醒</span><button id="notificationReadAll" type="button">全部標為已讀</button></div>
+    <div class="notification-meta">
+      <span id="notificationSummary">正在整理研究提醒</span>
+      <div class="notification-meta-actions">
+        <button id="notificationOrderToggle" type="button">使用原始排序</button>
+        <button id="notificationReadAll" type="button">全部標為已讀</button>
+      </div>
+    </div>
     <div id="notificationList" class="notification-list"><p class="notification-empty">報告載入後會顯示重要提醒。</p></div>
     <p class="notification-notice">通知只協助安排研究順序，不提供交易指令，也不改變健康分數。</p>
   </aside>
-  <script src="/assets/app.js?v=3.9.4.5" defer></script>
+  <script src="/assets/app.js?v=3.9.6.1" defer></script>
 </body>
 </html>

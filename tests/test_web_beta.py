@@ -675,7 +675,7 @@ def test_comparison_follow_up_uses_profile_specific_evidence() -> None:
     assert "景氣循環階段" in js
     assert "正式公告或已確認日程" in js
     assert "return supplied.slice(0, 3)" in js
-    assert html.count("3.9.4.5") == 3
+    assert html.count("3.9.6.1") == 3
 
 def test_pro_research_has_professional_executive_overview() -> None:
     root = Path(__file__).parents[1]
@@ -709,7 +709,7 @@ def test_pro_research_has_professional_executive_overview() -> None:
     assert "營運是否正處於可延續的循環轉折" in js
     assert ".pro-thesis-hero" in css
     assert ".pro-monitoring-grid" in css
-    assert html.count("3.9.4.5") == 3
+    assert html.count("3.9.6.1") == 3
 
 def test_pro_overview_is_positioned_and_profile_specific() -> None:
     root = Path(__file__).parents[1]
@@ -726,7 +726,7 @@ def test_pro_overview_is_positioned_and_profile_specific() -> None:
     assert 'html[data-research-mode="pro"] .integrated-decision' in css
     assert "overflow-x:clip" in css
     assert "overflow-wrap:anywhere" in css
-    assert html.count("3.9.4.5") == 3
+    assert html.count("3.9.6.1") == 3
 
 def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     root = Path(__file__).parents[1]
@@ -752,7 +752,7 @@ def test_pro_valuation_uses_profile_specific_frameworks() -> None:
     assert "價格位置不是合理價" in html
     assert "不提供目標價、預期報酬或買賣指令" in html
     assert ".pro-valuation-case-grid" in css
-    assert html.count("3.9.4.5") == 3
+    assert html.count("3.9.6.1") == 3
 
 def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     root = Path(__file__).parents[1]
@@ -785,7 +785,7 @@ def test_pro_research_ui_is_localized_and_theme_safe() -> None:
     assert "Pro research unified theme v2" in css
     assert 'html[data-theme="light"] .pro-research-workspace' in css
     assert "border:none!important" in css
-    assert html.count("3.9.4.5") == 3
+    assert html.count("3.9.6.1") == 3
 
 
 def test_pro_judgment_evidence_report_contract() -> None:
@@ -808,7 +808,7 @@ def test_pro_judgment_evidence_report_contract() -> None:
     assert ".pro-evidence-score-flow" in css
     assert ".pro-evidence-dimension-grid" in css
     assert ".pro-evidence-quality-grid" in css
-    assert html.count("3.9.4.5") == 3
+    assert html.count("3.9.6.1") == 3
 def test_gc9_uses_three_core_axes_and_separate_rhythm() -> None:
     root = Path(__file__).parents[1]
     html = (root / "web" / "index.html").read_text(encoding="utf-8")
@@ -1049,3 +1049,84 @@ def test_gc9_removes_legacy_gc8_runtime() -> None:
     assert "const gc9Profiles" in js
     assert "function gc9ArchetypeScores" in js
     assert "function gc9FatalHunterUnlocked" in js
+def test_gc9_personalizes_notification_priority() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+    css = (root / "web" / "home.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'id="notificationOrderToggle"' in html
+    assert "function personalityNotificationOrderEnabled" in js
+    assert "function setPersonalityNotificationOrder" in js
+    assert "function gc9NotificationPriority" in js
+    assert "aiStockPersonalityNotificationOrder" in js
+    assert "notification-personality-reason" in js
+    assert "不改變健康分數" in html
+    assert "GC-9 personalized notifications v1" in css
+    assert "fatal_hunter" in js
+    assert "失敗條件與風險上限" in js
+def test_gc9_personalizes_watchlist_priority() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+    css = (root / "web" / "home.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'id="watchlistOrderToggle"' in html
+    assert 'id="watchlistPersonalityBar"' in html
+    assert "function personalityWatchlistOrderEnabled" in js
+    assert "function setPersonalityWatchlistOrder" in js
+    assert "function gc9WatchlistPriority" in js
+    assert "function personalizedWatchlistRows" in js
+    assert "aiStockPersonalityWatchlistOrder" in js
+    assert "watch-personality-reason" in js
+    assert "watch-preview-personality" in js
+    assert "GC-9 personalized watchlist v1" in css
+    assert "不改變股票分數" in html
+def test_gc9_personalizes_research_summary() -> None:
+    root = Path(__file__).parents[1]
+    html = (root / "web" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+    css = (root / "web" / "home.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'id="summaryPersonalityBar"' in html
+    assert 'id="summaryPersonalityToggle"' in html
+    assert "function personalityResearchSummaryEnabled" in js
+    assert "function setPersonalityResearchSummary" in js
+    assert "function gc9ResearchSummaryReason" in js
+    assert "function renderPersonalityResearchSummary" in js
+    assert "aiStockPersonalitySummaryMode" in js
+    assert "renderPersonalityResearchSummary(report);" in js
+    assert "GC-9 personalized research summary v1" in css
+def test_gc9_report_guide_has_defined_items() -> None:
+    root = Path(__file__).parents[1]
+    js = (root / "web" / "app.js").read_text(
+        encoding="utf-8"
+    )
+    css = (root / "web" / "home.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert "const guideDescriptions = {" in js
+    assert "profile.order.map(" in js
+    assert "index: index + 1" in js
+    assert "order," in js
+    assert "GC-9 report guide and navigation correction v1" in css
+    assert "border: 0 !important;" in css
