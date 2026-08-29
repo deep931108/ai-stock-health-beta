@@ -111,3 +111,28 @@ Railway Volume 必須持續掛載 /data。系統只接受白名單事件、
 AI_STOCK_BETA_ADMIN_TOKEN。
 
 days 可設定為 1 至 90。未授權的管理 API 請求會回傳 404。
+
+
+## Beta readiness, backup, and restore
+
+`GET /api/health` is the Railway readiness endpoint. A `200` response means
+the Beta SQLite database passed a real write/read probe and at least one client
+report is available. A `503` response means the deployment should be treated as
+degraded. The response intentionally excludes filesystem paths and internal
+exceptions.
+
+Create and verify a consistent SQLite backup while the service is running:
+
+    python scripts/beta_database_maintenance.py backup --file backups/beta-access.sqlite3
+
+Verify a backup without changing production data:
+
+    python scripts/beta_database_maintenance.py verify --file backups/beta-access.sqlite3
+
+Restore only during a maintenance window. The command first creates a verified
+safety copy of the current database and requires the explicit confirmation flag:
+
+    python scripts/beta_database_maintenance.py restore --file backups/beta-access.sqlite3 --confirm-restore
+
+For Railway, copy verified backups to storage outside the active Volume. A file
+kept only on the same Volume is not a disaster-recovery backup.

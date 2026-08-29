@@ -1226,3 +1226,84 @@ def test_beta_initialization_remains_async() -> None:
     assert "async function initializeBetaAccess()" in js
     assert "function betaTelemetryPage()" in js
     assert "async function betaTelemetryPage()" not in js
+
+
+def test_beta_phase2a_readiness_and_backup_contract(tmp_path) -> None:
+    import sqlite3
+    from contextlib import closing
+    from types import SimpleNamespace
+
+    from beta_maintenance import (
+        backup_database,
+        database_readiness,
+        report_readiness,
+        restore_database,
+        verify_database,
+    )
+
+    database = tmp_path / "beta.sqlite3"
+    assert database_readiness(database) == {
+        "writable": True,
+        "integrity": "ok",
+    }
+
+    with closing(sqlite3.connect(database)) as connection:
+        connection.execute("CREATE TABLE sample(value TEXT)")
+        connection.execute("INSERT INTO sample(value) VALUES('before')")
+        connection.commit()
+
+    backup = backup_database(database, tmp_path / "backup.sqlite3")
+    assert verify_database(backup)
+
+    with closing(sqlite3.connect(database)) as connection:
+        connection.execute("UPDATE sample SET value = 'after'")
+        connection.commit()
+
+    restore_database(backup, database, confirmed=True)
+    with closing(sqlite3.connect(database)) as connection:
+        assert connection.execute("SELECT value FROM sample").fetchone()[0] == "before"
+
+    report_root = tmp_path / "reports"
+    report_path = report_root / "2330" / "latest.json"
+    report_path.parent.mkdir(parents=True)
+    report_path.write_text(
+        '{"data_as_of":"2026-08-29"}',
+        encoding="utf-8",
+    )
+    repository = SimpleNamespace(report_root=report_root, sample_dir=None)
+    assert report_readiness(repository) == {
+        "available": True,
+        "count": 1,
+        "latest_data_date": "2026-08-29",
+    }
+
+
+def test_beta_health_endpoint_exposes_safe_readiness_contract() -> None:
+    root = Path(__file__).parents[1]
+    app_source = (root / "app.py").read_text(encoding="utf-8")
+
+    assert 'version="1.6.0"' in app_source
+    assert '"ready": ready' in app_source
+    assert '"database": database' in app_source
+    assert '"reports": report_data' in app_source
+    assert 'response.status_code = 503' in app_source
+    assert 'str(BETA_DATABASE_PATH)' not in app_source
+
+
+
+def test_beta_database_maintenance_cli_resolves_project_root(tmp_path) -> None:
+    import subprocess
+    import sys
+
+    root = Path(__file__).parents[1]
+    script = root / "scripts" / "beta_database_maintenance.py"
+    result = subprocess.run(
+        [sys.executable, str(script), "--help"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert "GC Beta SQLite backup utility" in result.stdout

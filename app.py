@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from beta_access import BetaAccessStore, BetaSession
 from beta_insights import BetaInsightsStore
+from beta_maintenance import database_readiness, report_readiness
 from client_report_adapter import ClientReportRepository
 
 
@@ -30,7 +31,7 @@ ADMIN_TOKEN = os.environ.get("AI_STOCK_BETA_ADMIN_TOKEN", "").strip()
 
 app = FastAPI(
     title="AI 股票健康 Beta API",
-    version="1.5.0",
+    version="1.6.0",
     description="將 AI Stock Terminal 客戶版報告安全提供給 PWA。",
 )
 reports = ClientReportRepository(project_root=PROJECT_ROOT, sample_dir=BASE_DIR / "sample_reports")
@@ -85,11 +86,21 @@ def check_activation_rate(request: Request) -> None:
 
 
 @app.get("/api/health")
-def health() -> dict:
+def health(response: Response) -> dict:
+    database = database_readiness(BETA_DATABASE_PATH)
+    report_data = report_readiness(reports)
+    ready = database["writable"] and report_data["available"]
+    if not ready:
+        response.status_code = 503
     return {
-        "status": "healthy",
+        "status": "healthy" if ready else "degraded",
         "service": "ai-stock-web-beta",
         "version": app.version,
+        "ready": ready,
+        "checks": {
+            "database": database,
+            "reports": report_data,
+        },
     }
 
 
