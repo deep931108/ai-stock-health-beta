@@ -2,9 +2,9 @@ const CACHE = "ai-stock-health-beta-v6-reliability";
 const SHELL = [
   "/",
   "/assets/styles.css",
-  "/assets/evidence.css?v=3.9.8.0",
-  "/assets/home.css?v=3.9.8.0",
-  "/assets/app.js?v=3.9.8.0",
+  "/assets/evidence.css?v=3.9.8.1",
+  "/assets/home.css?v=3.9.8.1",
+  "/assets/app.js?v=3.9.8.1",
   "/assets/icon.svg",
   "/assets/manifest.webmanifest",
 ];

@@ -2103,6 +2103,7 @@ function gc9ResearchSummaryReason(
   if (!profile) return "";
 
   const events = reportEvents(report);
+  const eventGroups = reportEventGroups(report);
   const delta = scoreChange(report);
   const risk = Math.round(
     Number(report.risk || 0)
@@ -2125,7 +2126,9 @@ function gc9ResearchSummaryReason(
       if (hasChange && change > 0) {
         return `${name} 健康分數上升 ${changeText}，先確認改善是否形成成長機會。`;
       }
-      return `${name} 目前有 ${events.length} 項研究變化，先找新的成長訊號。`;
+      return eventGroups.length
+        ? `${name} 目前有 ${eventGroups.length} 個面向出現變化，先找新的成長訊號。`
+        : `${name} 尚未出現新的成長訊號，持續觀察。`;
 
     case "valuation_sage":
       return `${name} 先從價格位置、獲利與歷史比較基準開始閱讀。`;
@@ -2150,8 +2153,8 @@ function gc9ResearchSummaryReason(
     }
 
     case "market_observer":
-      return events.length
-        ? `${name} 今天有 ${events.length} 項變化，先觀察趨勢是否延續。`
+      return eventGroups.length
+        ? `${name} 今天有 ${eventGroups.length} 個面向出現變化，先觀察趨勢是否延續。`
         : `${name} 今天沒有重大變化，先等待更明確的市場訊號。`;
 
     case "star_child":
@@ -8029,6 +8032,27 @@ function reportEvents(report) {
   return Array.isArray(events) ? events : [];
 }
 
+function reportEventGroups(report) {
+  const block = report?.today_changes || {};
+  const groups = Array.isArray(block.event_groups) && block.event_groups.length
+    ? block.event_groups
+    : groupTodayEvents(reportEvents(report));
+
+  return groups.filter((group) =>
+    Number(group?.event_count || 0) > 0 ||
+    (Array.isArray(group?.events) && group.events.length > 0)
+  );
+}
+
+function reportPrimaryEventGroup(report) {
+  return reportEventGroups(report)
+    .slice()
+    .sort((a, b) =>
+      Math.abs(Number(b?.net_impact || 0)) -
+      Math.abs(Number(a?.net_impact || 0))
+    )[0] || null;
+}
+
 function scoreChange(report) {
   const history = Array.isArray(report?.score_history) ? report.score_history : [];
   if (history.length < 2) return null;
@@ -8038,14 +8062,22 @@ function scoreChange(report) {
 }
 
 function homeDirection(report) {
-  const net = reportEvents(report).reduce((total, item) => total + Number(item.score_impact || item.impact || 0), 0);
+  const net = reportNetImpact(report);
   if (net > 0.05) return {label:"正向", tone:"positive", arrow:"↑"};
   if (net < -0.05) return {label:"注意", tone:"negative", arrow:"↓"};
   return {label:"持續追蹤", tone:"neutral", arrow:"→"};
 }
 
 function reportNetImpact(report) {
-  return reportEvents(report).reduce((total, item) => total + Number(item.score_impact || item.impact || 0), 0);
+  const overview = report?.today_changes?.event_group_overview;
+  const overviewNet = Number(overview?.net_impact);
+
+  if (Number.isFinite(overviewNet)) return overviewNet;
+
+  return reportEventGroups(report).reduce(
+    (total, group) => total + Number(group?.net_impact || 0),
+    0
+  );
 }
 
 function categoryLabel(value) {
@@ -8459,15 +8491,27 @@ function renderHomeDashboard() {
   renderDailyResearch();
   renderMaterialNewsHome();
 
-  const digestRows = stockCatalog.filter((report) => reportEvents(report).length)
-    .sort((a, b) => Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)) || reportEvents(b).length - reportEvents(a).length).slice(0, 3);
+  const digestRows = stockCatalog
+    .filter((report) => reportEventGroups(report).length)
+    .sort((a, b) =>
+      Math.abs(reportNetImpact(b)) - Math.abs(reportNetImpact(a)) ||
+      reportEventGroups(b).length - reportEventGroups(a).length
+    )
+    .slice(0, 3);
+
   $("todayDigest").innerHTML = digestRows.length ? digestRows.map((report) => {
     const direction = homeDirection(report);
-    const event = reportEvents(report)[0] || {};
+    const primaryGroup = reportPrimaryEventGroup(report) || {};
+    const groupCount = reportEventGroups(report).length;
+    const headline =
+      primaryGroup.headline_zh ||
+      primaryGroup.summary_zh ||
+      `${groupCount} 個面向出現研究變化`;
+
     return `<button class="digest-row" type="button" data-home-stock="${report.id}">
       <span class="digest-icon">${escapeHtml(sectorName(report.industry).slice(0, 1))}</span>
-      <span class="digest-copy"><b>${escapeHtml(report.name)} <small>${report.id}</small></b><em>${escapeHtml(event.title_zh || event.title || `${reportEvents(report).length} 項研究變化`)}</em></span>
-      <span class="digest-tag">${reportEvents(report).length} 項</span>
+      <span class="digest-copy"><b>${escapeHtml(report.name)} <small>${report.id}</small></b><em>${escapeHtml(headline)}</em></span>
+      <span class="digest-tag">${groupCount} 個面向</span>
       <span class="digest-direction ${direction.tone}">${direction.arrow} ${direction.label}</span>
       <span class="digest-confidence">信心 ${Math.round(Number(report.confidence || 0))}%</span><span class="digest-arrow">›</span>
     </button>`;
@@ -8674,6 +8718,7 @@ function gc9WatchlistReason({
   report,
   result,
   events,
+  eventGroups,
   delta,
   risk,
   confidence,
@@ -8686,14 +8731,17 @@ function gc9WatchlistReason({
   const changeText = hasChange
     ? `${Math.abs(change).toFixed(1)} 分`
     : "";
+  const primaryGroup = reportPrimaryEventGroup(report);
   const firstEvent =
     events.find((event) =>
       event.title_zh || event.title
     );
   const eventTitle =
+    primaryGroup?.headline_zh ||
     firstEvent?.title_zh ||
     firstEvent?.title ||
     "";
+  const groupCount = eventGroups.length;
 
   switch (result?.archetype) {
     case "precision_sage":
@@ -8735,8 +8783,8 @@ function gc9WatchlistReason({
     }
 
     case "market_observer":
-      return events.length
-        ? `${name} 今天有 ${events.length} 項變化，先觀察趨勢是否延續`
+      return groupCount
+        ? `${name} 今天有 ${groupCount} 個面向出現變化，先觀察趨勢是否延續`
         : `${name} 今天沒有重大變化，等待更明確的市場訊號`;
 
     case "star_child":
@@ -8754,8 +8802,8 @@ function gc9WatchlistReason({
       return `${name} 目前風險分數 ${Math.round(risk)}，先確認高風險情境是否可控`;
 
     default:
-      return events.length
-        ? `${name} 今天有 ${events.length} 項研究變化`
+      return groupCount
+        ? `${name} 今天有 ${groupCount} 個面向出現研究變化`
         : fallback;
   }
 }
@@ -8765,6 +8813,8 @@ function gc9WatchlistPriority(
 ) {
   const archetype = result?.archetype;
   const events = reportEvents(report);
+  const eventGroups = reportEventGroups(report);
+  const netImpact = reportNetImpact(report);
   const delta = scoreChange(report);
   const risk = Number(report.risk || 0);
   const confidence = Number(report.confidence || 0);
@@ -8786,15 +8836,19 @@ function gc9WatchlistPriority(
     words.some((word) => text.includes(word));
 
   let score =
-    events.length * 12 +
+    eventGroups.length * 8 +
+    Math.min(
+      28,
+      Math.abs(Number(netImpact || 0)) * 4
+    ) +
     Math.min(
       24,
       Math.abs(Number(delta || 0)) * 5
     );
 
   let reason =
-    events.length
-      ? `今天有 ${events.length} 項研究變化`
+    eventGroups.length
+      ? `今天有 ${eventGroups.length} 個面向出現研究變化`
       : "持續追蹤原本研究條件";
 
   const rules = {
@@ -8857,7 +8911,7 @@ function gc9WatchlistPriority(
       if (contains("市場", "趨勢", "法人", "相對", "方向")) {
         score += 30;
       }
-      score += events.length * 4;
+      score += eventGroups.length * 4;
       reason =
         "你傾向先觀察市場，先看趨勢與方向逐漸明確的股票";
     },
@@ -8896,6 +8950,7 @@ function gc9WatchlistPriority(
     report,
     result,
     events,
+    eventGroups,
     delta,
     risk,
     confidence,
@@ -9015,8 +9070,8 @@ function watchlistCard(
           }</dd>
         </div>
         <div>
-          <dt>今日事件</dt>
-          <dd>${reportEvents(report).length} 項</dd>
+          <dt>今日變化</dt>
+          <dd>${reportEventGroups(report).length} 個面向</dd>
         </div>
       </dl>
       <span class="watch-card-state ${direction.tone}">
@@ -9039,7 +9094,7 @@ function renderWatchlistPage() {
 
   if (watchlistFilter === "changed") {
     rows = rows.filter(
-      (report) => reportEvents(report).length > 0
+      (report) => reportEventGroups(report).length > 0
     );
   }
 
@@ -9071,7 +9126,7 @@ function renderWatchlistPage() {
         stockCatalog.filter(
           (report) =>
             saved.has(report.id) &&
-            reportEvents(report).length
+            reportEventGroups(report).length
         ).length
       } 檔</b>
     </div>
@@ -9165,30 +9220,82 @@ function renderWatchlistPage() {
   );
 }
 
-function allResearchEvents() {
-  return stockCatalog.flatMap((report) => reportEvents(report).map((event) => ({...event, stock_id:report.id, stock_name:report.name, report})));
+function allResearchEventGroups() {
+  return stockCatalog.flatMap((report) =>
+    reportEventGroups(report).map((group) => ({
+      ...group,
+      stock_id: report.id,
+      stock_name: report.name,
+      report,
+    }))
+  );
 }
 
 function eventTone(event) {
-  const impact = Number(event.score_impact || event.impact || 0);
+  const impact = Number(
+    event.net_impact ??
+    event.score_impact ??
+    event.impact ??
+    0
+  );
+
   return impact > 0 ? "positive" : impact < 0 ? "negative" : "neutral";
 }
 
 function renderEventsPage() {
   const saved = new Set(watchlist());
-  let rows = allResearchEvents();
-  if (eventFilter === "positive" || eventFilter === "negative") rows = rows.filter((event) => eventTone(event) === eventFilter);
-  if (eventFilter === "watchlist") rows = rows.filter((event) => saved.has(event.stock_id));
-  rows.sort((a, b) => Math.abs(Number(b.score_impact || b.impact || 0)) - Math.abs(Number(a.score_impact || a.impact || 0)));
+  let rows = allResearchEventGroups();
+
+  if (eventFilter === "positive" || eventFilter === "negative") {
+    rows = rows.filter((event) => eventTone(event) === eventFilter);
+  }
+
+  if (eventFilter === "watchlist") {
+    rows = rows.filter((event) => saved.has(event.stock_id));
+  }
+
+  rows.sort((a, b) =>
+    Math.abs(Number(b.net_impact || 0)) -
+    Math.abs(Number(a.net_impact || 0))
+  );
+
   $("eventsPageList").innerHTML = rows.slice(0, 80).map((event) => {
     const tone = eventTone(event);
-    const impact = Number(event.score_impact || event.impact || 0);
-    const title = event.title_zh || event.title || event.what_happened || "研究事件";
-    const explanation = event.beginner_explanation_zh || event.explanation_zh || event.meaning || event.reason || "點入股票查看完整證據。";
-    return `<article class="event-list-card warm-card ${tone}"><button type="button" data-home-stock="${event.stock_id}"><span class="event-stock">${escapeHtml(event.stock_name)} <small>${event.stock_id}</small></span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(explanation)}</p><div class="event-card-meta"><span>${escapeHtml(event.category_zh || categoryLabel(event.category))}</span><b>${impact ? `${impact > 0 ? "+" : ""}${impact.toFixed(2)} 分` : "持續追蹤"}</b></div></button>${event.source_url ? `<a href="${escapeHtml(event.source_url)}" target="_blank" rel="noopener noreferrer">查看來源 ↗</a>` : ""}</article>`;
+    const impact = Number(event.net_impact || 0);
+    const itemCount = Number(
+      event.event_count ||
+      (Array.isArray(event.events) ? event.events.length : 0)
+    );
+    const title =
+      event.headline_zh ||
+      `${event.category_zh || categoryLabel(event.category)}出現變化`;
+    const explanation =
+      event.summary_zh ||
+      `此面向共有 ${itemCount} 項指標變化，點入股票查看詳細原因。`;
+
+    return `<article class="event-list-card warm-card ${tone}">
+      <button type="button" data-home-stock="${event.stock_id}">
+        <span class="event-stock">${escapeHtml(event.stock_name)} <small>${event.stock_id}</small></span>
+        <h3>${escapeHtml(title)}</h3>
+        <p>${escapeHtml(explanation)}</p>
+        <div class="event-card-meta">
+          <span>${escapeHtml(event.category_zh || categoryLabel(event.category))} · ${itemCount} 項指標</span>
+          <b>${impact ? `${impact > 0 ? "+" : ""}${impact.toFixed(2)} 分` : "影響持平"}</b>
+        </div>
+      </button>
+    </article>`;
   }).join("");
+
   $("eventsPageEmpty").classList.toggle("hidden", rows.length > 0);
-  document.querySelectorAll("#eventsPage [data-home-stock]").forEach((button) => button.addEventListener("click", () => loadStock(button.dataset.homeStock)));
+
+  document
+    .querySelectorAll("#eventsPage [data-home-stock]")
+    .forEach((button) =>
+      button.addEventListener(
+        "click",
+        () => loadStock(button.dataset.homeStock)
+      )
+    );
 }
 
 function renderProfilePage() {

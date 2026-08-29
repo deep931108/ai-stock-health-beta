@@ -288,6 +288,8 @@ class ClientReportRepository:
                 "positive_impact": self._number(group.get("positive_impact"), 0),
                 "negative_impact": self._number(group.get("negative_impact"), 0),
                 "net_impact": self._number(group.get("net_impact"), 0),
+                "headline_zh": str(group.get("headline_zh") or "同類因子彙整"),
+                "summary_zh": str(group.get("summary_zh") or ""),
                 "headline": str(group.get("headline_zh") or "同類因子彙整"),
                 "summary": str(group.get("summary_zh") or ""),
                 "events": group_events,
@@ -301,12 +303,14 @@ class ClientReportRepository:
             "events": events,
             "event_groups": groups,
             "event_group_overview": {
+                "title_zh": str((block.get("event_group_overview") or {}).get("title_zh") or "總分變化總覽"),
                 "title": str((block.get("event_group_overview") or {}).get("title_zh") or "總分變化總覽"),
                 "event_count": int((block.get("event_group_overview") or {}).get("event_count") or len(events)),
                 "positive_impact": self._number((block.get("event_group_overview") or {}).get("positive_impact"), 0),
                 "negative_impact": self._number((block.get("event_group_overview") or {}).get("negative_impact"), 0),
                 "net_impact": self._number((block.get("event_group_overview") or {}).get("net_impact"), 0),
                 "direction": str((block.get("event_group_overview") or {}).get("direction") or "neutral"),
+                "summary_zh": str((block.get("event_group_overview") or {}).get("summary_zh") or ""),
                 "summary": str((block.get("event_group_overview") or {}).get("summary_zh") or ""),
             },
         }
