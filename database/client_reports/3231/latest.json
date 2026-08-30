@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-29T23:20:15+08:00",
+  "generated_at": "2026-08-30T23:20:23+08:00",
   "status": "success",
   "stock_id": "3231",
   "data_date": "2026-08-28",
@@ -3419,8 +3419,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "3231",
-    "window_start": "2026-08-29",
-    "window_end": "2026-09-04",
+    "window_start": "2026-08-30",
+    "window_end": "2026-09-05",
     "window_days": 7,
     "events": [
       {
@@ -3449,8 +3449,8 @@
       "mode": "context_only"
     },
     "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
-    "data_as_of": "2026-08-29",
-    "generated_at": "2026-08-29T22:30:47+08:00",
+    "data_as_of": "2026-08-30",
+    "generated_at": "2026-08-30T22:30:46+08:00",
     "sources": [
       {
         "source_id": "ex_right_dividend",
@@ -3469,8 +3469,8 @@
       {
         "source_id": "investor_conference",
         "status": "success",
-        "rows": 130,
-        "normalized_events": 21,
+        "rows": 7,
+        "normalized_events": 0,
         "url": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L"
       },
       {
@@ -3574,7 +3574,7 @@
             "stock_id": "2317",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 253.0,
             "return_20d_pct": 0.998,
             "volatility_20d_pct": 1.8039,
@@ -3587,7 +3587,7 @@
             "stock_id": "2382",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 332.5,
             "return_20d_pct": 14.0652,
             "volatility_20d_pct": 1.6906,
@@ -3600,7 +3600,7 @@
             "stock_id": "3231",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 178.0,
             "return_20d_pct": 1.1364,
             "volatility_20d_pct": 2.7587,
@@ -3613,7 +3613,7 @@
             "stock_id": "2376",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 349.0,
             "return_20d_pct": 3.7147,
             "volatility_20d_pct": 3.4314,
@@ -3626,7 +3626,7 @@
             "stock_id": "6669",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 7200.0,
             "return_20d_pct": 33.5807,
             "volatility_20d_pct": 3.3664,
@@ -4397,7 +4397,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分增加 0.19 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "2770c498e6fbdb77",
+            "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+            "published_at": "2026-08-26T09:39:00+00:00",
+            "confirmed_by_count": 2
+          },
+          {
+            "evidence_id": "dcd62520dd6b97dd",
+            "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "知新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+            "published_at": "2026-08-26T09:29:00+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "0a6419f66cdb08f9",
+            "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+            "published_at": "2026-08-24T10:20:05+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "2fd49b720542ec55",
+            "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+            "source_name": "放言Fount Media",
+            "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+            "published_at": "2026-08-24T10:00:46+00:00",
+            "confirmed_by_count": 1
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-07",
@@ -4538,7 +4578,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分增加 0.10 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "2770c498e6fbdb77",
+            "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+            "published_at": "2026-08-26T09:39:00+00:00",
+            "confirmed_by_count": 2
+          },
+          {
+            "evidence_id": "dcd62520dd6b97dd",
+            "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "知新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+            "published_at": "2026-08-26T09:29:00+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "0a6419f66cdb08f9",
+            "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+            "published_at": "2026-08-24T10:20:05+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "2fd49b720542ec55",
+            "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+            "source_name": "放言Fount Media",
+            "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+            "published_at": "2026-08-24T10:00:46+00:00",
+            "confirmed_by_count": 1
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-10",
@@ -4679,7 +4759,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分增加 0.03 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "2770c498e6fbdb77",
+            "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+            "published_at": "2026-08-26T09:39:00+00:00",
+            "confirmed_by_count": 2
+          },
+          {
+            "evidence_id": "dcd62520dd6b97dd",
+            "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "知新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+            "published_at": "2026-08-26T09:29:00+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "0a6419f66cdb08f9",
+            "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+            "published_at": "2026-08-24T10:20:05+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "2fd49b720542ec55",
+            "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+            "source_name": "放言Fount Media",
+            "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+            "published_at": "2026-08-24T10:00:46+00:00",
+            "confirmed_by_count": 1
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-13",
@@ -5975,7 +6095,47 @@
               "score_reason_zh": "這項指標相較昨日讓健康分增加 0.19 分。影響值來自同一套健康評分規則，不是人工判斷。",
               "source_zh": "公開新聞索引｜2026-08-28",
               "source_url": null
-            }
+            },
+            "source_kind": "aggregated_news_window",
+            "source_name_zh": "近 7 日公開新聞樣本",
+            "source_count": 4,
+            "source_window_days": 7,
+            "evidence_status": "available",
+            "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+            "evidence_refs": [
+              {
+                "evidence_id": "2770c498e6fbdb77",
+                "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+                "source_name": "Yahoo新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+                "published_at": "2026-08-26T09:39:00+00:00",
+                "confirmed_by_count": 2
+              },
+              {
+                "evidence_id": "dcd62520dd6b97dd",
+                "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+                "source_name": "知新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+                "published_at": "2026-08-26T09:29:00+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "0a6419f66cdb08f9",
+                "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+                "source_name": "CMoney投資網誌",
+                "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+                "published_at": "2026-08-24T10:20:05+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "2fd49b720542ec55",
+                "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+                "source_name": "放言Fount Media",
+                "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+                "published_at": "2026-08-24T10:00:46+00:00",
+                "confirmed_by_count": 1
+              }
+            ]
           },
           {
             "event_id": "INDICATOR-DELTA-09",
@@ -6022,7 +6182,47 @@
               "score_reason_zh": "這項指標相較昨日讓健康分增加 0.10 分。影響值來自同一套健康評分規則，不是人工判斷。",
               "source_zh": "公開新聞索引｜2026-08-28",
               "source_url": null
-            }
+            },
+            "source_kind": "aggregated_news_window",
+            "source_name_zh": "近 7 日公開新聞樣本",
+            "source_count": 4,
+            "source_window_days": 7,
+            "evidence_status": "available",
+            "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+            "evidence_refs": [
+              {
+                "evidence_id": "2770c498e6fbdb77",
+                "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+                "source_name": "Yahoo新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+                "published_at": "2026-08-26T09:39:00+00:00",
+                "confirmed_by_count": 2
+              },
+              {
+                "evidence_id": "dcd62520dd6b97dd",
+                "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+                "source_name": "知新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+                "published_at": "2026-08-26T09:29:00+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "0a6419f66cdb08f9",
+                "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+                "source_name": "CMoney投資網誌",
+                "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+                "published_at": "2026-08-24T10:20:05+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "2fd49b720542ec55",
+                "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+                "source_name": "放言Fount Media",
+                "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+                "published_at": "2026-08-24T10:00:46+00:00",
+                "confirmed_by_count": 1
+              }
+            ]
           },
           {
             "event_id": "INDICATOR-DELTA-12",
@@ -6069,7 +6269,47 @@
               "score_reason_zh": "這項指標相較昨日讓健康分增加 0.03 分。影響值來自同一套健康評分規則，不是人工判斷。",
               "source_zh": "公開新聞索引｜2026-08-28",
               "source_url": null
-            }
+            },
+            "source_kind": "aggregated_news_window",
+            "source_name_zh": "近 7 日公開新聞樣本",
+            "source_count": 4,
+            "source_window_days": 7,
+            "evidence_status": "available",
+            "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+            "evidence_refs": [
+              {
+                "evidence_id": "2770c498e6fbdb77",
+                "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+                "source_name": "Yahoo新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+                "published_at": "2026-08-26T09:39:00+00:00",
+                "confirmed_by_count": 2
+              },
+              {
+                "evidence_id": "dcd62520dd6b97dd",
+                "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+                "source_name": "知新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+                "published_at": "2026-08-26T09:29:00+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "0a6419f66cdb08f9",
+                "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+                "source_name": "CMoney投資網誌",
+                "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+                "published_at": "2026-08-24T10:20:05+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "2fd49b720542ec55",
+                "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+                "source_name": "放言Fount Media",
+                "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+                "published_at": "2026-08-24T10:00:46+00:00",
+                "confirmed_by_count": 1
+              }
+            ]
           }
         ]
       }
@@ -6364,7 +6604,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分增加 0.19 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "2770c498e6fbdb77",
+            "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+            "published_at": "2026-08-26T09:39:00+00:00",
+            "confirmed_by_count": 2
+          },
+          {
+            "evidence_id": "dcd62520dd6b97dd",
+            "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "知新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+            "published_at": "2026-08-26T09:29:00+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "0a6419f66cdb08f9",
+            "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+            "published_at": "2026-08-24T10:20:05+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "2fd49b720542ec55",
+            "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+            "source_name": "放言Fount Media",
+            "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+            "published_at": "2026-08-24T10:00:46+00:00",
+            "confirmed_by_count": 1
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-07",
@@ -6505,7 +6785,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分增加 0.10 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "2770c498e6fbdb77",
+            "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+            "published_at": "2026-08-26T09:39:00+00:00",
+            "confirmed_by_count": 2
+          },
+          {
+            "evidence_id": "dcd62520dd6b97dd",
+            "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "知新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+            "published_at": "2026-08-26T09:29:00+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "0a6419f66cdb08f9",
+            "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+            "published_at": "2026-08-24T10:20:05+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "2fd49b720542ec55",
+            "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+            "source_name": "放言Fount Media",
+            "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+            "published_at": "2026-08-24T10:00:46+00:00",
+            "confirmed_by_count": 1
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-10",
@@ -6646,7 +6966,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分增加 0.03 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "2770c498e6fbdb77",
+            "title_zh": "緯創爆內鬼！女處長竊營業機密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxNUF9oYzlNTDFHMklLY3k3eXlZbFhnR3lyR0hjaGJ3M0thZXE5MG1uTVZCZ2tWNmpxTXUwZDVhdUNGUnh6ZWVzN01MQkM5S0NEenVZal9aUU9LemNOckhFMmxyNnp0aWMwSUxYUEhZM19RWGR0QXJZSEVJOFU4MTc2RnBfd09oTGFKSXJTVm45Y1RlM3hmOVUxRjVrOG1PZjZWSkpjYXljb3lIbHFaQk1Ob3hVRmEwZlpkWlkzWGpjOHc0RXBtdzI2ZUVNenRpWFd1YWhiYkw4MG44eDJBQzRuRWdmN2o3dkxkcWtXU05vOFFNVEZ5NDFxMF9Fd2g5Yml1R1RxdC1KMll5c2RqQ2M5TW9oanZYNkh0d3VPMDNQTDRLTTFZcEM4X1lGTUlXc2NuUlBRTXNlaGM0WnlVRkF6dHBUS1o4YUxNRUxkU1VLSWw1d0tRODBPZFlUdm05LUlMLU9sUjlPOUZtV2puNmdUQmg1TzJWTWZsQ0p1Si1HUlhvTmwyajRTTVRWOGN2UQ?oc=5",
+            "published_at": "2026-08-26T09:39:00+00:00",
+            "confirmed_by_count": 2
+          },
+          {
+            "evidence_id": "dcd62520dd6b97dd",
+            "title_zh": "緯創爆內鬼！女處長竊密和老公自立門戶 夫妻同遭起訴",
+            "source_name": "知新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9nRXJrclpjN2JRdk1NcXB6ZzVfc3YxNDgyWU0zUmVNYWxpUUJZVENCVGZraTJJTGV6R0lhUjBMZV9rNXBDOTBXS0JlRVlQN3pPTTg1SEZKeFQ2eEZnVnpfU1RDeHk0SnNvTlVjVEQ0OA?oc=5",
+            "published_at": "2026-08-26T09:29:00+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "0a6419f66cdb08f9",
+            "title_zh": "【26Q2財報公告】緯創(3231) Q2 營收8,954.4262億元，創歷史新高，季增5.81%、年成長62.43%-CMoney 小編",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcmlmMDlzbmlIY0dJLXd4OHRUUEUwZ3hHcm15cUE3WUdWTlVuNUhiNU9TY0NESGtyV2ZvbjA2ZXdid0plTWZqWkVCOXlYRzE0d1BWUVFMbGZoSmpvZ1huNkFkalBJRzFrX1d2MjJ6QmI4eDBoQWVwLVpuMm5vYjJVZk5UcjlCeFR6ZVE?oc=5",
+            "published_at": "2026-08-24T10:20:05+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "2fd49b720542ec55",
+            "title_zh": "緯創林建勳不怕AI伺服器換代空窗！幾乎參與輝達全平台 訂單能見度看到2027上半年",
+            "source_name": "放言Fount Media",
+            "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9FdmxUNjdHUGFpRHB1c0lTOHlQQl9pb0Eyd3AtUEthTE1EYUZIdFR1NjdyUGVLVURWT01keXl4Y0kyd3ZfQkV5aUpTOGtjdElmWHc?oc=5",
+            "published_at": "2026-08-24T10:00:46+00:00",
+            "confirmed_by_count": 1
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-13",

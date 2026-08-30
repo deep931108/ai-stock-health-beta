@@ -1,6 +1,6 @@
 {
   "version": "ClientReport-v1.5-DailyEvidence",
-  "generated_at": "2026-08-29T23:20:22+08:00",
+  "generated_at": "2026-08-30T23:20:46+08:00",
   "status": "success",
   "stock_id": "2881",
   "data_date": "2026-08-28",
@@ -12,7 +12,7 @@
   },
   "overview": {
     "health_score": 76.5,
-    "health_score_v1": 66.05,
+    "health_score_v1": 66.04,
     "health_score_v2": 76.5,
     "health_score_interval": "70-79",
     "health_score_band_zh": "偏強",
@@ -589,13 +589,13 @@
     {
       "key": "news",
       "label": "新聞情緒",
-      "score": 65.03,
+      "score": 64.97,
       "level": "中性",
       "description": "正負面新聞比例為 83.5 分，屬於加分因子。",
       "coverage_pct": 100.0,
       "reasons": [
         "正負面新聞比例為 83.5 分，屬於加分因子。",
-        "新聞情緒分數為 62.0 分，屬於加分因子。",
+        "新聞情緒分數為 61.8 分，屬於加分因子。",
         "近期新聞熱度為 45.0 分，屬於中性因子。"
       ],
       "source_label_zh": "公開新聞索引",
@@ -603,15 +603,15 @@
         {
           "factor": "news",
           "label_zh": "新聞情緒分數",
-          "value": 0.1434,
+          "value": 0.1419,
           "unit": "",
           "baseline_value": 0,
           "baseline_label_zh": "新聞情緒中性",
           "comparison_window": "近 7 日新聞",
-          "score": 61.95,
+          "score": 61.83,
           "sub_weight_pct": 50.0,
           "factor_weight_pct": 17.53,
-          "health_impact": 1.05,
+          "health_impact": 1.04,
           "direction": "positive",
           "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
           "source_label_zh": "公開新聞索引",
@@ -641,7 +641,7 @@
         {
           "factor": "news",
           "label_zh": "近期新聞熱度",
-          "value": 116,
+          "value": 117,
           "unit": "則",
           "baseline_value": 0,
           "baseline_label_zh": "無相關新聞",
@@ -683,7 +683,7 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 65.03,
+        "score": 64.97,
         "direction": "positive",
         "reason_zh": "正負面新聞比例為 83.5 分，屬於加分因子。",
         "source_label_zh": "公開新聞索引"
@@ -821,15 +821,15 @@
       {
         "factor": "news",
         "label_zh": "新聞情緒分數",
-        "value": 0.1434,
+        "value": 0.1419,
         "unit": "",
         "baseline_value": 0,
         "baseline_label_zh": "新聞情緒中性",
         "comparison_window": "近 7 日新聞",
-        "score": 61.95,
+        "score": 61.83,
         "sub_weight_pct": 50.0,
         "factor_weight_pct": 17.53,
-        "health_impact": 1.05,
+        "health_impact": 1.04,
         "direction": "positive",
         "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
         "source_label_zh": "公開新聞索引",
@@ -1184,7 +1184,7 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "value": 116,
+        "value": 117,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -1357,15 +1357,15 @@
       {
         "factor": "news",
         "label_zh": "新聞情緒分數",
-        "value": 0.1434,
+        "value": 0.1419,
         "unit": "",
         "baseline_value": 0,
         "baseline_label_zh": "新聞情緒中性",
         "comparison_window": "近 7 日新聞",
-        "score": 61.95,
+        "score": 61.83,
         "sub_weight_pct": 50.0,
         "factor_weight_pct": 17.53,
-        "health_impact": 1.05,
+        "health_impact": 1.04,
         "direction": "positive",
         "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
         "source_label_zh": "公開新聞索引",
@@ -1661,7 +1661,7 @@
       {
         "factor": "news",
         "label_zh": "近期新聞熱度",
-        "value": 116,
+        "value": 117,
         "unit": "則",
         "baseline_value": 0,
         "baseline_label_zh": "無相關新聞",
@@ -2336,13 +2336,13 @@
       {
         "key": "news",
         "label": "新聞情緒",
-        "score": 65.03,
+        "score": 64.97,
         "level": "中性",
         "description": "正負面新聞比例為 83.5 分，屬於加分因子。",
         "coverage_pct": 100.0,
         "reasons": [
           "正負面新聞比例為 83.5 分，屬於加分因子。",
-          "新聞情緒分數為 62.0 分，屬於加分因子。",
+          "新聞情緒分數為 61.8 分，屬於加分因子。",
           "近期新聞熱度為 45.0 分，屬於中性因子。"
         ],
         "source_label_zh": "公開新聞索引",
@@ -2350,15 +2350,15 @@
           {
             "factor": "news",
             "label_zh": "新聞情緒分數",
-            "value": 0.1434,
+            "value": 0.1419,
             "unit": "",
             "baseline_value": 0,
             "baseline_label_zh": "新聞情緒中性",
             "comparison_window": "近 7 日新聞",
-            "score": 61.95,
+            "score": 61.83,
             "sub_weight_pct": 50.0,
             "factor_weight_pct": 17.53,
-            "health_impact": 1.05,
+            "health_impact": 1.04,
             "direction": "positive",
             "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
             "source_label_zh": "公開新聞索引",
@@ -2388,7 +2388,7 @@
           {
             "factor": "news",
             "label_zh": "近期新聞熱度",
-            "value": 116,
+            "value": 117,
             "unit": "則",
             "baseline_value": 0,
             "baseline_label_zh": "無相關新聞",
@@ -2595,15 +2595,15 @@
         "key": "news",
         "label": "新聞情緒",
         "previous_score": 64.87,
-        "current_score": 65.03,
-        "score_change": 0.16,
+        "current_score": 64.97,
+        "score_change": 0.1,
         "previous_weight_pct": null,
         "current_weight_pct": null,
         "previous_weighted_contribution": null,
         "current_weighted_contribution": null,
         "weighted_change": null,
         "direction": "neutral",
-        "reason_zh": "新聞情緒由 64.87 分變為 65.03 分（+0.16）；在當日權重下，原始加權貢獻沒有改變 0.00。"
+        "reason_zh": "新聞情緒由 64.87 分變為 64.97 分（+0.10）；在當日權重下，原始加權貢獻沒有改變 0.00。"
       }
     ],
     "indicator_detail_available": true,
@@ -2939,6 +2939,36 @@
         "direction": "positive"
       },
       {
+        "key": "news:新聞情緒分數",
+        "factor": "news",
+        "feature": "新聞情緒分數",
+        "label_zh": "新聞情緒分數",
+        "value": 0.1419,
+        "unit": "",
+        "score": 61.83,
+        "health_impact": 1.04,
+        "sub_weight_pct": 50.0,
+        "factor_weight_pct": 17.53,
+        "baseline_value": 0,
+        "baseline_label_zh": "新聞情緒中性",
+        "comparison_window": "近 7 日新聞",
+        "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
+        "source_label_zh": "公開新聞索引",
+        "source_url": null,
+        "source_date": null,
+        "confidence": "medium",
+        "previous_value": 0.1459,
+        "current_value": 0.1419,
+        "value_change": -0.004,
+        "previous_score": 62.16,
+        "current_score": 61.83,
+        "score_change": -0.33,
+        "previous_health_impact": 1.11,
+        "current_health_impact": 1.04,
+        "impact_change": -0.07,
+        "direction": "negative"
+      },
+      {
         "key": "institutional:法人流向加速度",
         "factor": "institutional",
         "feature": "法人流向加速度",
@@ -2995,36 +3025,6 @@
         "score_change": 0.0,
         "previous_health_impact": 1.5,
         "current_health_impact": 1.44,
-        "impact_change": -0.06,
-        "direction": "negative"
-      },
-      {
-        "key": "news:新聞情緒分數",
-        "factor": "news",
-        "feature": "新聞情緒分數",
-        "label_zh": "新聞情緒分數",
-        "value": 0.1434,
-        "unit": "",
-        "score": 61.95,
-        "health_impact": 1.05,
-        "sub_weight_pct": 50.0,
-        "factor_weight_pct": 17.53,
-        "baseline_value": 0,
-        "baseline_label_zh": "新聞情緒中性",
-        "comparison_window": "近 7 日新聞",
-        "reason_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-        "source_label_zh": "公開新聞索引",
-        "source_url": null,
-        "source_date": null,
-        "confidence": "medium",
-        "previous_value": 0.1459,
-        "current_value": 0.1434,
-        "value_change": -0.0025,
-        "previous_score": 62.16,
-        "current_score": 61.95,
-        "score_change": -0.21,
-        "previous_health_impact": 1.11,
-        "current_health_impact": 1.05,
         "impact_change": -0.06,
         "direction": "negative"
       },
@@ -3303,7 +3303,7 @@
         "factor": "news",
         "feature": "近期新聞熱度",
         "label_zh": "近期新聞熱度",
-        "value": 116,
+        "value": 117,
         "unit": "則",
         "score": 45.0,
         "health_impact": -0.18,
@@ -3318,8 +3318,8 @@
         "source_date": null,
         "confidence": "medium",
         "previous_value": 132,
-        "current_value": 116,
-        "value_change": -16.0,
+        "current_value": 117,
+        "value_change": -15.0,
         "previous_score": 45.0,
         "current_score": 45.0,
         "score_change": 0.0,
@@ -3577,8 +3577,8 @@
     "version": "UpcomingEvents-v1.0",
     "status": "available",
     "stock_id": "2881",
-    "window_start": "2026-08-29",
-    "window_end": "2026-09-04",
+    "window_start": "2026-08-30",
+    "window_end": "2026-09-05",
     "window_days": 7,
     "events": [
       {
@@ -3626,8 +3626,8 @@
       "mode": "context_only"
     },
     "customer_notice_zh": "預定事件只用來提醒研究日程，不會直接改變健康分數。",
-    "data_as_of": "2026-08-29",
-    "generated_at": "2026-08-29T22:30:47+08:00",
+    "data_as_of": "2026-08-30",
+    "generated_at": "2026-08-30T22:30:46+08:00",
     "sources": [
       {
         "source_id": "ex_right_dividend",
@@ -3646,8 +3646,8 @@
       {
         "source_id": "investor_conference",
         "status": "success",
-        "rows": 130,
-        "normalized_events": 21,
+        "rows": 7,
+        "normalized_events": 0,
         "url": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L"
       },
       {
@@ -3758,7 +3758,7 @@
             "stock_id": "2881",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 144.0,
             "return_20d_pct": 10.7692,
             "volatility_20d_pct": 2.4745,
@@ -3771,7 +3771,7 @@
             "stock_id": "2882",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 105.5,
             "return_20d_pct": 3.9409,
             "volatility_20d_pct": 1.9892,
@@ -3784,7 +3784,7 @@
             "stock_id": "2891",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 64.4,
             "return_20d_pct": -0.7704,
             "volatility_20d_pct": 1.4903,
@@ -3797,7 +3797,7 @@
             "stock_id": "2886",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 48.2,
             "return_20d_pct": -9.2279,
             "volatility_20d_pct": 2.2597,
@@ -3810,7 +3810,7 @@
             "stock_id": "2884",
             "status": "available",
             "data_date": "2026-08-28",
-            "stale_calendar_days": 1,
+            "stale_calendar_days": 2,
             "close_latest": 38.75,
             "return_20d_pct": 0.2587,
             "volatility_20d_pct": 1.1252,
@@ -4236,7 +4236,7 @@
         "published_at": "2026-08-25T23:31:37+00:00",
         "reason_zh": "涉及正式財務或獲利資訊，可能改變基本面判斷。",
         "duplicate_group_id": "3dea6c30cee79fda",
-        "confirmed_by_count": 9
+        "confirmed_by_count": 10
       },
       {
         "severity": "medium",
@@ -4803,6 +4803,93 @@
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
+        "category": "news",
+        "feature": "新聞情緒分數",
+        "title_zh": "新聞情緒分數轉弱",
+        "direction": "negative",
+        "current_value": 0.1419,
+        "current_value_zh": "0.14",
+        "current_unit": "",
+        "baseline_value": 0.1459,
+        "baseline_value_zh": "0.15",
+        "baseline_label_zh": "前一交易日實際值",
+        "change_value": -0.004,
+        "change_value_zh": "-0.00",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": -0.07,
+        "impact_kind": "daily_health_impact_change",
+        "reason_zh": "新聞情緒分數由 0.15 變為 0.14（變化 -0.00）。這代表新聞情緒平均值反映近期事件偏正面或負面。；因此相較昨日扣分 0.07 分。",
+        "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
+        "metric_explanation_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
+        "score_reason_zh": "這項指標相較昨日讓健康分減少 0.07 分。影響值來自同一套健康評分規則，不是人工判斷。",
+        "beginner_explanation_zh": "簡單說，新聞情緒分數是用來觀察新聞情緒平均值反映近期事件偏正面或負面。。本次讓健康分比昨天減少 0.07 分。這是研究評分變化，不代表買進或賣出訊號。",
+        "source": "公開新聞索引",
+        "source_time": "2026-08-28",
+        "source_url": null,
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "impact_category_zh": "健康分扣分",
+        "source_link_status": "not_preserved",
+        "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
+          "current_value_zh": "0.14",
+          "comparison_zh": "0.15",
+          "baseline_value_zh": "0.15",
+          "meaning_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
+          "score_reason_zh": "這項指標相較昨日讓健康分減少 0.07 分。影響值來自同一套健康評分規則，不是人工判斷。",
+          "source_zh": "公開新聞索引｜2026-08-28",
+          "source_url": null
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "375eec7a32e49035",
+            "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+            "published_at": "2026-08-26T08:36:18+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "3dea6c30cee79fda",
+            "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+            "source_name": "LINE TODAY",
+            "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+            "published_at": "2026-08-25T23:31:37+00:00",
+            "confirmed_by_count": 10
+          },
+          {
+            "evidence_id": "6a378ffaf71813ae",
+            "title_zh": "富邦金、中信金明年股利可期- 日報",
+            "source_name": "工商時報",
+            "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+            "published_at": "2026-08-25T19:00:00+00:00",
+            "confirmed_by_count": 8
+          },
+          {
+            "evidence_id": "4612815b8cf068c9",
+            "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+            "published_at": "2026-08-24T15:50:15+00:00",
+            "confirmed_by_count": 9
+          }
+        ]
+      },
+      {
+        "event_id": "INDICATOR-DELTA-13",
+        "event_type": "indicator_change",
+        "event_level": "indicator",
+        "status": "new",
         "category": "institutional",
         "feature": "法人流向加速度",
         "title_zh": "法人流向加速度改善",
@@ -4846,7 +4933,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-13",
+        "event_id": "INDICATOR-DELTA-14",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -4890,53 +4977,6 @@
           "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "交易所股價與成交資料｜2026-08-28",
           "source_url": "https://wwwc.twse.com.tw/IIH2/zh/company/stock.html?code=2881"
-        }
-      },
-      {
-        "event_id": "INDICATOR-DELTA-14",
-        "event_type": "indicator_change",
-        "event_level": "indicator",
-        "status": "new",
-        "category": "news",
-        "feature": "新聞情緒分數",
-        "title_zh": "新聞情緒分數轉弱",
-        "direction": "negative",
-        "current_value": 0.1434,
-        "current_value_zh": "0.14",
-        "current_unit": "",
-        "baseline_value": 0.1459,
-        "baseline_value_zh": "0.15",
-        "baseline_label_zh": "前一交易日實際值",
-        "change_value": -0.0025,
-        "change_value_zh": "-0.00",
-        "comparison_window": "前一個有資料的交易日",
-        "score_impact": -0.06,
-        "impact_kind": "daily_health_impact_change",
-        "reason_zh": "新聞情緒分數由 0.15 變為 0.14（變化 -0.00）。這代表新聞情緒平均值反映近期事件偏正面或負面。；因此相較昨日扣分 0.06 分。",
-        "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
-        "metric_explanation_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-        "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
-        "beginner_explanation_zh": "簡單說，新聞情緒分數是用來觀察新聞情緒平均值反映近期事件偏正面或負面。。本次讓健康分比昨天減少 0.06 分。這是研究評分變化，不代表買進或賣出訊號。",
-        "source": "公開新聞索引",
-        "source_time": "2026-08-28",
-        "source_url": null,
-        "confidence": "high",
-        "schema_version": "CustomerEvidence-v2.0",
-        "explain_engine_version": "CustomerExplainEngine-v2.2",
-        "impact_category_zh": "健康分扣分",
-        "source_link_status": "not_preserved",
-        "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
-        "is_true_daily_change": true,
-        "state": "daily_change",
-        "six_questions": {
-          "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
-          "current_value_zh": "0.14",
-          "comparison_zh": "0.15",
-          "baseline_value_zh": "0.15",
-          "meaning_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-          "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
-          "source_zh": "公開新聞索引｜2026-08-28",
-          "source_url": null
         }
       },
       {
@@ -5125,7 +5165,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分減少 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "375eec7a32e49035",
+            "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+            "published_at": "2026-08-26T08:36:18+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "3dea6c30cee79fda",
+            "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+            "source_name": "LINE TODAY",
+            "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+            "published_at": "2026-08-25T23:31:37+00:00",
+            "confirmed_by_count": 10
+          },
+          {
+            "evidence_id": "6a378ffaf71813ae",
+            "title_zh": "富邦金、中信金明年股利可期- 日報",
+            "source_name": "工商時報",
+            "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+            "published_at": "2026-08-25T19:00:00+00:00",
+            "confirmed_by_count": 8
+          },
+          {
+            "evidence_id": "4612815b8cf068c9",
+            "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+            "published_at": "2026-08-24T15:50:15+00:00",
+            "confirmed_by_count": 9
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-19",
@@ -5371,19 +5451,19 @@
         "feature": "近期新聞熱度",
         "title_zh": "近期新聞熱度數值改變",
         "direction": "neutral",
-        "current_value": 116,
-        "current_value_zh": "116.00 則",
+        "current_value": 117,
+        "current_value_zh": "117.00 則",
         "current_unit": "則",
         "baseline_value": 132,
         "baseline_value_zh": "132.00 則",
         "baseline_label_zh": "前一交易日實際值",
-        "change_value": -16.0,
-        "change_value_zh": "-16.00 則",
+        "change_value": -15.0,
+        "change_value_zh": "-15.00 則",
         "comparison_window": "前一個有資料的交易日",
         "score_impact": 0.0,
         "impact_kind": "daily_health_impact_change",
-        "reason_zh": "近期新聞熱度由 132.00 則 變為 116.00 則（變化 -16.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
-        "what_happened_zh": "近期新聞熱度從 132.00 則 變成 116.00 則，實際變化 -16.00 則。",
+        "reason_zh": "近期新聞熱度由 132.00 則 變為 117.00 則（變化 -15.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
+        "what_happened_zh": "近期新聞熱度從 132.00 則 變成 117.00 則，實際變化 -15.00 則。",
         "metric_explanation_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
         "beginner_explanation_zh": "簡單說，近期新聞熱度是用來觀察適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。。數值雖有變化，但四捨五入後沒有改變健康分。這是研究評分變化，不代表買進或賣出訊號。",
@@ -5399,15 +5479,55 @@
         "is_true_daily_change": true,
         "state": "daily_change",
         "six_questions": {
-          "what_happened_zh": "近期新聞熱度從 132.00 則 變成 116.00 則，實際變化 -16.00 則。",
-          "current_value_zh": "116.00 則",
+          "what_happened_zh": "近期新聞熱度從 132.00 則 變成 117.00 則，實際變化 -15.00 則。",
+          "current_value_zh": "117.00 則",
           "comparison_zh": "132.00 則",
           "baseline_value_zh": "132.00 則",
           "meaning_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
           "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "375eec7a32e49035",
+            "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+            "published_at": "2026-08-26T08:36:18+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "3dea6c30cee79fda",
+            "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+            "source_name": "LINE TODAY",
+            "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+            "published_at": "2026-08-25T23:31:37+00:00",
+            "confirmed_by_count": 10
+          },
+          {
+            "evidence_id": "6a378ffaf71813ae",
+            "title_zh": "富邦金、中信金明年股利可期- 日報",
+            "source_name": "工商時報",
+            "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+            "published_at": "2026-08-25T19:00:00+00:00",
+            "confirmed_by_count": 8
+          },
+          {
+            "evidence_id": "4612815b8cf068c9",
+            "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+            "published_at": "2026-08-24T15:50:15+00:00",
+            "confirmed_by_count": 9
+          }
+        ]
       }
     ],
     "event_groups": [
@@ -5769,7 +5889,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-13",
+            "event_id": "INDICATOR-DELTA-14",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -6254,7 +6374,7 @@
             }
           },
           {
-            "event_id": "INDICATOR-DELTA-12",
+            "event_id": "INDICATOR-DELTA-13",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -6466,13 +6586,13 @@
         "positive_count": 0,
         "negative_count": 2,
         "positive_impact": 0.0,
-        "negative_impact": -0.08,
-        "net_impact": -0.08,
-        "headline_zh": "新聞消息整體扣分 0.08 分",
-        "summary_zh": "扣分主要來自新聞情緒分數轉弱、正負面新聞比例轉弱，合計 -0.08 分；所以新聞消息本次淨減少 0.08 分。",
+        "negative_impact": -0.09,
+        "net_impact": -0.09,
+        "headline_zh": "新聞消息整體扣分 0.09 分",
+        "summary_zh": "扣分主要來自新聞情緒分數轉弱、正負面新聞比例轉弱，合計 -0.09 分；所以新聞消息本次淨減少 0.09 分。",
         "events": [
           {
-            "event_id": "INDICATOR-DELTA-14",
+            "event_id": "INDICATOR-DELTA-12",
             "event_type": "indicator_change",
             "event_level": "indicator",
             "status": "new",
@@ -6480,22 +6600,22 @@
             "feature": "新聞情緒分數",
             "title_zh": "新聞情緒分數轉弱",
             "direction": "negative",
-            "current_value": 0.1434,
+            "current_value": 0.1419,
             "current_value_zh": "0.14",
             "current_unit": "",
             "baseline_value": 0.1459,
             "baseline_value_zh": "0.15",
             "baseline_label_zh": "前一交易日實際值",
-            "change_value": -0.0025,
+            "change_value": -0.004,
             "change_value_zh": "-0.00",
             "comparison_window": "前一個有資料的交易日",
-            "score_impact": -0.06,
+            "score_impact": -0.07,
             "impact_kind": "daily_health_impact_change",
-            "reason_zh": "新聞情緒分數由 0.15 變為 0.14（變化 -0.00）。這代表新聞情緒平均值反映近期事件偏正面或負面。；因此相較昨日扣分 0.06 分。",
+            "reason_zh": "新聞情緒分數由 0.15 變為 0.14（變化 -0.00）。這代表新聞情緒平均值反映近期事件偏正面或負面。；因此相較昨日扣分 0.07 分。",
             "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
             "metric_explanation_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-            "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
-            "beginner_explanation_zh": "簡單說，新聞情緒分數是用來觀察新聞情緒平均值反映近期事件偏正面或負面。。本次讓健康分比昨天減少 0.06 分。這是研究評分變化，不代表買進或賣出訊號。",
+            "score_reason_zh": "這項指標相較昨日讓健康分減少 0.07 分。影響值來自同一套健康評分規則，不是人工判斷。",
+            "beginner_explanation_zh": "簡單說，新聞情緒分數是用來觀察新聞情緒平均值反映近期事件偏正面或負面。。本次讓健康分比昨天減少 0.07 分。這是研究評分變化，不代表買進或賣出訊號。",
             "source": "公開新聞索引",
             "source_time": "2026-08-28",
             "source_url": null,
@@ -6513,10 +6633,50 @@
               "comparison_zh": "0.15",
               "baseline_value_zh": "0.15",
               "meaning_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-              "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
+              "score_reason_zh": "這項指標相較昨日讓健康分減少 0.07 分。影響值來自同一套健康評分規則，不是人工判斷。",
               "source_zh": "公開新聞索引｜2026-08-28",
               "source_url": null
-            }
+            },
+            "source_kind": "aggregated_news_window",
+            "source_name_zh": "近 7 日公開新聞樣本",
+            "source_count": 4,
+            "source_window_days": 7,
+            "evidence_status": "available",
+            "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+            "evidence_refs": [
+              {
+                "evidence_id": "375eec7a32e49035",
+                "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+                "source_name": "CMoney投資網誌",
+                "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+                "published_at": "2026-08-26T08:36:18+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "3dea6c30cee79fda",
+                "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+                "source_name": "LINE TODAY",
+                "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+                "published_at": "2026-08-25T23:31:37+00:00",
+                "confirmed_by_count": 10
+              },
+              {
+                "evidence_id": "6a378ffaf71813ae",
+                "title_zh": "富邦金、中信金明年股利可期- 日報",
+                "source_name": "工商時報",
+                "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+                "published_at": "2026-08-25T19:00:00+00:00",
+                "confirmed_by_count": 8
+              },
+              {
+                "evidence_id": "4612815b8cf068c9",
+                "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+                "source_name": "Yahoo新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+                "published_at": "2026-08-24T15:50:15+00:00",
+                "confirmed_by_count": 9
+              }
+            ]
           },
           {
             "event_id": "INDICATOR-DELTA-18",
@@ -6563,7 +6723,47 @@
               "score_reason_zh": "這項指標相較昨日讓健康分減少 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
               "source_zh": "公開新聞索引｜2026-08-28",
               "source_url": null
-            }
+            },
+            "source_kind": "aggregated_news_window",
+            "source_name_zh": "近 7 日公開新聞樣本",
+            "source_count": 4,
+            "source_window_days": 7,
+            "evidence_status": "available",
+            "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+            "evidence_refs": [
+              {
+                "evidence_id": "375eec7a32e49035",
+                "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+                "source_name": "CMoney投資網誌",
+                "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+                "published_at": "2026-08-26T08:36:18+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "3dea6c30cee79fda",
+                "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+                "source_name": "LINE TODAY",
+                "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+                "published_at": "2026-08-25T23:31:37+00:00",
+                "confirmed_by_count": 10
+              },
+              {
+                "evidence_id": "6a378ffaf71813ae",
+                "title_zh": "富邦金、中信金明年股利可期- 日報",
+                "source_name": "工商時報",
+                "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+                "published_at": "2026-08-25T19:00:00+00:00",
+                "confirmed_by_count": 8
+              },
+              {
+                "evidence_id": "4612815b8cf068c9",
+                "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+                "source_name": "Yahoo新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+                "published_at": "2026-08-24T15:50:15+00:00",
+                "confirmed_by_count": 9
+              }
+            ]
           },
           {
             "event_id": "INDICATOR-DELTA-24",
@@ -6574,19 +6774,19 @@
             "feature": "近期新聞熱度",
             "title_zh": "近期新聞熱度數值改變",
             "direction": "neutral",
-            "current_value": 116,
-            "current_value_zh": "116.00 則",
+            "current_value": 117,
+            "current_value_zh": "117.00 則",
             "current_unit": "則",
             "baseline_value": 132,
             "baseline_value_zh": "132.00 則",
             "baseline_label_zh": "前一交易日實際值",
-            "change_value": -16.0,
-            "change_value_zh": "-16.00 則",
+            "change_value": -15.0,
+            "change_value_zh": "-15.00 則",
             "comparison_window": "前一個有資料的交易日",
             "score_impact": 0.0,
             "impact_kind": "daily_health_impact_change",
-            "reason_zh": "近期新聞熱度由 132.00 則 變為 116.00 則（變化 -16.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
-            "what_happened_zh": "近期新聞熱度從 132.00 則 變成 116.00 則，實際變化 -16.00 則。",
+            "reason_zh": "近期新聞熱度由 132.00 則 變為 117.00 則（變化 -15.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
+            "what_happened_zh": "近期新聞熱度從 132.00 則 變成 117.00 則，實際變化 -15.00 則。",
             "metric_explanation_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
             "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
             "beginner_explanation_zh": "簡單說，近期新聞熱度是用來觀察適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。。數值雖有變化，但四捨五入後沒有改變健康分。這是研究評分變化，不代表買進或賣出訊號。",
@@ -6602,15 +6802,55 @@
             "is_true_daily_change": true,
             "state": "daily_change",
             "six_questions": {
-              "what_happened_zh": "近期新聞熱度從 132.00 則 變成 116.00 則，實際變化 -16.00 則。",
-              "current_value_zh": "116.00 則",
+              "what_happened_zh": "近期新聞熱度從 132.00 則 變成 117.00 則，實際變化 -15.00 則。",
+              "current_value_zh": "117.00 則",
               "comparison_zh": "132.00 則",
               "baseline_value_zh": "132.00 則",
               "meaning_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
               "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
               "source_zh": "公開新聞索引｜2026-08-28",
               "source_url": null
-            }
+            },
+            "source_kind": "aggregated_news_window",
+            "source_name_zh": "近 7 日公開新聞樣本",
+            "source_count": 4,
+            "source_window_days": 7,
+            "evidence_status": "available",
+            "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+            "evidence_refs": [
+              {
+                "evidence_id": "375eec7a32e49035",
+                "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+                "source_name": "CMoney投資網誌",
+                "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+                "published_at": "2026-08-26T08:36:18+00:00",
+                "confirmed_by_count": 1
+              },
+              {
+                "evidence_id": "3dea6c30cee79fda",
+                "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+                "source_name": "LINE TODAY",
+                "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+                "published_at": "2026-08-25T23:31:37+00:00",
+                "confirmed_by_count": 10
+              },
+              {
+                "evidence_id": "6a378ffaf71813ae",
+                "title_zh": "富邦金、中信金明年股利可期- 日報",
+                "source_name": "工商時報",
+                "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+                "published_at": "2026-08-25T19:00:00+00:00",
+                "confirmed_by_count": 8
+              },
+              {
+                "evidence_id": "4612815b8cf068c9",
+                "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+                "source_name": "Yahoo新聞",
+                "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+                "published_at": "2026-08-24T15:50:15+00:00",
+                "confirmed_by_count": 9
+              }
+            ]
           }
         ]
       }
@@ -6619,10 +6859,10 @@
       "title_zh": "總分變化總覽",
       "event_count": 24,
       "positive_impact": 3.45,
-      "negative_impact": -0.85,
-      "net_impact": 2.6,
+      "negative_impact": -0.86,
+      "net_impact": 2.59,
       "direction": "positive",
-      "summary_zh": "全部 24 項變化合計：加分 +3.45、扣分 -0.85，健康分淨影響 +2.60 分。點開下方五個面向，可查看每一項加扣分原因。"
+      "summary_zh": "全部 24 項變化合計：加分 +3.45、扣分 -0.86，健康分淨影響 +2.59 分。點開下方五個面向，可查看每一項加扣分原因。"
     },
     "indicator_events": [
       {
@@ -7147,6 +7387,93 @@
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
+        "category": "news",
+        "feature": "新聞情緒分數",
+        "title_zh": "新聞情緒分數轉弱",
+        "direction": "negative",
+        "current_value": 0.1419,
+        "current_value_zh": "0.14",
+        "current_unit": "",
+        "baseline_value": 0.1459,
+        "baseline_value_zh": "0.15",
+        "baseline_label_zh": "前一交易日實際值",
+        "change_value": -0.004,
+        "change_value_zh": "-0.00",
+        "comparison_window": "前一個有資料的交易日",
+        "score_impact": -0.07,
+        "impact_kind": "daily_health_impact_change",
+        "reason_zh": "新聞情緒分數由 0.15 變為 0.14（變化 -0.00）。這代表新聞情緒平均值反映近期事件偏正面或負面。；因此相較昨日扣分 0.07 分。",
+        "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
+        "metric_explanation_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
+        "score_reason_zh": "這項指標相較昨日讓健康分減少 0.07 分。影響值來自同一套健康評分規則，不是人工判斷。",
+        "beginner_explanation_zh": "簡單說，新聞情緒分數是用來觀察新聞情緒平均值反映近期事件偏正面或負面。。本次讓健康分比昨天減少 0.07 分。這是研究評分變化，不代表買進或賣出訊號。",
+        "source": "公開新聞索引",
+        "source_time": "2026-08-28",
+        "source_url": null,
+        "confidence": "high",
+        "schema_version": "CustomerEvidence-v2.0",
+        "explain_engine_version": "CustomerExplainEngine-v2.2",
+        "impact_category_zh": "健康分扣分",
+        "source_link_status": "not_preserved",
+        "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
+        "is_true_daily_change": true,
+        "state": "daily_change",
+        "six_questions": {
+          "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
+          "current_value_zh": "0.14",
+          "comparison_zh": "0.15",
+          "baseline_value_zh": "0.15",
+          "meaning_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
+          "score_reason_zh": "這項指標相較昨日讓健康分減少 0.07 分。影響值來自同一套健康評分規則，不是人工判斷。",
+          "source_zh": "公開新聞索引｜2026-08-28",
+          "source_url": null
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "375eec7a32e49035",
+            "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+            "published_at": "2026-08-26T08:36:18+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "3dea6c30cee79fda",
+            "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+            "source_name": "LINE TODAY",
+            "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+            "published_at": "2026-08-25T23:31:37+00:00",
+            "confirmed_by_count": 10
+          },
+          {
+            "evidence_id": "6a378ffaf71813ae",
+            "title_zh": "富邦金、中信金明年股利可期- 日報",
+            "source_name": "工商時報",
+            "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+            "published_at": "2026-08-25T19:00:00+00:00",
+            "confirmed_by_count": 8
+          },
+          {
+            "evidence_id": "4612815b8cf068c9",
+            "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+            "published_at": "2026-08-24T15:50:15+00:00",
+            "confirmed_by_count": 9
+          }
+        ]
+      },
+      {
+        "event_id": "INDICATOR-DELTA-13",
+        "event_type": "indicator_change",
+        "event_level": "indicator",
+        "status": "new",
         "category": "institutional",
         "feature": "法人流向加速度",
         "title_zh": "法人流向加速度改善",
@@ -7190,7 +7517,7 @@
         }
       },
       {
-        "event_id": "INDICATOR-DELTA-13",
+        "event_id": "INDICATOR-DELTA-14",
         "event_type": "indicator_change",
         "event_level": "indicator",
         "status": "new",
@@ -7234,53 +7561,6 @@
           "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "交易所股價與成交資料｜2026-08-28",
           "source_url": "https://wwwc.twse.com.tw/IIH2/zh/company/stock.html?code=2881"
-        }
-      },
-      {
-        "event_id": "INDICATOR-DELTA-14",
-        "event_type": "indicator_change",
-        "event_level": "indicator",
-        "status": "new",
-        "category": "news",
-        "feature": "新聞情緒分數",
-        "title_zh": "新聞情緒分數轉弱",
-        "direction": "negative",
-        "current_value": 0.1434,
-        "current_value_zh": "0.14",
-        "current_unit": "",
-        "baseline_value": 0.1459,
-        "baseline_value_zh": "0.15",
-        "baseline_label_zh": "前一交易日實際值",
-        "change_value": -0.0025,
-        "change_value_zh": "-0.00",
-        "comparison_window": "前一個有資料的交易日",
-        "score_impact": -0.06,
-        "impact_kind": "daily_health_impact_change",
-        "reason_zh": "新聞情緒分數由 0.15 變為 0.14（變化 -0.00）。這代表新聞情緒平均值反映近期事件偏正面或負面。；因此相較昨日扣分 0.06 分。",
-        "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
-        "metric_explanation_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-        "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
-        "beginner_explanation_zh": "簡單說，新聞情緒分數是用來觀察新聞情緒平均值反映近期事件偏正面或負面。。本次讓健康分比昨天減少 0.06 分。這是研究評分變化，不代表買進或賣出訊號。",
-        "source": "公開新聞索引",
-        "source_time": "2026-08-28",
-        "source_url": null,
-        "confidence": "high",
-        "schema_version": "CustomerEvidence-v2.0",
-        "explain_engine_version": "CustomerExplainEngine-v2.2",
-        "impact_category_zh": "健康分扣分",
-        "source_link_status": "not_preserved",
-        "source_link_message_zh": "目前資料只保存新聞摘要，尚未保存原始文章網址",
-        "is_true_daily_change": true,
-        "state": "daily_change",
-        "six_questions": {
-          "what_happened_zh": "新聞情緒分數從 0.15 變成 0.14，實際變化 -0.00。",
-          "current_value_zh": "0.14",
-          "comparison_zh": "0.15",
-          "baseline_value_zh": "0.15",
-          "meaning_zh": "新聞情緒平均值反映近期事件偏正面或負面。",
-          "score_reason_zh": "這項指標相較昨日讓健康分減少 0.06 分。影響值來自同一套健康評分規則，不是人工判斷。",
-          "source_zh": "公開新聞索引｜2026-08-28",
-          "source_url": null
         }
       },
       {
@@ -7469,7 +7749,47 @@
           "score_reason_zh": "這項指標相較昨日讓健康分減少 0.02 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "375eec7a32e49035",
+            "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+            "published_at": "2026-08-26T08:36:18+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "3dea6c30cee79fda",
+            "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+            "source_name": "LINE TODAY",
+            "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+            "published_at": "2026-08-25T23:31:37+00:00",
+            "confirmed_by_count": 10
+          },
+          {
+            "evidence_id": "6a378ffaf71813ae",
+            "title_zh": "富邦金、中信金明年股利可期- 日報",
+            "source_name": "工商時報",
+            "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+            "published_at": "2026-08-25T19:00:00+00:00",
+            "confirmed_by_count": 8
+          },
+          {
+            "evidence_id": "4612815b8cf068c9",
+            "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+            "published_at": "2026-08-24T15:50:15+00:00",
+            "confirmed_by_count": 9
+          }
+        ]
       },
       {
         "event_id": "INDICATOR-DELTA-19",
@@ -7715,19 +8035,19 @@
         "feature": "近期新聞熱度",
         "title_zh": "近期新聞熱度數值改變",
         "direction": "neutral",
-        "current_value": 116,
-        "current_value_zh": "116.00 則",
+        "current_value": 117,
+        "current_value_zh": "117.00 則",
         "current_unit": "則",
         "baseline_value": 132,
         "baseline_value_zh": "132.00 則",
         "baseline_label_zh": "前一交易日實際值",
-        "change_value": -16.0,
-        "change_value_zh": "-16.00 則",
+        "change_value": -15.0,
+        "change_value_zh": "-15.00 則",
         "comparison_window": "前一個有資料的交易日",
         "score_impact": 0.0,
         "impact_kind": "daily_health_impact_change",
-        "reason_zh": "近期新聞熱度由 132.00 則 變為 116.00 則（變化 -16.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
-        "what_happened_zh": "近期新聞熱度從 132.00 則 變成 116.00 則，實際變化 -16.00 則。",
+        "reason_zh": "近期新聞熱度由 132.00 則 變為 117.00 則（變化 -15.00 則）。這代表適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。；因此相較昨日分數影響持平 0.00 分。",
+        "what_happened_zh": "近期新聞熱度從 132.00 則 變成 117.00 則，實際變化 -15.00 則。",
         "metric_explanation_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
         "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
         "beginner_explanation_zh": "簡單說，近期新聞熱度是用來觀察適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。。數值雖有變化，但四捨五入後沒有改變健康分。這是研究評分變化，不代表買進或賣出訊號。",
@@ -7743,15 +8063,55 @@
         "is_true_daily_change": true,
         "state": "daily_change",
         "six_questions": {
-          "what_happened_zh": "近期新聞熱度從 132.00 則 變成 116.00 則，實際變化 -16.00 則。",
-          "current_value_zh": "116.00 則",
+          "what_happened_zh": "近期新聞熱度從 132.00 則 變成 117.00 則，實際變化 -15.00 則。",
+          "current_value_zh": "117.00 則",
           "comparison_zh": "132.00 則",
           "baseline_value_zh": "132.00 則",
           "meaning_zh": "適度新聞關注有助於資訊透明，極端熱度也可能伴隨事件風險。",
           "score_reason_zh": "這項指標相較昨日讓健康分維持 0.00 分。影響值來自同一套健康評分規則，不是人工判斷。",
           "source_zh": "公開新聞索引｜2026-08-28",
           "source_url": null
-        }
+        },
+        "source_kind": "aggregated_news_window",
+        "source_name_zh": "近 7 日公開新聞樣本",
+        "source_count": 4,
+        "source_window_days": 7,
+        "evidence_status": "available",
+        "evidence_notice_zh": "以下列出本期新聞統計所參考的代表新聞。",
+        "evidence_refs": [
+          {
+            "evidence_id": "375eec7a32e49035",
+            "title_zh": "【即時新聞】今日富邦金財報利多發酵，股價大漲7.2%攻上141.5元創新高！",
+            "source_name": "CMoney投資網誌",
+            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcjB4cGRPLXZxOVp3ZVVWRHhvZFNBUFNVeGx3emtHV1hMZ1l0Q0FMLXpnTWF3QVE4VWkzZU11V0F2WDVJam5GUlpSSlh3TDlkVVhPbUxOVlhYYnRKSkJUcmJxTWNaNnNNckUyOWNiRzdxVDUyRGVoSlBFSk1GLUFMX3duV05MOG1YX25PTXRoano?oc=5",
+            "published_at": "2026-08-26T08:36:18+00:00",
+            "confirmed_by_count": 1
+          },
+          {
+            "evidence_id": "3dea6c30cee79fda",
+            "title_zh": "富邦金控2026年上半年稅後淨利973.9億元 每股盈餘6.67元 | 信傳媒",
+            "source_name": "LINE TODAY",
+            "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90MFA3UmhOOVJyS1dZeW1VNTJDMVhSSkg1UEd5WHRGZHFBMlZnS0xZazE4N0JsQkVMalV5djQ1VGQ2NEFsQU9aZ3o0cWZvUFJfWi1KNE1n?oc=5",
+            "published_at": "2026-08-25T23:31:37+00:00",
+            "confirmed_by_count": 10
+          },
+          {
+            "evidence_id": "6a378ffaf71813ae",
+            "title_zh": "富邦金、中信金明年股利可期- 日報",
+            "source_name": "工商時報",
+            "source_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZeW1HNkxiaXhRNlY3Ry03UHB4Ti1JQUFOV0MtTDF2N1VlVHQxWFNaZHlDR0pBaWFQUjVCZzFqbS1GYk5PZTZ3QkFmTktpaGUwRWgwc1BNRWdyTHhsOW84?oc=5",
+            "published_at": "2026-08-25T19:00:00+00:00",
+            "confirmed_by_count": 8
+          },
+          {
+            "evidence_id": "4612815b8cf068c9",
+            "title_zh": "富邦金法說》明年股利6元起跳、大增逾4成？總座韓蔚廷：我們也希望",
+            "source_name": "Yahoo新聞",
+            "source_url": "https://news.google.com/rss/articles/CBMikwNBVV95cUxQbVhsX2RDai1nbldPTlVMNUp4MDI5aDN5QkdlTjNyOGhBZ2lJS3hHYlBibHRLRGV4OV8xRjI2eTZrQXE1dndNSkhNV0lxTXFWU0RyeERLZktRTWViRHhnRHpOSGdkMGJ0aEdPZ05KWHBnMFMtVlBqc1pjaG05MW85UEpXRVJsY1ZXOUkwVko3OXoxRlhCa0JFSHhNWUpNRURLWWhkWmphc0M4U2NyWWFNSnFwenFsR21NV0M5SkhZWU5IMGRvdU91UGdjX1BCeWpoYk01TV9uUjRKWThMRnlzV0NWY21RTnBxNUltSm5QMVFQVnVCUTVXWmZ5UFY4aXNUV1dQdUZYMndVS1kyaERNUEM4YTlfX0lDOFY2NXlHTXBpSWNVeDNieVlDVWpZQTFnUE1sVWpMUUpESXZUaTBzcHowbmhkMmpwR0tWN3Q5TjdtQmR0TmdsSXlqc3BBaXROWGpIdEh2OXdGUnVseTBCSVJvZ3NWLUFMVVZ5S2o1WW5WY2cwV3ExT293UTVRbWhZbDRB?oc=5",
+            "published_at": "2026-08-24T15:50:15+00:00",
+            "confirmed_by_count": 9
+          }
+        ]
       }
     ],
     "factor_events": [],
