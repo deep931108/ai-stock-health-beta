@@ -8243,3 +8243,187 @@ html[data-theme="dark"]
 .network-status,.data-freshness{position:sticky;top:8px;z-index:35;display:flex;align-items:center;justify-content:center;gap:12px;width:min(760px,calc(100% - 24px));margin:8px auto;padding:10px 14px;border:1px solid #d69a55;border-radius:14px;background:#fff4e6;color:#75431f;box-shadow:0 8px 24px rgba(66,45,28,.12);font-size:14px}.network-status button,.stock-center-empty button{border:1px solid currentColor;border-radius:999px;padding:7px 12px;background:transparent;color:inherit;cursor:pointer}.data-freshness{position:relative;top:auto;border-color:#cf9e65;background:#fff7ec}.stock-center-empty{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.stock-center-empty button{color:var(--warm-brand)}
 html[data-theme="dark"] .network-status,html[data-theme="dark"] .data-freshness{border-color:#8d633b;background:#30271f;color:#efb272;box-shadow:0 8px 24px rgba(0,0,0,.28)}
 @media(max-width:640px){.network-status,.data-freshness{align-items:flex-start;justify-content:space-between;font-size:13px}.network-status button{flex:0 0 auto}}
+
+
+/* Event group readability v1 */
+.events-page-list {
+  gap: 16px;
+}
+
+.event-list-card {
+  overflow: hidden;
+  border-left: 1px solid var(--warm-line);
+  border-top: 4px solid #aaa;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.event-list-card.positive {
+  border-left-color: var(--warm-line);
+  border-top-color: var(--warm-green);
+}
+
+.event-list-card.negative {
+  border-left-color: var(--warm-line);
+  border-top-color: var(--warm-red);
+}
+
+.event-list-card.neutral {
+  border-top-color: #a59b90;
+}
+
+.event-list-card:hover {
+  transform: translateY(-2px);
+}
+
+.event-list-card > button {
+  padding: 20px;
+}
+
+.event-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.event-stock {
+  color: var(--warm-brand);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.event-stock small {
+  margin-left: 4px;
+  color: #91877d;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.event-direction-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.event-direction-badge.positive {
+  border-color: rgba(72, 132, 97, .24);
+  background: rgba(72, 132, 97, .12);
+  color: #39734f;
+}
+
+.event-direction-badge.negative {
+  border-color: rgba(173, 81, 74, .24);
+  background: rgba(173, 81, 74, .11);
+  color: #974840;
+}
+
+.event-direction-badge.neutral {
+  border-color: rgba(126, 116, 105, .22);
+  background: rgba(126, 116, 105, .1);
+  color: #71675d;
+}
+
+.event-list-card h3 {
+  margin: 12px 0 8px;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.event-list-card .event-card-explanation {
+  min-height: 0;
+  margin: 0;
+  color: #655e57;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.event-card-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  color: #82786f;
+  font-size: 12px;
+}
+
+.event-category-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 3px 9px;
+  border: 1px solid var(--warm-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .46);
+  color: var(--warm-ink);
+  font-weight: 750;
+}
+
+.event-card-meta {
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+}
+
+.event-card-meta .event-card-action {
+  color: var(--warm-brand);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.event-card-meta b {
+  color: var(--warm-ink);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+html[data-theme="dark"] .event-list-card .event-card-explanation {
+  color: #c1bab0;
+}
+
+html[data-theme="dark"] .event-category-pill {
+  background: rgba(255, 255, 255, .04);
+}
+
+html[data-theme="dark"] .event-direction-badge.positive {
+  color: #9bc8aa;
+}
+
+html[data-theme="dark"] .event-direction-badge.negative {
+  color: #e3a39e;
+}
+
+html[data-theme="dark"] .event-direction-badge.neutral {
+  color: #c7beb4;
+}
+
+@media (max-width: 720px) {
+  .event-list-card > button {
+    padding: 17px;
+  }
+
+  .event-list-card h3 {
+    font-size: 17px;
+  }
+
+  .event-card-meta {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .event-card-meta b {
+    white-space: normal;
+  }
+}

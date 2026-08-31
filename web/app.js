@@ -9266,27 +9266,67 @@ function renderEventsPage() {
       event.event_count ||
       (Array.isArray(event.events) ? event.events.length : 0)
     );
+    const category =
+      event.category_zh ||
+      categoryLabel(event.category);
     const title =
       event.headline_zh ||
-      `${event.category_zh || categoryLabel(event.category)}出現變化`;
+      `${category}出現變化`;
     const explanation =
       event.summary_zh ||
       `此面向共有 ${itemCount} 項指標變化，點入股票查看詳細原因。`;
+    const toneLabel =
+      tone === "positive"
+        ? "改善"
+        : tone === "negative"
+          ? "轉弱"
+          : "持平";
+    const impactText = impact
+      ? `${impact > 0 ? "+" : ""}${impact.toFixed(2)} 分`
+      : "0.00 分";
+    const stockName =
+      event.stock_name ||
+      event.stock_id;
 
     return `<article class="event-list-card warm-card ${tone}">
-      <button type="button" data-home-stock="${event.stock_id}">
-        <span class="event-stock">${escapeHtml(event.stock_name)} <small>${event.stock_id}</small></span>
+      <button
+        type="button"
+        data-home-stock="${event.stock_id}"
+        aria-label="${escapeHtml(stockName + " " + title)}"
+      >
+        <div class="event-card-header">
+          <span class="event-stock">
+            ${escapeHtml(stockName)}
+            <small>${escapeHtml(event.stock_id)}</small>
+          </span>
+          <span class="event-direction-badge ${tone}">
+            ${toneLabel}
+          </span>
+        </div>
         <h3>${escapeHtml(title)}</h3>
-        <p>${escapeHtml(explanation)}</p>
+        <p class="event-card-explanation">
+          ${escapeHtml(explanation)}
+        </p>
+        <div class="event-card-details">
+          <span class="event-category-pill">
+            ${escapeHtml(category)}
+          </span>
+          <span>${itemCount} 項指標彙整</span>
+        </div>
         <div class="event-card-meta">
-          <span>${escapeHtml(event.category_zh || categoryLabel(event.category))} · ${itemCount} 項指標</span>
-          <b>${impact ? `${impact > 0 ? "+" : ""}${impact.toFixed(2)} 分` : "影響持平"}</b>
+          <span class="event-card-action">
+            查看原因與證據 →
+          </span>
+          <b>綜合影響 ${impactText}</b>
         </div>
       </button>
     </article>`;
   }).join("");
 
-  $("eventsPageEmpty").classList.toggle("hidden", rows.length > 0);
+  $("eventsPageEmpty").classList.toggle(
+    "hidden",
+    rows.length > 0
+  );
 
   document
     .querySelectorAll("#eventsPage [data-home-stock]")
