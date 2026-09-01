@@ -1,10 +1,10 @@
-const CACHE = "ai-stock-health-beta-v11-mobile-onboarding";
+const CACHE = "ai-stock-health-beta-v12-home-compact";
 const SHELL = [
   "/",
   "/assets/styles.css",
-  "/assets/evidence.css?v=3.9.8.6",
-  "/assets/home.css?v=3.9.8.6",
-  "/assets/app.js?v=3.9.8.6",
+  "/assets/evidence.css?v=3.9.8.7",
+  "/assets/home.css?v=3.9.8.7",
+  "/assets/app.js?v=3.9.8.7",
   "/assets/icon.svg",
   "/assets/manifest.webmanifest",
 ];
