@@ -1,7 +1,7 @@
 {
-  "name": "AI 股票健康",
-  "short_name": "股票健康",
-  "description": "AI 股票研究輔助 Beta",
+  "name": "GC Terminal",
+  "short_name": "GC Terminal",
+  "description": "GC 投資研究工作台 Beta",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
