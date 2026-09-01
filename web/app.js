@@ -112,7 +112,7 @@ const THEME_STORAGE_KEY = "aiStockTheme";
 const RESEARCH_MODE_STORAGE_KEY = "aiStockResearchMode";
 const NOTIFICATION_READ_KEY = "aiStockNotificationReadIds";
 const ONBOARDING_STORAGE_KEY = "aiStockOnboardingVersion";
-const ONBOARDING_VERSION = "1";
+const ONBOARDING_VERSION = "5";
 const PERSONALITY_STORAGE_KEY = "aiStockResearchPersonality";
 const PERSONALITY_ORDER_STORAGE_KEY = "aiStockPersonalityOrder";
 const PERSONALITY_VERSION = "4";
@@ -121,6 +121,8 @@ let personalityAnswers = Array(12).fill(null);
 let onboardingStepIndex = 0;
 let onboardingActive = false;
 let onboardingTarget = null;
+let onboardingHighlightedTargets = [];
+let onboardingTransitioning = false;
 let currentReport = null;
 let available = [];
 let stockCatalog = [];
@@ -186,10 +188,14 @@ function applyResearchMode(mode, {persist = false, announce = false} = {}) {
     shortcut.querySelector("b").textContent = guided ? "Guided" : "Pro";
     shortcut.classList.toggle("pro", !guided);
     shortcut.setAttribute(
+      "aria-pressed",
+      String(!guided)
+    );
+    shortcut.setAttribute(
       "aria-label",
       guided
-        ? "目前為 Guided，引導研究模式；前往模式設定"
-        : "目前為 Pro，專業研究模式；前往模式設定"
+        ? "目前為 Guided，引導研究模式；點擊切換為 Pro"
+        : "目前為 Pro，專業研究模式；點擊切換為 Guided"
     );
   }
 
@@ -572,6 +578,10 @@ const onboardingSteps = [
   },
   {
     anchor: "#dailyResearchSection",
+    mobileAnchors: [
+      "#dailyResearchSection .home-section-heading",
+      "#dailyResearchSection .daily-research-overview",
+    ],
     kicker: "每天先看這裡",
     title: "今日研究幫你安排閱讀順序",
     copy: "新事件、重要變化、持續追蹤與判斷依據會分開呈現，不需要一次翻完所有資料。",
@@ -582,6 +592,10 @@ const onboardingSteps = [
   },
   {
     anchor: "#futureEvents",
+    mobileAnchors: [
+      "#futureEventsTitle",
+      "#futureEvents > :first-child",
+    ],
     kicker: "未來 7 天",
     title: "只顯示仍有效的正式日程",
     copy: "已過期事件不會留在這裡；沒有新事件時也會明確說明。事件存在本身不會改變健康分數。",
@@ -592,6 +606,10 @@ const onboardingSteps = [
   },
   {
     anchor: "#stockCenter",
+    mobileAnchors: [
+      "#stockCenter .stock-center-heading",
+      "#stockCenter .explore-search",
+    ],
     scrollBlock: "start",
     kicker: "選擇研究標的",
     title: "從探索頁進入個股報告",
@@ -603,6 +621,9 @@ const onboardingSteps = [
   },
   {
     anchor: ".hero-card",
+    mobileAnchors: [
+      ".hero-card .score-area",
+    ],
     scrollBlock: "start",
     kicker: "Guided 個股報告",
     title: "先看健康分數與四個重要判斷",
@@ -622,6 +643,9 @@ const onboardingSteps = [
   },
   {
     anchor: "#researchModeShortcut",
+    mobileAnchors: [
+      "#researchModeShortcut",
+    ],
     kicker: "選擇資訊深度",
     title: "需要完整資料時再切換 Pro",
     copy: "Guided 與 Pro 使用同一套研究結果。Guided 用白話帶你閱讀；Pro 顯示完整指標、基準、權重與歷史證據。",
@@ -631,6 +655,81 @@ const onboardingSteps = [
 
 function onboardingCompleted() {
   return localStorage.getItem(ONBOARDING_STORAGE_KEY) === ONBOARDING_VERSION;
+}
+
+function isMobileOnboarding() {
+  return window.matchMedia(
+    "(max-width: 760px)"
+  ).matches;
+}
+
+function onboardingMobileGroupFrame() {
+  let frame = document.getElementById(
+    "onboardingMobileGroupFrame"
+  );
+
+  if (!frame) {
+    frame = document.createElement("div");
+    frame.id = "onboardingMobileGroupFrame";
+    frame.className =
+      "onboarding-mobile-group-frame hidden";
+    frame.setAttribute("aria-hidden", "true");
+    document.body.appendChild(frame);
+  }
+
+  return frame;
+}
+
+function clearOnboardingTargetHighlights() {
+  onboardingHighlightedTargets.forEach((target) => {
+    target.classList.remove("onboarding-mobile-target");
+  });
+  onboardingHighlightedTargets = [];
+
+  const frame = document.getElementById(
+    "onboardingMobileGroupFrame"
+  );
+
+  if (frame) {
+    frame.classList.add("hidden");
+  }
+}
+
+function positionMobileOnboardingGroup() {
+  const rects = onboardingHighlightedTargets
+    .map((target) => target.getBoundingClientRect())
+    .filter((rect) => rect.width > 0 && rect.height > 0);
+
+  if (!rects.length) return;
+
+  const padding = 10;
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.right));
+  const bottom = Math.max(...rects.map((rect) => rect.bottom));
+  const frame = onboardingMobileGroupFrame();
+
+  frame.style.left =
+    `${window.scrollX + left - padding}px`;
+  frame.style.top =
+    `${window.scrollY + top - padding}px`;
+  frame.style.width =
+    `${right - left + padding * 2}px`;
+  frame.style.height =
+    `${bottom - top + padding * 2}px`;
+  frame.classList.remove("hidden");
+}
+
+function onboardingStepSelectors(step) {
+  if (
+    isMobileOnboarding() &&
+    Array.isArray(step.mobileAnchors) &&
+    step.mobileAnchors.length
+  ) {
+    return step.mobileAnchors;
+  }
+
+  return [step.anchor];
 }
 
 function waitForOnboardingTarget(selector, timeout = 5000) {
@@ -666,6 +765,17 @@ function positionOnboarding(target) {
 
   const spotlight = $("onboardingSpotlight");
   const dialog = $("onboardingDialog");
+
+  if (isMobileOnboarding()) {
+    onboardingHighlightedTargets.forEach((item) => {
+      item.classList.add("onboarding-mobile-target");
+    });
+    spotlight.classList.add("hidden");
+    positionMobileOnboardingGroup();
+    return;
+  }
+
+  spotlight.classList.remove("hidden");
   const rect = target.getBoundingClientRect();
   const padding = 12;
   const spotlightLeft = Math.max(8, rect.left - padding);
@@ -723,14 +833,34 @@ async function showOnboardingStep(index) {
 
   await step.prepare();
 
-  onboardingTarget = await waitForOnboardingTarget(step.anchor);
+  clearOnboardingTargetHighlights();
+
+  const targetSelectors = onboardingStepSelectors(step);
+  const resolvedTargets = [];
+
+  for (const selector of targetSelectors) {
+    const target = await waitForOnboardingTarget(selector);
+
+    if (target && !resolvedTargets.includes(target)) {
+      resolvedTargets.push(target);
+    }
+  }
+
+  onboardingTarget = resolvedTargets[0] || null;
+  onboardingHighlightedTargets = resolvedTargets;
 
   if (!onboardingTarget) {
-    if (onboardingStepIndex < onboardingSteps.length - 1) {
-      await showOnboardingStep(onboardingStepIndex + 1);
-    } else {
-      finishOnboarding();
+    onboardingTarget = await waitForOnboardingTarget(
+      "#top",
+      500
+    );
+
+    if (onboardingTarget) {
+      onboardingHighlightedTargets = [onboardingTarget];
     }
+  }
+
+  if (!onboardingTarget) {
     return;
   }
 
@@ -741,7 +871,9 @@ async function showOnboardingStep(index) {
   documentRoot.style.scrollBehavior = "auto";
 
   onboardingTarget.scrollIntoView({
-    block: step.scrollBlock || "center",
+    block: isMobileOnboarding()
+      ? "start"
+      : step.scrollBlock || "center",
     inline: "nearest",
   });
 
@@ -788,6 +920,8 @@ function finishOnboarding({skipped = false} = {}) {
 
   onboardingActive = false;
   onboardingTarget = null;
+  onboardingTransitioning = false;
+  clearOnboardingTargetHighlights();
 
   localStorage.setItem(
     ONBOARDING_STORAGE_KEY,
@@ -800,6 +934,33 @@ function finishOnboarding({skipped = false} = {}) {
   document.body.classList.remove("onboarding-open");
 
   showToast(skipped ? "已略過新手導覽" : "新手導覽完成");
+}
+
+async function moveOnboarding(stepDelta) {
+  if (!onboardingActive || onboardingTransitioning) return;
+
+  onboardingTransitioning = true;
+  $("onboardingPrevious").disabled = true;
+  $("onboardingNext").disabled = true;
+
+  try {
+    const nextIndex = onboardingStepIndex + stepDelta;
+
+    if (nextIndex >= onboardingSteps.length) {
+      finishOnboarding();
+      return;
+    }
+
+    await showOnboardingStep(nextIndex);
+  } finally {
+    onboardingTransitioning = false;
+
+    if (onboardingActive) {
+      $("onboardingPrevious").disabled =
+        onboardingStepIndex === 0;
+      $("onboardingNext").disabled = false;
+    }
+  }
 }
 
 function savedPersonalityResult() {
@@ -9490,25 +9651,35 @@ document
   });
 
 $("researchModeShortcut").addEventListener("click", () => {
-  showHomeView({restoreScroll: false});
-  switchPage("about");
+  const currentMode =
+    document.documentElement.dataset.researchMode === "pro"
+      ? "pro"
+      : "guided";
+
+  setResearchMode(
+    currentMode === "guided" ? "pro" : "guided"
+  );
 });
 
-$("restartOnboarding").addEventListener("click", () => {
+$("restartOnboarding").addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+
+  localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+
+  if (onboardingActive) {
+    finishOnboarding({skipped: true});
+  }
+
   startOnboarding({force: true});
 });
 
 $("onboardingPrevious").addEventListener("click", () => {
-  showOnboardingStep(onboardingStepIndex - 1);
+  moveOnboarding(-1);
 });
 
 $("onboardingNext").addEventListener("click", () => {
-  if (onboardingStepIndex >= onboardingSteps.length - 1) {
-    finishOnboarding();
-    return;
-  }
-
-  showOnboardingStep(onboardingStepIndex + 1);
+  moveOnboarding(1);
 });
 
 $("onboardingSkip").addEventListener("click", () => {
@@ -9564,15 +9735,11 @@ window.addEventListener("keydown", (event) => {
   }
 
   if (event.key === "ArrowLeft" && onboardingStepIndex > 0) {
-    showOnboardingStep(onboardingStepIndex - 1);
+    moveOnboarding(-1);
   }
 
   if (event.key === "ArrowRight") {
-    if (onboardingStepIndex >= onboardingSteps.length - 1) {
-      finishOnboarding();
-    } else {
-      showOnboardingStep(onboardingStepIndex + 1);
-    }
+    moveOnboarding(1);
   }
 });
 $("proResearchTabs").addEventListener("click", (event) => {

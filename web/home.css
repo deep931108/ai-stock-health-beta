@@ -8427,3 +8427,43 @@ html[data-theme="dark"] .event-direction-badge.neutral {
     white-space: normal;
   }
 }
+/* Mobile onboarding v3: coordinate-free target highlight */
+@media (max-width:760px){
+  body.onboarding-open #top,
+  body.onboarding-open #dailyResearchSection .home-section-heading,
+  body.onboarding-open #futureEventsTitle,
+  body.onboarding-open #stockCenter .stock-center-heading,
+  body.onboarding-open .hero-card .score-area{
+    scroll-margin-top:28px;
+  }
+
+  .onboarding-backdrop{
+    background:rgba(4,10,7,.68);
+  }
+
+  .onboarding-spotlight{
+    display:none!important;
+  }
+
+  .onboarding-mobile-target{
+    position:relative!important;
+    z-index:9001!important;
+  }
+
+  .onboarding-mobile-group-frame{
+    position:absolute;
+    z-index:9001;
+    box-sizing:border-box;
+    border:3px solid var(--warm-brand);
+    border-radius:22px;
+    background:transparent;
+    box-shadow:
+      0 0 0 5px rgba(214,151,88,.18),
+      0 18px 50px rgba(0,0,0,.34);
+    pointer-events:none;
+  }
+
+  body.onboarding-open{
+    overflow-x:hidden;
+  }
+}
