@@ -28,8 +28,8 @@ def test_event_cards_publish_readable_hierarchy() -> None:
     assert ".event-card-explanation" in css
     assert "@media (max-width: 720px)" in css
 
-    assert "home.css?v=3.9.8.2" in html
-    assert "app.js?v=3.9.8.2" in html
-    assert "home.css?v=3.9.8.2" in sw
-    assert "app.js?v=3.9.8.2" in sw
-    assert "ai-stock-health-beta-v7-event-readability" in sw
+    assert "home.css?v=3.9.8.6" in html
+    assert "app.js?v=3.9.8.6" in html
+    assert "home.css?v=3.9.8.6" in sw
+    assert "app.js?v=3.9.8.6" in sw
+    assert "ai-stock-health-beta-v11-mobile-onboarding" in sw
